@@ -1,0 +1,113 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5097 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: fault) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_SINGLE_RADIAL_SOURCE_SCREEN) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:04:40.844Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY ? independently verify actual manufacturer, utility, installation, e) Tj ET
+BT /F1 8 Tf 32 662 Td (quipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM certif) Tj ET
+BT /F1 8 Tf 32 636 Td (ication or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: nominalLLV | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: voltageFactor | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: frequencyHz | Entered value: 60) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: seriesImpedances[0].id | Entered value: utility-positive-Z) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: seriesImpedances[0].rOhm | Entered value: 0.12) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: seriesImpedances[0].xOhm | Entered value: 0.94) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: seriesImpedances[1].id | Entered value: feeder-at-fault-voltage-base) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: seriesImpedances[1].rOhm | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: seriesImpedances[1].xOhm | Entered value: 0.21) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: dcTimesS[0] | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: dcTimesS[1] | Entered value: 0.01) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: dcTimesS[2] | Entered value: 0.03) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: dcTimesS[3] | Entered value: 0.05) Tj ET
+BT /F1 8 Tf 32 428 Td () Tj ET
+BT /F1 8 Tf 32 415 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: status | Value: BOUNDED_SINGLE_RADIAL_SOURCE_SCREEN) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: method | Value: IEC 60909-0:2026 single equivalent-voltage-source, symmetrical i) Tj ET
+BT /F1 8 Tf 32 376 Td (nitial three-phase current and radial equivalent-R/X peak screening; not a full IEC 60909 calculation. N) Tj ET
+BT /F1 8 Tf 32 363 Td (o distributed source, inverter, generator/motor decrement, meshed network, corrections, min/max case sel) Tj ET
+BT /F1 8 Tf 32 350 Td (ection, fault impedance or interrupting duty certification.) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: nominalLLV | Value: 13800) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: voltageFactor | Value: 1.1) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: frequencyHz | Value: 60) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: totalROhm | Value: 0.2) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: totalXOhm | Value: 1.15) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: impedanceMagnitudeOhm | Value: 1.167261752992875) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: rxRatio | Value: 0.1739130434782609) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: initialSymmetricalA | Value: 7508.321988471781) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: initialSymmetricalKA | Value: 7.508321988471781) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: kappa | Value: 1.6016177478009073) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: peakA | Value: 17006.57110480697) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: peakKA | Value: 17.006571104806973) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: initialShortCircuitMVA | Value: 179.46617325795194) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: decayingDC[0].seconds | Value: 0) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: decayingDC[0].dcOffsetMagnitudeA | Value: 10618.37078676092) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: decayingDC[1].seconds | Value: 0.01) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: decayingDC[1].dcOffsetMagnitudeA | Value: 5512.117587199794) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: decayingDC[2].seconds | Value: 0.03) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: decayingDC[2].dcOffsetMagnitudeA | Value: 1485.3870990088822) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: decayingDC[3].seconds | Value: 0.05) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: decayingDC[3].dcOffsetMagnitudeA | Value: 400.27717097792913) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: missingForFullStandard[0] | Value: IEC 60909 source and equipment factors) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: missingForFullStandard[1] | Value: full positive, negative and zero sequence net) Tj ET
+BT /F1 8 Tf 32 38 Td (work) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 1364 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: missingForFullStandard[2] | Value: voltage-factor choice) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: missingForFullStandard[3] | Value: all DER and motor contributions) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: missingForFullStandard[4] | Value: near-generator breaking-time decrement) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: missingForFullStandard[5] | Value: breaker making and breaking duty) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: missingForFullStandard[6] | Value: meshed peak factors) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: missingForFullStandard[7] | Value: fault location/case validation) Tj ET
+BT /F1 8 Tf 32 714 Td () Tj ET
+BT /F1 8 Tf 32 701 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 688 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 675 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY ? independently verify actual manufac) Tj ET
+BT /F1 8 Tf 32 662 Td (turer, utility, installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Evidence / limitation: Study method | Value: fault) Tj ET
+BT /F1 8 Tf 32 636 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:04:40.844Z) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000005338 00000 n 
+0000005464 00000 n 
+0000006880 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+7006
+%%EOF
