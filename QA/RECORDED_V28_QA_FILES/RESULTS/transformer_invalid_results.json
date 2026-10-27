@@ -1,0 +1,70 @@
+{
+  "cases": 16,
+  "rejected": 16,
+  "results": [
+    {
+      "label": "wrong transformer tap",
+      "error": "Nameplate transformer fault envelope: This radial model is for the documented rated tap (ratedTapRatio=1) only"
+    },
+    {
+      "label": "nonphysical transformer losses",
+      "error": "Nameplate transformer fault envelope: Transformer load loss implies nonphysical R ≥ |Z|; check nameplate units"
+    },
+    {
+      "label": "reversed utility envelope",
+      "error": "Nameplate transformer fault envelope: Utility minimum-equivalent fault power cannot exceed maximum-equivalent fault power"
+    },
+    {
+      "label": "reversed cable temperature",
+      "error": "Nameplate transformer fault envelope: Minimum fault conductor temperature should not be below maximum fault conductor temperature"
+    },
+    {
+      "label": "nonfinite rated MVA",
+      "error": "Nameplate transformer fault envelope: Provide finite ratedMVA in 0.001..10000"
+    },
+    {
+      "label": "missing transformer provenance",
+      "error": "Nameplate transformer fault envelope: Document transformer OEM nameplate reference as a 4..350 character source/reference"
+    },
+    {
+      "label": "unexpected field",
+      "error": "Nameplate transformer fault envelope: transformer unexpected property secretInjectedField"
+    },
+    {
+      "label": "wrong voltage order",
+      "error": "Nameplate transformer fault envelope: High-voltage winding nominal voltage must exceed low voltage"
+    },
+    {
+      "label": "negative cable length",
+      "error": "Nameplate transformer fault envelope: Provide finite lengthM in 0..200000"
+    },
+    {
+      "label": "no utility",
+      "error": "Nameplate transformer fault envelope: Transformer, utility, feeder and voltageFactors required"
+    },
+    {
+      "label": "min voltage factor above max",
+      "error": "Nameplate transformer fault envelope: Provide finite minimum in 0.8..1.1"
+    },
+    {
+      "label": "nonfinite cable resistance",
+      "error": "Nameplate transformer fault envelope: Provide finite resistanceOhmPerKmAt20C in 0..10000"
+    },
+    {
+      "label": "missing temperature",
+      "error": "Nameplate transformer fault envelope: Provide finite minimumConductorTemperatureC in -50..250"
+    },
+    {
+      "label": "unreasonable transformer impedance",
+      "error": "Nameplate transformer fault envelope: Provide finite shortCircuitVoltagePercent in 0.01..50"
+    },
+    {
+      "label": "missing transformer nameplate MVA",
+      "error": "Nameplate transformer fault envelope: Provide finite ratedMVA in 0.001..10000"
+    },
+    {
+      "label": "invalid utility X/R",
+      "error": "Nameplate transformer fault envelope: Provide finite maximumXOverR in 0.01..10000"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "rejected": 27,
+  "cases": [
+    {
+      "label": "negative conductor area",
+      "error": "Conductor thermal-duty screen: areaMm2 must be finite within 0.1..20000"
+    },
+    {
+      "label": "zero conductor area",
+      "error": "Conductor thermal-duty screen: areaMm2 must be finite within 0.1..20000"
+    },
+    {
+      "label": "missing k source",
+      "error": "Conductor thermal-duty screen: Document kSourceReference as a traceable source reference (12–350 characters)"
+    },
+    {
+      "label": "wrong k",
+      "error": "Conductor thermal-duty screen: kASqrtSPerMm2 must be finite within 1..500"
+    },
+    {
+      "label": "infinite k",
+      "error": "Conductor thermal-duty screen: kASqrtSPerMm2 must be finite within 1..500"
+    },
+    {
+      "label": "unknown material",
+      "error": "Conductor thermal-duty screen: material must be copper, aluminium or other; no default k-factor is inferred"
+    },
+    {
+      "label": "reversed temperature",
+      "error": "Conductor thermal-duty screen: maximumFaultTempC must exceed initialTempC"
+    },
+    {
+      "label": "zero duration",
+      "error": "Conductor thermal-duty screen: clearingTimeS must be finite within 0.00001..30"
+    },
+    {
+      "label": "negative current",
+      "error": "Conductor thermal-duty screen: rmsA must be finite within 0..100000000"
+    },
+    {
+      "label": "no fault source",
+      "error": "Conductor thermal-duty screen: Document sourceReference as a traceable source reference (12–350 characters)"
+    },
+    {
+      "label": "margin below one",
+      "error": "Conductor thermal-duty screen: marginFactor must be finite within 1..10"
+    },
+    {
+      "label": "unknown method",
+      "error": "Conductor thermal-duty screen: method must be constant-rms, linear-rms-trace or documented-i2t"
+    },
+    {
+      "label": "unexpected root field",
+      "error": "Conductor thermal-duty screen: study unexpected field oemRating"
+    },
+    {
+      "label": "unexpected conductor field",
+      "error": "Conductor thermal-duty screen: conductor unexpected field unknown"
+    },
+    {
+      "label": "unexpected fault field",
+      "error": "Conductor thermal-duty screen: fault unexpected field rmsPeak"
+    },
+    {
+      "label": "NaN current",
+      "error": "Conductor thermal-duty screen: rmsA must be finite within 0..100000000"
+    },
+    {
+      "label": "infinite duration",
+      "error": "Conductor thermal-duty screen: clearingTimeS must be finite within 0.00001..30"
+    },
+    {
+      "label": "no study reference",
+      "error": "Conductor thermal-duty screen: Document studyReference as a traceable source reference (12–350 characters)"
+    },
+    {
+      "label": "trace empty",
+      "error": "Conductor thermal-duty screen: RMS trace requires 2–2000 time samples"
+    },
+    {
+      "label": "trace duplicate time",
+      "error": "Conductor thermal-duty screen: RMS trace times must strictly increase"
+    },
+    {
+      "label": "trace no t0",
+      "error": "Conductor thermal-duty screen: RMS trace must start at t=0"
+    },
+    {
+      "label": "trace missing clearing end",
+      "error": "Conductor thermal-duty screen: Last RMS sample must match the documented clearingTimeS"
+    },
+    {
+      "label": "trace negative sample",
+      "error": "Conductor thermal-duty screen: rmsA must be finite within 0..100000000"
+    },
+    {
+      "label": "trace extra sample field",
+      "error": "Conductor thermal-duty screen: RMS sample 0 unexpected field peakA"
+    },
+    {
+      "label": "I2t missing",
+      "error": "Conductor thermal-duty screen: documentedI2tA2s must be finite within 0..1000000000000000000"
+    },
+    {
+      "label": "I2t negative",
+      "error": "Conductor thermal-duty screen: documentedI2tA2s must be finite within 0..1000000000000000000"
+    },
+    {
+      "label": "I2t conflicting RMS",
+      "error": "Conductor thermal-duty screen: documented I2t fault unexpected field rmsA"
+    }
+  ]
+}

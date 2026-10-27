@@ -1,0 +1,10 @@
+{
+  "totalCases": 1200,
+  "accepted": 1200,
+  "failClosed": 0,
+  "numericComparisons": 24000,
+  "mismatches": 0,
+  "rejectedExamples": [],
+  "source": "https://faq.digsilent.de/en/faq-reader-powerfactory/why-are-the-results-of-short-citcuit-calculation-depending-on-max-voltage-tolerance.html",
+  "limitations": "Independent algebraic check of bounded radial nameplate scenario only; no full IEC 60909-0 conformance"
+}
