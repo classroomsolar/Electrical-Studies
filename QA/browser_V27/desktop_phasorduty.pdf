@@ -1,0 +1,123 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5157 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: phasorduty) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: DOCUMENTED_SYMMETRICAL_PHASOR_THERMAL_DUTY) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:04:35.947Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: durationS | Entered value: 0.1) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: sources[0].id | Entered value: UTILITY) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: sources[0].sourceReference | Entered value: ILLUSTRATIVE FAULT PHASOR TRACE; replace) Tj ET
+BT /F1 8 Tf 32 558 Td (with OEM/network time study) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: sources[0].samples[0].timeS | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: sources[0].samples[0].symmetricalRmsA | Entered value: 14000) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: sources[0].samples[0].phaseDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: sources[0].samples[1].timeS | Entered value: 0.05) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: sources[0].samples[1].symmetricalRmsA | Entered value: 10000) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: sources[0].samples[1].phaseDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: sources[0].samples[2].timeS | Entered value: 0.1) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: sources[0].samples[2].symmetricalRmsA | Entered value: 6000) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: sources[0].samples[2].phaseDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: sources[1].id | Entered value: GENERATOR) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: sources[1].sourceReference | Entered value: ILLUSTRATIVE GENERATOR TRACE; replace with) Tj ET
+BT /F1 8 Tf 32 402 Td (OEM decrement and case) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: sources[1].samples[0].timeS | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: sources[1].samples[0].symmetricalRmsA | Entered value: 4000) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: sources[1].samples[0].phaseDeg | Entered value: 30) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: sources[1].samples[1].timeS | Entered value: 0.1) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: sources[1].samples[1].symmetricalRmsA | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: sources[1].samples[1].phaseDeg | Entered value: 30) Tj ET
+BT /F1 8 Tf 32 311 Td () Tj ET
+BT /F1 8 Tf 32 298 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: status | Value: DOCUMENTED_SYMMETRICAL_PHASOR_THERMAL_DUTY) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: durationS | Value: 0.1) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: sourceCount | Value: 2) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: sourceReferences[0].id | Value: UTILITY) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: sourceReferences[0].reference | Value: ILLUSTRATIVE FAULT PHASOR TRACE;) Tj ET
+BT /F1 8 Tf 32 220 Td (replace with OEM/network time study) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: sourceReferences[1].id | Value: GENERATOR) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: sourceReferences[1].reference | Value: ILLUSTRATIVE GENERATOR TRACE;) Tj ET
+BT /F1 8 Tf 32 181 Td (replace with OEM decrement and case) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: totalI2tA2S | Value: 14992648.497156125) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: equivalentSymmetricalRmsA | Value: 12244.447107630513) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: maximumInstantaneousSymmetricalRmsA | Value: 17578.249208150883) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: timeAtMaximumS | Value: 0) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: individualSourceI2tA2S.UTILITY | Value: 10533333.333333334) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: individualSourceI2tA2S.GENERATOR | Value: 533333.3333333334) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: intervalCount | Value: 2) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: approved | Value: false) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: method | Value: Exact |sum complex RMS phasors|^2 integral under explicitly) Tj ET
+BT /F1 8 Tf 32 51 Td (assumed linear complex-phasor interpolation between provided time-stamped points) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: limitations[0] | Value: Fundamental-frequency symmetrical RMS phasor only:) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 2392 >>
+stream
+BT /F1 8 Tf 32 792 Td (no asymmetrical DC offset, high harmonics, CT/relay response or waveform integration) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: limitations[1] | Value: Phasor time traces are externally supplied and must) Tj ET
+BT /F1 8 Tf 32 766 Td (be appropriate to the same fault case and network) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: limitations[2] | Value: Time values in traces must include all) Tj ET
+BT /F1 8 Tf 32 740 Td (switching/discontinuities or separate sequences; interpolation is NOT a generator/IBR physics model) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: limitations[3] | Value: Not equivalent IEC 60909/ANSI short-time duty, peak) Tj ET
+BT /F1 8 Tf 32 714 Td (making or breaking-capacity certification) Tj ET
+BT /F1 8 Tf 32 701 Td () Tj ET
+BT /F1 8 Tf 32 688 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 675 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 662 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 649 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 636 Td (use.) Tj ET
+BT /F1 8 Tf 32 623 Td (Evidence / limitation: Study method | Value: phasorduty) Tj ET
+BT /F1 8 Tf 32 610 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:04:35.947Z) Tj ET
+BT /F1 8 Tf 32 597 Td (Evidence / limitation: outputs.limitations[0] | Value: Fundamental-frequency symmetrical RMS phasor) Tj ET
+BT /F1 8 Tf 32 584 Td (only: no asymmetrical DC offset, high harmonics, CT/relay response or waveform integration) Tj ET
+BT /F1 8 Tf 32 571 Td (Evidence / limitation: outputs.limitations[1] | Value: Phasor time traces are externally supplied) Tj ET
+BT /F1 8 Tf 32 558 Td (and must be appropriate to the same fault case and network) Tj ET
+BT /F1 8 Tf 32 545 Td (Evidence / limitation: outputs.limitations[2] | Value: Time values in traces must include all) Tj ET
+BT /F1 8 Tf 32 532 Td (switching/discontinuities or separate sequences; interpolation is NOT a generator/IBR physics model) Tj ET
+BT /F1 8 Tf 32 519 Td (Evidence / limitation: outputs.limitations[3] | Value: Not equivalent IEC 60909/ANSI short-time) Tj ET
+BT /F1 8 Tf 32 506 Td (duty, peak making or breaking-capacity certification) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000005398 00000 n 
+0000005524 00000 n 
+0000007968 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+8094
+%%EOF

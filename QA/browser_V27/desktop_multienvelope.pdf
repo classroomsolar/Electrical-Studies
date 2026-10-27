@@ -1,0 +1,1254 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R] /Count 18 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5747 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: multienvelope) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: DOCUMENTED_SCENARIO_ENVELOPE_SCREEN) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:04:34.296Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: studyBasis | Entered value: Illustrative two-case envelope, NOT certified utility) Tj ET
+BT /F1 8 Tf 32 584 Td (maximum/minimum IEC 60909 operating conditions.) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: scenarios[0].id | Entered value: example_high) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: scenarios[0].sourceReference | Entered value: illustrative-source-conditions-A) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: scenarios[0].network.nominalLLV | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: scenarios[0].network.voltageFactor | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: scenarios[0].network.frequencyHz | Entered value: 60) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: scenarios[0].network.faultType | Entered value: AG) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: scenarios[0].network.faultBus | Entered value: F) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: scenarios[0].network.buses[0] | Entered value: F) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: scenarios[0].network.buses[1] | Entered value: A) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: scenarios[0].network.buses[2] | Entered value: B) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: scenarios[0].network.branches[0].id | Entered value: line-A) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: scenarios[0].network.branches[0].from | Entered value: A) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: scenarios[0].network.branches[0].to | Entered value: F) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: scenarios[0].network.branches[0].positiveSequence.rOhm | Entered value: 0.06) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: scenarios[0].network.branches[0].positiveSequence.xOhm | Entered value: 0.12) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: scenarios[0].network.branches[0].negativeSequence.rOhm | Entered value: 0.07) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: scenarios[0].network.branches[0].negativeSequence.xOhm | Entered value: 0.14) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: scenarios[0].network.branches[0].zeroSequence.rOhm | Entered value: 0.23) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: scenarios[0].network.branches[0].zeroSequence.xOhm | Entered value: 0.44) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: scenarios[0].network.branches[1].id | Entered value: line-B) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: scenarios[0].network.branches[1].from | Entered value: B) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: scenarios[0].network.branches[1].to | Entered value: F) Tj ET
+BT /F1 8 Tf 32 285 Td (Input path: scenarios[0].network.branches[1].positiveSequence.rOhm | Entered value: 0.04) Tj ET
+BT /F1 8 Tf 32 272 Td (Input path: scenarios[0].network.branches[1].positiveSequence.xOhm | Entered value: 0.13) Tj ET
+BT /F1 8 Tf 32 259 Td (Input path: scenarios[0].network.branches[1].negativeSequence.rOhm | Entered value: 0.05) Tj ET
+BT /F1 8 Tf 32 246 Td (Input path: scenarios[0].network.branches[1].negativeSequence.xOhm | Entered value: 0.16) Tj ET
+BT /F1 8 Tf 32 233 Td (Input path: scenarios[0].network.branches[1].zeroSequence.rOhm | Entered value: 0.22) Tj ET
+BT /F1 8 Tf 32 220 Td (Input path: scenarios[0].network.branches[1].zeroSequence.xOhm | Entered value: 0.48) Tj ET
+BT /F1 8 Tf 32 207 Td (Input path: scenarios[0].network.sources[0].id | Entered value: grid-A) Tj ET
+BT /F1 8 Tf 32 194 Td (Input path: scenarios[0].network.sources[0].bus | Entered value: A) Tj ET
+BT /F1 8 Tf 32 181 Td (Input path: scenarios[0].network.sources[0].positiveSequence.rOhm | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 168 Td (Input path: scenarios[0].network.sources[0].positiveSequence.xOhm | Entered value: 0.42) Tj ET
+BT /F1 8 Tf 32 155 Td (Input path: scenarios[0].network.sources[0].negativeSequence.rOhm | Entered value: 0.09) Tj ET
+BT /F1 8 Tf 32 142 Td (Input path: scenarios[0].network.sources[0].negativeSequence.xOhm | Entered value: 0.46) Tj ET
+BT /F1 8 Tf 32 129 Td (Input path: scenarios[0].network.sources[0].zeroSequence.rOhm | Entered value: 0.31) Tj ET
+BT /F1 8 Tf 32 116 Td (Input path: scenarios[0].network.sources[0].zeroSequence.xOhm | Entered value: 1.2) Tj ET
+BT /F1 8 Tf 32 103 Td (Input path: scenarios[0].network.sources[0].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 90 Td (Input path: scenarios[0].network.sources[0].emScale | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 77 Td (Input path: scenarios[0].network.sources[1].id | Entered value: source-B) Tj ET
+BT /F1 8 Tf 32 64 Td (Input path: scenarios[0].network.sources[1].bus | Entered value: B) Tj ET
+BT /F1 8 Tf 32 51 Td (Input path: scenarios[0].network.sources[1].positiveSequence.rOhm | Entered value: 0.11) Tj ET
+BT /F1 8 Tf 32 38 Td (Input path: scenarios[0].network.sources[1].positiveSequence.xOhm | Entered value: 0.6) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 6230 >>
+stream
+BT /F1 8 Tf 32 792 Td (Input path: scenarios[0].network.sources[1].negativeSequence.rOhm | Entered value: 0.13) Tj ET
+BT /F1 8 Tf 32 779 Td (Input path: scenarios[0].network.sources[1].negativeSequence.xOhm | Entered value: 0.67) Tj ET
+BT /F1 8 Tf 32 766 Td (Input path: scenarios[0].network.sources[1].zeroSequence.rOhm | Entered value: 0.33) Tj ET
+BT /F1 8 Tf 32 753 Td (Input path: scenarios[0].network.sources[1].zeroSequence.xOhm | Entered value: 1.34) Tj ET
+BT /F1 8 Tf 32 740 Td (Input path: scenarios[0].network.sources[1].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 727 Td (Input path: scenarios[0].network.sources[1].emScale | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 714 Td (Input path: scenarios[1].id | Entered value: example_low) Tj ET
+BT /F1 8 Tf 32 701 Td (Input path: scenarios[1].sourceReference | Entered value: illustrative-source-conditions-B) Tj ET
+BT /F1 8 Tf 32 688 Td (Input path: scenarios[1].network.nominalLLV | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 675 Td (Input path: scenarios[1].network.voltageFactor | Entered value: 0.95) Tj ET
+BT /F1 8 Tf 32 662 Td (Input path: scenarios[1].network.frequencyHz | Entered value: 60) Tj ET
+BT /F1 8 Tf 32 649 Td (Input path: scenarios[1].network.faultType | Entered value: AG) Tj ET
+BT /F1 8 Tf 32 636 Td (Input path: scenarios[1].network.faultBus | Entered value: F) Tj ET
+BT /F1 8 Tf 32 623 Td (Input path: scenarios[1].network.buses[0] | Entered value: F) Tj ET
+BT /F1 8 Tf 32 610 Td (Input path: scenarios[1].network.buses[1] | Entered value: A) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: scenarios[1].network.buses[2] | Entered value: B) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: scenarios[1].network.branches[0].id | Entered value: line-A) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: scenarios[1].network.branches[0].from | Entered value: A) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: scenarios[1].network.branches[0].to | Entered value: F) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: scenarios[1].network.branches[0].positiveSequence.rOhm | Entered value: 0.06) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: scenarios[1].network.branches[0].positiveSequence.xOhm | Entered value: 0.12) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: scenarios[1].network.branches[0].negativeSequence.rOhm | Entered value: 0.07) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: scenarios[1].network.branches[0].negativeSequence.xOhm | Entered value: 0.14) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: scenarios[1].network.branches[0].zeroSequence.rOhm | Entered value: 0.23) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: scenarios[1].network.branches[0].zeroSequence.xOhm | Entered value: 0.44) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: scenarios[1].network.branches[1].id | Entered value: line-B) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: scenarios[1].network.branches[1].from | Entered value: B) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: scenarios[1].network.branches[1].to | Entered value: F) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: scenarios[1].network.branches[1].positiveSequence.rOhm | Entered value: 0.04) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: scenarios[1].network.branches[1].positiveSequence.xOhm | Entered value: 0.13) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: scenarios[1].network.branches[1].negativeSequence.rOhm | Entered value: 0.05) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: scenarios[1].network.branches[1].negativeSequence.xOhm | Entered value: 0.16) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: scenarios[1].network.branches[1].zeroSequence.rOhm | Entered value: 0.22) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: scenarios[1].network.branches[1].zeroSequence.xOhm | Entered value: 0.48) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: scenarios[1].network.sources[0].id | Entered value: grid-A) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: scenarios[1].network.sources[0].bus | Entered value: A) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: scenarios[1].network.sources[0].positiveSequence.rOhm | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: scenarios[1].network.sources[0].positiveSequence.xOhm | Entered value: 0.42) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: scenarios[1].network.sources[0].negativeSequence.rOhm | Entered value: 0.09) Tj ET
+BT /F1 8 Tf 32 285 Td (Input path: scenarios[1].network.sources[0].negativeSequence.xOhm | Entered value: 0.46) Tj ET
+BT /F1 8 Tf 32 272 Td (Input path: scenarios[1].network.sources[0].zeroSequence.rOhm | Entered value: 0.31) Tj ET
+BT /F1 8 Tf 32 259 Td (Input path: scenarios[1].network.sources[0].zeroSequence.xOhm | Entered value: 1.2) Tj ET
+BT /F1 8 Tf 32 246 Td (Input path: scenarios[1].network.sources[0].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 233 Td (Input path: scenarios[1].network.sources[0].emScale | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 220 Td (Input path: scenarios[1].network.sources[1].id | Entered value: source-B) Tj ET
+BT /F1 8 Tf 32 207 Td (Input path: scenarios[1].network.sources[1].bus | Entered value: B) Tj ET
+BT /F1 8 Tf 32 194 Td (Input path: scenarios[1].network.sources[1].positiveSequence.rOhm | Entered value: 0.11) Tj ET
+BT /F1 8 Tf 32 181 Td (Input path: scenarios[1].network.sources[1].positiveSequence.xOhm | Entered value: 0.6) Tj ET
+BT /F1 8 Tf 32 168 Td (Input path: scenarios[1].network.sources[1].negativeSequence.rOhm | Entered value: 0.13) Tj ET
+BT /F1 8 Tf 32 155 Td (Input path: scenarios[1].network.sources[1].negativeSequence.xOhm | Entered value: 0.67) Tj ET
+BT /F1 8 Tf 32 142 Td (Input path: scenarios[1].network.sources[1].zeroSequence.rOhm | Entered value: 0.33) Tj ET
+BT /F1 8 Tf 32 129 Td (Input path: scenarios[1].network.sources[1].zeroSequence.xOhm | Entered value: 1.34) Tj ET
+BT /F1 8 Tf 32 116 Td (Input path: scenarios[1].network.sources[1].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 103 Td (Input path: scenarios[1].network.sources[1].emScale | Entered value: 0.87) Tj ET
+BT /F1 8 Tf 32 90 Td () Tj ET
+BT /F1 8 Tf 32 77 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: status | Value: DOCUMENTED_SCENARIO_ENVELOPE_SCREEN) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: studyBasis | Value: Illustrative two-case envelope, NOT certified utility) Tj ET
+BT /F1 8 Tf 32 38 Td (maximum/minimum IEC 60909 operating conditions.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 5537 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarioCount | Value: 2) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: maximumScenarioId | Value: example_high) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: minimumScenarioId | Value: example_low) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: maximumPhaseRmsA | Value: 16620.557944533848) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: minimumPhaseRmsA | Value: 13555.382764706039) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: ratioHighToLow | Value: 1.2261223628305475) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[0].id | Value: example_high) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[0].sourceReference | Value: illustrative-source-conditions-A) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[0].maximumPhaseRmsA | Value: 16620.557944533848) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[0].groundResidualA | Value: 16620.557944533844) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[0].faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: scenarios[0].networkResult.status | Value: BOUNDED_MULTI_BUS_SEQUENCE_FAULT) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[0].networkResult.scope | Value: One voltage base, explicitly) Tj ET
+BT /F1 8 Tf 32 623 Td (entered positive/negative/zero-sequence branch and source impedances, independent fixed) Tj ET
+BT /F1 8 Tf 32 610 Td (positive-sequence source EMFs; four metallic fault configurations. No IEC 60909 corrections,) Tj ET
+BT /F1 8 Tf 32 597 Td (transformer vector shifts, time-dependent generator/IBR currents or making/breaking duties.) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[0].networkResult.faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: scenarios[0].networkResult.nominalLLV | Value: 13800) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[0].networkResult.voltageFactor | Value: 1.1) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: scenarios[0].networkResult.frequencyHz | Value: 60) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[0].networkResult.faultBus | Value: F) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: scenarios[0].networkResult.faultImpedanceOhm.rOhm | Value: 0) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[0].networkResult.faultImpedanceOhm.xOhm | Value: 0) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 480 Td (0.2729322097008292) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 454 Td (0.8628023435184697) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[0].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 428 Td (0.9049419180660937) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[0].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 402 Td (72.44615709955977) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 376 Td (0.07332704773129058) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 350 Td (0.3106022392457279) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[1].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 324 Td (0.31914041886518757) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[1].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 298 Td (76.7168095145296) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 272 Td (0.08554316130525336) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 246 Td (0.34845082156908147) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[2].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 220 Td (0.3587974463374349) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[0].networkResult.sequenceTheveninOhm[2].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 194 Td (76.20691177731727) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[0].networkResult.prefaultPositiveFaultBusV.real | Value:) Tj ET
+BT /F1 8 Tf 32 168 Td (8764.177086298525) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[0].networkResult.prefaultPositiveFaultBusV.imag | Value:) Tj ET
+BT /F1 8 Tf 32 142 Td (-1.0694152322308772e-12) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[0].networkResult.prefaultPositiveFaultBusV.magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 116 Td (8764.177086298525) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[0].networkResult.prefaultPositiveFaultBusV.angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 90 Td (-6.991298641103816e-15) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 64 Td (1512.2465924481921) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 38 Td (-5329.800273308838) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 5602 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[0].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 779 Td (5540.185981511282) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[0].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 753 Td (-74.15954736119843) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 727 Td (1512.2465924481921) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 701 Td (-5329.800273308838) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[1].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 675 Td (5540.185981511282) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[1].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 649 Td (-74.15954736119843) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 623 Td (1512.2465924481921) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 597 Td (-5329.800273308838) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[2].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 571 Td (5540.185981511282) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[0].networkResult.sequenceFaultCurrentA[2].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 545 Td (-74.15954736119843) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 519 Td (4536.739777344576) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 493 Td (-15989.400819926514) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[0].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 467 Td (16620.557944533848) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[0].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 441 Td (-74.15954736119843) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 415 Td (4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[1].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[1].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 376 Td (4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[1].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[2].real | Value: 0) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[2].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[2].magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[0].networkResult.phaseFaultCurrentA[2].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: scenarios[0].networkResult.groundResidualA | Value: 16620.557944533844) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[0].networkResult.maximumPhaseRmsA | Value: 16620.557944533848) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 233 Td (Value: 2691.562397669685) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 207 Td (Value: -8875.047550729882) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[0].magnitu) Tj ET
+BT /F1 8 Tf 32 181 Td (de | Value: 9274.210325858794) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[0].angleDe) Tj ET
+BT /F1 8 Tf 32 155 Td (grees | Value: -73.12886548949481) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 129 Td (Value: -80.07152598509356) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 103 Td (Value: 264.44816588912727) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[1].magnitu) Tj ET
+BT /F1 8 Tf 32 77 Td (de | Value: 276.304689999473) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[1].angleDe) Tj ET
+BT /F1 8 Tf 32 51 Td (grees | Value: 106.8456418478821) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[2].real |) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 5608 >>
+stream
+BT /F1 8 Tf 32 792 Td (Value: -135.7143107704046) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 766 Td (Value: 258.7728188264974) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[2].magnitu) Tj ET
+BT /F1 8 Tf 32 740 Td (de | Value: 292.20155015211196) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].phaseCurrentsA[2].angleDe) Tj ET
+BT /F1 8 Tf 32 714 Td (grees | Value: 117.67492081629787) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[0].real) Tj ET
+BT /F1 8 Tf 32 688 Td (| Value: 825.2588536380623) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[0].imag) Tj ET
+BT /F1 8 Tf 32 662 Td (| Value: -2783.942188671419) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[0].magn) Tj ET
+BT /F1 8 Tf 32 636 Td (itude | Value: 2903.684949400093) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[0].angl) Tj ET
+BT /F1 8 Tf 32 610 Td (eDegrees | Value: -73.48831515028421) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[1].real) Tj ET
+BT /F1 8 Tf 32 584 Td (| Value: 931.5134404386342) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[1].imag) Tj ET
+BT /F1 8 Tf 32 558 Td (| Value: -3029.4899926421012) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[1].magn) Tj ET
+BT /F1 8 Tf 32 532 Td (itude | Value: 3169.467921471435) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[1].angl) Tj ET
+BT /F1 8 Tf 32 506 Td (eDegrees | Value: -72.90828276612866) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[2].real) Tj ET
+BT /F1 8 Tf 32 480 Td (| Value: 934.7901035929883) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[2].imag) Tj ET
+BT /F1 8 Tf 32 454 Td (| Value: -3061.6153694163613) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[2].magn) Tj ET
+BT /F1 8 Tf 32 428 Td (itude | Value: 3201.1437343583734) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[0].sequenceCurrentsA[2].angl) Tj ET
+BT /F1 8 Tf 32 402 Td (eDegrees | Value: -73.02121840574361) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 350 Td (Value: 1845.177379674894) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 324 Td (Value: -7114.353269196625) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[0].magnitu) Tj ET
+BT /F1 8 Tf 32 298 Td (de | Value: 7349.741628206573) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[0].angleDe) Tj ET
+BT /F1 8 Tf 32 272 Td (grees | Value: -75.4601462566015) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 246 Td (Value: 80.07152598510766) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 220 Td (Value: -264.44816588913363) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[1].magnitu) Tj ET
+BT /F1 8 Tf 32 194 Td (de | Value: 276.3046899994832) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[1].angleDe) Tj ET
+BT /F1 8 Tf 32 168 Td (grees | Value: -73.15435815211549) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 142 Td (Value: 135.7143107703905) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 116 Td (Value: -258.77281882651005) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[2].magnitu) Tj ET
+BT /F1 8 Tf 32 90 Td (de | Value: 292.2015501521166) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].phaseCurrentsA[2].angleDe) Tj ET
+BT /F1 8 Tf 32 64 Td (grees | Value: -62.32507918370572) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[0].real) Tj ET
+BT /F1 8 Tf 32 38 Td (| Value: 686.9877388101307) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 5574 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[0].imag) Tj ET
+BT /F1 8 Tf 32 779 Td (| Value: -2545.8580846374225) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[0].magn) Tj ET
+BT /F1 8 Tf 32 753 Td (itude | Value: 2636.9197068528993) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[0].angl) Tj ET
+BT /F1 8 Tf 32 727 Td (eDegrees | Value: -74.8986886937207) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[1].real) Tj ET
+BT /F1 8 Tf 32 701 Td (| Value: 580.7331520095568) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[1].imag) Tj ET
+BT /F1 8 Tf 32 675 Td (| Value: -2300.3102806667225) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[1].magn) Tj ET
+BT /F1 8 Tf 32 649 Td (itude | Value: 2372.4835892338583) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[1].angl) Tj ET
+BT /F1 8 Tf 32 623 Td (eDegrees | Value: -75.83125142278031) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[2].real) Tj ET
+BT /F1 8 Tf 32 597 Td (| Value: 577.4564888552064) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[2].imag) Tj ET
+BT /F1 8 Tf 32 571 Td (| Value: -2268.184903892479) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[2].magn) Tj ET
+BT /F1 8 Tf 32 545 Td (itude | Value: 2340.5381335852485) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[0].networkResult.sourceContributions[1].sequenceCurrentsA[2].angl) Tj ET
+BT /F1 8 Tf 32 519 Td (eDegrees | Value: -75.71652407446481) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].id | Value: line-A) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].from | Value: A) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].to | Value: F) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 454 Td (Value: 2691.5623976696897) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 428 Td (Value: -8875.047550729887) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 402 Td (Value: 9274.2103258588) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 376 Td (| Value: -73.12886548949479) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 350 Td (Value: -80.07152598510356) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 324 Td (Value: 264.44816588912636) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 298 Td (Value: 276.30468999947504) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 272 Td (| Value: 106.84564184788417) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 246 Td (Value: -135.71431077039915) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 220 Td (Value: 258.772818826507) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 194 Td (Value: 292.20155015211793) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].phaseCurrentsA[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 168 Td (| Value: 117.67492081629607) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 142 Td (Value: 825.2588536380622) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 116 Td (Value: -2783.942188671418) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[0].magnitude) Tj ET
+BT /F1 8 Tf 32 90 Td (| Value: 2903.6849494000917) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[0].angleDegr) Tj ET
+BT /F1 8 Tf 32 64 Td (ees | Value: -73.48831515028421) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 38 Td (Value: 931.5134404386398) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Length 5515 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 779 Td (Value: -3029.4899926421094) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[1].magnitude) Tj ET
+BT /F1 8 Tf 32 753 Td (| Value: 3169.4679214714442) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[1].angleDegr) Tj ET
+BT /F1 8 Tf 32 727 Td (ees | Value: -72.90828276612862) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 701 Td (Value: 934.7901035929874) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 675 Td (Value: -3061.61536941636) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[2].magnitude) Tj ET
+BT /F1 8 Tf 32 649 Td (| Value: 3201.143734358372) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[0].sequenceCurrentsA[2].angleDegr) Tj ET
+BT /F1 8 Tf 32 623 Td (ees | Value: -73.02121840574361) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].id | Value: line-B) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].from | Value: B) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].to | Value: F) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 558 Td (Value: 1845.1773796749053) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 532 Td (Value: -7114.353269196645) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 506 Td (Value: 7349.741628206596) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 480 Td (| Value: -75.46014625660146) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 454 Td (Value: 80.07152598508105) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 428 Td (Value: -264.44816588913136) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 402 Td (Value: 276.3046899994733) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 376 Td (| Value: -73.15435815212062) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 350 Td (Value: 135.71431077040643) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 324 Td (Value: -258.77281882648913) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 298 Td (Value: 292.2015501521055) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].phaseCurrentsA[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 272 Td (| Value: -62.32507918370105) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 246 Td (Value: 686.987738810131) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 220 Td (Value: -2545.8580846374216) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[0].magnitude) Tj ET
+BT /F1 8 Tf 32 194 Td (| Value: 2636.9197068528983) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[0].angleDegr) Tj ET
+BT /F1 8 Tf 32 168 Td (ees | Value: -74.89868869372069) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 142 Td (Value: 580.7331520095677) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 116 Td (Value: -2300.3102806667453) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[1].magnitude) Tj ET
+BT /F1 8 Tf 32 90 Td (| Value: 2372.483589233883) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[1].angleDegr) Tj ET
+BT /F1 8 Tf 32 64 Td (ees | Value: -75.8312514227802) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 38 Td (Value: 577.4564888552067) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 16 0 R >>
+endobj
+18 0 obj
+<< /Length 5456 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 779 Td (Value: -2268.1849038924775) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[2].magnitude) Tj ET
+BT /F1 8 Tf 32 753 Td (| Value: 2340.5381335852467) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[0].networkResult.branchCurrents[1].sequenceCurrentsA[2].angleDegr) Tj ET
+BT /F1 8 Tf 32 727 Td (ees | Value: -75.71652407446481) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].bus | Value: F) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 688 Td (1.5916157281026244e-12) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 662 Td (4.689582056016661e-13) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 636 Td (Value: 1.6592656280851425e-12) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[0].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 610 Td (Value: 16.417232830434777) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 584 Td (-7523.775721922144) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 558 Td (-7555.841674042445) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 532 Td (Value: 10662.923825901677) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[1].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 506 Td (Value: -134.87816395435416) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 480 Td (-7510.139189234899) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 454 Td (8005.554459790879) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 428 Td (Value: 10976.843483003639) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].phaseVoltagesV[2].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 402 Td (Value: 133.17117015805255) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[0].real |) Tj ET
+BT /F1 8 Tf 32 376 Td (Value: -5011.3049703856805) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[0].imag |) Tj ET
+BT /F1 8 Tf 32 350 Td (Value: 149.90426191614415) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 324 Td (Value: 5013.546528551706) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 298 Td (| Value: 178.28660973836136) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[1].real |) Tj ET
+BT /F1 8 Tf 32 272 Td (Value: 6997.840608610377) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[1].imag |) Tj ET
+BT /F1 8 Tf 32 246 Td (Value: -78.8886588669685) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 220 Td (Value: 6998.285261691915) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 194 Td (| Value: -0.6458843512941284) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[2].real |) Tj ET
+BT /F1 8 Tf 32 168 Td (Value: -1986.5356382246948) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[2].imag |) Tj ET
+BT /F1 8 Tf 32 142 Td (Value: -71.01560304917518) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 116 Td (Value: 1987.804582400703) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[0].networkResult.busVoltages[0].sequenceVoltagesV[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 90 Td (| Value: -177.95263558388115) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 51 Td (2328.235163865351) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[0].imag | Value:) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 18 0 R >>
+endobj
+20 0 obj
+<< /Length 5366 >>
+stream
+BT /F1 8 Tf 32 792 Td (-430.62305585569516) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 766 Td (Value: 2367.723631358528) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[0].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 740 Td (Value: -10.478827958056545) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 714 Td (-6554.12506477979) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 688 Td (-7691.686276806313) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 662 Td (Value: 10105.37446835026) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[1].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 636 Td (Value: -130.43448596658666) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 610 Td (-6563.792712186067) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 584 Td (7740.443695029404) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 558 Td (Value: 10148.785314729412) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].phaseVoltagesV[2].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 532 Td (Value: 130.29749874525513) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[0].real |) Tj ET
+BT /F1 8 Tf 32 506 Td (Value: -3596.5608710335023) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[0].imag |) Tj ET
+BT /F1 8 Tf 32 480 Td (Value: -127.28854587753472) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 454 Td (Value: 3598.8126476604593) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 428 Td (| Value: -177.97304871060717) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[1].real |) Tj ET
+BT /F1 8 Tf 32 402 Td (Value: 7417.270214153748) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[1].imag |) Tj ET
+BT /F1 8 Tf 32 376 Td (Value: -148.87644557285827) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 350 Td (Value: 7418.764157581692) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 324 Td (| Value: -1.14986329757395) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[2].real |) Tj ET
+BT /F1 8 Tf 32 298 Td (Value: -1492.4741792548953) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[2].imag |) Tj ET
+BT /F1 8 Tf 32 272 Td (Value: -154.45806440530214) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 246 Td (Value: 1500.4454236667211) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[0].networkResult.busVoltages[1].sequenceVoltagesV[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 220 Td (| Value: -174.09142098368295) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 181 Td (2087.201254796809) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 155 Td (-267.8679724345863) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 129 Td (Value: 2104.3199207063526) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[0].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 103 Td (Value: -7.313269217975994) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 77 Td (-6503.7562349062455) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 51 Td (-7707.209879457681) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[1].magnitude |) Tj ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 20 0 R >>
+endobj
+22 0 obj
+<< /Length 5736 >>
+stream
+BT /F1 8 Tf 32 792 Td (Value: 10084.638282511274) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[1].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 766 Td (Value: -130.1594643542308) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 740 Td (-6497.912381555031) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 714 Td (7733.78664566659) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 688 Td (Value: 10101.20394799833) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].phaseVoltagesV[2].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 662 Td (Value: 130.03691132992225) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[0].real |) Tj ET
+BT /F1 8 Tf 32 636 Td (Value: -3638.1557872214894) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[0].imag |) Tj ET
+BT /F1 8 Tf 32 610 Td (Value: -80.43040207522574) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 584 Td (Value: 3639.044734771915) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 558 Td (| Value: -178.73354185037942) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[1].real |) Tj ET
+BT /F1 8 Tf 32 532 Td (Value: 7320.1102711774365) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[1].imag |) Tj ET
+BT /F1 8 Tf 32 506 Td (Value: -95.40576033239454) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 480 Td (Value: 7320.731974420454) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 454 Td (| Value: -0.7467152428685605) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[2].real |) Tj ET
+BT /F1 8 Tf 32 428 Td (Value: -1594.753229159138) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[2].imag |) Tj ET
+BT /F1 8 Tf 32 402 Td (Value: -92.03181002696601) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 376 Td (Value: 1597.4065593862879) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[0].networkResult.busVoltages[2].sequenceVoltagesV[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 350 Td (| Value: -176.6971740846384) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[0].networkResult.kclRelativeResidual | Value:) Tj ET
+BT /F1 8 Tf 32 324 Td (2.634614910300192e-15) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[0].networkResult.nodalRelativeResidual | Value:) Tj ET
+BT /F1 8 Tf 32 298 Td (1.1443916996305582e-15) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[0].networkResult.limitations[0] | Value: Explicit) Tj ET
+BT /F1 8 Tf 32 272 Td (positive/negative/zero-sequence equivalent impedances; no transformer winding shift or) Tj ET
+BT /F1 8 Tf 32 259 Td (zero-sequence grounding topology inference) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: scenarios[0].networkResult.limitations[1] | Value: Multiple documented) Tj ET
+BT /F1 8 Tf 32 233 Td (fixed positive-sequence Thevenin EMFs, one voltage level only) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: scenarios[0].networkResult.limitations[2] | Value: No motor/IBR dynamic or) Tj ET
+BT /F1 8 Tf 32 207 Td (generator subtransient decrement; no short-circuit peak, making/breaking duty) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: scenarios[0].networkResult.limitations[3] | Value: No IEC 60909 voltage) Tj ET
+BT /F1 8 Tf 32 181 Td (correction by equipment type, maximum/minimum operating envelope or breaker rating) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[0].networkResult.limitations[4] | Value: No harmonic, nonlinear) Tj ET
+BT /F1 8 Tf 32 155 Td (electric arc, fault resistance estimation or conductor thermal qualification) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[1].id | Value: example_low) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[1].sourceReference | Value: illustrative-source-conditions-B) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: scenarios[1].maximumPhaseRmsA | Value: 13555.382764706039) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[1].groundResidualA | Value: 13555.382764706039) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: scenarios[1].faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[1].networkResult.status | Value: BOUNDED_MULTI_BUS_SEQUENCE_FAULT) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: scenarios[1].networkResult.scope | Value: One voltage base, explicitly) Tj ET
+BT /F1 8 Tf 32 51 Td (entered positive/negative/zero-sequence branch and source impedances, independent fixed) Tj ET
+BT /F1 8 Tf 32 38 Td (positive-sequence source EMFs; four metallic fault configurations. No IEC 60909 corrections,) Tj ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 22 0 R >>
+endobj
+24 0 obj
+<< /Length 5268 >>
+stream
+BT /F1 8 Tf 32 792 Td (transformer vector shifts, time-dependent generator/IBR currents or making/breaking duties.) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: scenarios[1].networkResult.faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[1].networkResult.nominalLLV | Value: 13800) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: scenarios[1].networkResult.voltageFactor | Value: 0.95) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[1].networkResult.frequencyHz | Value: 60) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: scenarios[1].networkResult.faultBus | Value: F) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[1].networkResult.faultImpedanceOhm.rOhm | Value: 0) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[1].networkResult.faultImpedanceOhm.xOhm | Value: 0) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 675 Td (0.2729322097008292) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 649 Td (0.8628023435184697) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[0].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 623 Td (0.9049419180660937) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[0].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 597 Td (72.44615709955977) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 571 Td (0.07332704773129058) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 545 Td (0.3106022392457279) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[1].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 519 Td (0.31914041886518757) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[1].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 493 Td (76.7168095145296) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 467 Td (0.08554316130525336) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 441 Td (0.34845082156908147) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[2].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 415 Td (0.3587974463374349) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: scenarios[1].networkResult.sequenceTheveninOhm[2].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 389 Td (76.20691177731727) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: scenarios[1].networkResult.prefaultPositiveFaultBusV.real | Value:) Tj ET
+BT /F1 8 Tf 32 363 Td (7147.8707117338045) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: scenarios[1].networkResult.prefaultPositiveFaultBusV.imag | Value:) Tj ET
+BT /F1 8 Tf 32 337 Td (12.29247787397336) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: scenarios[1].networkResult.prefaultPositiveFaultBusV.magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 311 Td (7147.8812816578165) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: scenarios[1].networkResult.prefaultPositiveFaultBusV.angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 285 Td (0.09853373627072966) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 259 Td (1240.8306532296388) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 233 Td (-4344.747218164595) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[0].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 207 Td (4518.46092156868) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[0].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 181 Td (-74.0610136249277) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 155 Td (1240.8306532296388) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 129 Td (-4344.747218164595) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[1].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 103 Td (4518.46092156868) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[1].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 77 Td (-74.0610136249277) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 51 Td (1240.8306532296388) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[2].imag | Value:) Tj ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 24 0 R >>
+endobj
+26 0 obj
+<< /Length 5663 >>
+stream
+BT /F1 8 Tf 32 792 Td (-4344.747218164595) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[2].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 766 Td (4518.46092156868) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: scenarios[1].networkResult.sequenceFaultCurrentA[2].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 740 Td (-74.0610136249277) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 714 Td (3722.4919596889163) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 688 Td (-13034.241654493786) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[0].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 662 Td (13555.382764706039) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[0].angleDegrees | Value:) Tj ET
+BT /F1 8 Tf 32 636 Td (-74.0610136249277) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 610 Td (4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[1].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[1].magnitude | Value:) Tj ET
+BT /F1 8 Tf 32 571 Td (4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[1].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[2].real | Value: 0) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[2].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[2].magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[1].networkResult.phaseFaultCurrentA[2].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[1].networkResult.groundResidualA | Value: 13555.382764706039) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[1].networkResult.maximumPhaseRmsA | Value: 13555.382764706039) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 428 Td (Value: 2375.779092476766) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 402 Td (Value: -7970.9080996116645) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[0].magnitu) Tj ET
+BT /F1 8 Tf 32 376 Td (de | Value: 8317.433632359476) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[0].angleDe) Tj ET
+BT /F1 8 Tf 32 350 Td (grees | Value: -73.40298267951442) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 324 Td (Value: -787.4829867428919) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 298 Td (Value: 438.1365747993191) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[1].magnitu) Tj ET
+BT /F1 8 Tf 32 272 Td (de | Value: 901.162090073914) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[1].angleDe) Tj ET
+BT /F1 8 Tf 32 246 Td (grees | Value: 150.90949050414696) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 220 Td (Value: 442.60710817447307) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 194 Td (Value: 724.6773381512139) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[2].magnitu) Tj ET
+BT /F1 8 Tf 32 168 Td (de | Value: 849.1515157123013) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].phaseCurrentsA[2].angleDe) Tj ET
+BT /F1 8 Tf 32 142 Td (grees | Value: 58.58490084239294) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[0].real) Tj ET
+BT /F1 8 Tf 32 116 Td (| Value: 676.9677379694488) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[0].imag) Tj ET
+BT /F1 8 Tf 32 90 Td (| Value: -2269.364728887044) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[0].magn) Tj ET
+BT /F1 8 Tf 32 64 Td (itude | Value: 2368.1852948973474) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[0].angl) Tj ET
+BT /F1 8 Tf 32 38 Td (eDegrees | Value: -73.38978141401347) Tj ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 26 0 R >>
+endobj
+28 0 obj
+<< /Length 5694 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[1].real) Tj ET
+BT /F1 8 Tf 32 779 Td (| Value: 932.1228706811672) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[1].imag) Tj ET
+BT /F1 8 Tf 32 753 Td (| Value: -3205.8681090763266) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[1].magn) Tj ET
+BT /F1 8 Tf 32 727 Td (itude | Value: 3338.628966932313) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[1].angl) Tj ET
+BT /F1 8 Tf 32 701 Td (eDegrees | Value: -73.78793518777795) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[2].real) Tj ET
+BT /F1 8 Tf 32 675 Td (| Value: 766.6884838261499) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[2].imag) Tj ET
+BT /F1 8 Tf 32 649 Td (| Value: -2495.675261648294) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[2].magn) Tj ET
+BT /F1 8 Tf 32 623 Td (itude | Value: 2610.786518050628) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[0].sequenceCurrentsA[2].angl) Tj ET
+BT /F1 8 Tf 32 597 Td (eDegrees | Value: -72.92268466947286) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 545 Td (Value: 1346.712867212152) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 519 Td (Value: -5063.333554882115) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[0].magnitu) Tj ET
+BT /F1 8 Tf 32 493 Td (de | Value: 5239.3684957931655) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[0].angleDe) Tj ET
+BT /F1 8 Tf 32 467 Td (grees | Value: -75.10566464442842) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 441 Td (Value: 787.4829867429037) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 415 Td (Value: -438.1365747993241) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[1].magnitu) Tj ET
+BT /F1 8 Tf 32 389 Td (de | Value: 901.1620900739267) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[1].angleDe) Tj ET
+BT /F1 8 Tf 32 363 Td (grees | Value: -29.090509495852952) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 337 Td (Value: -442.6071081744835) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 311 Td (Value: -724.6773381512237) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[2].magnitu) Tj ET
+BT /F1 8 Tf 32 285 Td (de | Value: 849.1515157123149) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].phaseCurrentsA[2].angleDe) Tj ET
+BT /F1 8 Tf 32 259 Td (grees | Value: -121.41509915760734) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[0].real) Tj ET
+BT /F1 8 Tf 32 233 Td (| Value: 563.8629152601907) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[0].imag) Tj ET
+BT /F1 8 Tf 32 207 Td (| Value: -2075.382489277554) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[0].magn) Tj ET
+BT /F1 8 Tf 32 181 Td (itude | Value: 2150.617089117823) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[0].angl) Tj ET
+BT /F1 8 Tf 32 155 Td (eDegrees | Value: -74.80015495744995) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[1].real) Tj ET
+BT /F1 8 Tf 32 129 Td (| Value: 308.7077825484706) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[1].imag) Tj ET
+BT /F1 8 Tf 32 103 Td (| Value: -1138.8791090882573) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[1].magn) Tj ET
+BT /F1 8 Tf 32 77 Td (itude | Value: 1179.9771693230578) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[1].angl) Tj ET
+BT /F1 8 Tf 32 51 Td (eDegrees | Value: -74.83368261136107) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[2].real) Tj ET
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 28 0 R >>
+endobj
+30 0 obj
+<< /Length 5518 >>
+stream
+BT /F1 8 Tf 32 792 Td (| Value: 474.14216940349087) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[2].imag) Tj ET
+BT /F1 8 Tf 32 766 Td (| Value: -1849.0719565163033) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[2].magn) Tj ET
+BT /F1 8 Tf 32 740 Td (itude | Value: 1908.8944175049803) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: scenarios[1].networkResult.sourceContributions[1].sequenceCurrentsA[2].angl) Tj ET
+BT /F1 8 Tf 32 714 Td (eDegrees | Value: -75.61799033819408) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].id | Value: line-A) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].from | Value: A) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].to | Value: F) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 649 Td (Value: 2375.7790924767637) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 623 Td (Value: -7970.908099611659) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 597 Td (Value: 8317.43363235947) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 571 Td (| Value: -73.40298267951442) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 545 Td (Value: -787.4829867428873) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 519 Td (Value: 438.13657479931953) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 493 Td (Value: 901.1620900739102) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 467 Td (| Value: 150.9094905041468) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 441 Td (Value: 442.607108174469) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 415 Td (Value: 724.6773381512106) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 389 Td (Value: 849.1515157122963) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].phaseCurrentsA[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 363 Td (| Value: 58.58490084239307) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 337 Td (Value: 676.9677379694485) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 311 Td (Value: -2269.364728887043) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[0].magnitude) Tj ET
+BT /F1 8 Tf 32 285 Td (| Value: 2368.1852948973465) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[0].angleDegr) Tj ET
+BT /F1 8 Tf 32 259 Td (ees | Value: -73.38978141401347) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 233 Td (Value: 932.1228706811652) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 207 Td (Value: -3205.868109076322) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[1].magnitude) Tj ET
+BT /F1 8 Tf 32 181 Td (| Value: 3338.6289669323082) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[1].angleDegr) Tj ET
+BT /F1 8 Tf 32 155 Td (ees | Value: -73.78793518777798) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 129 Td (Value: 766.68848382615) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 103 Td (Value: -2495.675261648294) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[2].magnitude) Tj ET
+BT /F1 8 Tf 32 77 Td (| Value: 2610.786518050628) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[0].sequenceCurrentsA[2].angleDegr) Tj ET
+BT /F1 8 Tf 32 51 Td (ees | Value: -72.92268466947286) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].id | Value: line-B) Tj ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 30 0 R >>
+endobj
+32 0 obj
+<< /Length 5500 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].from | Value: B) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].to | Value: F) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 753 Td (Value: 1346.7128672121537) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 727 Td (Value: -5063.333554882129) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 701 Td (Value: 5239.368495793178) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 675 Td (| Value: -75.10566464442844) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 649 Td (Value: 787.4829867428903) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 623 Td (Value: -438.1365747993168) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 597 Td (Value: 901.1620900739114) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 571 Td (| Value: -29.090509495852963) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 545 Td (Value: -442.60710817447193) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 519 Td (Value: -724.6773381512149) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 493 Td (Value: 849.1515157123015) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].phaseCurrentsA[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 467 Td (| Value: -121.41509915760699) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[0].real |) Tj ET
+BT /F1 8 Tf 32 441 Td (Value: 563.8629152601907) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[0].imag |) Tj ET
+BT /F1 8 Tf 32 415 Td (Value: -2075.3824892775533) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[0].magnitude) Tj ET
+BT /F1 8 Tf 32 389 Td (| Value: 2150.6170891178217) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[0].angleDegr) Tj ET
+BT /F1 8 Tf 32 363 Td (ees | Value: -74.80015495744995) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[1].real |) Tj ET
+BT /F1 8 Tf 32 337 Td (Value: 308.7077825484718) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[1].imag |) Tj ET
+BT /F1 8 Tf 32 311 Td (Value: -1138.8791090882717) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[1].magnitude) Tj ET
+BT /F1 8 Tf 32 285 Td (| Value: 1179.9771693230718) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[1].angleDegr) Tj ET
+BT /F1 8 Tf 32 259 Td (ees | Value: -74.8336826113612) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[2].real |) Tj ET
+BT /F1 8 Tf 32 233 Td (Value: 474.14216940349115) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[2].imag |) Tj ET
+BT /F1 8 Tf 32 207 Td (Value: -1849.071956516303) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[2].magnitude) Tj ET
+BT /F1 8 Tf 32 181 Td (| Value: 1908.8944175049803) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[1].networkResult.branchCurrents[1].sequenceCurrentsA[2].angleDegr) Tj ET
+BT /F1 8 Tf 32 155 Td (ees | Value: -75.61799033819408) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].bus | Value: F) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 116 Td (1.5916157281026244e-12) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 90 Td (3.197442310920451e-13) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 64 Td (Value: 1.6234152270014871e-12) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[0].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 38 Td (Value: 11.359113388562097) Tj ET
+endstream
+endobj
+33 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 32 0 R >>
+endobj
+34 0 obj
+<< /Length 5366 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 779 Td (-6125.628861574908) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 753 Td (-6172.931550590695) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 727 Td (Value: 8696.459789939672) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[1].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 701 Td (Value: -134.77963021808338) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 675 Td (-6136.333340059855) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 649 Td (6518.621140578018) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 623 Td (Value: 8952.486159426375) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].phaseVoltagesV[2].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 597 Td (Value: 133.2697038943233) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[0].real |) Tj ET
+BT /F1 8 Tf 32 571 Td (Value: -4087.3207338782536) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[0].imag |) Tj ET
+BT /F1 8 Tf 32 545 Td (Value: 115.22986332910773) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 519 Td (Value: 4088.944693071051) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 493 Td (| Value: 178.3851434746321) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[1].real |) Tj ET
+BT /F1 8 Tf 32 467 Td (Value: 5707.3960482794155) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[1].imag |) Tj ET
+BT /F1 8 Tf 32 441 Td (Value: -54.524814897144516) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 415 Td (Value: 5707.656489957595) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 389 Td (| Value: -0.5473506150233923) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[2].real |) Tj ET
+BT /F1 8 Tf 32 363 Td (Value: -1620.0753144011603) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[2].imag |) Tj ET
+BT /F1 8 Tf 32 337 Td (Value: -60.705048431962894) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 311 Td (Value: 1621.2122400343349) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: scenarios[1].networkResult.busVoltages[0].sequenceVoltagesV[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 285 Td (| Value: -177.85410184761042) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 246 Td (1997.9173362718939) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 220 Td (-371.9463055800213) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 194 Td (Value: 2032.2445071423876) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[0].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 168 Td (Value: -10.545856900673154) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 142 Td (-5404.629448406164) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 116 Td (-6355.626070240976) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 90 Td (Value: 8342.901307057746) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[1].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 64 Td (Value: -130.37681923288432) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 38 Td (-5392.580908170675) Tj ET
+endstream
+endobj
+35 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 34 0 R >>
+endobj
+36 0 obj
+<< /Length 5370 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 779 Td (6400.997716995932) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 753 Td (Value: 8369.749137468458) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].phaseVoltagesV[2].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 727 Td (Value: 130.11277836379037) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[0].real |) Tj ET
+BT /F1 8 Tf 32 701 Td (Value: -2933.0976734349815) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[0].imag |) Tj ET
+BT /F1 8 Tf 32 675 Td (Value: -108.85821960835483) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 649 Td (Value: 2935.1170460283183) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 623 Td (| Value: -177.87451497433642) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[1].real |) Tj ET
+BT /F1 8 Tf 32 597 Td (Value: 6148.027593609444) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[1].imag |) Tj ET
+BT /F1 8 Tf 32 571 Td (Value: -135.02215695998402) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 545 Td (Value: 6149.510084116723) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 519 Td (| Value: -1.258119973086647) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[2].real |) Tj ET
+BT /F1 8 Tf 32 493 Td (Value: -1217.0125839025686) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[2].imag |) Tj ET
+BT /F1 8 Tf 32 467 Td (Value: -128.0659290116825) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 441 Td (Value: 1223.7322058158115) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: scenarios[1].networkResult.busVoltages[1].sequenceVoltagesV[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 415 Td (| Value: -173.99288724741223) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[0].real | Value:) Tj ET
+BT /F1 8 Tf 32 376 Td (1600.1946532066663) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[0].imag | Value:) Tj ET
+BT /F1 8 Tf 32 350 Td (-207.943951669656) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 324 Td (Value: 1613.6491611212134) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[0].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 298 Td (Value: -7.4040476254726535) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[1].real | Value:) Tj ET
+BT /F1 8 Tf 32 272 Td (-5235.704523615647) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[1].imag | Value:) Tj ET
+BT /F1 8 Tf 32 246 Td (-6210.021335523312) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 220 Td (Value: 8122.620688316309) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[1].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 194 Td (Value: -130.13442954875794) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[2].real | Value:) Tj ET
+BT /F1 8 Tf 32 168 Td (-5265.752022594378) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[2].imag | Value:) Tj ET
+BT /F1 8 Tf 32 142 Td (6205.865032231779) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 116 Td (Value: 8138.851587400641) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].phaseVoltagesV[2].angleDegrees |) Tj ET
+BT /F1 8 Tf 32 90 Td (Value: 130.31501040097731) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[0].real |) Tj ET
+BT /F1 8 Tf 32 64 Td (Value: -2967.087297667786) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[0].imag |) Tj ET
+BT /F1 8 Tf 32 38 Td (Value: -70.7000849870625) Tj ET
+endstream
+endobj
+37 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 36 0 R >>
+endobj
+38 0 obj
+<< /Length 4787 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[0].magnitude |) Tj ET
+BT /F1 8 Tf 32 779 Td (Value: 2967.929502868743) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[0].angleDegrees) Tj ET
+BT /F1 8 Tf 32 753 Td (| Value: -178.63500811410867) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[1].real |) Tj ET
+BT /F1 8 Tf 32 727 Td (Value: 5867.79864376283) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[1].imag |) Tj ET
+BT /F1 8 Tf 32 701 Td (Value: -59.94796752937404) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[1].magnitude |) Tj ET
+BT /F1 8 Tf 32 675 Td (Value: 5868.104862948157) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[1].angleDegrees) Tj ET
+BT /F1 8 Tf 32 649 Td (| Value: -0.5853380874235742) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[2].real |) Tj ET
+BT /F1 8 Tf 32 623 Td (Value: -1300.5166928883773) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[2].imag |) Tj ET
+BT /F1 8 Tf 32 597 Td (Value: -77.29589915321947) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[2].magnitude |) Tj ET
+BT /F1 8 Tf 32 571 Td (Value: 1302.8116995587761) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[1].networkResult.busVoltages[2].sequenceVoltagesV[2].angleDegrees) Tj ET
+BT /F1 8 Tf 32 545 Td (| Value: -176.5986403483676) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[1].networkResult.kclRelativeResidual | Value:) Tj ET
+BT /F1 8 Tf 32 519 Td (2.4237824915186094e-15) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[1].networkResult.nodalRelativeResidual | Value:) Tj ET
+BT /F1 8 Tf 32 493 Td (1.1443916996305582e-15) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[1].networkResult.limitations[0] | Value: Explicit) Tj ET
+BT /F1 8 Tf 32 467 Td (positive/negative/zero-sequence equivalent impedances; no transformer winding shift or) Tj ET
+BT /F1 8 Tf 32 454 Td (zero-sequence grounding topology inference) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[1].networkResult.limitations[1] | Value: Multiple documented) Tj ET
+BT /F1 8 Tf 32 428 Td (fixed positive-sequence Thevenin EMFs, one voltage level only) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[1].networkResult.limitations[2] | Value: No motor/IBR dynamic or) Tj ET
+BT /F1 8 Tf 32 402 Td (generator subtransient decrement; no short-circuit peak, making/breaking duty) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: scenarios[1].networkResult.limitations[3] | Value: No IEC 60909 voltage) Tj ET
+BT /F1 8 Tf 32 376 Td (correction by equipment type, maximum/minimum operating envelope or breaker rating) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[1].networkResult.limitations[4] | Value: No harmonic, nonlinear) Tj ET
+BT /F1 8 Tf 32 350 Td (electric arc, fault resistance estimation or conductor thermal qualification) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: limits[0] | Value: These are extrema of the entered cases ONLY. No) Tj ET
+BT /F1 8 Tf 32 324 Td (automatic utility maximum/minimum correction regimes or operating-state enumeration.) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: limits[1] | Value: No time-dependence or IBR/motor model; no) Tj ET
+BT /F1 8 Tf 32 298 Td (breaker-making/breaking duty) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: limits[2] | Value: All scenario impedances, source EMF angles, grounding) Tj ET
+BT /F1 8 Tf 32 272 Td (paths and statuses must be documented; individual studies contain source contributions and KCL) Tj ET
+BT /F1 8 Tf 32 259 Td (checks) Tj ET
+BT /F1 8 Tf 32 246 Td () Tj ET
+BT /F1 8 Tf 32 233 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 220 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 207 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 194 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 181 Td (use.) Tj ET
+BT /F1 8 Tf 32 168 Td (Evidence / limitation: Study method | Value: multienvelope) Tj ET
+BT /F1 8 Tf 32 155 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:04:34.296Z) Tj ET
+endstream
+endobj
+39 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 38 0 R >>
+endobj
+xref
+0 40
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000233 00000 n 
+0000000301 00000 n 
+0000006100 00000 n 
+0000006226 00000 n 
+0000012508 00000 n 
+0000012634 00000 n 
+0000018223 00000 n 
+0000018349 00000 n 
+0000024004 00000 n 
+0000024132 00000 n 
+0000029793 00000 n 
+0000029921 00000 n 
+0000035548 00000 n 
+0000035676 00000 n 
+0000041244 00000 n 
+0000041372 00000 n 
+0000046881 00000 n 
+0000047009 00000 n 
+0000052428 00000 n 
+0000052556 00000 n 
+0000058345 00000 n 
+0000058473 00000 n 
+0000063794 00000 n 
+0000063922 00000 n 
+0000069638 00000 n 
+0000069766 00000 n 
+0000075513 00000 n 
+0000075641 00000 n 
+0000081212 00000 n 
+0000081340 00000 n 
+0000086893 00000 n 
+0000087021 00000 n 
+0000092440 00000 n 
+0000092568 00000 n 
+0000097991 00000 n 
+0000098119 00000 n 
+0000102959 00000 n 
+trailer
+<< /Size 40 /Root 1 0 R >>
+startxref
+103087
+%%EOF

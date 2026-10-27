@@ -1,0 +1,143 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 4683 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: peakscreen) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_METHOD_C_PEAK_SCREEN) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:04:38.028Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: nominalLLV | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: voltageFactor | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: frequencyHz | Entered value: 60) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: faultBus | Entered value: F) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: buses[0] | Entered value: F) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: buses[1] | Entered value: A) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: buses[2] | Entered value: B) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: branches[0].id | Entered value: feeder-A) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: branches[0].from | Entered value: A) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: branches[0].to | Entered value: F) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: branches[0].rOhm | Entered value: 0.06) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: branches[0].xOhm | Entered value: 0.12) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: branches[1].id | Entered value: feeder-B) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: branches[1].from | Entered value: B) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: branches[1].to | Entered value: F) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: branches[1].rOhm | Entered value: 0.04) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: branches[1].xOhm | Entered value: 0.13) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: sources[0].id | Entered value: utility-1) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: sources[0].bus | Entered value: A) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: sources[0].rOhm | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: sources[0].xOhm | Entered value: 0.42) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: sources[0].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: sources[0].emScale | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: sources[1].id | Entered value: generator-2) Tj ET
+BT /F1 8 Tf 32 285 Td (Input path: sources[1].bus | Entered value: B) Tj ET
+BT /F1 8 Tf 32 272 Td (Input path: sources[1].rOhm | Entered value: 0.11) Tj ET
+BT /F1 8 Tf 32 259 Td (Input path: sources[1].xOhm | Entered value: 0.6) Tj ET
+BT /F1 8 Tf 32 246 Td (Input path: sources[1].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 233 Td (Input path: sources[1].emScale | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 220 Td () Tj ET
+BT /F1 8 Tf 32 207 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: status | Value: BOUNDED_METHOD_C_PEAK_SCREEN) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scope | Value: Bounded IEC 60909 equivalent-frequency Method C screen: one) Tj ET
+BT /F1 8 Tf 32 168 Td (voltage level, documented passive positive-sequence network, identical source EMFs, 3PH bolted) Tj ET
+BT /F1 8 Tf 32 155 Td (fault. Not a full IEC 60909-0:2026 calculation or breaker-making-duty certification.) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: faultType | Value: 3PH_BOLTED) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: faultBus | Value: F) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: nominalLLV | Value: 13800) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: voltageFactor | Value: 1.1) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: frequencyHz | Value: 60) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: equivalentFrequencyHz | Value: 24) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: drivingPointNominalOhm.rOhm | Value: 0.07332704773129058) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: drivingPointNominalOhm.xOhm | Value: 0.3106022392457279) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: drivingPointNominalOhm.magnitudeOhm | Value: 0.31914041886518757) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 4366 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: drivingPointEquivalentFrequencyOhm.rOhm | Value: 0.07313849499070618) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: drivingPointEquivalentFrequencyOhm.xOhm | Value: 0.12457118808524564) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: drivingPointEquivalentFrequencyOhm.magnitudeOhm | Value:) Tj ET
+BT /F1 8 Tf 32 753 Td (0.14445490767182403) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: nominalRX | Value: 0.23608022887845018) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: methodCRX | Value: 0.23484883178815502) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: kappaMethodC | Value: 1.5044460514914157) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: initialSymmetricalA | Value: 27461.821092616654) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: initialSymmetricalKA | Value: 27.461821092616653) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: peakMakingScreenA | Value: 58427.990522482636) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: peakMakingScreenKA | Value: 58.42799052248264) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: nodalRelativeResidual | Value: 8.950904182623615e-16) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: limitations[0] | Value: Positive-sequence passive equivalent impedances,) Tj ET
+BT /F1 8 Tf 32 623 Td (one nominal voltage level and coincident source EMFs only) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: limitations[1] | Value: IEC equipment impedance correction factors and) Tj ET
+BT /F1 8 Tf 32 597 Td (automatic c selection are NOT implemented) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: limitations[2] | Value: Reactances assumed linearly proportional to) Tj ET
+BT /F1 8 Tf 32 571 Td (frequency and resistances constant between f and 0.4f) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: limitations[3] | Value: No transformer vector groups/taps, generator) Tj ET
+BT /F1 8 Tf 32 545 Td (decrement, converter or motor dynamic contributions) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: limitations[4] | Value: Not a validated IEC 60909 breaker-making or) Tj ET
+BT /F1 8 Tf 32 519 Td (interrupting duty calculation; no label or device approval) Tj ET
+BT /F1 8 Tf 32 506 Td () Tj ET
+BT /F1 8 Tf 32 493 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 480 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 467 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 454 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 441 Td (use.) Tj ET
+BT /F1 8 Tf 32 428 Td (Evidence / limitation: Study method | Value: peakscreen) Tj ET
+BT /F1 8 Tf 32 415 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:04:38.028Z) Tj ET
+BT /F1 8 Tf 32 402 Td (Evidence / limitation: outputs.scope | Value: Bounded IEC 60909 equivalent-frequency Method C) Tj ET
+BT /F1 8 Tf 32 389 Td (screen: one voltage level, documented passive positive-sequence network, identical source EMFs, 3PH) Tj ET
+BT /F1 8 Tf 32 376 Td (bolted fault. Not a full IEC 60909-0:2026 calculation or breaker-making-duty certification.) Tj ET
+BT /F1 8 Tf 32 363 Td (Evidence / limitation: outputs.limitations[0] | Value: Positive-sequence passive equivalent) Tj ET
+BT /F1 8 Tf 32 350 Td (impedances, one nominal voltage level and coincident source EMFs only) Tj ET
+BT /F1 8 Tf 32 337 Td (Evidence / limitation: outputs.limitations[1] | Value: IEC equipment impedance correction factors) Tj ET
+BT /F1 8 Tf 32 324 Td (and automatic c selection are NOT implemented) Tj ET
+BT /F1 8 Tf 32 311 Td (Evidence / limitation: outputs.limitations[2] | Value: Reactances assumed linearly proportional to) Tj ET
+BT /F1 8 Tf 32 298 Td (frequency and resistances constant between f and 0.4f) Tj ET
+BT /F1 8 Tf 32 285 Td (Evidence / limitation: outputs.limitations[3] | Value: No transformer vector groups/taps, generator) Tj ET
+BT /F1 8 Tf 32 272 Td (decrement, converter or motor dynamic contributions) Tj ET
+BT /F1 8 Tf 32 259 Td (Evidence / limitation: outputs.limitations[4] | Value: Not a validated IEC 60909 breaker-making or) Tj ET
+BT /F1 8 Tf 32 246 Td (interrupting duty calculation; no label or device approval) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000004924 00000 n 
+0000005050 00000 n 
+0000009468 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+9594
+%%EOF
