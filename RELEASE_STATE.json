@@ -1,0 +1,52 @@
+{
+  "transfer": "LATEST_ONLY",
+  "release": "V28",
+  "website_files": 236,
+  "website_source_sha256": "b662c1525f722cc58454601ef1879b0f8098d9f7d05f5d576995ccdaae4782b6",
+  "origin_url": "https://headless-dlrpfrynayh-classroomsolar-140e.wix-site-host.com/",
+  "origin_wix_metaSiteId": "97613ac8-1f7d-4ecf-8fa4-2d589c387775",
+  "last_observed_public_deployment": "V27",
+  "last_observed_public_file_count": 234,
+  "v28_deployed": false,
+  "full_engineering_acceptance": false,
+  "prior_source_archives_included": false,
+  "current_v28_qa_files_included": 205,
+  "reference_database_status": "historical audited workbook, not automatically qualified OEM/live catalogue",
+  "original_private_cloud_studies_included": false,
+  "source_release_state": {
+    "release": "V28_CUMULATIVE_OFFLINE_VALIDATED",
+    "date": "2026-10-26",
+    "parent": "V27_CUMULATIVE_RECOVERY",
+    "public_site": "https://headless-dlrpfrynayh-classroomsolar-140e.wix-site-host.com/",
+    "wix_metaSiteId": "97613ac8-1f7d-4ecf-8fa4-2d589c387775",
+    "websiteFileCount": 236,
+    "previousFileCount": 234,
+    "preservedByteForByte": 233,
+    "modifiedExistingFiles": [
+      "index.html"
+    ],
+    "newFiles": [
+      "conductor-duty-v28.mjs",
+      "conductor-duty-ui-v28.mjs"
+    ],
+    "deletedFiles": [],
+    "productionDeployment": "NOT_PERFORMED_PRESERVE_EXISTING_PUBLIC_SITE",
+    "productionBrowserVerification": "NOT_CLEARED",
+    "liveHTTP429Cleared": false,
+    "v20AdvancedExportsBrowserValidatedDesktopMobile": 64,
+    "v27AdvancedExportsBrowserValidatedDesktopMobile": 64,
+    "validatedPdfAndXlsxDocuments": 128,
+    "validatedReportInputOutputRows": 19848,
+    "v28NewBrowserDownloadsDesktopMobile": 18,
+    "transformerIndependentCases": 1200,
+    "transformerIndependentNumericComparisons": 24000,
+    "conductorIndependentCases": 1500,
+    "conductorIndependentNumericComparisons": 9000,
+    "invalidInputsRejected": 43,
+    "originalPrivateCloudStudiesExported": false,
+    "fullEngineeringComplianceEstablished": false,
+    "completeUserScopeAccepted": false,
+    "observedBrowserDownloadIssue": "After ten successive downloads, 11th Chromium download event timed out although report was generated and JS had no errors; isolated four-mode contexts succeeded. Browser automatic-download gating suspected, not proven.",
+    "history": "Unmodified V27 cumulative archive included; V27 recursively includes earlier versions."
+  }
+}
