@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#171927">
+  <title>Fault Current Studio — Connected Network</title>
+  <meta name="description" content="Build a connected electrical lineup, model transformer voltage changes, and inspect bus and branch fault currents.">
+  <link rel="stylesheet" href="public-style-v21.css">
+  <link rel="stylesheet" href="studio-v26.css?v=20261026-v26">
+  <link rel="stylesheet" href="operations-v27.css?v=20261026-v27">
+</head>
+<body>
+<details id="public-preview-status"><summary>PUBLIC PREVIEW <span class="v26-preview-label">· Engineering verification is incomplete</span> <span class="v26-preview-more">Read scope and limitations ⌄</span></summary><p>Core calculations and browser-local study backups work here. Optional encrypted cross-device Cloud Vault, browser-local saves and PDF/XLSX exports are available; engineering verification is not yet complete. This is not the private Site.</p></details>
+  <div id="app"><div class="loading">Loading your engineering workspace…</div></div>
+  <input id="project-file" type="file" accept=".json,application/json" hidden>
+  <script>
+  // Dependency request failures must never leave a blank loading screen indefinitely.
+  (function(){
+    const target=document.getElementById('app');
+    let ready=false;
+    const observed=new MutationObserver(()=>{
+      if(target && !target.querySelector('.loading')) { ready=true;observed.disconnect(); }
+    });
+    observed.observe(target,{childList:true,subtree:true});
+    window.addEventListener('error',function(event){
+      const origin=event.target;
+      if(origin && origin.tagName==='SCRIPT' && origin.src && origin.src.includes('public-bundle-v21')){
+        target.innerHTML='<div style="padding:28px;max-width:700px;margin:3rem auto;font:16px system-ui;line-height:1.6"><strong>Engineering workspace could not load.</strong> The hosting service may be throttling asset requests. Reload this page once your connection has recovered; your saved studies have not been changed. <button onclick="location.reload()" style="padding:8px 16px">Try again</button></div>';
+      }
+    },true);
+    setTimeout(()=>{
+      if(!ready && target && target.querySelector('.loading')){
+        target.innerHTML='<div style="padding:28px;max-width:700px;margin:3rem auto;font:16px system-ui"><strong>Engineering workspace loading has been interrupted.</strong> Please retry. Saved studies are not changed. <button onclick="location.reload()" style="padding:8px 16px">Retry</button></div>';
+      }
+    },25000);
+  })();
+  </script>
+  <script defer src="public-bundle-v21.js?v=20261026-v25-capability-atlas"></script>
+  <script defer src="interface-v25.js?v=20261026-v25"></script>
+  <script defer src="interface-v26.js?v=20261026-v26"></script>
+  <script type="module" src="operations-v27-ui.mjs?v=20261026-v27"></script>
+  <script type="module" src="conductor-duty-ui-v28.mjs?v=20261026-v28"></script>
+</body>
+</html>

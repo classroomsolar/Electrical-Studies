@@ -1,0 +1,288 @@
+/* One workspace: lineup, live schematic, and the selected item's inputs. */
+:root {--ink:#193749;--accent:#11785f;--line:#dbe5e8;background:#f1f5f4;color:var(--ink)}
+body {background:#f1f5f4}
+button {min-height:38px;border-radius:8px;font-size:12px}
+button:focus-visible,a:focus-visible {outline:3px solid #44bfa0;outline-offset:3px}
+h1,h2,h3 {text-wrap:balance}
+p {font-size:13px}
+.sidebar {width:194px;background:#112b3a;padding:26px 13px}
+.brand {font-size:11px;line-height:1.5;gap:7px;padding:0 4px 26px}
+.brand small {font-size:7px;letter-spacing:.65px}
+.workspace-label {font-size:8px;letter-spacing:1px;margin-left:8px}
+nav a {font-size:11px;min-height:49px;line-height:1.5;padding:11px 9px}
+nav a.active {background:#1f4653;box-shadow:inset 3px 0 #57dcb6}
+.sidebar-bottom {line-height:1.6;font-size:10px;padding-left:7px}
+main {margin-left:194px;padding:25px 24px;max-width:2350px}
+header {margin-bottom:19px;align-items:center}
+header>div:first-child {min-width:0}
+header h1 {font-size:23px;overflow-wrap:anywhere;max-width:900px}
+header .actions {flex-shrink:0}
+header [data-action="calculate"] {background:#173b4d;color:white;border-color:#173b4d}
+header [data-action="calculate"]:hover {background:#24586a}
+.eyebrow {font-size:9px;letter-spacing:1.25px}
+.study-bar {padding:13px 17px;gap:19px}
+.study-bar select {font-size:13px;min-height:30px}
+.study-context strong {font-size:12px}
+.metrics {grid-template-columns:1.15fr 1fr 1fr .95fr;gap:11px;margin-bottom:18px}
+.metric {min-width:0;min-height:111px;padding:17px;border-radius:12px}
+.metric.dark {background:linear-gradient(120deg,#173b4d,#102e3d)}
+.metric strong {font-size:30px}
+.metric small {font-size:10px;line-height:1.5}
+.metric span {font-size:9px;letter-spacing:.9px}
+.panel,.network-panel,.editor,.equipment-rail {border-radius:12px;box-shadow:0 3px 14px #183b4b04}
+.input-intro {padding:17px 21px;margin-bottom:18px}
+.input-intro h2 {font-size:21px;margin-top:5px}
+.input-intro p {margin-bottom:5px;max-width:740px;font-size:12px}
+.input-intro .form-grid {margin-top:14px;grid-template-columns:1.5fr 1fr .7fr}
+.workflow-steps {font-size:10px;gap:12px}
+.input-workspace {display:grid;grid-template-columns:182px minmax(390px,1fr) minmax(280px,330px);gap:14px;align-items:start}
+.input-context {display:block;grid-column:auto;margin:0;min-width:0}
+.lineup-column {min-width:0;position:sticky;top:20px}
+.equipment-rail {max-height:calc(100vh - 40px);overflow:auto;background:#fff}
+.rail-heading {padding:16px 12px}
+.rail-heading h2 {font-size:17px}
+.rail-heading button {font-size:11px;padding:9px 5px}
+.rail-heading button+button {margin-top:8px}
+.equipment-group {padding:13px 6px 4px}
+.equipment-group h3 {font-size:9px;letter-spacing:.35px;margin:0 6px 7px}
+.equipment-item {gap:7px;padding:11px 6px;align-items:center;min-height:65px}
+.equipment-item>span:nth-child(2) {min-width:0}
+.equipment-item strong {font-size:12px;line-height:1.45}
+.equipment-item small {font-size:10px;line-height:1.5}
+.equipment-item .item-connection {font-size:9px}
+.equipment-item.chosen {background:#edf8f3;border-color:#b1dcca}
+.item-mark {font-size:18px}
+.input-workspace>.editor {position:sticky;top:20px;margin:0}
+.editor-head {padding:18px 19px}
+.editor-head h3 {font-size:19px;line-height:1.45}
+.editor-actions {padding:11px 19px;gap:8px;justify-content:space-between}
+.editor-actions button {font-size:11px;min-height:34px}
+.editor-scroll {padding:19px;max-height:calc(100vh - 215px)!important;min-height:380px;overflow:auto}
+.form-fields {display:block}
+.field {margin-bottom:17px}
+.field>span {font-size:12px;line-height:1.45;margin-bottom:7px}
+.field small {font-size:11px;line-height:1.6;color:#718592}
+.input-unit {border-radius:8px;background:#f8fbfa}
+.input-unit input,.input-unit select {font-size:14px;min-height:43px;padding:11px 10px}
+.input-unit input::placeholder {font-size:12px;color:#90a1ab}
+.input-unit .unit {font-size:11px;width:73px;padding:8px}
+.check-field {flex-wrap:wrap;gap:5px 9px}
+.check-field small {flex-basis:100%;padding-left:25px;margin-top:0}
+.check-field input {min-height:18px;width:18px}
+.check-field .input-unit {flex-basis:18px}
+.form-fields h4 {font-size:13px;margin:21px 0 15px;border-top:1px solid var(--line);padding-top:19px}
+.connection-note,.model-note,.inline-issue {font-size:12px}
+.editor .micro {font-size:11px}
+.cable-voltage-check {border:1px solid #d4e2e4;border-radius:10px;padding:13px;margin:15px 0 22px;background:#f7fbfa}
+.cable-voltage-heading {display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:13px}
+.cable-voltage-heading strong {font-size:12px}
+.cable-voltage-heading>span {font-size:9px;line-height:1.4;border-radius:5px;padding:5px 7px;background:#e7edef;color:#496372}
+.cable-voltage-heading>span.bad {background:#fce4e2;color:#aa302b}
+.cable-voltage-heading>span.ready {background:#dcf2e7;color:#136647}
+.cable-voltage-values {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cable-voltage-values>div {min-width:0;border-left:2px solid #c5d9d5;padding-left:7px}
+.cable-voltage-values small {display:block;font-size:8px;letter-spacing:.5px;color:#637c86}
+.cable-voltage-values strong {display:block;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.cable-voltage-values span {display:block;font-size:9px;line-height:1.5;overflow-wrap:anywhere;color:#637c86}
+.cable-voltage-check p {font-size:11px;line-height:1.6;margin:13px 0 10px;overflow-wrap:anywhere}
+.cable-voltage-check p.bad {color:#a52d28}
+.cable-voltage-actions {display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.cable-voltage-actions button {font-size:10px;padding:6px 8px;min-height:32px}
+.cable-voltage-help {display:block;font-size:10px;line-height:1.6;color:#637c86}
+.db-voltage-context {padding:9px 12px;border-left:3px solid #218067;background:#f0f8f4}
+.editor-empty {padding:105px 25px;min-height:560px}
+.editor-empty p {font-size:13px}
+.database-pick {font-size:12px;min-height:44px}
+.network-panel .panel-heading {padding:19px;align-items:center;flex-wrap:nowrap}
+.network-panel .panel-heading h2 {font-size:19px;margin-top:5px}
+.network-panel .panel-heading button {flex-shrink:0}
+.diagram-toolbar {display:flex;gap:8px;align-items:center;padding:10px 15px;border-top:1px solid #e5ecef;flex-wrap:wrap;background:#fafcfb}
+.diagram-toolbar>button {font-size:10px;padding:6px 9px;min-height:32px}
+.diagram-tools {display:flex;gap:1px;margin-right:auto;border:1px solid #d5e2e5;border-radius:7px;overflow:hidden}
+.diagram-tools button {border:0;border-radius:0;font-size:12px;min-width:34px;min-height:32px;padding:5px 8px}
+.diagram-tools button+button {border-left:1px solid #e2ebeb}
+.diagram-missing {display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 15px;background:#fff4e8;font-size:11px;color:#946140}
+.diagram-missing button {font-size:10px;min-height:30px;padding:5px 7px;border-color:#ead4bd;background:#fffaf5}
+.canvas,.input-context .canvas {height:540px;min-height:0;max-height:none;overflow:hidden;background:#0f2533;position:relative}
+.canvas svg,.input-context .canvas svg {height:100%;width:100%;min-width:0;min-height:0;display:block;touch-action:none;user-select:none}
+.canvas svg:active {cursor:grabbing}
+.diagram-legend {display:flex;gap:18px;flex-wrap:wrap;padding:12px 16px 0;background:#fff;font-size:10px;color:#5b7482}
+.diagram-legend>span {display:flex;align-items:center;gap:6px}
+.diagram-legend i {width:15px;height:3px;background:#49ba99;border-radius:1px}
+.diagram-legend .legend-fault {background:#d39a40}
+.diagram-legend .legend-open {height:0;background:none;border-top:2px dashed #849aab}
+.canvas-foot {font-size:10px;line-height:1.6;display:flex;flex-direction:column;gap:4px;padding:11px 16px 14px}
+.full-diagram .canvas {height:min(72vh,790px);min-height:480px}
+.diagram-page-note {display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 0}
+.diagram-page-note p {margin:0;font-size:12px}
+.button-link {display:inline-block;padding:10px 14px;border:1px solid #b8d9cc;border-radius:8px;background:#edf8f3;white-space:nowrap;font-size:12px;font-weight:600}
+.quick-result {margin:14px 0 0;padding:19px}
+.quick-result h2 {font-size:16px}
+.quick-result .panel-heading {padding:0 0 9px;gap:12px;flex-wrap:wrap}
+.quick-result .panel-heading a {font-size:11px}
+.quick-result .category-totals {grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:10px 0}
+.quick-result .category-totals strong {font-size:12px}
+.quick-result .contribution {grid-template-columns:150px minmax(0,1fr) 78px;gap:10px}
+.quick-result .contribution strong {font-size:12px}
+.quick-result .contribution span {font-size:10px}
+.quick-result .contribution b {font-size:13px}
+.quick-result .micro {font-size:10px}
+.quick-result .result-empty {padding:5px 0;font-size:12px}
+#study-controls>h2,#input-review>h2 {font-size:19px}
+#study-controls .form-grid {grid-template-columns:repeat(4,minmax(0,1fr));gap:6px 21px}
+#study-controls .check-field {grid-column:span 2;align-self:start}
+.study-bar label {font-size:9px}
+.result-blocker {line-height:1.6}
+.review-row p {font-size:12px}
+.review-row>span,.review-row button {font-size:10px}
+.badge {font-size:10px;line-height:1.4}
+th {font-size:10px}
+td,.table-scroll td {font-size:12px}
+.math-grid>div {font-size:10px;line-height:1.5}
+.math-grid strong {font-size:13px}
+.math-source summary {font-size:13px}
+.db-controls input,.db-controls select {font-size:13px}
+.database-dialog {max-width:1200px}
+.database-dialog .table-scroll {max-height:46vh}
+.modal-backdrop {backdrop-filter:blur(5px)}
+.report-diagram .one-line {display:block;width:100%;max-height:500px;border-radius:9px}
+footer {font-size:10px;line-height:1.5}
+@media (min-width:1800px) {
+  .input-workspace {grid-template-columns:215px minmax(600px,1fr) 400px;gap:20px}
+  .canvas,.input-context .canvas {height:630px}
+}
+@media (max-width:1290px) {
+  .sidebar {width:175px;padding:24px 10px}
+  main {margin-left:175px;padding:22px 17px}
+  .brand {font-size:10px}.brand small {font-size:6px}
+  .input-workspace {grid-template-columns:160px minmax(340px,1fr) 325px;gap:12px}
+  .rail-heading {padding:13px 9px}
+  .equipment-item strong {font-size:11px}
+  .editor-scroll {padding:16px}
+  .network-panel .panel-heading {padding:16px}
+  .network-panel .panel-heading h2 {font-size:17px}
+  .diagram-toolbar {gap:5px;padding:9px}
+  .diagram-toolbar>button {font-size:9px;padding:6px}
+  .quick-result .category-totals {grid-template-columns:repeat(3,1fr)}
+  .quick-result .contribution {grid-template-columns:115px 1fr 67px;gap:7px}
+  .workflow-steps {display:none}
+  .metric strong {font-size:27px}
+}
+@media (max-width:1150px) {
+  .input-workspace {grid-template-columns:minmax(350px,1fr) 340px}
+  .lineup-column {grid-column:1/-1;position:static}
+  .equipment-rail {max-height:none;display:flex;overflow:auto;align-items:stretch;padding:0 7px;gap:7px}
+  .rail-heading {flex:0 0 150px;border-bottom:0;border-right:1px solid var(--line);padding:15px 10px}
+  .rail-heading h2 {margin:7px 0 8px}
+  .equipment-group {flex:0 0 auto;max-width:490px;padding:14px 6px;display:flex;flex-wrap:wrap;align-content:start;gap:6px}
+  .equipment-group h3 {flex:0 0 100%;margin-bottom:2px}
+  .equipment-item {width:145px;min-height:61px;padding:8px 6px;margin:0}
+  .equipment-item .item-connection {display:none!important}
+  .canvas,.input-context .canvas {height:500px}
+  #study-controls .form-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
+  .metrics {grid-template-columns:repeat(2,1fr)}
+  .metric {min-height:100px}
+}
+@media (max-width:940px) {
+  .sidebar {position:static;width:auto;padding:14px 20px;display:block}
+  .brand {padding:0;font-size:12px}.brand>span {font-size:30px}.brand small {font-size:7px}
+  .workspace-label,.sidebar-bottom {display:none}
+  nav {display:flex;overflow:auto;gap:6px;margin-top:11px}
+  nav a {white-space:nowrap;font-size:11px;min-height:41px;padding:9px 12px;flex-shrink:0}
+  nav a i {font-size:16px}
+  main {margin:0;padding:20px}
+  .input-workspace {grid-template-columns:minmax(350px,1fr) 325px}
+  header {gap:14px}header h1 {font-size:20px}
+  header .actions {flex-shrink:1;justify-content:flex-end}
+  .study-bar {gap:16px}
+  .study-bar label {max-width:none}
+  .study-context {flex:none}
+  .results-grid {grid-template-columns:1fr}
+}
+@media (max-width:780px) {
+  main {padding:17px 13px}
+  header {flex-wrap:wrap;margin-bottom:16px}
+  header>div:first-child {width:100%}
+  header .actions {width:100%;justify-content:flex-start}
+  header .actions button {flex:1;font-size:11px;min-height:42px;padding:9px 7px}
+  .input-workspace {display:flex;flex-direction:column;gap:15px}
+  .lineup-column,.input-context,.input-workspace>.editor {width:100%;grid-column:auto;position:static}
+  .input-context {display:none}
+  .input-workspace>.editor {order:2}
+  .editor-scroll {max-height:none!important;min-height:0;overflow:visible;padding:20px}
+  .editor-empty {min-height:0;padding:32px}
+  .form-fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 17px}
+  .form-fields>h4,.form-fields>.model-note,.form-fields>.connection-note,.form-fields>.voltage-bridge,.form-fields>p {grid-column:1/-1}
+  .form-fields>h4 {margin-top:14px}
+  .canvas,.input-context .canvas {height:420px}
+  .quick-result {display:none}
+  .diagram-toolbar>button {font-size:11px;padding:8px}
+  .diagram-tools button {font-size:13px;min-height:44px;min-width:44px}
+  .network-panel .panel-heading h2 {font-size:19px}
+  .input-intro .form-grid {grid-template-columns:1fr 1fr}
+  .input-intro .form-grid>.field:first-child {grid-column:1/-1}
+  .input-unit input,.input-unit select {font-size:16px;min-height:46px}
+  .input-unit .unit {font-size:12px;width:70px}
+  .check-field input {min-height:18px}
+  .input-intro {padding:17px}
+  .input-intro h2 {font-size:20px}
+  .metric {padding:15px}
+  .metric strong {font-size:28px}
+  .metric span {font-size:9px}
+  .study-bar {flex-wrap:wrap;gap:12px}
+  .study-bar label {flex-basis:100%}
+  .study-context {flex:1}
+  .study-bar>a {margin-left:0;font-size:11px}
+  .equipment-group {max-width:500px;display:flex}
+  .equipment-item {width:155px;min-height:65px}
+  .equipment-item strong {font-size:12px}
+  #study-controls .form-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  #study-controls .check-field {grid-column:1/-1}
+  .diagram-page-note {flex-wrap:wrap}
+  .full-diagram .canvas {min-height:440px;height:65vh}
+  .math-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .review-row {flex-wrap:wrap;gap:9px}
+  .review-row p {flex-basis:calc(100% - 110px)}
+  .result-blocker button {min-height:40px}
+  .modal-backdrop {padding:12px}
+  .database-dialog {max-height:94vh}
+}
+@media (max-width:460px) {
+  main {padding:15px 10px}
+  .sidebar {padding:12px 13px}
+  .form-fields {display:block}
+  .editor-scroll {padding:18px}
+  .input-intro .form-grid {gap:12px}
+  .input-intro p {font-size:12px}
+  .canvas,.input-context .canvas {height:350px}
+  .diagram-toolbar {padding:9px;gap:6px}
+  .diagram-toolbar>button {font-size:10px}
+  .diagram-legend {gap:12px;font-size:9px}
+  .canvas-foot {font-size:10px}
+  .metric strong {font-size:26px}
+  .metric span {font-size:8px;letter-spacing:.5px}
+  .metric small {font-size:9px}
+  .metrics {gap:9px}
+  #study-controls .form-grid {grid-template-columns:1fr}
+  .contribution {grid-template-columns:105px minmax(0,1fr) 75px;gap:8px}
+  .form-grid {grid-template-columns:1fr}
+  .input-intro .form-grid {grid-template-columns:1fr}
+  .panel {padding:18px}
+  .db-controls {flex-wrap:wrap}.db-controls input,.db-controls select {flex-basis:100%}
+  button {min-height:42px}
+  .editor-actions button {min-height:40px}
+}
+@media (prefers-reduced-motion:reduce) {button {transition:none}}
+@media print {
+  body {background:white;color:#111}
+  main {margin:0;padding:0;max-width:none}
+  .diagram-toolbar,.diagram-legend,.canvas-foot,.diagram-page-note {display:none!important}
+  .report-diagram .one-line {width:100%;max-height:380px;border:1px solid #abc;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .report-diagram {break-inside:avoid}
+  td,.table-scroll td {font-size:10px}th {font-size:9px}
+  .badge {font-size:8px}
+  .panel,.network-panel {box-shadow:none}
+}
+
+/* Shared styles also support sites with an inline-style restriction. */
+.cloud-save-line{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 18px;color:#526773;font-size:13px}.cloud-save-line button{padding:5px 9px;margin-left:8px;font-size:12px}.cloud-search{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,240px);gap:16px;margin:22px 0}.cloud-search label{font-size:12px;font-weight:650;color:#526773}.cloud-search input,.cloud-search select{display:block;width:100%;margin-top:7px;padding:11px;border:1px solid #cbd9dc;border-radius:8px;font:inherit;font-size:14px;background:#fff;color:#112b3a}.cloud-case{padding:20px 0;border-top:1px solid #dbe5e7}.cloud-case-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.cloud-case h3{margin:0 0 3px;font-size:16px}.cloud-case small{display:block;color:#617780;font-size:12px;margin:5px 0 12px}.cloud-delete{color:#a04439}.cloud-delete-confirm{padding:14px;border:1px solid #ecc6c0;border-radius:8px;background:#fff6f4;margin-top:12px}.cloud-delete-confirm .actions{margin-top:12px}.cloud-error{padding:12px;background:#fff5e7;color:#7e5525;border-radius:8px}.report-title .no-print{margin-right:8px}@media(max-width:700px){.cloud-search{grid-template-columns:1fr}.cloud-case .actions{gap:8px}.cloud-case .actions button{flex:1 1 140px}.cloud-save-line{font-size:12px}}

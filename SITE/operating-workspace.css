@@ -1,0 +1,26 @@
+.operating-workspace{display:block;max-width:100%;overflow:hidden}
+.operating-workspace .operating-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;margin:16px 0}
+.operating-workspace .operating-field{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600}
+.operating-workspace input,.operating-workspace select{max-width:100%;min-height:39px;padding:7px;border:1px solid #a8b3bc;border-radius:7px;background:white;color:#173143}
+.operating-workspace .operating-table-wrap{overflow:auto;max-width:100%}
+.operating-workspace .operating-table{width:100%;border-collapse:collapse;min-width:670px;font-size:13px;margin:12px 0}
+.operating-workspace .operating-table td,.operating-workspace .operating-table th{padding:9px;border-bottom:1px solid #d3dce2;text-align:left}
+.operating-workspace .operating-table td input{width:135px}
+.operating-workspace .operating-table th{background:#edf3f5;color:#23485c}
+.operating-workspace .operating-blocker{padding:12px 16px;border-left:4px solid #9b621e;background:#faf0df;color:#5e400c}
+.operating-workspace .operating-ok{padding:12px 16px;border-left:4px solid #2e725f;background:#edf7f4;color:#185341}
+.operating-workspace .operating-limits{font-size:13px;color:#596d77;line-height:1.5}
+.operating-workspace .operating-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px;margin-top:20px}
+.operating-workspace .operating-card{border:1px solid #d4dee3;border-radius:10px;padding:16px;min-width:0}
+.operating-workspace .operating-card h3{margin:0 0 8px;font-size:17px}
+@media (max-width:650px){.operating-workspace .operating-card{padding:12px}}
+
+.operating-protection{margin-top:24px;padding:16px;border:1px solid #bfcfd9;border-radius:11px}
+.operating-protection fieldset{min-width:0}
+.operating-protection legend{font-weight:700;color:#23485c;padding:0 4px}
+.operating-protection p{line-height:1.5}
+
+.tcc-chart{margin:18px auto;max-width:900px;width:100%;}
+.tcc-chart svg{background:#fff;display:block;width:100%;height:auto;border:1px solid #d3e2e8;border-radius:8px}
+.tcc-chart figcaption{text-align:center;font-size:12px;color:#526a74;line-height:1.6}
+.tcc-chart .downstream{color:#185780;font-weight:700}.tcc-chart .upstream{color:#b45e29;font-weight:700}

@@ -1,0 +1,40 @@
+/**
+ * Lossless, safe advanced-study PDF and XLSX export without a web service.
+ * Inputs, outputs, units, scope, provenance and warnings are preserved as
+ * sheets; the shared public-report-engine supplies established ZIP/PDF writers.
+ * Never turn an illustrative or bounded result into an equipment approval.
+ */
+import {workbookBlob,pdfBlob} from './public-report-engine.mjs';
+const maxRows=9000,maxDepth=24;
+function collect(value,prefix='',depth=0,rows=[]){
+ if(depth>maxDepth)throw Error('Study report nesting exceeds safe maximum');
+ if(rows.length>maxRows)throw Error('Study report exceeds supported row count; export JSON instead');
+ if(value===null||typeof value!=='object'){
+  if(typeof value==='number'&&!Number.isFinite(value))throw Error('Nonfinite study result cannot be exported');
+  if(typeof value==='string'&&value.length>8000)throw Error('Oversized field cannot be safely exported to spreadsheet/PDF');
+  rows.push([prefix||'value',value===null?'null':value]);return rows;
+ }
+ if(Array.isArray(value)){
+  if(!value.length)rows.push([prefix||'array','[]']);
+  for(let i=0;i<value.length;i++)collect(value[i],`${prefix}[${i}]`,depth+1,rows);
+ }else{
+  const keys=Object.keys(value);if(!keys.length)rows.push([prefix||'object','{}']);
+  for(let k of keys)collect(value[k],prefix?`${prefix}.${k}`:k,depth+1,rows);
+ }
+ return rows;
+}
+const warning='ENGINEERING SCREENING ONLY — independently verify actual manufacturer, utility, installation, equipment settings and standards edition before professional use.';
+export function advancedStudyReport(study){
+ if(!study||!study.outputs||!study.inputs||typeof study.method!=='string')throw Error('Run a documented advanced study before exporting');
+ if(study.outputs.status===undefined||typeof study.outputs.status!=='string')throw Error('Only successfully calculated studies can be reported');
+ const created=study.createdAt??new Date().toISOString(),outputRows=collect(study.outputs),inputRows=collect(study.inputs);
+ let risk=[['Release status','BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL'],['Warning',warning],['Study method',study.method],['Timestamp',created]];
+ for(const [key,val] of Object.entries(study.outputs))if(['scope','limitations','warnings','assumptions','reference','provenance'].includes(key))collect(val,`outputs.${key}`,0,risk);
+ return {sheets:[
+  {name:'Summary',headers:['Property','Value'],rows:[['Project','Fault Current Studio advanced study'],['Method',study.method],['Model status',study.outputs.status],['Captured UTC',created],['Warning',warning],['Report data provenance','Entered study inputs, isolated calculated method outputs. No external OEM certification or auto-selected breaker/PPE.']]},
+  {name:'Study inputs',headers:['Input path','Entered value'],rows:inputRows},
+  {name:'Equipment duty',headers:['Calculated output path','Value'],rows:outputRows},
+  {name:'Assumptions & QA',headers:['Evidence / limitation','Value'],rows:risk}
+ ]};
+}
+export function advancedStudyReportBlob(study,format){let report=advancedStudyReport(study);if(format==='pdf')return pdfBlob(report);if(format==='xlsx')return workbookBlob(report);throw Error('Unsupported advanced study report format')}
