@@ -1,0 +1,223 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5334 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: transformer60909) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_IEC60909_RADIAL_TRANSFORMER_ENVELOPE) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: ratedHighVoltageV | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: ratedLowVoltageV | Entered value: 480) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: transformer.sourceReference | Entered value: ILLUSTRATIVE: replace with actual approved) Tj ET
+BT /F1 8 Tf 32 558 Td (2500 kVA transformer OEM nameplate and loss test) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: transformer.ratedMVA | Entered value: 2.5) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: transformer.shortCircuitVoltagePercent | Entered value: 5.75) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: transformer.ratedLoadLossKW | Entered value: 18) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: transformer.ratedTapRatio | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: utility.sourceReference | Entered value: ILLUSTRATIVE: replace with max/min POI) Tj ET
+BT /F1 8 Tf 32 480 Td (equivalent utility study and matching X/R) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: utility.maximumEquivalentMVA | Entered value: 350) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: utility.maximumXOverR | Entered value: 10) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: utility.minimumEquivalentMVA | Entered value: 220) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: utility.minimumXOverR | Entered value: 8) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: voltageFactors.maximum | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: voltageFactors.minimum | Entered value: 0.95) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: feeder.sourceReference | Entered value: ILLUSTRATIVE LV cable sizing and installation;) Tj ET
+BT /F1 8 Tf 32 376 Td (replace with approved conductor R20/X/route/temperature) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: feeder.lengthM | Entered value: 25) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: feeder.resistanceOhmPerKmAt20C | Entered value: 0.16) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: feeder.reactanceOhmPerKm | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: feeder.alphaPerC | Entered value: 0.00393) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: feeder.maximumConductorTemperatureC | Entered value: 20) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: feeder.minimumConductorTemperatureC | Entered value: 90) Tj ET
+BT /F1 8 Tf 32 285 Td () Tj ET
+BT /F1 8 Tf 32 272 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: status | Value: BOUNDED_IEC60909_RADIAL_TRANSFORMER_ENVELOPE) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: scope | Value: Single utility Thevenin source, one 2-winding transformer at) Tj ET
+BT /F1 8 Tf 32 233 Td (rated reference tap, one LV feeder, radial balanced 3PH initial symmetrical maximum/minimum) Tj ET
+BT /F1 8 Tf 32 220 Td (scenarios. Calculates nameplate transformer R/X, correction KT=0.95*cmax/\(1+0.6*xT\) and IEC-style) Tj ET
+BT /F1 8 Tf 32 207 Td (voltage-factor current. Source equivalent short-circuit MVA is specifically defined as nominal) Tj ET
+BT /F1 8 Tf 32 194 Td (V^2/|Zsource| \(does NOT include a voltage factor\). Not full IEC 60909-0:2026, not network) Tj ET
+BT /F1 8 Tf 32 181 Td (generator/motor/IBR duty, tap-position rules or breaker interrupting qualification.) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: highVoltageV | Value: 13800) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: lowVoltageV | Value: 480) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: transformer.ratedMVA | Value: 2.5) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: transformer.shortCircuitVoltagePercent | Value: 5.75) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: transformer.ratedLoadLossKW | Value: 18) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: transformer.atRatedTapOnly | Value: true) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: transformer.uncorrectedRohm | Value: 0.000663552) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: transformer.uncorrectedXohm | Value: 0.005257491738775821) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: transformer.relativeReactancePu | Value: 0.05704743640164736) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: transformer.impedanceCorrectionKT | Value: 1.0104150471162217) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: provenance.transformerReference | Value: ILLUSTRATIVE: replace with actual) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 5993 >>
+stream
+BT /F1 8 Tf 32 792 Td (approved 2500 kVA transformer OEM nameplate and loss test) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: provenance.utilityReference | Value: ILLUSTRATIVE: replace with max/min POI) Tj ET
+BT /F1 8 Tf 32 766 Td (equivalent utility study and matching X/R) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: provenance.feederReference | Value: ILLUSTRATIVE LV cable sizing and) Tj ET
+BT /F1 8 Tf 32 740 Td (installation; replace with approved conductor R20/X/route/temperature) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: scenarios[0].scenario | Value: MAXIMUM) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[0].voltageFactor | Value: 1.1) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[0].conductorTemperatureC | Value: 20) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[0].utilityEquivalentMVA | Value: 350) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[0].utilityXOverR | Value: 10) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: scenarios[0].sourceEquivalentLVImpedanceOhm.r | Value:) Tj ET
+BT /F1 8 Tf 32 649 Td (0.00006550187674982329) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[0].sourceEquivalentLVImpedanceOhm.x | Value:) Tj ET
+BT /F1 8 Tf 32 623 Td (0.0006550187674982329) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: scenarios[0].correctedTransformerImpedanceOhm.r | Value:) Tj ET
+BT /F1 8 Tf 32 597 Td (0.0006704629253440631) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: scenarios[0].correctedTransformerImpedanceOhm.x | Value:) Tj ET
+BT /F1 8 Tf 32 571 Td (0.005312248762948318) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: scenarios[0].feederImpedanceOhm.r | Value: 0.004) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: scenarios[0].feederImpedanceOhm.x | Value: 0.002) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: scenarios[0].totalEquivalentImpedanceOhm.r | Value: 0.004735964802093887) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: scenarios[0].totalEquivalentImpedanceOhm.x | Value: 0.007967267530446551) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: scenarios[0].shortCircuitCurrent.realA | Value: 16805.624338409994) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: scenarios[0].shortCircuitCurrent.imaginaryA | Value: -28271.938393861798) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: scenarios[0].shortCircuitCurrent.magnitudeA | Value: 32889.68698467766) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: scenarios[0].shortCircuitCurrent.angleDegrees | Value: -59.2715759691218) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: scenarios[0].initialSymmetricalKA | Value: 32.88968698467766) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scenarios[0].screenPeakA | Value: 55105.1012606707) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: scenarios[0].screenPeakKA | Value: 55.1051012606707) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scenarios[0].networkXOverR | Value: 1.6822902752410716) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: scenarios[0].scope | Value: Initial symmetrical RMS and single radial) Tj ET
+BT /F1 8 Tf 32 389 Td (passive-system exponential peak screening; no circuit-breaker interrupting or close-and-latch) Tj ET
+BT /F1 8 Tf 32 376 Td (qualification) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: scenarios[1].scenario | Value: MINIMUM) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: scenarios[1].voltageFactor | Value: 0.95) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: scenarios[1].conductorTemperatureC | Value: 90) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: scenarios[1].utilityEquivalentMVA | Value: 220) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: scenarios[1].utilityXOverR | Value: 8) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: scenarios[1].sourceEquivalentLVImpedanceOhm.r | Value:) Tj ET
+BT /F1 8 Tf 32 285 Td (0.00012989819476978923) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: scenarios[1].sourceEquivalentLVImpedanceOhm.x | Value:) Tj ET
+BT /F1 8 Tf 32 259 Td (0.0010391855581583138) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: scenarios[1].correctedTransformerImpedanceOhm.r | Value:) Tj ET
+BT /F1 8 Tf 32 233 Td (0.0006704629253440631) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: scenarios[1].correctedTransformerImpedanceOhm.x | Value:) Tj ET
+BT /F1 8 Tf 32 207 Td (0.005312248762948318) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: scenarios[1].feederImpedanceOhm.r | Value: 0.005100400000000001) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[1].feederImpedanceOhm.x | Value: 0.002) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[1].totalEquivalentImpedanceOhm.r | Value: 0.005900761120113853) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: scenarios[1].totalEquivalentImpedanceOhm.x | Value: 0.008351434321106632) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[1].shortCircuitCurrent.realA | Value: 14856.759460467198) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[1].shortCircuitCurrent.imaginaryA | Value: -21026.990981830735) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: scenarios[1].shortCircuitCurrent.magnitudeA | Value: 25746.022050331823) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[1].shortCircuitCurrent.angleDegrees | Value: -54.75663077054178) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: scenarios[1].initialSymmetricalKA | Value: 25.746022050331824) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[1].screenPeakA | Value: 41422.98388804437) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: scenarios[1].screenPeakKA | Value: 41.42298388804437) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[1].networkXOverR | Value: 1.4153147621311426) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: scenarios[1].scope | Value: Initial symmetrical RMS and single radial) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 5666 >>
+stream
+BT /F1 8 Tf 32 792 Td (passive-system exponential peak screening; no circuit-breaker interrupting or close-and-latch) Tj ET
+BT /F1 8 Tf 32 779 Td (qualification) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: maxInitialSymmetricalKA | Value: 32.88968698467766) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: minInitialSymmetricalKA | Value: 25.746022050331824) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: reference | Value: IEC 60909-0:2016 transformer K_T expression reproduced) Tj ET
+BT /F1 8 Tf 32 727 Td (in Schneider Electric TP20180605 \(2018\); method remains an explicitly bounded screening, NOT full) Tj ET
+BT /F1 8 Tf 32 714 Td (IEC 60909-0:2026 conformity) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: limitations[0] | Value: Only radial single utility source and one) Tj ET
+BT /F1 8 Tf 32 688 Td (two-winding transformer; no motor/generator/IBR/source contribution) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: limitations[1] | Value: No LV transformer off-rated tap, load tap changer) Tj ET
+BT /F1 8 Tf 32 662 Td (correction, unbalanced or ground faults) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: limitations[2] | Value: Utility source input short-circuit MVA is a stated) Tj ET
+BT /F1 8 Tf 32 636 Td (equivalent Z definition; it must not already include an IEC voltage factor) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: limitations[3] | Value: LV cable resistance at temperature uses) Tj ET
+BT /F1 8 Tf 32 610 Td (user-entered linear alpha; no skin/proximity derivation or sheath effects) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: limitations[4] | Value: Exponential peak kappa only appropriate to simple) Tj ET
+BT /F1 8 Tf 32 584 Td (passive equivalent R+jX source network) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: limitations[5] | Value: No device protection trip-time, breaking or thermal) Tj ET
+BT /F1 8 Tf 32 558 Td (withstand validation) Tj ET
+BT /F1 8 Tf 32 545 Td () Tj ET
+BT /F1 8 Tf 32 532 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 519 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 506 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 493 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 480 Td (use.) Tj ET
+BT /F1 8 Tf 32 467 Td (Evidence / limitation: Study method | Value: transformer60909) Tj ET
+BT /F1 8 Tf 32 454 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 441 Td (Evidence / limitation: outputs.scope | Value: Single utility Thevenin source, one 2-winding) Tj ET
+BT /F1 8 Tf 32 428 Td (transformer at rated reference tap, one LV feeder, radial balanced 3PH initial symmetrical) Tj ET
+BT /F1 8 Tf 32 415 Td (maximum/minimum scenarios. Calculates nameplate transformer R/X, correction KT=0.95*cmax/\(1+0.6*xT\)) Tj ET
+BT /F1 8 Tf 32 402 Td (and IEC-style voltage-factor current. Source equivalent short-circuit MVA is specifically defined) Tj ET
+BT /F1 8 Tf 32 389 Td (as nominal V^2/|Zsource| \(does NOT include a voltage factor\). Not full IEC 60909-0:2026, not network) Tj ET
+BT /F1 8 Tf 32 376 Td (generator/motor/IBR duty, tap-position rules or breaker interrupting qualification.) Tj ET
+BT /F1 8 Tf 32 363 Td (Evidence / limitation: outputs.provenance.transformerReference | Value: ILLUSTRATIVE: replace with) Tj ET
+BT /F1 8 Tf 32 350 Td (actual approved 2500 kVA transformer OEM nameplate and loss test) Tj ET
+BT /F1 8 Tf 32 337 Td (Evidence / limitation: outputs.provenance.utilityReference | Value: ILLUSTRATIVE: replace with) Tj ET
+BT /F1 8 Tf 32 324 Td (max/min POI equivalent utility study and matching X/R) Tj ET
+BT /F1 8 Tf 32 311 Td (Evidence / limitation: outputs.provenance.feederReference | Value: ILLUSTRATIVE LV cable sizing and) Tj ET
+BT /F1 8 Tf 32 298 Td (installation; replace with approved conductor R20/X/route/temperature) Tj ET
+BT /F1 8 Tf 32 285 Td (Evidence / limitation: outputs.reference | Value: IEC 60909-0:2016 transformer K_T expression) Tj ET
+BT /F1 8 Tf 32 272 Td (reproduced in Schneider Electric TP20180605 \(2018\); method remains an explicitly bounded screening,) Tj ET
+BT /F1 8 Tf 32 259 Td (NOT full IEC 60909-0:2026 conformity) Tj ET
+BT /F1 8 Tf 32 246 Td (Evidence / limitation: outputs.limitations[0] | Value: Only radial single utility source and one) Tj ET
+BT /F1 8 Tf 32 233 Td (two-winding transformer; no motor/generator/IBR/source contribution) Tj ET
+BT /F1 8 Tf 32 220 Td (Evidence / limitation: outputs.limitations[1] | Value: No LV transformer off-rated tap, load tap) Tj ET
+BT /F1 8 Tf 32 207 Td (changer correction, unbalanced or ground faults) Tj ET
+BT /F1 8 Tf 32 194 Td (Evidence / limitation: outputs.limitations[2] | Value: Utility source input short-circuit MVA is a) Tj ET
+BT /F1 8 Tf 32 181 Td (stated equivalent Z definition; it must not already include an IEC voltage factor) Tj ET
+BT /F1 8 Tf 32 168 Td (Evidence / limitation: outputs.limitations[3] | Value: LV cable resistance at temperature uses) Tj ET
+BT /F1 8 Tf 32 155 Td (user-entered linear alpha; no skin/proximity derivation or sheath effects) Tj ET
+BT /F1 8 Tf 32 142 Td (Evidence / limitation: outputs.limitations[4] | Value: Exponential peak kappa only appropriate to) Tj ET
+BT /F1 8 Tf 32 129 Td (simple passive equivalent R+jX source network) Tj ET
+BT /F1 8 Tf 32 116 Td (Evidence / limitation: outputs.limitations[5] | Value: No device protection trip-time, breaking or) Tj ET
+BT /F1 8 Tf 32 103 Td (thermal withstand validation) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000127 00000 n 
+0000000195 00000 n 
+0000005581 00000 n 
+0000005707 00000 n 
+0000011752 00000 n 
+0000011878 00000 n 
+0000017596 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+17722
+%%EOF

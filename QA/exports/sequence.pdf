@@ -1,0 +1,115 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5007 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: sequence) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_REDUCED_SEQUENCE_NETWORK) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: nominalLLV | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: voltageFactor | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: faultType | Entered value: AG) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: positiveSequence.rOhm | Entered value: 0.12) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: positiveSequence.xOhm | Entered value: 0.94) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: negativeSequence.rOhm | Entered value: 0.14) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: negativeSequence.xOhm | Entered value: 0.98) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: zeroSequence.rOhm | Entered value: 0.33) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: zeroSequence.xOhm | Entered value: 1.45) Tj ET
+BT /F1 8 Tf 32 480 Td () Tj ET
+BT /F1 8 Tf 32 467 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: status | Value: BOUNDED_REDUCED_SEQUENCE_NETWORK) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: scope | Value: Single-source classical symmetrical-component) Tj ET
+BT /F1 8 Tf 32 428 Td (voltage/impedance screen for initial steady phasors. Not full IEC 60909:2026. No) Tj ET
+BT /F1 8 Tf 32 415 Td (positive/negative/zero transformer vector group correction, shunt/motor/IBR contribution,) Tj ET
+BT /F1 8 Tf 32 402 Td (peak/interrupting duty, relay settings, fault minimum, multiple sources or detailed earthing) Tj ET
+BT /F1 8 Tf 32 389 Td (design.) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: voltageLLV | Value: 13800) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: voltageFactor | Value: 1.1) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: sequenceA.positive.phase | Value: I1) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: sequenceA.positive.realA | Value: 441.76544048834916) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: sequenceA.positive.imagA | Value: -2523.30429567074) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: sequenceA.positive.rmsA | Value: 2561.683288964558) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: sequenceA.negative.phase | Value: I2) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: sequenceA.negative.realA | Value: 441.76544048834916) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: sequenceA.negative.imagA | Value: -2523.30429567074) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: sequenceA.negative.rmsA | Value: 2561.683288964558) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: sequenceA.zero.phase | Value: I0) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: sequenceA.zero.realA | Value: 441.76544048834916) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: sequenceA.zero.imagA | Value: -2523.30429567074) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: sequenceA.zero.rmsA | Value: 2561.683288964558) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: phaseA.a.phase | Value: A) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: phaseA.a.realA | Value: 1325.2963214650474) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: phaseA.a.imagA | Value: -7569.91288701222) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: phaseA.a.rmsA | Value: 7685.049866893674) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: phaseA.b.phase | Value: B) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: phaseA.b.realA | Value: 2.2737367544323206e-13) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: phaseA.b.imagA | Value: 0) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: phaseA.b.rmsA | Value: 2.2737367544323206e-13) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: phaseA.c.phase | Value: C) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: phaseA.c.realA | Value: 0) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: phaseA.c.imagA | Value: 1.1368683772161603e-13) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: phaseA.c.rmsA | Value: 1.1368683772161603e-13) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 1394 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: groundResidualA | Value: 7685.049866893674) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: maximumPhaseRmsA | Value: 7685.049866893674) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 740 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 727 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 714 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 701 Td (use.) Tj ET
+BT /F1 8 Tf 32 688 Td (Evidence / limitation: Study method | Value: sequence) Tj ET
+BT /F1 8 Tf 32 675 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 662 Td (Evidence / limitation: outputs.scope | Value: Single-source classical symmetrical-component) Tj ET
+BT /F1 8 Tf 32 649 Td (voltage/impedance screen for initial steady phasors. Not full IEC 60909:2026. No) Tj ET
+BT /F1 8 Tf 32 636 Td (positive/negative/zero transformer vector group correction, shunt/motor/IBR contribution,) Tj ET
+BT /F1 8 Tf 32 623 Td (peak/interrupting duty, relay settings, fault minimum, multiple sources or detailed earthing) Tj ET
+BT /F1 8 Tf 32 610 Td (design.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000005248 00000 n 
+0000005374 00000 n 
+0000006820 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+6946
+%%EOF

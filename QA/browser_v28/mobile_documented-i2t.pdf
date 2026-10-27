@@ -1,0 +1,137 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5273 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: conductor-duty-v28) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_DOCUMENTED_ADIABATIC_CONDUCTOR_I2T_SCREEN) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:08:09.669Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: method | Entered value: documented-i2t) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: studyReference | Entered value: ILLUSTRATIVE conductor duty screening example only) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: conductor.areaMm2 | Entered value: 120) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: conductor.kASqrtSPerMm2 | Entered value: 100) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: conductor.kSourceReference | Entered value: ILLUSTRATIVE k coefficient; NOT OEM) Tj ET
+BT /F1 8 Tf 32 532 Td (qualified; replace before project use) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: conductor.material | Entered value: copper) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: conductor.initialTempC | Entered value: 90) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: conductor.maximumFaultTempC | Entered value: 250) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: fault.sourceReference | Entered value: ILLUSTRATIVE 10 kA RMS and 0.2 s; replace with) Tj ET
+BT /F1 8 Tf 32 467 Td (verified clearing envelope) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: fault.clearingTimeS | Entered value: 0.2) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: fault.documentedI2tA2s | Entered value: 15000000) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: marginFactor | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 415 Td () Tj ET
+BT /F1 8 Tf 32 402 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: status | Value: BOUNDED_DOCUMENTED_ADIABATIC_CONDUCTOR_I2T_SCREEN) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: scope | Value: One documented conductor, one fault interval, user-qualified) Tj ET
+BT /F1 8 Tf 32 363 Td (adiabatic k-factor, exact integral of entered piecewise-linear RMS current trace or entered) Tj ET
+BT /F1 8 Tf 32 350 Td (protective let-through I^2t. This is a bounded thermal stress screen, NOT an IEC 60949 full) Tj ET
+BT /F1 8 Tf 32 337 Td (calculation, NEC/IEC cable rating, protective coordination, or OEM equipment approval.) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: method | Value: documented-i2t) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: conductorMaterial | Value: copper) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: conductorAreaMm2 | Value: 120) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: initialConductorTempC | Value: 90) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: maximumFaultConductorTempC | Value: 250) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: enteredKASqrtSPerMm2 | Value: 100) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: kSourceReference | Value: ILLUSTRATIVE k coefficient; NOT OEM qualified;) Tj ET
+BT /F1 8 Tf 32 233 Td (replace before project use) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: faultSourceReference | Value: ILLUSTRATIVE 10 kA RMS and 0.2 s; replace) Tj ET
+BT /F1 8 Tf 32 207 Td (with verified clearing envelope) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: studyReference | Value: ILLUSTRATIVE conductor duty screening example only) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: clearingTimeS | Value: 0.2) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: sourceKind | Value: externally documented integrated conductor I^2t) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: enteredPeakRmsA | Value: null) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: documentedFaultI2tA2s | Value: 15000000) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: adiabaticCapacityA2s | Value: 144000000) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: marginFactor | Value: 1.1) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: marginAdjustedDemandA2s | Value: 16500000.000000002) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: utilizationPercent | Value: 11.458333333333334) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: minimumAreaMm2ForEnteredDemand | Value: 40.620192023179804) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: maximumConstantRmsAForClearingTime | Value: 25584.085962673253) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: withinEnteredAdiabaticCapacity | Value: true) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: limitations[0] | Value: One physical conductor only; multiple parallel runs) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 3933 >>
+stream
+BT /F1 8 Tf 32 792 Td (need independently verified fault current distribution) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: limitations[1] | Value: Entered k is NOT derived or verified: material,) Tj ET
+BT /F1 8 Tf 32 766 Td (insulation, initial and maximum temperatures and relevant standard edition must be confirmed by a) Tj ET
+BT /F1 8 Tf 32 753 Td (qualified engineer) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: limitations[2] | Value: Current RMS trace is assumed piecewise-linear) Tj ET
+BT /F1 8 Tf 32 727 Td (between samples; waveform/DC offset/limiting effects are NOT inferred) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: limitations[3] | Value: Documented I^2t must be for the same physical) Tj ET
+BT /F1 8 Tf 32 701 Td (conductor and entire clearing interval; device trip time and let-through are NOT calculated) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: limitations[4] | Value: Adiabatic only: no non-adiabatic corrections,) Tj ET
+BT /F1 8 Tf 32 675 Td (adjacent heating, cable joints/terminations or sheath/armour stress) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: limitations[5] | Value: Passing this screen is not cable sizing,) Tj ET
+BT /F1 8 Tf 32 649 Td (installation compliance, or protective-device approval) Tj ET
+BT /F1 8 Tf 32 636 Td () Tj ET
+BT /F1 8 Tf 32 623 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 610 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 597 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 584 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 571 Td (use.) Tj ET
+BT /F1 8 Tf 32 558 Td (Evidence / limitation: Study method | Value: conductor-duty-v28) Tj ET
+BT /F1 8 Tf 32 545 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:08:09.669Z) Tj ET
+BT /F1 8 Tf 32 532 Td (Evidence / limitation: outputs.scope | Value: One documented conductor, one fault interval,) Tj ET
+BT /F1 8 Tf 32 519 Td (user-qualified adiabatic k-factor, exact integral of entered piecewise-linear RMS current trace or) Tj ET
+BT /F1 8 Tf 32 506 Td (entered protective let-through I^2t. This is a bounded thermal stress screen, NOT an IEC 60949 full) Tj ET
+BT /F1 8 Tf 32 493 Td (calculation, NEC/IEC cable rating, protective coordination, or OEM equipment approval.) Tj ET
+BT /F1 8 Tf 32 480 Td (Evidence / limitation: outputs.limitations[0] | Value: One physical conductor only; multiple) Tj ET
+BT /F1 8 Tf 32 467 Td (parallel runs need independently verified fault current distribution) Tj ET
+BT /F1 8 Tf 32 454 Td (Evidence / limitation: outputs.limitations[1] | Value: Entered k is NOT derived or verified:) Tj ET
+BT /F1 8 Tf 32 441 Td (material, insulation, initial and maximum temperatures and relevant standard edition must be) Tj ET
+BT /F1 8 Tf 32 428 Td (confirmed by a qualified engineer) Tj ET
+BT /F1 8 Tf 32 415 Td (Evidence / limitation: outputs.limitations[2] | Value: Current RMS trace is assumed) Tj ET
+BT /F1 8 Tf 32 402 Td (piecewise-linear between samples; waveform/DC offset/limiting effects are NOT inferred) Tj ET
+BT /F1 8 Tf 32 389 Td (Evidence / limitation: outputs.limitations[3] | Value: Documented I^2t must be for the same physical) Tj ET
+BT /F1 8 Tf 32 376 Td (conductor and entire clearing interval; device trip time and let-through are NOT calculated) Tj ET
+BT /F1 8 Tf 32 363 Td (Evidence / limitation: outputs.limitations[4] | Value: Adiabatic only: no non-adiabatic) Tj ET
+BT /F1 8 Tf 32 350 Td (corrections, adjacent heating, cable joints/terminations or sheath/armour stress) Tj ET
+BT /F1 8 Tf 32 337 Td (Evidence / limitation: outputs.limitations[5] | Value: Passing this screen is not cable sizing,) Tj ET
+BT /F1 8 Tf 32 324 Td (installation compliance, or protective-device approval) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000005514 00000 n 
+0000005640 00000 n 
+0000009625 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+9751
+%%EOF

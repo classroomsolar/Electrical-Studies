@@ -1,0 +1,149 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5199 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: buried) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_IEC60287_SINGLE_CORE_HOMOGENEOUS_DIRECT_BURIAL) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: installation | Entered value: single-core-homogeneous-direct-burial) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: conductorDiameterMM | Entered value: 20) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: insulationLayers[0].innerDiameterMM | Entered value: 20) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: insulationLayers[0].outerDiameterMM | Entered value: 31) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: insulationLayers[0].thermalResistivityKmPerW | Entered value: 3.5) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: beddingLayers[0].innerDiameterMM | Entered value: 31) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: beddingLayers[0].outerDiameterMM | Entered value: 34) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: beddingLayers[0].thermalResistivityKmPerW | Entered value: 4.5) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: jacketLayers[0].innerDiameterMM | Entered value: 34) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: jacketLayers[0].outerDiameterMM | Entered value: 43) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: jacketLayers[0].thermalResistivityKmPerW | Entered value: 3.5) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: burialDepthToAxisMM | Entered value: 900) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: soilThermalResistivityKmPerW | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: ambientSoilC | Entered value: 25) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: conductorLimitC | Entered value: 90) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: dielectricLossWPerM | Entered value: 0.05) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: sheathLossFactor | Entered value: 0.1) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: armourLossFactor | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: centerOffsetsMM[0] | Entered value: -200) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: centerOffsetsMM[1] | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: centerOffsetsMM[2] | Entered value: 200) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: acResistanceAtLimitOhmPerM | Entered value: 0.00013) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: acResistanceSource | Entered value: ILLUSTRATIVE INPUT ONLY: replace with a) Tj ET
+BT /F1 8 Tf 32 298 Td (manufacturer-qualified AC conductor resistance at rated conductor temperature) Tj ET
+BT /F1 8 Tf 32 285 Td (Input path: loadCurrentA | Entered value: 250) Tj ET
+BT /F1 8 Tf 32 272 Td () Tj ET
+BT /F1 8 Tf 32 259 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: status | Value: BOUNDED_IEC60287_SINGLE_CORE_HOMOGENEOUS_DIRECT_BURIAL) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: installation | Value: single-core-homogeneous-direct-burial) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: scope | Value: One or a flat row of equally loaded identical single-core) Tj ET
+BT /F1 8 Tf 32 207 Td (cables in uniform, undried soil at equal burial depth. Not trefoil, duct banks, cyclic/drying-out) Tj ET
+BT /F1 8 Tf 32 194 Td (or heterogeneous soil.) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cableOuterDiameterMM | Value: 43) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: burialDepthToAxisMM | Value: 900) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: conductorResistanceOhmPerM | Value: 0.00013) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: acResistanceSource | Value: ILLUSTRATIVE INPUT ONLY: replace with a) Tj ET
+BT /F1 8 Tf 32 129 Td (manufacturer-qualified AC conductor resistance at rated conductor temperature) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: t1KmPerW | Value: 0.24412653507231694) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: t2KmPerW | Value: 0.06615751728897509) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: t3KmPerW | Value: 0.13081558613776706) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: isolatedExternalThermalResistanceKmPerW | Value: 0.7046340497704088) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cableRatings[0].index | Value: 0) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cableRatings[0].centerOffsetMM | Value: -200) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cableRatings[0].mutualThermalResistanceKmPerW | Value: 0.5938927293857521) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 5297 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cableRatings[0].externalThermalResistanceKmPerW | Value: 1.2985267791561608) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cableRatings[0].continuousRatingA | Value: 514.1364394513777) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cableRatings[0].dielectricTemperatureRiseC | Value: 0.08087815750595306) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cableRatings[0].heatingCoefficient | Value: 0.0002455929327687563) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cableRatings[1].index | Value: 1) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cableRatings[1].centerOffsetMM | Value: 0) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cableRatings[1].mutualThermalResistanceKmPerW | Value: 0.7013511510203021) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cableRatings[1].externalThermalResistanceKmPerW | Value: 1.405985200790711) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cableRatings[1].continuousRatingA | Value: 498.748727522147) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: cableRatings[1].dielectricTemperatureRiseC | Value: 0.08625107858768058) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cableRatings[1].heatingCoefficient | Value: 0.000260959487062497) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cableRatings[2].index | Value: 2) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cableRatings[2].centerOffsetMM | Value: 200) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cableRatings[2].mutualThermalResistanceKmPerW | Value: 0.5938927293857521) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cableRatings[2].externalThermalResistanceKmPerW | Value: 1.2985267791561608) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cableRatings[2].continuousRatingA | Value: 514.1364394513777) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cableRatings[2].dielectricTemperatureRiseC | Value: 0.08087815750595306) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cableRatings[2].heatingCoefficient | Value: 0.0002455929327687563) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: limitingCableIndex | Value: 1) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: groupContinuousCurrentRatingA | Value: 498.748727522147) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: enteredLoadCurrentA | Value: 250) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: withinGroupRating | Value: true) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: warnings[0] | Value: AC resistance skin/proximity correction inputs,) Tj ET
+BT /F1 8 Tf 32 493 Td (dielectric losses and sheath/armour loss factors require manufacturer qualification.) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: warnings[1] | Value: This is a constrained homogeneous direct-burial) Tj ET
+BT /F1 8 Tf 32 467 Td (steady-state calculation and is NOT a verified full IEC 60287 installation/NEC ampacity rating.) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: warnings[2] | Value: Soil dry-out, thermal backfill, ducts, other heated) Tj ET
+BT /F1 8 Tf 32 441 Td (circuits and cyclic/seasonal conditions are excluded.) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: warnings[3] | Value: Use project-specific thermophysical and conductor data) Tj ET
+BT /F1 8 Tf 32 415 Td (and engineering review for final cable sizing.) Tj ET
+BT /F1 8 Tf 32 402 Td () Tj ET
+BT /F1 8 Tf 32 389 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 376 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 363 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 350 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 337 Td (use.) Tj ET
+BT /F1 8 Tf 32 324 Td (Evidence / limitation: Study method | Value: buried) Tj ET
+BT /F1 8 Tf 32 311 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 298 Td (Evidence / limitation: outputs.scope | Value: One or a flat row of equally loaded identical) Tj ET
+BT /F1 8 Tf 32 285 Td (single-core cables in uniform, undried soil at equal burial depth. Not trefoil, duct banks,) Tj ET
+BT /F1 8 Tf 32 272 Td (cyclic/drying-out or heterogeneous soil.) Tj ET
+BT /F1 8 Tf 32 259 Td (Evidence / limitation: outputs.warnings[0] | Value: AC resistance skin/proximity correction inputs,) Tj ET
+BT /F1 8 Tf 32 246 Td (dielectric losses and sheath/armour loss factors require manufacturer qualification.) Tj ET
+BT /F1 8 Tf 32 233 Td (Evidence / limitation: outputs.warnings[1] | Value: This is a constrained homogeneous direct-burial) Tj ET
+BT /F1 8 Tf 32 220 Td (steady-state calculation and is NOT a verified full IEC 60287 installation/NEC ampacity rating.) Tj ET
+BT /F1 8 Tf 32 207 Td (Evidence / limitation: outputs.warnings[2] | Value: Soil dry-out, thermal backfill, ducts, other) Tj ET
+BT /F1 8 Tf 32 194 Td (heated circuits and cyclic/seasonal conditions are excluded.) Tj ET
+BT /F1 8 Tf 32 181 Td (Evidence / limitation: outputs.warnings[3] | Value: Use project-specific thermophysical and) Tj ET
+BT /F1 8 Tf 32 168 Td (conductor data and engineering review for final cable sizing.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000005440 00000 n 
+0000005566 00000 n 
+0000010915 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+11041
+%%EOF

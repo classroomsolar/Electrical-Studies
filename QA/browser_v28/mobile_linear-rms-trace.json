@@ -1,0 +1,67 @@
+{
+  "method": "conductor-duty-v28",
+  "inputs": {
+    "method": "linear-rms-trace",
+    "studyReference": "ILLUSTRATIVE conductor duty screening example only",
+    "conductor": {
+      "areaMm2": 120,
+      "kASqrtSPerMm2": 100,
+      "kSourceReference": "ILLUSTRATIVE k coefficient; NOT OEM qualified; replace before project use",
+      "material": "copper",
+      "initialTempC": 90,
+      "maximumFaultTempC": 250
+    },
+    "fault": {
+      "sourceReference": "ILLUSTRATIVE 10 kA RMS and 0.2 s; replace with verified clearing envelope",
+      "clearingTimeS": 0.2,
+      "samples": [
+        {
+          "timeS": 0,
+          "rmsA": 10000
+        },
+        {
+          "timeS": 0.1,
+          "rmsA": 8000
+        },
+        {
+          "timeS": 0.2,
+          "rmsA": 4000
+        }
+      ]
+    },
+    "marginFactor": 1.1
+  },
+  "outputs": {
+    "status": "BOUNDED_DOCUMENTED_ADIABATIC_CONDUCTOR_I2T_SCREEN",
+    "scope": "One documented conductor, one fault interval, user-qualified adiabatic k-factor, exact integral of entered piecewise-linear RMS current trace or entered protective let-through I²t. This is a bounded thermal stress screen, NOT an IEC 60949 full calculation, NEC/IEC cable rating, protective coordination, or OEM equipment approval.",
+    "method": "linear-rms-trace",
+    "conductorMaterial": "copper",
+    "conductorAreaMm2": 120,
+    "initialConductorTempC": 90,
+    "maximumFaultConductorTempC": 250,
+    "enteredKASqrtSPerMm2": 100,
+    "kSourceReference": "ILLUSTRATIVE k coefficient; NOT OEM qualified; replace before project use",
+    "faultSourceReference": "ILLUSTRATIVE 10 kA RMS and 0.2 s; replace with verified clearing envelope",
+    "studyReference": "ILLUSTRATIVE conductor duty screening example only",
+    "clearingTimeS": 0.2,
+    "sourceKind": "piecewise-linear documented RMS current envelope",
+    "enteredPeakRmsA": 10000,
+    "documentedFaultI2tA2s": 11866666.666666666,
+    "adiabaticCapacityA2s": 144000000,
+    "marginFactor": 1.1,
+    "marginAdjustedDemandA2s": 13053333.333333334,
+    "utilizationPercent": 9.064814814814817,
+    "minimumAreaMm2ForEnteredDemand": 36.12939707957128,
+    "maximumConstantRmsAForClearingTime": 25584.085962673253,
+    "withinEnteredAdiabaticCapacity": true,
+    "limitations": [
+      "One physical conductor only; multiple parallel runs need independently verified fault current distribution",
+      "Entered k is NOT derived or verified: material, insulation, initial and maximum temperatures and relevant standard edition must be confirmed by a qualified engineer",
+      "Current RMS trace is assumed piecewise-linear between samples; waveform/DC offset/limiting effects are NOT inferred",
+      "Documented I²t must be for the same physical conductor and entire clearing interval; device trip time and let-through are NOT calculated",
+      "Adiabatic only: no non-adiabatic corrections, adjacent heating, cable joints/terminations or sheath/armour stress",
+      "Passing this screen is not cable sizing, installation compliance, or protective-device approval"
+    ]
+  },
+  "createdAt": "2026-10-26T06:08:09.154Z"
+}
