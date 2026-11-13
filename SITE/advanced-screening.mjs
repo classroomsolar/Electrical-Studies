@@ -1,3 +1,4 @@
+import {ieee1584Calculate} from './ieee1584-2018.mjs';
 /*
  * Fault Current Studio, candidate Batches 03B–08.
  * Pure, bounded engineering screening calculators. No manufacturer settings,
@@ -31,7 +32,14 @@ export function arcFlashIntake(x){
  if(!finite(voltageV)||voltageV<208||voltageV>15000)return {status:'OUTSIDE_IEEE_1584_SCOPE',incidentEnergyCalCm2:null,boundaryMm:null,missing:['Documented 208–15000 V nominal voltage'],method:SCREEN_METHODS.arc};
  for(const [k,label] of Object.entries({boltedFaultKA:'Bolted fault current (kA)',workingDistanceMm:'Working distance (mm)',electrodeGapMm:'Actual electrode gap (mm)',enclosureHeightMm:'Enclosure height (mm)',enclosureWidthMm:'Enclosure width (mm)',enclosureDepthMm:'Enclosure depth (mm)',clearingTimeS:'Valid clearing time at actual arcing current (s)'}))if(!finite(x[k])||x[k]<=0)missing.push(label);
  if(!['VCB','VCBB','HCB','VOA','HOA'].includes(x.electrodeConfiguration))missing.push('Actual IEEE 1584 electrode configuration');
- return {status:missing.length?'DATA_INCOMPLETE':'DATA_READY_NO_APPROVED_ENGINE',missing,incidentEnergyCalCm2:null,boundaryMm:null,method:SCREEN_METHODS.arc};
+ if(missing.length)return {status:'DATA_INCOMPLETE',missing,incidentEnergyCalCm2:null,boundaryMm:null,method:SCREEN_METHODS.arc};
+ // Complete data: the Studio's IEEE 1584-2018 engine (the same one used by the arc-flash tools). One documented total
+ // clearing time is applied at both the full and the reduced arcing current.
+ const ms=x.clearingTimeS*1000;
+ try{const a=ieee1584Calculate({voltageKV:voltageV/1000,boltedFaultKA:x.boltedFaultKA,electrodeConfiguration:x.electrodeConfiguration,gapMM:x.electrodeGapMm,workingDistanceMM:x.workingDistanceMm,enclosureHeightMM:x.enclosureHeightMm,enclosureWidthMM:x.enclosureWidthMm,enclosureDepthMM:x.enclosureDepthMm,clearingFullMS:ms,clearingReducedMS:ms});
+  const g=a.cases.find(c=>c.case===a.governingCase);
+  return {status:'CALCULATED',missing,incidentEnergyCalCm2:g.incidentEnergyCalPerCm2,boundaryMm:Math.max(...a.cases.map(c=>c.arcFlashBoundaryMM)),governingCase:a.governingCase,cases:a.cases.map(c=>({case:c.case,arcingCurrentKA:c.arcingCurrentKA,clearingTimeMS:c.clearingTimeMS,incidentEnergyCalPerCm2:c.incidentEnergyCalPerCm2,arcFlashBoundaryMM:c.arcFlashBoundaryMM})),warnings:a.warnings,method:'IEEE 1584-2018 (Studio engine) with one total clearing time for both arcing-current cases',basis:'Confirm that the clearing time is valid at both the full and the reduced arcing current; otherwise use Arc flash · all buses with the protective-device curve.'};
+ }catch(e){return {status:'INPUT OUTSIDE IEEE 1584-2018 RANGE',missing:[e.message],incidentEnergyCalCm2:null,boundaryMm:null,method:SCREEN_METHODS.arc}}
 }
 export function thermalResistanceScreen(x){
  const I=v('actual load current A',x.loadCurrentA,{min:0,allowZero:true}),runs=v('number of actual equal parallel runs',x.runs,{min:1,max:10000});if(!Number.isSafeInteger(runs))stop('parallel runs must be an integer');

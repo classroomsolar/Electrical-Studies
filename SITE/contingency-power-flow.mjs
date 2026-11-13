@@ -7,8 +7,10 @@ const check=(x,what)=>{if(typeof x!=='number'||!Number.isFinite(x)||x<=0)throw E
 const integer=(x,what)=>{if(!Number.isSafeInteger(x))throw Error('N-1: '+what+' must be integer');return x};
 export function screenBalancedNMinusOne({network,nominalBusVoltageV,busVoltageLimitsPu,branchCurrentLimitsA,maxCases=200}){
  if(!network||!Array.isArray(network.branches)||!Array.isArray(network.buses))throw Error('N-1: valid operating network required');
- if(network.branches.length>200||network.buses.length>40)throw Error('N-1: supported network limit exceeded');
- if(integer(maxCases,'maxCases')<1||maxCases>200)throw Error('N-1: maxCases must be 1–200');
+ // Above 40 buses / 200 branches the sparse load flow is used; each outage then keeps only its violations to bound memory.
+ const large=network.branches.length>200||network.buses.length>40;
+ if(network.branches.length>60000||network.buses.length>20000)throw Error('N-1: supported network limit exceeded (20,000 buses / 60,000 branches)');
+ if(integer(maxCases,'maxCases')<1||maxCases>(large?5000:200))throw Error(large?'N-1: maxCases must be 1–5000':'N-1: maxCases must be 1–200');
  if(network.branches.some(e=>typeof e.id!=='string'||!e.id))throw Error('N-1: each branch requires a stable unique ID');
  const branchIds=network.branches.map(e=>e.id),busIds=network.buses.map(b=>b.id);
  if(new Set(branchIds).size!==branchIds.length)throw Error('N-1: branch IDs must be unique');
@@ -29,7 +31,7 @@ export function screenBalancedNMinusOne({network,nominalBusVoltageV,busVoltageLi
  const run=(outage)=>{
   const subset=outage?{...network,branches:network.branches.filter(e=>e.id!==outage)}:network;
   try{const results=solveBalancedPowerFlow(subset),violations=evaluate(results);
-    return {outagedBranchId:outage??null,status:violations.length?'SCREEN_VIOLATION':'SCREEN_WITHIN_SUPPLIED_LIMITS',violations,buses:results.buses,branches:results.branches,iterations:results.iterations,mismatchPu:results.mismatchPu};
+    return {outagedBranchId:outage??null,status:violations.length?'SCREEN_VIOLATION':'SCREEN_WITHIN_SUPPLIED_LIMITS',violations,buses:large&&outage?null:results.buses,branches:large&&outage?null:results.branches,iterations:results.iterations,mismatchPu:results.mismatchPu};
   }catch(error){return {outagedBranchId:outage??null,status:'NOT_SOLVED_REVIEW_REQUIRED',reason:String(error.message).slice(0,500),violations:null,buses:null,branches:null};}
  };
  const base=run(null);

@@ -1,14 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="v30">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#171927">
+  <meta name="theme-color" content="#0d1117">
   <title>Fault Current Studio — Connected Network</title>
   <meta name="description" content="Build a connected electrical lineup, model transformer voltage changes, and inspect bus and branch fault currents.">
   <link rel="stylesheet" href="public-style-v21.css">
   <link rel="stylesheet" href="studio-v26.css?v=20261026-v26">
   <link rel="stylesheet" href="operations-v27.css?v=20261026-v27">
+  <link rel="stylesheet" href="fcs-theme-v30.css?v=20261108-v31">
+  <link rel="stylesheet" href="fcs-v31.css?v=20261108-v31">
+  <link rel="stylesheet" href="fcs-v32.css?v=20261108-v32">
 </head>
 <body>
 <details id="public-preview-status"><summary>PUBLIC PREVIEW <span class="v26-preview-label">· Engineering verification is incomplete</span> <span class="v26-preview-more">Read scope and limitations ⌄</span></summary><p>Core calculations and browser-local study backups work here. Optional encrypted cross-device Cloud Vault, browser-local saves and PDF/XLSX exports are available; engineering verification is not yet complete. This is not the private Site.</p></details>
@@ -36,10 +39,16 @@
     },25000);
   })();
   </script>
-  <script defer src="public-bundle-v21.js?v=20261026-v25-capability-atlas"></script>
+  <script defer src="public-bundle-v21.js?v=20261108-v32"></script>
   <script defer src="interface-v25.js?v=20261026-v25"></script>
   <script defer src="interface-v26.js?v=20261026-v26"></script>
-  <script type="module" src="operations-v27-ui.mjs?v=20261026-v27"></script>
-  <script type="module" src="conductor-duty-ui-v28.mjs?v=20261026-v28"></script>
+  <script type="module" src="operations-v27-ui.mjs?v=20261108-v32"></script>
+  <script type="module" src="conductor-duty-ui-v28.mjs?v=20261108-v32"></script>
+  <script type="module" src="fault-envelope-ui-v29.mjs?v=20261108-v32"></script>
+  <script type="module" src="arcflash-network-ui-v29.mjs?v=20261108-v32"></script>
+  <script type="module" src="cable-sizing-ui-v29.mjs?v=20261108-v32"></script>
+  <script type="module" src="power-quality-ui-v29.mjs?v=20261108-v32"></script>
+  <script type="module" src="shell-v30.mjs?v=20261108-v32"></script>
+  <script type="module" src="plant-builder-ui-v31.mjs?v=20261108-v32"></script>
 </body>
 </html>

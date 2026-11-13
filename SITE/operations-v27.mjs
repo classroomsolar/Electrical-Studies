@@ -3,7 +3,7 @@
  * Does NOT implement validated utility dispatch optimisation, full quasi-dynamics,
  * unbalanced power flow, dynamic inverter response or certified planning standards.
  */
-import {solveBalancedPowerFlow,operatingNetworkFromStudio} from './operating-studies.mjs';
+import {solveBalancedPowerFlow,operatingNetworkFromStudio} from './operating-studies.mjs?v=20261108-v32';
 const bad=message=>{throw Error('Operations study: '+message)};
 const num=(value,name,low=-Infinity,high=Infinity)=>{if(typeof value!=='number'||!Number.isFinite(value)||value<low||value>high)bad(name+' must be a finite number between '+low+' and '+high);return value};
 const entries=(array,limit,name)=>{if(!Array.isArray(array)||!array.length||array.length>limit)bad(name+' requires 1–'+limit+' entries');return array};
@@ -196,7 +196,7 @@ export function compareBessSizeCases(input){
  }
  compared.sort((a,b)=>Number(b.supplyFullyServed)-Number(a.supplyFullyServed)||a.discountedLifecycleCost-b.discountedLifecycleCost||a.capacityKWh-b.capacityKWh||a.powerKW-b.powerKW);
  const best=compared.find(c=>c.supplyFullyServed)||null;
- return {status:best?'BOUNDED_FINANCIAL_SCREEN':'NO_FULLY_SERVED_CANDIDATE',method:'Enumerated battery capacity/inverter combinations with identical rule-based dispatch. The lowest modelled discounted cost is chosen only among cases with no unserved load; this is NOT mixed-integer optimisation, HOMER/REopt equivalence or an equipment sizing approval.',
+ return {status:best?'BOUNDED_FINANCIAL_SCREEN':'NO_FULLY_SERVED_CANDIDATE',method:'Enumerated battery capacity/inverter combinations with identical rule-based dispatch. The lowest modelled discounted cost is chosen only among cases with no unserved load; this is NOT mixed-integer optimisation, equivalence with commercial optimisation software or an equipment sizing approval.',
   summary:{candidateCount:compared.length,feasibleCount:compared.filter(x=>x.supplyFullyServed).length,profileHours:hours,profileRepetitionsPerYear:cycles,analysisYears:years,annualDiscountFraction:discount,baselineAnnualGridCost:baseline.summary.netGridCost*cycles,baselineAnnualUnservedKWh:baseline.summary.unservedKWh*cycles,bestCapacityKWh:best?.capacityKWh??null,bestPowerKW:best?.powerKW??null,bestDiscountedLifecycleCost:best?.discountedLifecycleCost??null},intervals:compared,
   assumptions:['Candidate battery capacities and inverter kW are explicit; no continuous optimisation','Same simple PV-only battery charging and peak shaving/self-consumption rule applied to every case','Representative intervals are repeated sequentially with battery SOC carried forward between repetitions; not simulated seasonality','Capex is one upfront payment; energy costs repeat each year and are discounted at the entered real annual rate','No demand charges, financing, replacement batteries, degradation, cycle limits, maintenance, taxes, reliability valuation or escalation','Annual terminal SOC may differ from starting SOC; energy inventory change is reported and should be reconciled before comparing long-run cases','Any scenario with modelled unserved demand is rejected from the feasible best-case selection']};
 }

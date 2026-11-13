@@ -1,0 +1,13 @@
+import {plant} from './plant.mjs';
+const E=await import(new URL('../../SITE/network-engine.mjs',import.meta.url).href);
+const [inv,aux]=[+process.argv[2]||70,+process.argv[3]||24];
+const p=plant({inverters:inv,aux,motors:+process.argv[4]||0});
+console.log('buses',p.buses.length,'branches',p.branches.length,'sources',p.sources.length,'devices',p.devices.length);
+let t=performance.now();const r=E.calculateProject(p);const t1=performance.now()-t;
+const errs=r.issues.filter(i=>i.severity==='error');
+t=performance.now();const duties=p.devices.map(d=>E.deviceDuty(d,r.results.find(x=>x.busId===d.bus),p,r.results));const t2=performance.now()-t;
+const flows=r.results.reduce((s,x)=>s+(x.branchFlows?.length||0),0),dets=r.results.reduce((s,x)=>s+(x.details?.length||0),0);
+const v8=await import("node:v8");const json=v8.serialize(r.results).length;
+console.log({calcS:(t1/1000).toFixed(2),dutyS:(t2/1000).toFixed(2),errors:errs.length,statuses:[...new Set(r.results.map(x=>x.status))],flows,dets,jsonMB:(json/1e6).toFixed(1),heapMB:(process.memoryUsage().heapUsed/1e6).toFixed(0),scope:r.results[0].outputScope});
+console.log(r.results.slice(0,3).map(x=>[x.busName,x.totalA?.toFixed(1),x.status,x.detailScope]));
+const bad=r.results.filter(x=>x.status==='NETWORK ERROR');if(bad.length)console.log(bad[0].faultNote);

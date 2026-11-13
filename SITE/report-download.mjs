@@ -14,9 +14,10 @@ export function browserHandoffMarkup(state){
  if(state.phase==='error')return `<section class="report-download-panel no-print error" data-browser-handoff role="alert"><div><strong>Browser address could not be prepared</strong><p>${esc(state.message)}</p><button data-action="open-browser">Retry</button></div>${close}</section>`;
  return `<section class="report-download-panel no-print" data-browser-handoff role="status"><div><strong>This study is ready for your browser</strong><p>Check the browser tab requested by your click. If no tab appeared, use the link below or copy its address into your browser address bar. Your private saved revision ${esc(state.revision)} opens with the same inputs. Use the same authorized ChatGPT account if sign-in is requested.</p><div class="actions">${browserAction(state.url)}</div>${addressField(state.url,'browser')}</div>${close}</section>`;
 }
-export function reportDownloadMarkup(state,{pending=false,embedded=false}={}){
+// handoff=false: no saved-study browser address can be made on this host (no cloud), so the option is not offered.
+export function reportDownloadMarkup(state,{pending=false,embedded=false,handoff=true}={}){
  if(!state)return '';
- const browserLink=browserAction(state.browserUrl);
+ const browserLink=state.browserUrl||handoff?browserAction(state.browserUrl):'';
  const title=state.format==='pdf'?'PDF':'Excel',close='<button data-action="close-report-download" aria-label="Close report download">× Close</button>';
  if(state.phase==='print-preview')return `<section class="report-download-panel no-print" data-report-download role="status"><div><strong>Print current study</strong><p>Printing uses the current calculated report. PDF and Excel downloads are also available.</p><div class="actions"><button data-action="print-ready" ${pending?'disabled':''}>${pending?'Updating print preview…':'Print current report'}</button><button data-action="pdf">Download PDF</button><button data-action="xlsx">Download Excel</button>${browserLink}</div></div>${close}</section>`;
  if(state.phase==='preparing')return `<section class="report-download-panel no-print" data-report-download role="status"><div><strong>Preparing ${title} report…</strong><p>Using the current study inputs. You can continue working.</p></div>${close}</section>`;

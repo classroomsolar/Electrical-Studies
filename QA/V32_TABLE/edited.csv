@@ -1,0 +1,4 @@
+action,id,type,name,from_bus,to_bus,bus,enabled,voltage_V [V],length_m [m],runs,r_ohm_per_km [Ω/km],x_ohm_per_km [Ω/km],kva [kVA],z_percent [%],xr,v1_V [V],v2_V [V],tap_percent [%],fault_A [A],angle_deg [°],interrupt_A [A],sccr_A [A],peak_A [A],rated_V [V]
+add,,bus,Aux panel,,,,,690,,,,,,,,,,,,,,,,
+add,,cable,Aux feeder,F1-B01 LV,Aux panel,,,,20,1,0.3,0.1,,,,,,,,,,,,
+delete,bess-mw7x5vny-8i8404,,,,,,,,,,,,,,,,,,,,,,,

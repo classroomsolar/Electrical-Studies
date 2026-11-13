@@ -1,0 +1,110 @@
+=== NEW CHAT PROMPT – Fault Current Studio (continue from V32) ===
+
+PROJECT
+Fault Current Studio is a browser-based electrical engineering calculator: fault current, arc flash, load flow, cable sizing, harmonics, protection and PV/BESS plant building. It is deployed as a Wix headless site.
+- Wix metaSiteId: 97613ac8-1f7d-4ecf-8fa4-2d589c387775
+- Public URL: https://headless-dlrpfrynayh-classroomsolar-140e.wix-site-host.com/
+- Attached: Fault_Current_Studio_V32_Complete.zip (folder Electrical-Studies/). This is the latest source (V32, 265 site files in SITE/).
+- Before doing anything, read: START_HERE.md, REPORTS/V32_Release_Report.md, REPORTS/V29_ISSUES_AND_BACKLOG.md (section "Open after V32"), RELEASE_STATE.json, README.md. Verify SITE/ against QA/V32_SHA256_Manifest.json.
+
+CURRENT STATE
+- V32 is live on this same Wix site (263 live files). Deploy was verified only by Wix file read-back and checksums. No real-browser check was done on the live URL.
+- The live public-bundle-v21.js is a module bundle (factories written as "name.mjs": function(module,exports,require){...}). Patch it module by module, and confirm every untouched module is unchanged after the write.
+- The live index.html contains a Wix-injected <script id="wix-site-script">. Patch it with exact string replacements and a SHA check; never overwrite the whole file.
+- Database v13 is NOT live, on purpose (owner decision).
+
+RULES (follow strictly)
+1. Always reply to me in Hinglish.
+2. Do NOT use GitHub at all: no push, no PRs, nothing with nilesh0901. I upload manually. Deliver the full Electrical-Studies folder structure as ONE ZIP (no .git).
+3. Never invent coefficients, manufacturer data, curves or clearing times. Use only authentic published sources and cite them. If data is missing, the tool must say "input required".
+4. Never claim 100% completion or engineering certification. Always list the remaining gaps honestly.
+5. Do not create a new Wix site. Deploy only checksum-verified files to this same site, and read each file back after upload.
+6. Database v13 must NOT go live until I explicitly say so. Keep the live database-reference-tables module in the bundle unchanged.
+7. Every function shown in the UI must either work or clearly say why it cannot. Do not remove anything that works.
+8. Everything must work on 2,000-bus projects.
+9. Use parallel agents/bots for large work, then check their results yourself.
+10. Do not run a full audit unless the task list below asks for it. Work through the list in order.
+11. At the very end, only when I ask: give a final full ZIP, then remove everything from that chat.
+
+=== COMPLETE LIST OF REMAINING WORK (do all of it) ===
+
+A. LIVE VERIFICATION (first)
+A1. Open the live URL in a real browser (desktop and mobile widths) and verify everything added in V32:
+    - the Report contents chooser (sections, all/selected scope, extra studies) and the PDF/Excel/print downloads;
+    - 2,000-bus SLG/LL/DLG and split-phase fault calculations;
+    - the sparse load flow with closed-switch merging, and the "fill 0 MW / 0 Mvar" button;
+    - Arc flash · all buses, including the bracket option;
+    - the IEEE 1584 result in the Engineering studies arc-flash card;
+    - Equipment table add/delete;
+    - Build plant DC arrays and attach-to-bus;
+    - tree auto-arrange for more than 40 buses.
+    Fix anything broken and redeploy.
+A2. Check the browser console for JS errors on every page.
+
+B. FULL AUDIT FROM AUTHENTIC SOURCES
+B1. Calculator audit. Compare every calculator function against independent published sources, with a test case and the source reference for each:
+    - IEEE 1584-2018 official test cases (arc flash);
+    - IEC 60909-0:2016 and IEC TR 60909-4 worked examples (fault current, c-factors, peak, Ib, Ith);
+    - IEEE 399 (Brown Book) / IEEE 551 (Violet Book) examples;
+    - ANSI/IEEE C37 breaker duty (C37.010, C37.13, C37.5 where applicable);
+    - NEC 2023: 310.16 ampacity, 240.4 OCPD, 250.122 EGC, 110.24 labels, 690 (PV);
+    - IEEE 519-2022 (harmonics / TDD);
+    - IEEE 80-2013 (grounding / GPR);
+    - IEC 60287 / IEC 60853 (cable ratings);
+    - IEC 61660 (DC short circuit) and IEEE 946 (DC);
+    - published manufacturer TCC curves and datasheets for the device library.
+    Report every mismatch, fix it, and add a regression test.
+B2. Code audit, module by module:
+    - correctness, edge cases, numerical stability (singular/ill-conditioned networks);
+    - error handling, security (XSS and input escaping in every innerHTML), memory use on 2,000-bus projects;
+    - dead code, duplicate code, and consistent version strings (?v=...) across index.html and all imports.
+B3. UI/UX audit:
+    - WCAG 2.2 AA: contrast, keyboard navigation, focus order, labels, screen reader names, error messages;
+    - Nielsen's 10 heuristics;
+    - layout at 360/768/1280/1440/1920 px widths;
+    - clear wording;
+    - every button either works or says why not;
+    - no overlapping or cut-off text.
+B4. Write the audit as a report (finding, source, severity, fix, test) inside REPORTS/.
+
+C. PERFORMANCE (2,000-bus projects)
+C1. Undo/redo takes ~6–8 s because the whole project is recalculated. Make recalculation incremental or cached.
+C2. "+ Add equipment" (one breaker) takes ~8 s. Same fix.
+C3. A DC project recalculation takes 4–8 s. Speed it up.
+C4. Operating study entry takes ~2 s per field. Add bulk entry and CSV import/export for bus load/generation.
+C5. The transformer Z-tolerance envelope takes 9–14 s on 70 transformers. Speed it up.
+C6. Arc flash · all buses: opening the device picker takes 4–6 s and saving was slow (31 s in V31). Measure again on V32 and fix.
+
+D. FUNCTIONS NOT BUILT OR ONLY PARTLY BUILT
+D1. Unbalanced (per-phase, three-phase four-wire) load flow.
+D2. Editing connections (from/to bus) in the Equipment table, with a validation preview before applying.
+D3. "Open this study in browser" needs the private cloud. Either make it work without the cloud, or keep it hidden with a clear message.
+D4. Large PV plant arc flash: many buses are "screening bound" because the inverter fault-current angle is unknown. Add an input for real inverter fault data (from datasheets only) so final values can be calculated.
+D5. Capability atlas items marked "not built yet" or "partly built". Build them in this priority order, using authentic standards only:
+    1. IEC 60909 full method (all c-factors, Ib/Ik/Ith, motor contribution)
+    2. ANSI C37 breaker duty
+    3. Protection selectivity / coordination study
+    4. IEC 60287 duct banks and IEC 60853 cyclic rating
+    5. IEEE 80 grounding grid (touch and step voltage)
+    6. IEC 61660 DC short circuit
+    7. Cable pulling tension and cleat forces
+    8. Hosting capacity
+    9. Frequency (harmonic) sweep
+    10. PV yield
+    11. Storage dispatch
+    12. Microgrid dynamics
+    13. CAD/BIM/CIM import
+    14. Provenance/traceability of every input
+D6. Offline small issues: Google Fonts are blocked (bundle fonts locally) and favicon.ico returns 404.
+
+E. DATA AND ACCEPTANCE
+E1. Database v13 stays NOT live until I approve. When I approve: DEPLOY/deploy_database_to_wix.py and REPORTS/V29d_Database_v13_Import.md.
+E2. The reference database is a historical audited workbook, not a qualified OEM catalogue. Mark this clearly in the UI wherever database values are used.
+E3. Full IEEE/IEC compliance and engineering acceptance are not established. Keep the screening/verification notices.
+
+F. FINISH
+F1. Update REPORTS (new V33 release report and backlog), START_HERE.md, RELEASE_STATE.json, README.md and QA/V33_SHA256_Manifest.json. Add QA scripts for every change.
+F2. Deploy checksum-verified files to the same Wix site. Keep Database v13 off.
+F3. Send me the full Electrical-Studies ZIP and an honest Hinglish summary of what is done and what is still left.
+
+Start with A1. First tell me in one or two lines what you are about to do, then begin.

@@ -1,0 +1,55 @@
+/* Fault Current Studio V31 additions: project folder, find on one-line, plant builder and equipment table.
+   Uses the V30 tokens; screen only. */
+@media screen{
+html.v30 .visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
+html.v30 body .diagram-find{display:inline-flex;align-items:center;min-width:0}
+html.v30 body .diagram-find input{width:15rem;max-width:100%;min-height:40px;padding:8px 12px;border-radius:var(--r);background:var(--bg1)!important;border:1px solid var(--stroke)!important;color:var(--text)!important;font:500 14px/1.3 var(--sans)!important}
+html.v30 body .diagram-find input::placeholder{color:var(--faint)!important;opacity:1}
+html.v30 body .diagram-find-status{color:var(--muted)!important;font:500 13px/1.4 var(--sans);max-width:28rem;overflow-wrap:anywhere}
+html.v30 body .folder-panel h3{margin:26px 0 10px!important}
+html.v30 body .folder-panel .folder-name-field{max-width:36rem;margin:14px 0 4px}
+html.v30 body .folder-panel .saved-row{gap:16px;flex-wrap:wrap}
+html.v30 body .folder-panel .saved-row strong{overflow-wrap:anywhere}
+html.v30 body .folder-panel .saved-row .actions{flex-wrap:wrap}
+/* Dialogs */
+html.v30 body dialog.v31-dialog{width:min(980px,calc(100vw - 32px));max-height:calc(100vh - 32px);padding:0;border:1px solid var(--stroke);border-radius:10px;background:var(--bg2)!important;color:var(--text)!important;box-shadow:0 24px 64px rgba(0,0,0,.55)}
+html.v30 body dialog.v31-dialog::backdrop{background:rgba(3,6,10,.82)}
+html.v30 body .v31-dialog-form{display:flex;flex-direction:column;max-height:calc(100vh - 34px);margin:0}
+html.v30 body .v31-dialog-form>header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;border-bottom:1px solid var(--stroke2)}
+html.v30 body .v31-dialog-form>header h2{margin:0;font:600 20px/1.3 var(--sans)!important;color:var(--text)!important}
+html.v30 body .v31-close{min-width:40px;min-height:40px;border-radius:var(--r);background:var(--bg3)!important;border:1px solid var(--stroke)!important;color:var(--text)!important;font-size:20px;line-height:1}
+html.v30 body .v31-dialog-body{overflow:auto;padding:20px 24px 24px}
+html.v30 body .v31-lead{margin:0 0 18px;color:var(--muted)!important;line-height:1.55;max-width:70ch}
+html.v30 body .v31-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:14px 20px}
+html.v30 body .v31-grid .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+html.v30 body .v31-grid label{font:500 13px/1.4 var(--sans)!important;color:var(--text)!important;overflow-wrap:anywhere}
+html.v30 body .v31-grid input{min-height:42px;padding:9px 12px;border-radius:var(--r);background:var(--bg1)!important;border:1px solid var(--stroke)!important;color:var(--text)!important;font:500 14px/1.3 var(--mono)!important;width:100%;box-sizing:border-box}
+html.v30 body .v31-unit{color:var(--cyan-t)!important;font-family:var(--mono)}
+html.v30 body .v31-optional{color:var(--faint)!important;font-size:12px}
+html.v30 body .v31-options{margin:20px 0 0;padding:14px 16px;border:1px solid var(--stroke2);border-radius:8px;display:flex;flex-wrap:wrap;gap:10px 22px}
+html.v30 body .v31-options legend{padding:0 6px;color:var(--muted)!important;font:600 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+html.v30 body .v31-check{display:inline-flex;align-items:center;gap:8px;color:var(--text)!important;font:500 14px/1.4 var(--sans)}
+html.v30 body .v31-check input{width:18px;height:18px;accent-color:var(--cyan-h)}
+html.v30 body .v31-summary{margin:18px 0 0;color:var(--cyan-t)!important;font:500 14px/1.5 var(--mono)}
+html.v30 body .v31-errors{margin:10px 0 0;padding-left:20px;color:var(--red-t)!important;line-height:1.5}
+html.v30 body .v31-errors:empty{display:none}
+html.v30 body .v31-notes{margin:0 0 18px;padding-left:20px;color:var(--muted)!important;line-height:1.6}
+html.v30 body .v31-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+html.v30 body .v31-file{position:relative;display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border-radius:var(--r);background:var(--bg3)!important;border:1px solid var(--stroke)!important;color:var(--text)!important;font:600 14px/1 var(--sans);cursor:pointer}
+html.v30 body .v31-file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+html.v30 body .v31-file:focus-within{outline:2px solid var(--cyan2);outline-offset:2px}
+html.v30 body .v31-dialog-body footer{display:flex;justify-content:flex-end;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid var(--stroke2)}
+html.v30 body .v31-dialog button{min-height:42px;padding:0 18px;border-radius:var(--r);background:var(--bg3)!important;border:1px solid var(--stroke)!important;color:var(--text)!important;font:600 14px/1 var(--sans)!important;cursor:pointer}
+html.v30 body .v31-dialog button.primary{background:var(--cyan)!important;border-color:var(--cyan)!important;color:#fff!important}
+html.v30 body .v31-dialog button:focus-visible,html.v30 body .v31-dialog input:focus-visible{outline:2px solid var(--cyan2)!important;outline-offset:2px}
+/* Database picker inside the equipment inspector (not covered by the V30 sweep) */
+html.v30 body .inline-catalog{background:var(--bg3)!important;border:1px solid var(--stroke)!important;color:var(--text)!important}
+html.v30 body .inline-catalog .catalog-heading strong,html.v30 body .inline-catalog>strong{color:var(--text)!important}
+html.v30 body .inline-catalog .field>span,html.v30 body .inline-catalog label>span{color:var(--muted)!important}
+html.v30 body .inline-catalog p,html.v30 body .inline-catalog small{color:var(--muted)!important}
+html.v30 body .inline-catalog .catalog-missing{background:var(--amber-c)!important;color:var(--amber-t)!important}
+/* Zoomed-out overview of a large one-line: keep wires and busbars visible at any zoom */
+html.v30 body svg.one-line.overview .wire,html.v30 body svg.one-line.overview .busbar{vector-effect:non-scaling-stroke;stroke-width:1.6px!important}
+html.v30 body .diagram-overview-note{margin:0;padding:8px 16px;color:var(--amber-t)!important;background:var(--amber-c)!important;border-top:1px solid var(--stroke2);font:500 13px/1.5 var(--sans)}
+@media (max-width:560px){html.v30 body dialog.v31-dialog{width:calc(100vw - 16px)}html.v30 body .v31-dialog-body,html.v30 body .v31-dialog-form>header{padding-left:16px;padding-right:16px}html.v30 body .diagram-find input{width:100%}}
+}

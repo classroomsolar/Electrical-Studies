@@ -1,6 +1,6 @@
-import {isDcStudy,calculateDcProject,validateDcProject,dcScope} from './dc-network.mjs?v=20261022-pv-final';
-import {calculateConnectedProject,validateConnectedSequences} from './connected-sequences.mjs?v=20261022-pv-final';
-import {isSplitPhaseFault,calculateSplitPhaseProject,splitPhaseIssues,splitPhaseScope} from './split-phase-network.mjs?v=20261022-pv-final';
+import {isDcStudy,calculateDcProject,validateDcProject,dcScope} from './dc-network.mjs?v=20261108-v32';
+import {calculateConnectedProject,validateConnectedSequences} from './connected-sequences.mjs?v=20261108-v32';
+import {isSplitPhaseFault,calculateSplitPhaseProject,splitPhaseIssues,splitPhaseScope} from './split-phase-network.mjs?v=20261108-v32';
 
 export const analysisFaultTypes=[['single-ll','Single/split-phase · L1–L2 full winding'],['split-l1-n','Split-phase · L1–neutral'],['split-l2-n','Split-phase · L2–neutral'],['split-l1-g','Split-phase · L1–ground'],['split-l2-g','Split-phase · L2–ground'],['3phase','3-phase fault'],['3phase-ground','3-phase-to-ground fault'],['ll','Line-to-line'],['slg','Single-line-to-ground'],['dlg','Double-line-to-ground · B–C–ground'],['dc','DC pole-to-pole · documented resistive loop']];
 export const usesConnectedSequences=p=>p?.settings?.faultType==='3phase-ground'||(['3phase','ll','slg','dlg'].includes(p?.settings?.faultType)&&p?.settings?.sequenceModel==='connected');

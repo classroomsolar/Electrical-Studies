@@ -1,6 +1,7 @@
 /** V28 incremental UI. Never reads/writes original Studio project/draft/cloud keys. */
 import {screenConductorThermalDuty} from './conductor-duty-v28.mjs';
-import {advancedStudyReportBlob} from './advanced-study-report.mjs';
+import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261108-v32';
+const __fcsReportStudy=(key,label,get)=>{try{(globalThis.__fcsReportStudies??=new Map()).set(key,{label,projectId:globalThis.__fcsStudio?.projectId?.()??null,at:Date.now(),get});globalThis.dispatchEvent?.(new Event('fcs-report-studies'))}catch{}};
 const KEY='fault-studio-conductor-duty-cases-v28';
 const sample={method:'constant-rms',studyReference:'ILLUSTRATIVE conductor duty screening example only',conductor:{areaMm2:120,kASqrtSPerMm2:100,kSourceReference:'ILLUSTRATIVE k coefficient; NOT OEM qualified; replace before project use',material:'copper',initialTempC:90,maximumFaultTempC:250},fault:{sourceReference:'ILLUSTRATIVE 10 kA RMS and 0.2 s; replace with verified clearing envelope',clearingTimeS:0.2,rmsA:10000},marginFactor:1.1};
 const safeCases=()=>{const raw=localStorage.getItem(KEY);if(raw===null)return [];if(raw.length>1000000)throw Error('Existing saved-case data is oversized; original storage not changed.');let a;try{a=JSON.parse(raw)}catch{throw Error('Saved-case data is unreadable; original storage not changed.')}if(!Array.isArray(a)||a.length>100||a.some(v=>!v||typeof v.id!=='string'||typeof v.name!=='string'||!v.input||typeof v.input!=='object'))throw Error('Existing saved-case format is unsupported; original storage not changed.');return a};
@@ -24,7 +25,7 @@ function launch(){
    if(action==='close'){close();return}
    if(action==='example'){restore();return}
    if(action==='calculate'){
-    if(input.value.length>50000)throw Error('Input exceeds 50 KB');const values=JSON.parse(input.value),result=screenConductorThermalDuty(values);last={method:'conductor-duty-v28',inputs:values,outputs:result,createdAt:new Date().toISOString()};output.textContent=JSON.stringify(result,null,2);notice('Calculated bounded conductor I²t. Not a standards or device approval.');return;
+    if(input.value.length>50000)throw Error('Input exceeds 50 KB');const values=JSON.parse(input.value),result=screenConductorThermalDuty(values);last={method:'conductor-duty-v28',inputs:values,outputs:result,createdAt:new Date().toISOString()};{const s=last;__fcsReportStudy('conductor-duty','Conductor thermal duty (I²t)',()=>s);}output.textContent=JSON.stringify(result,null,2);notice('Calculated bounded conductor I²t. Not a standards or device approval.');return;
    }
    if(['pdf','xlsx','json'].includes(action)){
     if(!last)throw Error('Recalculate a valid documented case before exporting');const blob=action==='json'?new Blob([JSON.stringify(last,null,2)],{type:'application/json'}):advancedStudyReportBlob(last,action);download(blob,'fcs-conductor-duty-v28.'+action);notice('Prepared '+action.toUpperCase()+' report. Confirm the browser saved it.');return;

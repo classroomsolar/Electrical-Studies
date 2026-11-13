@@ -1,7 +1,8 @@
 // IEEE 1584-2018 arc-flash calculation interface; opt-in isolated module.
-// Server computes with MIT arcflash-calc 0.1.0. No browser draft is sent.
+// V29: computed in the browser by ieee1584-2018.mjs (port of MIT arcflash-calc). No study data leaves the browser.
 // Explicit documented full/reduced-current clearing times are mandatory.
 import {parseManufacturerCurve,evaluateManufacturerCurve} from './manufacturer-tcc.mjs';
+import {ieee1584Calculate} from './ieee1584-2018.mjs'; // V29: computed locally in the browser
 const API = 'https://fault-studio-ieee1584-api.vercel.app/api/arcflash';
 const exampleTcc = Object.freeze({model:'ILLUSTRATIVE SAMPLE — NOT OEM',source:'DEMONSTRATION ONLY — REPLACE WITH OEM DOCUMENT',revision:'illustrative-2026-10',singleRadialPathConfirmed:false,curveCsv:'1000,1.2,1.5\n5000,0.35,0.50\n15000,0.10,0.18\n40000,0.045,0.08\n60000,0.03,0.05'});
 const example = Object.freeze({
@@ -35,7 +36,7 @@ function setup(){
  <details><summary><b>Optional: derive times from documented manufacturer TCC envelope</b></summary><p>For a <strong>single radial fault path only</strong>, if every ampere of calculated arcing current passes through the studied device, enter its documented total-clearing envelope (primary amperes, min clearing seconds, max clearing seconds). No extrapolation or guessed CT/source factors. Set <code>singleRadialPathConfirmed=true</code> only after verifying that condition. Curves have not been authenticated by this software.</p>
  <label for="fcs-ieee-arc-tcc">Documented TCC input (JSON)</label><textarea id="fcs-ieee-arc-tcc" spellcheck="false"></textarea><button data-arc="curve">Compute from documented worst-case total clearing curve</button></details>
  <p id="fcs-ieee-arc-status" role="status" aria-live="polite"></p><pre id="fcs-ieee-arc-output">No result. Enter studied protection clearing times.</pre>
- <small>Independent Python engine: MIT-licensed <a href="https://github.com/LiaungYip/arcflash" target="_blank" rel="noopener noreferrer">arcflash-calc</a>, validated against IEEE Annex D examples. Study inputs are sent to the project's Vercel calculation service and are not saved by this interface.</small>
+ <small>Independent Python engine: MIT-licensed <a href="https://github.com/LiaungYip/arcflash" target="_blank" rel="noopener noreferrer">arcflash-calc</a>, validated against IEEE Annex D examples. Calculated in your browser by a JavaScript port of the same library, checked against IEEE Annex D.1/D.2 and 105,120 official IEEE 1584-2018 calculator results. Study inputs are not sent anywhere.</small>
  </section>`;document.body.append(o);
  const input=o.querySelector('#fcs-ieee-arc-input'),curveInput=o.querySelector('#fcs-ieee-arc-tcc'),result=o.querySelector('#fcs-ieee-arc-output'),status=o.querySelector('#fcs-ieee-arc-status');
  let last=null,busy=false;
@@ -58,7 +59,7 @@ function setup(){
    busy=true;btn.disabled=true;last=null;result.textContent='No results until the calculation passes';status.textContent='Calculating full and reduced arcing-current cases…';
    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),25000);
    try{
-    const call=async payload=>{const resp=await fetch(API,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal,cache:'no-store'});const val=await resp.json();if(!resp.ok)throw Error(val.error||'Calculation not available');if(val.status!=='IEEE1584_2018_EXPLICIT_CLEARING_TIMES'||!Array.isArray(val.cases)||val.cases.length!==2)throw Error('Unrecognized IEEE calculation response');return val;};
+    const call=async payload=>{const val=ieee1584Calculate(payload);if(val.status!=='IEEE1584_2018_EXPLICIT_CLEARING_TIMES'||!Array.isArray(val.cases)||val.cases.length!==2)throw Error('Unrecognized IEEE calculation response');return val;};
     let val=await call(data);let protectionTrace=null;
     if(action==='curve'){
      if(curveInput.value.length>16000)throw Error('TCC input is oversized');

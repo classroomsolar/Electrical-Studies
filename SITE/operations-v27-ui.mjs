@@ -1,8 +1,9 @@
 /** Fault Current Studio V27 — independent user-visible time-series analysis workbench.
  * No writes to network draft, history, databases, or Cloud Vault.
  */
-import {evaluateBessDispatch,evaluateAcTimeSeries,compareBessSizeCases,operatingCaseFromStudio} from './operations-v27.mjs';
-import {pdfBlob,workbookBlob} from './public-report-engine.mjs';
+import {evaluateBessDispatch,evaluateAcTimeSeries,compareBessSizeCases,operatingCaseFromStudio} from './operations-v27.mjs?v=20261108-v32';
+import {pdfBlob,workbookBlob} from './public-report-engine.mjs?v=20261108-v32';
+const __fcsReportStudy=(key,label,get)=>{try{(globalThis.__fcsReportStudies??=new Map()).set(key,{label,projectId:globalThis.__fcsStudio?.projectId?.()??null,at:Date.now(),get});globalThis.dispatchEvent?.(new Event('fcs-report-studies'))}catch{}};
 const KEY='fault-studio-operations-v27-cases';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const finite=(s,label)=>{if(String(s).trim()==='')throw Error(label+' is required');const n=Number(s);if(!Number.isFinite(n))throw Error(label+' must be numeric');return n};
@@ -101,7 +102,7 @@ function launch(){if(document.getElementById('v27-operations'))return;
  function preservedCases(){const raw=localStorage.getItem(KEY);if(raw===null)return [];let cases;try{cases=JSON.parse(raw)}catch{throw Error('Saved-case storage is damaged. It has NOT been overwritten; export the original value before saving again.')};if(!Array.isArray(cases)||cases.length>60||cases.some(c=>!c||typeof c.id!=='string'||!c.input||!['bess','ac','sweep'].includes(c.mode)))throw Error('Saved-case format is invalid. The original value has been preserved.');return cases}
  function showSaved(){try{const cases=preservedCases();$('#v27-saved-list').innerHTML=cases.length?`<div class="v27-saved-rows">${cases.map(c=>`<div><b>${escape(c.name||'Saved scenario')}</b><small>${escape(c.mode)} · ${escape(c.created||'')}</small><button type="button" data-v27-open="${escape(c.id)}">Open (recalculate)</button></div>`).join('')}</div>`:'<p>No saved scenarios. Saving never changes existing network projects.</p>'}catch(error){$('#v27-saved-list').textContent=error.message}}
  function downloadJSON(){if(!latest)throw Error('Run the calculation before exporting');download(new Blob([pretty({format:'fcs-operations-v27',mode,input:latest,result:results,created:new Date().toISOString()})],{type:'application/json'}),'fcs-operations-v27.json')}
- overlay.addEventListener('submit',e=>{if(e.target.id!=='v27-form')return;e.preventDefault();try{latest=currentInputs();results=mode==='bess'?evaluateBessDispatch(latest):mode==='sweep'?compareBessSizeCases(latest):evaluateAcTimeSeries(latest);render(results)}catch(error){results=null;latest=null;showError(error)}});
+ overlay.addEventListener('submit',e=>{if(e.target.id!=='v27-form')return;e.preventDefault();try{latest=currentInputs();results=mode==='bess'?evaluateBessDispatch(latest):mode==='sweep'?compareBessSizeCases(latest):evaluateAcTimeSeries(latest);render(results);{const m=mode,i=latest,r=results;__fcsReportStudy('ops-'+m,m==='bess'?'BESS dispatch (time series)':m==='sweep'?'BESS size comparison':'AC time-series load flow',()=>makeReport(m,i,r));}}catch(error){results=null;latest=null;showError(error)}});
  overlay.addEventListener('click',async e=>{
   const selected=e.target.closest?.('[data-v27-mode]');if(selected){form(selected.dataset.v27Mode);return}
   const openCase=e.target.closest?.('[data-v27-open]');if(openCase){try{const saved=preservedCases().find(x=>x.id===openCase.dataset.v27Open);if(!saved)throw Error('Saved scenario not found');form(saved.mode,saved.input);$('#v27-saved-list').textContent='Scenario reopened for recalculation. Source data unchanged.';}catch(err){showError(err)}return}

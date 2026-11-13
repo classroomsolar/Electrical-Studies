@@ -17,24 +17,25 @@ function phaseIdentity(phases,rms,seq){
 const namedSequences=s=>({zero:s?.i0,positive:s?.i1,negative:s?.i2});
 function validConductor(f){return f&&nonnegative(f.fromA)&&nonnegative(f.toA)&&finiteComplex(f.fromPhasor)&&finiteComplex(f.toPhasor)&&near(f.fromA,magnitude(f.fromPhasor))&&near(f.toA,magnitude(f.toPhasor));}
 function validExtendedPacket(data,p){
+ const branchById=new Map();for(const b of p.branches){let list=branchById.get(b.id);if(!list)branchById.set(b.id,list=[]);list.push(b)}const sameBranch=(e,test=()=>true)=>(branchById.get(e.id)||[]).some(b=>b.from===e.from&&b.to===e.to&&test(b)),sourceIds=new Set(p.sources.map(s=>s.id));
  if(!Array.isArray(data.results)||data.results.length!==p.buses.length||!Array.isArray(data.issues))return false;
  const buses=new Map(p.buses.map(b=>[b.id,b])),seen=new Set(),expectedModel=isDcStudy(p)?'dc-resistive':isSplitPhaseFault(p)?'split-phase-explicit-loop':'connected-sequences';
  const split=isSplitPhaseFault(p),dc=isDcStudy(p),seq=usesConnectedSequences(p),leg=p.settings.faultType.includes('l2')?'L2':'L1';
  const cfg=split?prepareSplitPhaseProject(p).splitPhaseNetwork:null;
  const branch=e=>{
-  if(!e||!p.branches.some(b=>b.id===e.id&&b.from===e.from&&b.to===e.to))return false;
+  if(!e||!sameBranch(e))return false;
   if(seq)return ['from','to'].every(side=>phaseIdentity(e[side+'PhaseCurrents'],e[side+'PhaseRMSA'],e[side+'SequenceCurrents'])&&near(e[side+'A'],Math.max(...Object.values(e[side+'PhaseRMSA'])))&&sameComplex(e[side+'Phasor'],e[side+'PhaseCurrents'].a));
   return validConductor(e)&&(!dc||(near(e.fromPhasor.i,0)&&near(e.toPhasor.i,0)&&Number.isFinite(e.signedA)&&near(e.signedA,e.fromPhasor.r)));
  };
- const conductors=rows=>uniqueRecords(rows,'id',e=>e&&p.branches.some(b=>b.id===e.id&&b.kind!=='transformer'&&b.from===e.from&&b.to===e.to)&&e.conductors&&Object.keys(e.conductors).length===4&&['L1','L2','N','G'].every(k=>{const f=e.conductors[k];return validConductor(f)&&typeof f.open==='boolean'&&typeof f.modeled==='boolean'&&f.modeled===(k!==(leg==='L1'?'L2':'L1'))&&near(f.fromPhasor.r,-f.toPhasor.r)&&near(f.fromPhasor.i,-f.toPhasor.i)&&(!(f.open||!f.modeled)||near(f.fromA,0));}));
+ const conductors=rows=>uniqueRecords(rows,'id',e=>e&&sameBranch(e,b=>b.kind!=='transformer')&&e.conductors&&Object.keys(e.conductors).length===4&&['L1','L2','N','G'].every(k=>{const f=e.conductors[k];return validConductor(f)&&typeof f.open==='boolean'&&typeof f.modeled==='boolean'&&f.modeled===(k!==(leg==='L1'?'L2':'L1'))&&near(f.fromPhasor.r,-f.toPhasor.r)&&near(f.fromPhasor.i,-f.toPhasor.i)&&(!(f.open||!f.modeled)||near(f.fromA,0));}));
  const bonds=rows=>uniqueRecords(rows,'id',b=>b&&cfg?.bonds?.some(x=>x.id===b.id&&x.bus===b.bus)&&finiteComplex(b.fromPhasor)&&nonnegative(b.amps)&&near(b.amps,magnitude(b.fromPhasor)));
- const terminals=rows=>uniqueRecords(rows,'sourceId',s=>s&&p.sources.some(x=>x.id===s.sourceId)&&nonnegative(s.amps)&&(dc?Number.isFinite(s.signedA)&&near(s.amps,Math.abs(s.signedA)):seq?phaseIdentity(s.phaseCurrents,s.phaseRMSA,namedSequences(s.sequenceCurrents))&&near(s.amps,Math.max(...Object.values(s.phaseRMSA))):false));
+ const terminals=rows=>uniqueRecords(rows,'sourceId',s=>s&&sourceIds.has(s.sourceId)&&nonnegative(s.amps)&&(dc?Number.isFinite(s.signedA)&&near(s.amps,Math.abs(s.signedA)):seq?phaseIdentity(s.phaseCurrents,s.phaseRMSA,namedSequences(s.sequenceCurrents))&&near(s.amps,Math.max(...Object.values(s.phaseRMSA))):false));
  for(const r of data.results){
   if(!r||!buses.has(r.busId)||seen.has(r.busId)||typeof r.status!=='string'||r.phaseModel!==expectedModel||r.faultType!==p.settings.faultType)return false;seen.add(r.busId);
   if(r.totalA===null)continue;
   if(!['CALCULATED',...(isSplitPhaseFault(p)?['OPEN RETURN PATH','OPEN SUPPLY PATH']:[])].includes(r.status)||!nonnegative(r.totalA)||!Number.isFinite(r.voltage)||r.voltage<=0||r.voltage!==buses.get(r.busId).voltage)return false;
   if(r.peakA!==null||r.asymA!==null||r.xr!==null||(r.zth!==null&&!finiteComplex(r.zth))||!Array.isArray(r.details)||!Array.isArray(r.branchFlows)||!r.branchFlows.every(branch))return false;
-  if(r.details.some(d=>!d||!p.sources.some(s=>s.id===d.sourceId)||typeof d.name!=='string'||!nonnegative(d.amps)||!finiteComplex(d.phasor)||!Array.isArray(d.branchFlows)||!d.branchFlows.every(branch)))return false;
+  if(r.details.some(d=>!d||!sourceIds.has(d.sourceId)||typeof d.name!=='string'||!nonnegative(d.amps)||!finiteComplex(d.phasor)||!Array.isArray(d.branchFlows)||!d.branchFlows.every(branch)))return false;
   if((dc||seq)&&!terminals(r.sourceTerminalCurrents)||split&&r.sourceTerminalCurrents!==undefined)return false;
   if(r.details.some(d=>seq?(!phaseIdentity(d.phaseCurrents,d.phaseRMSA,namedSequences(d.sequenceCurrents))||!near(d.amps,Math.max(...Object.values(d.phaseRMSA)))||!sameComplex(d.phasor,d.phaseCurrents.a)):(!near(d.amps,magnitude(d.phasor))||dc&&(!Number.isFinite(d.signedA)||!near(d.signedA,d.phasor.r)||!near(d.phasor.i,0)))))return false;
   if(isDcStudy(p)){if(!Number.isFinite(r.signedA)||!near(Math.abs(r.signedA),r.totalA)||r.sequence!==null)return false;}
@@ -59,6 +60,7 @@ function validDlgResult(r){
 }
 function validPacket(data,project){
  if(isExtendedStudy(project))return validExtendedPacket(data,project);
+ const branchById=new Map();for(const b of project.branches){let list=branchById.get(b.id);if(!list)branchById.set(b.id,list=[]);list.push(b)}const knownBranch=e=>(branchById.get(e.id)||[]).some(b=>b.from===e.from&&b.to===e.to),sourceIds=new Set(project.sources.map(s=>s.id));
  if(!Array.isArray(data.results)||!Array.isArray(data.issues)||data.results.length!==project.buses.length)return false;
  const expected=new Map(project.buses.map(b=>[b.id,b])),seen=new Set();
  for(const r of data.results){
@@ -66,12 +68,12 @@ function validPacket(data,project){
   if(r.totalA!==null){
    if(!['CALCULATED','SCREENING BOUND'].includes(r.status)||!nonnegative(r.totalA)||r.voltage!==expected.get(r.busId).voltage||!Number.isFinite(r.voltage)||r.voltage<=0||!Array.isArray(r.details))return false;
    if([r.peakA,r.asymA].some(v=>v!==null&&!nonnegative(v))||(r.zth!==null&&!finiteComplex(r.zth)))return false;
-   if(!Array.isArray(r.branchFlows)||r.branchFlows.some(e=>!e||!nonnegative(e.fromA)||!nonnegative(e.toA)||!nonnegative(e.fromBoundA)||!nonnegative(e.toBoundA)||!finiteComplex(e.fromPhasor)||!finiteComplex(e.toPhasor)||!project.branches.some(b=>b.id===e.id&&b.from===e.from&&b.to===e.to)))return false;
+   if(!Array.isArray(r.branchFlows)||r.branchFlows.some(e=>!e||!nonnegative(e.fromA)||!nonnegative(e.toA)||!nonnegative(e.fromBoundA)||!nonnegative(e.toBoundA)||!finiteComplex(e.fromPhasor)||!finiteComplex(e.toPhasor)||!knownBranch(e)))return false;
    if(r.sequence!=null&&(!finiteComplex(r.sequence.z1)||!finiteComplex(r.sequence.z2)||!finiteComplex(r.sequence.referenceVoltage)||(r.sequence.z0!==null&&!finiteComplex(r.sequence.z0))))return false;
    if(!hasBranchCurrents(project)&&(!r.sequence||r.details.length||r.branchFlows.length||(project.settings.faultType==='slg'&&!finiteComplex(r.sequence.z0))))return false;
    if(isSinglePhase(project)&&(r.phaseModel!=='single-phase-ll'||r.sequence!==null||r.peakA!==null||r.asymA!==null))return false;
    if(project.settings.faultType==='dlg'&&!validDlgResult(r))return false;
-   if(r.details.some(d=>!d||!project.sources.some(s=>s.id===d.sourceId)||typeof d.name!=='string'||!nonnegative(d.amps)||!finiteComplex(d.phasor)||!Array.isArray(d.path)||!Array.isArray(d.branchFlows)||d.path.some(e=>!e||typeof e.name!=='string'||!finiteComplex(e.ohms)||!Number.isFinite(e.atVoltage)||e.atVoltage<=0)||d.branchFlows.some(e=>!e||typeof e.name!=='string'||!nonnegative(e.amps)||!nonnegative(e.toAmps)||!finiteComplex(e.fromPhasor)||!finiteComplex(e.toPhasor)||!project.branches.some(b=>b.id===e.id&&b.from===e.from&&b.to===e.to))))return false;
+   if(r.details.some(d=>!d||!sourceIds.has(d.sourceId)||typeof d.name!=='string'||!nonnegative(d.amps)||!finiteComplex(d.phasor)||!Array.isArray(d.path)||!Array.isArray(d.branchFlows)||d.path.some(e=>!e||typeof e.name!=='string'||!finiteComplex(e.ohms)||!Number.isFinite(e.atVoltage)||e.atVoltage<=0)||d.branchFlows.some(e=>!e||typeof e.name!=='string'||!nonnegative(e.amps)||!nonnegative(e.toAmps)||!finiteComplex(e.fromPhasor)||!finiteComplex(e.toPhasor)||!knownBranch(e))))return false;
   }
  }
  return data.issues.every(i=>i&&typeof i.id==='string'&&typeof i.message==='string'&&['error','warning','info'].includes(i.severity));
@@ -80,7 +82,7 @@ function validPacket(data,project){
 // The study stays on the visitor's device in both execution paths.
 // A denied/failed worker must never leave a valid study stuck at "Calculating".
 export function runCalculation({project,revision,onResult,WorkerClass=globalThis.Worker,
- workerUrl=new URL('./network-worker.mjs?v=20261022-pv-final',import.meta.url),startupTimeoutMs=4000,resultTimeoutMs=30000,
+ workerUrl=new URL('./network-worker.mjs?v=20261108-v32',import.meta.url),startupTimeoutMs=4000,resultTimeoutMs=30000,
  setTimer=setTimeout,clearTimer=clearTimeout,compute=calculateProject}){
  let closed=false,worker=null,watchdog=null,started=false;
  const cleanup=()=>{if(watchdog!==null){clearTimer(watchdog);watchdog=null}worker?.terminate();worker=null};

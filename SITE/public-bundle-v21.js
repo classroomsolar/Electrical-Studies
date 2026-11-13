@@ -722,7 +722,7 @@ exports.readAdvancedInputCases = readAdvancedInputCases;
 exports.saveAdvancedInputCase = saveAdvancedInputCase;
 exports.advancedInputCaseArchive = advancedInputCaseArchive;
 exports.mergeAdvancedInputArchive = mergeAdvancedInputArchive;
-const advanced_study_report_mjs_1 = require("./advanced-study-report.mjs");
+const advanced_study_report_mjs_v_20261108_v32_1 = require("./advanced-study-report.mjs?v=20261108-v32");
 const engineering_core_methods_mjs_1 = require("./engineering-core-methods.mjs");
 const protection_full_range_mjs_1 = require("./protection-full-range.mjs");
 const time_varying_current_duty_mjs_1 = require("./time-varying-current-duty.mjs");
@@ -738,6 +738,11 @@ const fault_scenario_envelope_mjs_1 = require("./fault-scenario-envelope.mjs");
 const contingency_power_flow_mjs_1 = require("./contingency-power-flow.mjs");
 const iec60909_peak_network_mjs_1 = require("./iec60909-peak-network.mjs");
 const fault_bus_sweep_mjs_1 = require("./fault-bus-sweep.mjs");
+const __fcsReportStudy = (key, label, get) => { try {
+    (globalThis.__fcsReportStudies ??= new Map()).set(key, { label, projectId: globalThis.__fcsStudio?.projectId?.() ?? null, at: Date.now(), get });
+    globalThis.dispatchEvent?.(new Event('fcs-report-studies'));
+}
+catch { } };
 // Versioned, separate, browser-local input-case library. Never touches existing
 // project history, active draft, owner cloud records or Cloud Vault recovery codes.
 exports.ADVANCED_CASE_KEY = 'fault-studio-advanced-input-cases-v1';
@@ -1025,6 +1030,10 @@ function install() {
                 const data = JSON.parse(input.value);
                 const out = sel.value === 'transformer60909' ? (0, iec60909_transformer_scenarios_mjs_1.transformerNameplateFaultEnvelope)(data) : sel.value === 'protectionrange' ? (0, protection_full_range_mjs_1.sweepProtectionCoordination)(data) : sel.value === 'acdcwave' ? (0, asymmetrical_waveform_duty_mjs_1.documentedAsymmetricalWaveformDuty)(data) : sel.value === 'phasorduty' ? (0, time_varying_current_duty_mjs_1.timeVaryingSymmetricalFaultDuty)(data) : sel.value === 'fault' ? (0, engineering_core_methods_mjs_1.radialSourceFault)(data) : sel.value === 'multisource' ? (0, multi_source_fault_network_mjs_1.multiSourceThreePhaseFault)(data) : sel.value === 'multivoltage' ? (0, multi_voltage_fault_network_mjs_1.multiVoltageThreePhaseFault)(data) : sel.value === 'multisequence' ? (0, multibus_sequence_fault_network_mjs_1.multiBusSequenceFault)(data) : sel.value === 'multienvelope' ? (0, fault_scenario_envelope_mjs_1.faultScenarioEnvelope)(data) : sel.value === 'contingency' ? (0, contingency_power_flow_mjs_1.screenBalancedNMinusOne)(data) : sel.value === 'peakscreen' ? (0, iec60909_peak_network_mjs_1.peakMakingNetworkScreen)(data) : sel.value === 'faultsweep' ? (0, fault_bus_sweep_mjs_1.faultBusSweep)(data) : sel.value === 'sequence' ? (0, sequence_fault_screen_mjs_1.reducedSequenceFault)(data) : sel.value === 'resistance' ? (0, iec60287_ac_resistance_mjs_1.conductorACResistanceIEC60287)(data) : sel.value === 'buried' ? (0, iec60287_buried_cable_mjs_1.directBuriedSingleCoreRating)(data) : (0, engineering_core_methods_mjs_1.thermalSteadyCore)(data);
                 last = { method: sel.value, inputs: data, outputs: out, createdAt: new Date().toISOString() };
+                {
+                    const s = last;
+                    __fcsReportStudy('core:' + sel.value, sel.selectedOptions?.[0]?.textContent?.trim() || sel.value, () => s);
+                }
                 result.textContent = JSON.stringify(out, null, 2);
                 status.textContent = 'Bounded study calculated. This is not standards-compliance or equipment-duty certification.';
                 status.style.color = '#1b693c';
@@ -1044,7 +1053,7 @@ function install() {
                 return;
             }
             try {
-                const blob = (0, advanced_study_report_mjs_1.advancedStudyReportBlob)(last, action);
+                const blob = (0, advanced_study_report_mjs_v_20261108_v32_1.advancedStudyReportBlob)(last, action);
                 const url = URL.createObjectURL(blob), a = document.createElement('a');
                 a.href = url;
                 a.download = 'fault-studio-' + last.method + '-documented-study.' + action;
@@ -1083,7 +1092,6 @@ if (typeof document !== 'undefined') {
     else
         install();
 }
-
 },
 "advanced-study-report.mjs": function(module,exports,require){
 "use strict";
@@ -1096,8 +1104,10 @@ exports.advancedStudyReportBlob = advancedStudyReportBlob;
  * sheets; the shared public-report-engine supplies established ZIP/PDF writers.
  * Never turn an illustrative or bounded result into an equipment approval.
  */
-const public_report_engine_mjs_1 = require("./public-report-engine.mjs");
-const maxRows = 9000, maxDepth = 24;
+const public_report_engine_mjs_v_20261108_v32_1 = require("./public-report-engine.mjs?v=20261108-v32");
+// Row budget for the flattened (path, value) listing. Large per-bus result lists are written as their own tables
+// (one row per bus) instead, so plant-scale studies export; long sheets continue on numbered sheets.
+const maxRows = 400000, maxDepth = 24, TABLE_MIN = 50;
 function collect(value, prefix = '', depth = 0, rows = []) {
     if (depth > maxDepth)
         throw Error('Study report nesting exceeds safe maximum');
@@ -1127,12 +1137,42 @@ function collect(value, prefix = '', depth = 0, rows = []) {
     return rows;
 }
 const warning = 'ENGINEERING SCREENING ONLY — independently verify actual manufacturer, utility, installation, equipment settings and standards edition before professional use.';
+// Arrays of records (e.g. one entry per bus) longer than TABLE_MIN become tables: nested objects are flattened one level
+// per column (a.b), deeper values are written as JSON text. Returns [sheets, outputs without those arrays].
+function tables(outputs) {
+    const sheets = [], rest = {};
+    for (const [key, value] of Object.entries(outputs)) {
+        if (Array.isArray(value) && value.length > TABLE_MIN && value.every(v => v && typeof v === 'object' && !Array.isArray(v))) {
+            const cols = [], seen = new Set(), add = c => { if (!seen.has(c)) {
+                seen.add(c);
+                cols.push(c);
+            } };
+            const flat = v => { const o = {}; for (const [k, x] of Object.entries(v)) {
+                if (x && typeof x === 'object' && !Array.isArray(x))
+                    for (const [k2, y] of Object.entries(x))
+                        o[k + '.' + k2] = y;
+                else
+                    o[k] = x;
+            } return o; };
+            const rows = value.map(flat);
+            for (const r of rows)
+                for (const c of Object.keys(r))
+                    add(c);
+            const cell = x => x === null || x === undefined ? '' : typeof x === 'object' ? JSON.stringify(x).slice(0, 8000) : typeof x === 'number' && !Number.isFinite(x) ? String(x) : typeof x === 'string' ? x.slice(0, 8000) : x;
+            sheets.push({ name: ('Results · ' + key).slice(0, 31), headers: cols, rows: rows.map(r => cols.map(c => cell(r[c]))) });
+        }
+        else
+            rest[key] = value;
+    }
+    return [sheets, rest];
+}
 function advancedStudyReport(study) {
     if (!study || !study.outputs || !study.inputs || typeof study.method !== 'string')
         throw Error('Run a documented advanced study before exporting');
     if (study.outputs.status === undefined || typeof study.outputs.status !== 'string')
         throw Error('Only successfully calculated studies can be reported');
-    const created = study.createdAt ?? new Date().toISOString(), outputRows = collect(study.outputs), inputRows = collect(study.inputs);
+    const [resultTables, restOutputs] = tables(study.outputs), [inputTables, restInputs] = tables(study.inputs);
+    const created = study.createdAt ?? new Date().toISOString(), outputRows = collect(restOutputs), inputRows = collect(restInputs);
     let risk = [['Release status', 'BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL'], ['Warning', warning], ['Study method', study.method], ['Timestamp', created]];
     for (const [key, val] of Object.entries(study.outputs))
         if (['scope', 'limitations', 'warnings', 'assumptions', 'reference', 'provenance'].includes(key))
@@ -1141,23 +1181,25 @@ function advancedStudyReport(study) {
             { name: 'Summary', headers: ['Property', 'Value'], rows: [['Project', 'Fault Current Studio advanced study'], ['Method', study.method], ['Model status', study.outputs.status], ['Captured UTC', created], ['Warning', warning], ['Report data provenance', 'Entered study inputs, isolated calculated method outputs. No external OEM certification or auto-selected breaker/PPE.']] },
             { name: 'Study inputs', headers: ['Input path', 'Entered value'], rows: inputRows },
             { name: 'Equipment duty', headers: ['Calculated output path', 'Value'], rows: outputRows },
-            { name: 'Assumptions & QA', headers: ['Evidence / limitation', 'Value'], rows: risk }
-        ] };
+            { name: 'Assumptions & QA', headers: ['Evidence / limitation', 'Value'], rows: risk },
+            ...resultTables, ...inputTables.map(t => ({ ...t, name: ('Inputs · ' + t.name.replace(/^Results · /, '')).slice(0, 31) }))
+        ], ...((resultTables.length || inputTables.length) ? { pdfSheets: ['Summary', 'Study inputs', 'Equipment duty', 'Assumptions & QA', ...resultTables.map(t => t.name)] } : {}) };
 }
 function advancedStudyReportBlob(study, format) { let report = advancedStudyReport(study); if (format === 'pdf')
-    return (0, public_report_engine_mjs_1.pdfBlob)(report); if (format === 'xlsx')
-    return (0, public_report_engine_mjs_1.workbookBlob)(report); throw Error('Unsupported advanced study report format'); }
-
+    return (0, public_report_engine_mjs_v_20261108_v32_1.pdfBlob)(report); if (format === 'xlsx')
+    return (0, public_report_engine_mjs_v_20261108_v32_1.workbookBlob)(report); throw Error('Unsupported advanced study report format'); }
 },
 "public-report-engine.mjs": function(module,exports,require){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.workbookBlob = workbookBlob;
+exports.workbookBlobCompact = workbookBlobCompact;
 exports.pdfBlob = pdfBlob;
 exports.browserReport = browserReport;
 // Browser-hosted report export. Study data and calculations reuse Studio's original report-data module.
 // No cloud transmission. For construction, calculations and report fidelity require engineering review.
 const report_data_mjs_1 = require("./report-data.mjs");
+const report_contents_mjs_1 = require("./report-contents.mjs");
 const enc = new TextEncoder();
 // Excel XML 1.0 forbids most C0 controls and unpaired UTF-16 surrogates.
 // Replace prohibited code points rather than producing a ZIP with invalid worksheet XML.
@@ -1165,21 +1207,22 @@ const xml = v => String(v ?? '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001
 const escapePdf = v => String(v ?? '').replace(/[\u2012-\u2015]/g, '-').replace(/Ω/g, 'Ohm').replace(/φ/g, 'phase').replace(/²/g, '^2').replace(/≤/g, '<=').replace(/≥/g, '>=').normalize('NFKD').replace(/[^\x20-\x7e]/g, '?').replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
 const crcTable = Array.from({ length: 256 }, (_, i) => { let c = i; for (let j = 0; j < 8; j++)
     c = (c & 1) ? 0xedb88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
-function crc32(data) { let c = 0xffffffff; for (const b of data)
-    c = crcTable[(c ^ b) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; }
-function zipStored(entries) {
+function crc32(data) { let c = 0xffffffff; for (let i = 0; i < data.length; i++)
+    c = crcTable[(c ^ data[i]) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; }
+function zipStored(entries) { return zipEntries(entries.map(({ name, text }) => { const bytes = enc.encode(text); return { name, bytes, stored: bytes, method: 0 }; })); }
+function zipEntries(entries) {
     let off = 0;
     const all = [], cd = [];
     const u16 = n => [n & 255, (n >> 8) & 255], u32 = n => [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255];
-    for (const { name, text } of entries) {
-        const n = enc.encode(name), bytes = enc.encode(text), c = crc32(bytes);
+    for (const { name, bytes, stored, method } of entries) {
+        const n = enc.encode(name), c = crc32(bytes);
         if (n.length > 65535 || bytes.length > 200 * 1024 * 1024)
             throw Error('One report sheet is too large for browser export.');
-        const lh = Uint8Array.from([...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0), ...u32(c), ...u32(bytes.length), ...u32(bytes.length), ...u16(n.length), ...u16(0)]);
-        all.push(lh, n, bytes);
-        const ch = Uint8Array.from([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0), ...u32(c), ...u32(bytes.length), ...u32(bytes.length), ...u16(n.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off)]);
+        const lh = Uint8Array.from([...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(method), ...u16(0), ...u16(0), ...u32(c), ...u32(stored.length), ...u32(bytes.length), ...u16(n.length), ...u16(0)]);
+        all.push(lh, n, stored);
+        const ch = Uint8Array.from([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(method), ...u16(0), ...u16(0), ...u32(c), ...u32(stored.length), ...u32(bytes.length), ...u16(n.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off)]);
         cd.push(ch, n);
-        off += lh.length + n.length + bytes.length;
+        off += lh.length + n.length + stored.length;
     }
     const cdSize = cd.reduce((n, x) => n + x.length, 0), cdoff = off;
     if (entries.length > 65535 || off + cdSize >= 0xffffffff)
@@ -1207,13 +1250,64 @@ function worksheet(sheet) {
     }
     return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"/></sheetViews><sheetFormatPr defaultRowHeight="15"/><sheetData>${body}</sheetData></worksheet>`;
 }
-function workbookBlob(report) {
-    const sheets = report.sheets;
+const SHEET_ROWS = 99999;
+// A sheet longer than the per-sheet row budget continues on numbered sheets instead of failing.
+function splitSheets(sheets) {
+    if (!sheets.some(s => s.rows.length > SHEET_ROWS))
+        return sheets;
+    const out = [];
+    for (const s of sheets) {
+        if (s.rows.length <= SHEET_ROWS) {
+            out.push(s);
+            continue;
+        }
+        for (let i = 0, part = 1; i < s.rows.length; i += SHEET_ROWS, part++) {
+            const tag = part === 1 ? '' : ' (' + part + ')';
+            out.push({ ...s, name: String(s.name).slice(0, 31 - tag.length) + tag, rows: s.rows.slice(i, i + SHEET_ROWS) });
+        }
+    }
+    return out;
+}
+function workbookBlob(report) { return zipStored(workbookEntries(report)); }
+// Large workbooks are deflate-compressed where the browser supports CompressionStream; small ones stay byte-identical.
+const DEFLATE_FROM = 8 * 1024 * 1024;
+async function deflateRaw(bytes) { const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw')); return new Uint8Array(await new Response(stream).arrayBuffer()); }
+async function workbookBlobCompact(report) {
+    const entries = workbookEntries(report), coded = entries.map(({ name, text }) => ({ name, bytes: enc.encode(text) }));
+    const total = coded.reduce((n, e) => n + e.bytes.length, 0);
+    let deflate = total >= DEFLATE_FROM && typeof CompressionStream === 'function';
+    if (deflate) {
+        try {
+            for (const e of coded) {
+                const z = await deflateRaw(e.bytes);
+                if (z.length < e.bytes.length) {
+                    e.stored = z;
+                    e.method = 8;
+                }
+                else {
+                    e.stored = e.bytes;
+                    e.method = 0;
+                }
+            }
+        }
+        catch {
+            deflate = false;
+        }
+    }
+    if (!deflate)
+        for (const e of coded) {
+            e.stored = e.bytes;
+            e.method = 0;
+        }
+    return zipEntries(coded);
+}
+function workbookEntries(report) {
+    const sheets = splitSheets(report.sheets);
     const paths = sheets.map((s, i) => ({ name: `xl/worksheets/sheet${i + 1}.xml`, text: worksheet(s) }));
     const names = sheets.map((s, i) => `<sheet name="${xml(s.name.replace(/[\\/?*\[\]:]/g, ' ').slice(0, 31))}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('');
     const relationships = sheets.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('');
     const contentTypes = sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('');
-    return zipStored([
+    return ([
         { name: '[Content_Types].xml', text: `<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${contentTypes}</Types>` },
         { name: '_rels/.rels', text: `<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>` },
         { name: 'xl/workbook.xml', text: `<?xml version="1.0" encoding="UTF-8"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${names}</sheets></workbook>` },
@@ -1221,13 +1315,17 @@ function workbookBlob(report) {
         ...paths
     ]);
 }
+const PDF_LINES = 118000;
 function pageLines(report) {
     const all = [`FAULT CURRENT STUDIO - ENGINEERING REPORT`, `BROWSER EXPORT - ENGINEERING REVIEW REQUIRED`, ''];
-    const include = new Set(['Summary', 'Bus results', 'Source contributions', 'Branch currents', 'Equipment duty', 'Study inputs', 'Assumptions & QA', 'PV arrays', 'Database screens']);
+    const include = new Set(report.pdfSheets || ['Summary', 'Bus results', 'Source contributions', 'Branch currents', 'Equipment duty', 'Study inputs', 'Assumptions & QA', 'PV arrays', 'Database screens']);
+    const limit = report.pdfSheets ? PDF_LINES : 16000, counts = [];
     for (const sheet of report.sheets) {
         if (!include.has(sheet.name))
             continue;
         all.push('', `===== ${sheet.name.toUpperCase()} =====`);
+        const start = all.length;
+        counts.push([sheet.name, 0]);
         for (let i = 0; i < sheet.rows.length; i++) {
             const row = sheet.rows[i];
             const line = sheet.name === 'Summary' ? `${row[0]}: ${row[1] ?? '—'}` : row.map((v, j) => `${sheet.headers[j]}: ${v ?? '—'}`).join(' | ');
@@ -1242,8 +1340,13 @@ function pageLines(report) {
             }
             if (remain.length)
                 all.push(remain);
-            if (all.length > 16000)
-                throw Error('PDF report is too long for browser export. Download Excel instead.');
+            counts[counts.length - 1][1] = all.length - start;
+            if (all.length > limit) {
+                if (!report.pdfSheets)
+                    throw Error('PDF report is too long for browser export. Download Excel instead.');
+                const big = counts.sort((a, b) => b[1] - a[1]).slice(0, 3).map(([n, c]) => n + ' (≥' + Math.ceil(c / 59) + ' pages)').join(', ');
+                throw Error('PDF report would exceed ' + Math.round(limit / 59) + ' pages. Largest sections: ' + big + '. ' + (report.choice ? 'Untick sections or choose “Selected fault bus only” in Report contents, or download Excel.' : 'Download Excel instead (no row limit).'));
+            }
         }
     }
     return all;
@@ -1281,17 +1384,20 @@ function pdfBlob(report) {
     parts.push(`trailer\n<< /Size ${offsets.length} /Root ${catalog} 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
     return new Blob(parts, { type: 'application/pdf' });
 }
-async function browserReport(project, format) {
-    const report = (0, report_data_mjs_1.reportData)(project);
+async function browserReport(project, format, options) {
+    let report = (0, report_data_mjs_1.reportData)(project);
+    if (options?.choice) {
+        const selectedName = report.results?.find(r => r.busId === report.project?.selectedBus)?.busName || '';
+        report = (0, report_contents_mjs_1.applyReportChoice)(report, options.choice, { project: report.project, selectedName, studies: options.studies || [] });
+    }
     if (report.issues.some(x => x.severity === 'error'))
         throw Error('Resolve engineering input errors before exporting a report.');
     if (format === 'pdf')
         return pdfBlob(report);
     if (format === 'xlsx')
-        return workbookBlob(report);
+        return options?.choice ? workbookBlobCompact(report) : workbookBlob(report);
     throw Error('Unsupported report format.');
 }
-
 },
 "report-data.mjs": function(module,exports,require){
 "use strict";
@@ -1324,7 +1430,7 @@ exports.scopeNotes = [
     'Short-time equipment screening compares equipment-bus symmetrical RMS against the published current rating only within its stated duration. No higher current rating for a shorter time, or interrupting/assembly rating from a continuous-current value, is inferred.'
 ];
 const inputFields = {
-    valueSource: ['Value entry mode', ''], userManufacturer: ['Manufacturer (user data)', ''], userModel: ['Model / part number (user data)', ''], dataReference: ['User data source / notes', ''], temperature: ['Impedance-data temperature', '°C'], insulationCustomDesignation: ['Custom product insulation marking', ''], singlePhaseBasis: ['Utility two-wire input basis', ''], phaseRating: ['Transformer phase/nameplate basis', ''], loopImpedanceBasis: ['Cable complete-loop basis', ''], method: ['Source data method', ''], model: ['Source model', ''], voltage: ['Nominal / source data voltage', 'V'], v1: ['Primary rated voltage', 'V'], v2: ['Secondary rated voltage', 'V'], power: ['Rated apparent power', 'VA'], faultA: ['Entered available RMS fault current', 'A'], faultMVA: ['Entered short-circuit power', 'MVA'], xr: ['X/R ratio', ''], angle: ['Source phase angle', 'degrees'], r: ['Source resistance', 'ohm'], x: ['Source reactance', 'ohm'], xdpp: ['Subtransient reactance', 'pu'], xdp: ['Transient reactance', 'pu'], xd: ['Steady-state reactance', 'pu'], multiplier: ['Manufacturer fault multiplier', ''], duration: ['Contribution duration', 's'], peakA: ['Entered peak fault / duty rating', 'A'], zPercent: ['Transformer impedance', '%'], shift: ['Transformer phase shift', 'degrees'], primaryConnection: ['Primary winding connection', ''], secondaryConnection: ['Secondary winding connection', ''], grounding: ['Grounding', ''], neutralR: ['Neutral resistance', 'ohm'], neutralX: ['Neutral reactance', 'ohm'], length: ['Cable length', 'm'], runs: ['Parallel conductors per phase', ''], rPerM: ['Cable positive-sequence resistance', 'ohm/m'], xPerM: ['Cable positive-sequence reactance', 'ohm/m'], r0PerM: ['Recorded cable zero-sequence resistance', 'ohm/m'], x0PerM: ['Recorded cable zero-sequence reactance', 'ohm/m'], ratedVoltage: ['Equipment / insulation voltage rating', 'V'], interruptA: ['Interrupting RMS rating', 'A'], sccrA: ['Assembly SCCR', 'A'], frequency: ['Data frequency', 'Hz'], material: ['Conductor material', ''], size: ['Conductor size', ''], cableType: ['Cable R/X library / construction', ''], insulationType: ['Installed insulation designation', ''], insulationLocation: ['Cable installation location', ''], insulationProductTemp: ['Insulation temperature from product marking', '°C'], cableCategory: ['Cable type filter', ''], maxInclude: ['Included in maximum case', ''], minInclude: ['Included in minimum case', ''], maxStrength: ['Maximum source strength', ''], minStrength: ['Minimum source strength', ''], allowIdeal: ['Ideal connection explicitly selected', ''], allowOneToOne: ['1:1 transformer explicitly selected', ''], frequencyOverride: ['Frequency mismatch manually verified', '']
+    valueSource: ['Value entry mode', ''], userManufacturer: ['Manufacturer (user data)', ''], userModel: ['Model / part number (user data)', ''], dataReference: ['User data source / notes', ''], temperature: ['Impedance-data temperature', '°C'], insulationCustomDesignation: ['Custom product insulation marking', ''], singlePhaseBasis: ['Utility two-wire input basis', ''], phaseRating: ['Transformer phase/nameplate basis', ''], loopImpedanceBasis: ['Cable complete-loop basis', ''], method: ['Source data method', ''], model: ['Source model', ''], voltage: ['Nominal / source data voltage', 'V'], v1: ['Primary rated voltage', 'V'], v2: ['Secondary rated voltage', 'V'], power: ['Rated apparent power', 'VA'], faultA: ['Entered available RMS fault current', 'A'], faultMVA: ['Entered short-circuit power', 'MVA'], xr: ['X/R ratio', ''], angle: ['Source phase angle', 'degrees'], r: ['Source resistance', 'ohm'], x: ['Source reactance', 'ohm'], xdpp: ['Subtransient reactance', 'pu'], xdp: ['Transient reactance', 'pu'], xd: ['Steady-state reactance', 'pu'], multiplier: ['Manufacturer fault multiplier', ''], duration: ['Contribution duration', 's'], peakA: ['Entered peak fault / duty rating', 'A'], zPercent: ['Transformer impedance', '%'], tapPercent: ['Off-nominal primary tap', '%'], shift: ['Transformer phase shift', 'degrees'], primaryConnection: ['Primary winding connection', ''], secondaryConnection: ['Secondary winding connection', ''], grounding: ['Grounding', ''], neutralR: ['Neutral resistance', 'ohm'], neutralX: ['Neutral reactance', 'ohm'], length: ['Cable length', 'm'], runs: ['Parallel conductors per phase', ''], rPerM: ['Cable positive-sequence resistance', 'ohm/m'], xPerM: ['Cable positive-sequence reactance', 'ohm/m'], r0PerM: ['Recorded cable zero-sequence resistance', 'ohm/m'], x0PerM: ['Recorded cable zero-sequence reactance', 'ohm/m'], ratedVoltage: ['Equipment / insulation voltage rating', 'V'], interruptA: ['Interrupting RMS rating', 'A'], sccrA: ['Assembly SCCR', 'A'], frequency: ['Data frequency', 'Hz'], material: ['Conductor material', ''], size: ['Conductor size', ''], cableType: ['Cable R/X library / construction', ''], insulationType: ['Installed insulation designation', ''], insulationLocation: ['Cable installation location', ''], insulationProductTemp: ['Insulation temperature from product marking', '°C'], cableCategory: ['Cable type filter', ''], maxInclude: ['Included in maximum case', ''], minInclude: ['Included in minimum case', ''], maxStrength: ['Maximum source strength', ''], minStrength: ['Minimum source strength', ''], allowIdeal: ['Ideal connection explicitly selected', ''], allowOneToOne: ['1:1 transformer explicitly selected', ''], frequencyOverride: ['Frequency mismatch manually verified', '']
 };
 function reportData(input, caseMeta = null) {
     const p = (0, manufacturer_library_mjs_1.synchronizeManufacturerData)((0, network_model_mjs_1.normalizeProject)(input)), calculation = (0, network_engine_mjs_1.calculateProject)(p), { results, issues } = calculation;
@@ -1524,21 +1630,21 @@ exports.hydrateSplitPhaseInputs = hydrateSplitPhaseInputs;
 exports.prepareSplitPhaseProject = prepareSplitPhaseProject;
 exports.calculateExtendedProject = calculateExtendedProject;
 exports.validateExtendedProject = validateExtendedProject;
-const dc_network_mjs_v_20261022_pv_final_1 = require("./dc-network.mjs?v=20261022-pv-final");
-Object.defineProperty(exports, "isDcStudy", { enumerable: true, get: function () { return dc_network_mjs_v_20261022_pv_final_1.isDcStudy; } });
-const connected_sequences_mjs_v_20261022_pv_final_1 = require("./connected-sequences.mjs?v=20261022-pv-final");
-const split_phase_network_mjs_v_20261022_pv_final_1 = require("./split-phase-network.mjs?v=20261022-pv-final");
-Object.defineProperty(exports, "isSplitPhaseFault", { enumerable: true, get: function () { return split_phase_network_mjs_v_20261022_pv_final_1.isSplitPhaseFault; } });
+const dc_network_mjs_v_20261108_v32_1 = require("./dc-network.mjs?v=20261108-v32");
+Object.defineProperty(exports, "isDcStudy", { enumerable: true, get: function () { return dc_network_mjs_v_20261108_v32_1.isDcStudy; } });
+const connected_sequences_mjs_v_20261108_v32_1 = require("./connected-sequences.mjs?v=20261108-v32");
+const split_phase_network_mjs_v_20261108_v32_1 = require("./split-phase-network.mjs?v=20261108-v32");
+Object.defineProperty(exports, "isSplitPhaseFault", { enumerable: true, get: function () { return split_phase_network_mjs_v_20261108_v32_1.isSplitPhaseFault; } });
 exports.analysisFaultTypes = [['single-ll', 'Single/split-phase · L1–L2 full winding'], ['split-l1-n', 'Split-phase · L1–neutral'], ['split-l2-n', 'Split-phase · L2–neutral'], ['split-l1-g', 'Split-phase · L1–ground'], ['split-l2-g', 'Split-phase · L2–ground'], ['3phase', '3-phase fault'], ['3phase-ground', '3-phase-to-ground fault'], ['ll', 'Line-to-line'], ['slg', 'Single-line-to-ground'], ['dlg', 'Double-line-to-ground · B–C–ground'], ['dc', 'DC pole-to-pole · documented resistive loop']];
 const usesConnectedSequences = p => p?.settings?.faultType === '3phase-ground' || (['3phase', 'll', 'slg', 'dlg'].includes(p?.settings?.faultType) && p?.settings?.sequenceModel === 'connected');
 exports.usesConnectedSequences = usesConnectedSequences;
-const isExtendedStudy = p => (0, dc_network_mjs_v_20261022_pv_final_1.isDcStudy)(p) || (0, split_phase_network_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) || (0, exports.usesConnectedSequences)(p);
+const isExtendedStudy = p => (0, dc_network_mjs_v_20261108_v32_1.isDcStudy)(p) || (0, split_phase_network_mjs_v_20261108_v32_1.isSplitPhaseFault)(p) || (0, exports.usesConnectedSequences)(p);
 exports.isExtendedStudy = isExtendedStudy;
 const analysisFaultLabel = p => exports.analysisFaultTypes.find(([key]) => key === p?.settings?.faultType)?.[1] || 'Unknown fault type';
 exports.analysisFaultLabel = analysisFaultLabel;
-const analysisQuantity = p => (0, dc_network_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'Prospective DC current' : (0, split_phase_network_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) ? 'Single-leg RMS' : (0, exports.usesConnectedSequences)(p) ? 'Maximum phase RMS' : 'Fault RMS';
+const analysisQuantity = p => (0, dc_network_mjs_v_20261108_v32_1.isDcStudy)(p) ? 'Prospective DC current' : (0, split_phase_network_mjs_v_20261108_v32_1.isSplitPhaseFault)(p) ? 'Single-leg RMS' : (0, exports.usesConnectedSequences)(p) ? 'Maximum phase RMS' : 'Fault RMS';
 exports.analysisQuantity = analysisQuantity;
-function analysisScope(p) { return (0, dc_network_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? (0, dc_network_mjs_v_20261022_pv_final_1.dcScope)() : (0, split_phase_network_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) ? split_phase_network_mjs_v_20261022_pv_final_1.splitPhaseScope : (0, exports.usesConnectedSequences)(p) ? 'Connected positive-, negative- and zero-sequence RMS network with explicit source, conductor and transformer grounding data. Source superposition and actual terminal currents are separate quantities. No unbalanced IBR controls, transient decay, peak or complete IEC/ANSI procedures.' : ''; }
+function analysisScope(p) { return (0, dc_network_mjs_v_20261108_v32_1.isDcStudy)(p) ? (0, dc_network_mjs_v_20261108_v32_1.dcScope)() : (0, split_phase_network_mjs_v_20261108_v32_1.isSplitPhaseFault)(p) ? split_phase_network_mjs_v_20261108_v32_1.splitPhaseScope : (0, exports.usesConnectedSequences)(p) ? 'Connected positive-, negative- and zero-sequence RMS network with explicit source, conductor and transformer grounding data. Source superposition and actual terminal currents are separate quantities. No unbalanced IBR controls, transient decay, peak or complete IEC/ANSI procedures.' : ''; }
 const active = (e, p) => e.enabled !== false && (!e.deviceId || p.devices.find(d => d.id === e.deviceId)?.enabled !== false);
 const supplied = v => v !== undefined && v !== null && v !== '';
 const value = (x, key, fallback) => x && Object.hasOwn(x, key) ? x[key] : fallback;
@@ -1642,28 +1748,28 @@ function prepareSplitPhaseProject(input) {
     return p;
 }
 const connected = p => p.settings.faultType === '3phase-ground' && p.settings.sequenceModel !== 'connected' ? { ...p, settings: { ...p.settings, sequenceModel: 'connected' } } : p;
-function calculateExtendedProject(p) { let result; if ((0, dc_network_mjs_v_20261022_pv_final_1.isDcStudy)(p))
-    result = (0, dc_network_mjs_v_20261022_pv_final_1.calculateDcProject)(p);
-else if ((0, split_phase_network_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p))
-    result = (0, split_phase_network_mjs_v_20261022_pv_final_1.calculateSplitPhaseProject)(prepareSplitPhaseProject(p));
+function calculateExtendedProject(p) { let result; if ((0, dc_network_mjs_v_20261108_v32_1.isDcStudy)(p))
+    result = (0, dc_network_mjs_v_20261108_v32_1.calculateDcProject)(p);
+else if ((0, split_phase_network_mjs_v_20261108_v32_1.isSplitPhaseFault)(p))
+    result = (0, split_phase_network_mjs_v_20261108_v32_1.calculateSplitPhaseProject)(prepareSplitPhaseProject(p));
 else if ((0, exports.usesConnectedSequences)(p))
-    result = (0, connected_sequences_mjs_v_20261022_pv_final_1.calculateConnectedProject)(connected(p));
+    result = (0, connected_sequences_mjs_v_20261108_v32_1.calculateConnectedProject)(connected(p));
 else
     return null; return { ...result, results: result.results.map(r => ({ ...r, faultType: p.settings.faultType })) }; }
-function validateExtendedProject(p) { if ((0, dc_network_mjs_v_20261022_pv_final_1.isDcStudy)(p))
-    return (0, dc_network_mjs_v_20261022_pv_final_1.validateDcProject)(p); if ((0, split_phase_network_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p))
-    return (0, split_phase_network_mjs_v_20261022_pv_final_1.splitPhaseIssues)(prepareSplitPhaseProject(p)); if ((0, exports.usesConnectedSequences)(p))
-    return (0, connected_sequences_mjs_v_20261022_pv_final_1.validateConnectedSequences)(connected(p)); return null; }
-
+function validateExtendedProject(p) { if ((0, dc_network_mjs_v_20261108_v32_1.isDcStudy)(p))
+    return (0, dc_network_mjs_v_20261108_v32_1.validateDcProject)(p); if ((0, split_phase_network_mjs_v_20261108_v32_1.isSplitPhaseFault)(p))
+    return (0, split_phase_network_mjs_v_20261108_v32_1.splitPhaseIssues)(prepareSplitPhaseProject(p)); if ((0, exports.usesConnectedSequences)(p))
+    return (0, connected_sequences_mjs_v_20261108_v32_1.validateConnectedSequences)(connected(p)); return null; }
 },
 "dc-network.mjs": function(module,exports,require){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dcScope = exports.isDcStudy = void 0;
+exports.DC_COMPACT_WORK = exports.DC_SPARSE_NODES = exports.DC_FACTOR_MIN = exports.dcScope = exports.isDcStudy = void 0;
 exports.validateDcProject = validateDcProject;
 exports.buildDcNetwork = buildDcNetwork;
 exports.calculateDcBus = calculateDcBus;
 exports.calculateDcProject = calculateDcProject;
+exports.calculateDcBusDetail = calculateDcBusDetail;
 // Pure, additive DC full-loop equivalent. No imports from the AC engine.
 const finite = x => typeof x === 'number' && Number.isFinite(x);
 const record = x => x !== null && typeof x === 'object' && !Array.isArray(x);
@@ -1794,10 +1900,16 @@ function buildDcNetwork(p) {
             const i = find(net.at[e.from]), j = find(net.at[e.to]);
             root[j] = i;
         }
-    const roots = [...new Set(root.map((_, i) => find(i)))];
-    net.nodeAt = root.map((_, i) => roots.indexOf(find(i)));
-    net.Y = roots.map(() => roots.map(() => 0));
+    const roots = [...new Set(root.map((_, i) => find(i)))], rootIndex = new Map(roots.map((r, k) => [r, k]));
+    net.nodeAt = root.map((_, i) => rootIndex.get(find(i)));
+    // V31: plant-scale DC arrays keep the conductance matrix sparse (rows of Map); small ones keep the dense matrix.
+    net.sparseY = roots.length > exports.DC_SPARSE_NODES;
+    net.Y = net.sparseY ? roots.map(() => new Map()) : roots.map(() => roots.map(() => 0));
     net.adj = roots.map(() => []);
+    const addY = (a, b, g) => { if (net.sparseY)
+        net.Y[a].set(b, (net.Y[a].get(b) || 0) + g);
+    else
+        net.Y[a][b] += g; };
     for (const e of p.branches) {
         if (!conducting(e, p))
             continue;
@@ -1806,10 +1918,10 @@ function buildDcNetwork(p) {
         if (a === b || r === 0)
             continue;
         const g = 1 / r;
-        net.Y[a][a] += g;
-        net.Y[b][b] += g;
-        net.Y[a][b] -= g;
-        net.Y[b][a] -= g;
+        addY(a, a, g);
+        addY(b, b, g);
+        addY(a, b, -g);
+        addY(b, a, -g);
         net.adj[a].push(b);
         net.adj[b].push(a);
     }
@@ -1817,10 +1929,10 @@ function buildDcNetwork(p) {
         if (!included(s, p))
             continue;
         const i = net.at[s.bus], node = net.nodeAt[i], g = 1 / s.dcResistanceOhm;
-        net.Y[node][node] += g;
+        addY(node, node, g);
         net.sources.push({ ...s, i, node, current: false, impedance: real(s.dcResistanceOhm), conductance: g, injection: s.voltage * g });
     }
-    if (net.Y.some(row => row.some(x => !finite(x))) || net.sources.some(s => !finite(s.injection))) {
+    if (net.Y.some(row => (net.sparseY ? [...row.values()] : row).some(x => !finite(x))) || net.sources.some(s => !finite(s.injection))) {
         const issue = { id: 'settings', message: 'DC conductance/injection exceeds numerical range. Check resistance and voltage units.', severity: 'error' };
         net.issues.push(issue);
         net.errors.push(issue);
@@ -1901,13 +2013,16 @@ function response(net, comp, f, faultR, sources) {
 }
 function branchFlows(net, comp, v) { return net.branches.filter(e => e.resistanceOhm > 0 && comp.includes(e.a)).map(e => { const signed = (v[e.a] - v[e.b]) / e.resistanceOhm; if (!finite(signed))
     throw Error('DC branch current exceeds numerical range.'); return { id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, signedA: signed, amps: Math.abs(signed), toAmps: Math.abs(signed), fromA: Math.abs(signed), toA: Math.abs(signed), fromPhasor: real(signed), toPhasor: real(-signed), fromBoundA: 0, toBoundA: 0, bound: false }; }); }
-function calculateDcBus(net, p, busId) {
-    const bus = net.buses.find(b => b.id === busId), base = { busId, busName: bus?.name, voltage: bus?.voltage, phaseModel: 'dc-resistive', quantity: 'Steady-state prospective DC fault current', units: 'A', totalA: null, signedA: null, conventionalA: null, derBound: 0, peakA: null, asymA: null, xr: null, bound: false, details: [], branchFlows: [], groups: {}, zth: null, sequence: null, faultNote: (0, exports.dcScope)(), issues: net.issues };
+function calculateDcBus(net, p, busId, options = {}) {
+    const bus = (net.busById ??= new Map(net.buses.map(b => [b.id, b]))).get(busId), base = { busId, busName: bus?.name, voltage: bus?.voltage, phaseModel: 'dc-resistive', quantity: 'Steady-state prospective DC fault current', units: 'A', totalA: null, signedA: null, conventionalA: null, derBound: 0, peakA: null, asymA: null, xr: null, bound: false, details: [], branchFlows: [], groups: {}, zth: null, sequence: null, faultNote: (0, exports.dcScope)(), issues: net.issues };
     if (net.errors.length)
         return { ...base, status: 'INPUT REQUIRED' };
     if (!bus)
         return { ...base, status: 'MISSING BUS' };
-    const f = net.nodeAt[net.at[busId]], comp = component(net, f), sources = net.sources.filter(s => comp.includes(s.node));
+    const f = net.nodeAt[net.at[busId]];
+    if (net.sparseY || options.factored || componentSize(net, f) > exports.DC_FACTOR_MIN)
+        return factoredDcBus(net, p, f, base, options);
+    const comp = component(net, f), sources = net.sources.filter(s => comp.includes(s.node));
     if (!sources.length)
         return { ...base, status: 'DISCONNECTED / NO ACTIVE SOURCE' };
     try {
@@ -1939,17 +2054,278 @@ function calculateDcBus(net, p, busId) {
         return { ...base, status: 'NETWORK ERROR', faultNote: e.message + ' ' + (0, exports.dcScope)() };
     }
 }
-function calculateDcProject(p) { const net = buildDcNetwork(p); return { issues: net.issues, results: net.buses.map(b => calculateDcBus(net, p, b.id)), net }; }
-
+function calculateDcProject(p, options = {}) { const net = buildDcNetwork(p); if (!net.errors.length) {
+    const work = net.buses.length * Math.max(1, net.branches.length) * Math.max(1, net.sources.length);
+    net.compact = options.compact ?? work > exports.DC_COMPACT_WORK;
+    net.selectedBus = p.selectedBus;
+} const results = net.buses.map(b => calculateDcBus(net, p, b.id, options)); if (net.compact)
+    addDcEnvelope(net, results); return { issues: net.issues, results, net }; }
+// ===================== V31 plant-scale DC path =====================
+// Same resistive superposition as above, but each connected array is factorized once (sparse, minimum-degree
+// ordering) and every bus fault reuses it: V = P − Z(:,f)·I with I = P(f)/(Z(f,f)+Rf). Components of up to
+// DC_FACTOR_MIN nodes keep the original per-fault elimination unchanged.
+exports.DC_FACTOR_MIN = 40, exports.DC_SPARSE_NODES = 400, exports.DC_COMPACT_WORK = 4e5;
+function components(net) { if (net.compOf)
+    return net.compOf; const n = net.adj.length, c = new Int32Array(n).fill(-1); let id = 0; for (let s = 0; s < n; s++) {
+    if (c[s] >= 0)
+        continue;
+    const q = [s];
+    c[s] = id;
+    for (let h = 0; h < q.length; h++)
+        for (const j of net.adj[q[h]])
+            if (c[j] < 0) {
+                c[j] = id;
+                q.push(j);
+            }
+    id++;
+} net.compOf = c; return c; }
+function componentSize(net, f) { const c = components(net); net.compSize ??= (() => { const m = new Map(); for (const x of c)
+    m.set(x, (m.get(x) || 0) + 1); return m; })(); return net.compSize.get(c[f]); }
+const yRow = (net, a) => net.sparseY ? net.Y[a] : new Map(net.Y[a].map((g, j) => [j, g]).filter(([, g]) => g !== 0));
+function realFactor(rows) {
+    const n = rows.length, elim = new Uint8Array(n), order = new Int32Array(n), Lp = [0], Li = [], Lv = [], Up = [0], Uj = [], Uv = [], d = new Float64Array(n), heap = [];
+    const scale = rows.map(r => { let m = 0; for (const v of r.values())
+        m = Math.max(m, Math.abs(v)); return m; });
+    const less = (a, b) => a[0] < b[0] || (a[0] === b[0] && a[1] < b[1]), deg = k => rows[k].size - (rows[k].has(k) ? 1 : 0);
+    const push = (x, k) => { heap.push([x, k]); let c = heap.length - 1; while (c > 0) {
+        const q = (c - 1) >> 1;
+        if (!less(heap[c], heap[q]))
+            break;
+        [heap[c], heap[q]] = [heap[q], heap[c]];
+        c = q;
+    } };
+    const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) {
+        heap[0] = last;
+        let c = 0;
+        for (;;) {
+            const l = 2 * c + 1, r = l + 1;
+            let m = c;
+            if (l < heap.length && less(heap[l], heap[m]))
+                m = l;
+            if (r < heap.length && less(heap[r], heap[m]))
+                m = r;
+            if (m === c)
+                break;
+            [heap[c], heap[m]] = [heap[m], heap[c]];
+            c = m;
+        }
+    } return top; };
+    for (let k = 0; k < n; k++)
+        push(deg(k), k);
+    let t = 0;
+    while (t < n) {
+        const [x, k] = pop();
+        if (elim[k] || x !== deg(k))
+            continue;
+        const row = rows[k], piv = row.get(k) || 0;
+        if (!finite(piv) || !(Math.abs(piv) > 1e-13 * Math.max(scale[k], Number.MIN_VALUE)))
+            throw Error('DC network is singular or ill-conditioned; check extreme resistance ratios.');
+        const urow = [];
+        for (const [j, v] of row)
+            if (j !== k)
+                urow.push([j, v]);
+        for (const [i] of urow) {
+            const ri = rows[i], aik = ri.get(k) || 0;
+            ri.delete(k);
+            const l = aik / piv;
+            Li.push(i);
+            Lv.push(l);
+            if (l === 0)
+                continue;
+            for (const [j, u] of urow)
+                ri.set(j, (ri.get(j) || 0) - l * u);
+        }
+        for (const [j, v] of urow) {
+            Uj.push(j);
+            Uv.push(v);
+        }
+        Lp.push(Li.length);
+        Up.push(Uj.length);
+        d[k] = piv;
+        elim[k] = 1;
+        order[t++] = k;
+        rows[k] = null;
+        for (const [i] of urow)
+            push(deg(i), i);
+    }
+    return { n, order, Lp: Int32Array.from(Lp), Li: Int32Array.from(Li), Lv: Float64Array.from(Lv), Up: Int32Array.from(Up), Uj: Int32Array.from(Uj), Uv: Float64Array.from(Uv), d };
+}
+function realSolve(F, b) {
+    const { n, order, Lp, Li, Lv, Up, Uj, Uv, d } = F, x = Float64Array.from(b);
+    for (let t = 0; t < n; t++) {
+        const k = order[t], a = x[k];
+        if (a === 0)
+            continue;
+        for (let q = Lp[t]; q < Lp[t + 1]; q++)
+            x[Li[q]] -= Lv[q] * a;
+    }
+    for (let t = n - 1; t >= 0; t--) {
+        const k = order[t];
+        let v = x[k];
+        for (let q = Up[t]; q < Up[t + 1]; q++)
+            v -= Uv[q] * x[Uj[q]];
+        x[k] = v / d[k];
+    }
+    for (let k = 0; k < n; k++)
+        if (!finite(x[k]))
+            throw Error('DC calculation exceeds numerical range.');
+    return x;
+}
+function prepareDc(net, f) {
+    const c = components(net), id = c[f];
+    net.dcPrepared ??= new Map();
+    if (net.dcPrepared.has(id))
+        return net.dcPrepared.get(id);
+    let prep;
+    try {
+        const list = [];
+        for (let k = 0; k < c.length; k++)
+            if (c[k] === id)
+                list.push(k);
+        const loc = new Map(list.map((g, k) => [g, k]));
+        const sources = net.sources.filter(s => c[s.node] === id);
+        if (!sources.length) {
+            prep = { list, loc, sources };
+            net.dcPrepared.set(id, prep);
+            return prep;
+        }
+        const rows = list.map(g => { const m = new Map(); for (const [j, v] of yRow(net, g)) {
+            const k = loc.get(j);
+            if (k !== undefined)
+                m.set(k, v);
+        } return m; });
+        const F = realFactor(rows), N = list.length, P = new Float64Array(N), Ps = new Map();
+        for (const s of sources) {
+            const b = new Float64Array(N);
+            b[loc.get(s.node)] = s.injection;
+            const x = realSolve(F, b);
+            Ps.set(s.id, x);
+            for (let k = 0; k < N; k++)
+                P[k] += x[k];
+        }
+        // KCL residual of the factorized solution, scaled like the original elimination check.
+        for (const s of sources.slice(0, 4)) {
+            const x = Ps.get(s.id);
+            for (let a = 0; a < N; a++) {
+                let sum = 0, sc = a === loc.get(s.node) ? Math.abs(s.injection) : 0;
+                for (const [j, v] of yRow(net, list[a])) {
+                    const k = loc.get(j);
+                    if (k === undefined)
+                        continue;
+                    sum += v * x[k];
+                    sc += Math.abs(v * x[k]);
+                }
+                const rhs = a === loc.get(s.node) ? s.injection : 0;
+                if (!finite(sum) || Math.abs(sum - rhs) > 1e-9 * Math.max(Number.MIN_VALUE, sc))
+                    throw Error('DC solution fails numerical KCL residual check.');
+            }
+        }
+        const branchIdx = [];
+        net.branches.forEach((e, k) => { if (e.resistanceOhm > 0 && c[e.a] === id)
+            branchIdx.push(k); });
+        prep = { list, loc, sources, F, P, Ps, branchIdx };
+    }
+    catch (error) {
+        prep = { error };
+    }
+    net.dcPrepared.set(id, prep);
+    return prep;
+}
+function factoredDcBus(net, p, f, base, options) {
+    const prep = prepareDc(net, f);
+    if (prep.sources && !prep.sources.length)
+        return { ...base, status: 'DISCONNECTED / NO ACTIVE SOURCE' };
+    try {
+        if (prep.error)
+            throw prep.error;
+        const { list, loc, sources, F, P, Ps, branchIdx } = prep, N = list.length, lf = loc.get(f), Rf = p.settings.faultR, bolted = Rf === 0;
+        const e = new Float64Array(N);
+        e[lf] = 1;
+        const Z = realSolve(F, e), z = Z[lf];
+        if (!positive(z))
+            throw Error('DC Thevenin resistance is outside numerical range.');
+        const respond = x => { const I = x[lf] / (z + Rf), v = new Float64Array(N); for (let k = 0; k < N; k++)
+            v[k] = x[k] - Z[k] * I; if (bolted)
+            v[lf] = 0; if (!finite(I))
+            throw Error('DC fault current exceeds numerical range.'); return { I, v }; };
+        const { I: amps, v } = respond(P);
+        const full = !net.compact || net.buses[net.at[net.selectedBus]] && net.nodeAt[net.at[net.selectedBus]] === f || options.full;
+        const flowOf = (k, vv) => { const b = net.branches[k], signed = (vv[loc.get(b.a)] - vv[loc.get(b.b)]) / b.resistanceOhm; if (!finite(signed))
+            throw Error('DC branch current exceeds numerical range.'); return { id: b.id, name: b.name, kind: b.kind, from: b.from, to: b.to, signedA: signed, amps: Math.abs(signed), toAmps: Math.abs(signed), fromA: Math.abs(signed), toA: Math.abs(signed), fromPhasor: real(signed), toPhasor: real(-signed), fromBoundA: 0, toBoundA: 0, bound: false }; };
+        const all = branchIdx.map(k => flowOf(k, v));
+        const meshed = branchIdx.length >= N;
+        const perSourceFlows = full && sources.length * branchIdx.length <= 4e5;
+        const details = sources.map(s => { const x = Ps.get(s.id), node = loc.get(s.node), one = perSourceFlows ? respond(x) : (() => { const I = x[lf] / (z + Rf); if (!finite(I))
+            throw Error('DC fault current exceeds numerical range.'); return { I }; })(); return { sourceId: s.id, name: s.name, kind: s.kind, current: false, expired: false, unknownAngle: false, amps: Math.abs(one.I), signedA: one.I, phasor: real(one.I), sourceImpedance: s.impedance, sourceImpedanceAtFault: s.impedance, pathSeriesZ: null, path: [], meshed, terminalA: Math.abs((s.voltage - v[node]) / s.dcResistanceOhm), terminalVoltagePu: v[node] / s.voltage, branchFlows: perSourceFlows ? branchIdx.map(k => flowOf(k, one.v)) : [] }; });
+        const terminal = sources.map(s => ({ sourceId: s.id, signedA: (s.voltage - v[loc.get(s.node)]) / s.dcResistanceOhm, amps: Math.abs((s.voltage - v[loc.get(s.node)]) / s.dcResistanceOhm) }));
+        if (terminal.some(s => !finite(s.signedA)) || details.some(d => !finite(d.terminalA) || !finite(d.terminalVoltagePu)))
+            throw Error('DC source terminal current exceeds numerical range.');
+        // Physical KCL at every node of the array, with the same tolerance as the per-fault path.
+        const inj = new Float64Array(N), out = new Float64Array(N), sc = new Float64Array(N);
+        terminal.forEach((t, k) => { const a = loc.get(sources[k].node); inj[a] += t.signedA; sc[a] += Math.abs(t.signedA); });
+        all.forEach((fl, q) => { const b = net.branches[branchIdx[q]], a = loc.get(b.a), c = loc.get(b.b); if (a === c)
+            return; out[a] += fl.signedA; out[c] -= fl.signedA; sc[a] += Math.abs(fl.signedA); sc[c] += Math.abs(fl.signedA); });
+        out[lf] += amps;
+        sc[lf] += Math.abs(amps);
+        for (let k = 0; k < N; k++) {
+            const mismatch = inj[k] - out[k];
+            if (!finite(mismatch) || !finite(sc[k]) || Math.abs(mismatch) > 1e-8 * Math.max(1, sc[k]))
+                throw Error('DC physical source/branch KCL fails numerical precision; check extreme resistance ratios.');
+        }
+        let flows = all;
+        if (!full) {
+            const keep = new Set();
+            for (const [q, k] of branchIdx.entries()) {
+                const b = net.branches[k];
+                if (b.a === f || b.b === f)
+                    keep.add(q);
+            }
+            flows = all.filter((_, q) => keep.has(q));
+            net.dcEnvelope ??= new Map();
+            for (const [q, k] of branchIdx.entries()) {
+                const fl = all[q], cur = net.dcEnvelope.get(k);
+                if (!cur || fl.toA > cur.flow.toA)
+                    net.dcEnvelope.set(k, { busId: base.busId, flow: fl });
+            }
+        }
+        else if (net.compact) {
+            net.dcEnvelope ??= new Map();
+            for (const [q, k] of branchIdx.entries()) {
+                const fl = all[q], cur = net.dcEnvelope.get(k);
+                if (!cur || fl.toA > cur.flow.toA)
+                    net.dcEnvelope.set(k, { busId: base.busId, flow: fl });
+            }
+        }
+        const busVoltagesV = full ? Object.fromEntries(net.buses.filter(b => loc.has(net.nodeAt[net.at[b.id]])).map(b => [b.id, v[loc.get(net.nodeAt[net.at[b.id]])]])) : undefined;
+        return { ...base, status: 'CALCULATED', totalA: Math.abs(amps), signedA: amps, conventionalA: Math.abs(amps), details, branchFlows: flows, zth: real(z), groups: details.reduce((o, d) => (o[d.kind] = (o[d.kind] || 0) + d.amps, o), {}), ...(busVoltagesV ? { busVoltagesV } : {}), sourceTerminalCurrents: terminal, idealBranchCurrentsAvailable: !net.branches.some(e => e.resistanceOhm === 0 && components(net)[e.a] === components(net)[f]), solver: 'factored', ...(net.compact ? { outputScope: 'compact', detailScope: full ? 'full' : 'summary' } : {}) };
+    }
+    catch (e) {
+        return { ...base, status: 'NETWORK ERROR', faultNote: e.message + ' ' + (0, exports.dcScope)() };
+    }
+}
+// Each branch's worst bus fault is kept in that bus's table, so cable duty screens see the true maximum.
+function addDcEnvelope(net, results) { if (!net.dcEnvelope)
+    return; const byBus = new Map(results.map(r => [r.busId, r])); for (const { busId, flow } of net.dcEnvelope.values()) {
+    const r = byBus.get(busId);
+    if (r && Array.isArray(r.branchFlows) && !r.branchFlows.includes(flow))
+        r.branchFlows.push(flow);
+} const order = new Map(net.branches.map((b, k) => [b.id, k])); for (const r of results)
+    if (r.outputScope === 'compact')
+        r.branchFlows.sort((a, b) => order.get(a.id) - order.get(b.id)); }
+function calculateDcBusDetail(p, busId) { const net = buildDcNetwork(p); return calculateDcBus(net, p, busId, { full: true, factored: true }); }
 },
 "connected-sequences.mjs": function(module,exports,require){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CONNECTED_COMPACT_MIN_BUSES = exports.DENSE_MAX_SIZE = void 0;
+exports.setConnectedThresholds = setConnectedThresholds;
 exports.sequenceToPhase = sequenceToPhase;
 exports.validateConnectedSequences = validateConnectedSequences;
 exports.calculateConnectedProject = calculateConnectedProject;
+exports.calculateConnectedBusDetail = calculateConnectedBusDetail;
 exports.calculateConnectedBus = calculateConnectedBus;
 // Opt-in connected symmetrical-component screening. No dependency on the legacy engine.
+const sparse_complex_lu_mjs_v_20261108_v32_1 = require("./sparse-complex-lu.mjs?v=20261108-v32");
 const C = (r = 0, i = 0) => { if (!Number.isFinite(r) || !Number.isFinite(i))
     throw Error('Connected sequence calculation exceeds numerical range. Check units and input magnitude.'); return { r, i }; }, add = (a, b) => C(a.r + b.r, a.i + b.i), sub = (a, b) => C(a.r - b.r, a.i - b.i), mul = (a, b) => C(a.r * b.r - a.i * b.i, a.r * b.i + a.i * b.r), scale = (a, k) => C(a.r * k, a.i * k), conj = a => C(a.r, -a.i), abs = a => Math.hypot(a.r, a.i), polar = (v, d) => C(v * Math.cos(d * Math.PI / 180), v * Math.sin(d * Math.PI / 180));
 function requireFiniteOutput(value) { if (typeof value === 'number' && !Number.isFinite(value))
@@ -1962,6 +2338,11 @@ function div(a, b) { const m = Math.max(Math.abs(b.r), Math.abs(b.i)); if (!(m >
     throw Error('Connected sequence calculation exceeds numerical range'); return z; }
 const bz = (v, base) => v * v / (base * 1e6), bi = (v, base) => base * 1e6 / (Math.sqrt(3) * v), zmag = (m, xr) => { const r = m / Math.hypot(1, xr); return C(r, r * xr); };
 const seqKeys = ['zero', 'positive', 'negative'];
+const sv = (x, k) => x.tr ? { r: x.tr[k], i: x.ti[k] } : x[k];
+// MNA size above which the sparse LU replaces the dense one; networks above COMPACT_MIN_BUSES keep a bounded set of branch flows per bus.
+exports.DENSE_MAX_SIZE = 400, exports.CONNECTED_COMPACT_MIN_BUSES = 150;
+// QA hook: force the sparse / compact paths on small networks to compare them with the dense full calculation.
+function setConnectedThresholds({ denseMaxSize = 400, compactMinBuses = 150 } = {}) { exports.DENSE_MAX_SIZE = denseMaxSize; exports.CONNECTED_COMPACT_MIN_BUSES = compactMinBuses; }
 const emptySeq = () => ({ zero: C(), positive: C(), negative: C() });
 function sequenceToPhase({ zero = C(), positive = C(), negative = C() }) { const a = polar(1, 120), a2 = conj(a); return { a: add(add(zero, positive), negative), b: add(add(zero, mul(a2, positive)), mul(a, negative)), c: add(add(zero, mul(a, positive)), mul(a2, negative)) }; }
 const rms = ph => Object.fromEntries(Object.entries(ph).map(([k, v]) => [k, abs(v)]));
@@ -2161,6 +2542,8 @@ function validateConnectedSequences(p) {
                 error(e.id, 'Transformer requires nonnegative percent impedance and explicit X/R; 0% requires allowIdeal.');
             if (!finite(e.shift))
                 error(e.id, 'Transformer positive-sequence vector shift must be explicit in degrees.');
+            if (e.tapPercent !== null && e.tapPercent !== undefined && e.tapPercent !== '' && !(typeof e.tapPercent === 'number' && Math.abs(e.tapPercent) <= 10))
+                error(e.id, 'Transformer off-nominal tap must be a number between -10 % and +10 %.');
             if (needsNegative(p))
                 negative(e.sequence, 'r2', 'x2', e.id, 'Transformer negative sequence');
             if (needsZero(p)) {
@@ -2222,7 +2605,7 @@ function factor(matrix) { const a = matrix.map(row => row.map(z => C(z.r, z.i)))
         z = sub(z, mul(a[i][j], x[j]));
     x[i] = div(z, a[i][i]);
 } return x; }; }
-function network(p, issues) { const buses = p.buses, at = new Map(buses.map((b, i) => [b.id, i])), base = p.settings.baseMVA, edges = p.branches.filter(e => branchActive(e, p)).map(e => ({ ...e, i: at.get(e.from), j: at.get(e.to) })), sources = p.sources.filter(s => active(s, p) && strength(s, p) > 0).map(s => { const i = at.get(s.bus), z1 = scale(positiveSource(s, p), 1 / strength(s, p)), q = s.sequence || {}; const z2 = needsNegative(p) ? (nonnegative(q.r2) && nonnegative(q.x2) ? C(q.r2, q.x2) : z1) : null, z0 = needsZero(p) && q.zeroPath === 'grounded' ? C(q.r0 + 3 * q.neutralR, q.x0 + 3 * q.neutralX) : null; return { ...s, i, z1, z2, z0, emf: polar(p.settings.voltageFactor, s.angle ?? 0) }; }); return { p, buses, at, base, edges, sources, issues }; }
+function network(p, issues) { const buses = p.buses, at = new Map(buses.map((b, i) => [b.id, i])), base = p.settings.baseMVA, edges = p.branches.filter(e => branchActive(e, p)).map((e, k) => ({ ...e, i: at.get(e.from), j: at.get(e.to), _k: k })), sources = p.sources.filter(s => active(s, p) && strength(s, p) > 0).map(s => { const i = at.get(s.bus), z1 = scale(positiveSource(s, p), 1 / strength(s, p)), q = s.sequence || {}; const z2 = needsNegative(p) ? (nonnegative(q.r2) && nonnegative(q.x2) ? C(q.r2, q.x2) : z1) : null, z0 = needsZero(p) && q.zeroPath === 'grounded' ? C(q.r0 + 3 * q.neutralR, q.x0 + 3 * q.neutralX) : null; return { ...s, i, z1, z2, z0, emf: polar(p.settings.voltageFactor, s.angle ?? 0) }; }); return { p, buses, at, base, edges, sources, issues }; }
 function component(net, start) { const found = new Set([start]), queue = [start]; for (let k = 0; k < queue.length; k++)
     for (const e of net.edges) {
         const j = e.i === queue[k] ? e.j : e.j === queue[k] ? e.i : null;
@@ -2239,11 +2622,11 @@ function prepare(net, comp, sequence) {
         const i = local.get(e.i), j = local.get(e.j), q = e.sequence || {}, z1 = positiveBranch(e);
         let z = z1, tap = C(1), a = i, b = j;
         if (sequence === 'positive' && e.kind === 'transformer')
-            tap = polar((e.v1 / e.v2) / (buses[e.i].voltage / buses[e.j].voltage), e.shift);
+            tap = polar((e.v1 * (1 + (e.tapPercent || 0) / 100) / e.v2) / (buses[e.i].voltage / buses[e.j].voltage), e.shift);
         if (sequence === 'negative') {
             z = e.kind === 'transformer' ? (nonnegative(q.r2) && nonnegative(q.x2) ? C(q.r2, q.x2) : z1) : e.kind === 'cable' && e.length > 0 ? (nonnegative(q.r2PerM) && nonnegative(q.x2PerM) ? C(q.r2PerM * e.length / e.runs, q.x2PerM * e.length / e.runs) : z1) : z1;
             if (e.kind === 'transformer')
-                tap = polar((e.v1 / e.v2) / (buses[e.i].voltage / buses[e.j].voltage), -e.shift);
+                tap = polar((e.v1 * (1 + (e.tapPercent || 0) / 100) / e.v2) / (buses[e.i].voltage / buses[e.j].voltage), -e.shift);
         }
         if (sequence === 'zero') {
             if (e.kind === 'transformer') {
@@ -2262,6 +2645,7 @@ function prepare(net, comp, sequence) {
                 else {
                     const ratio = e.v2 / e.v1;
                     z = C(q.r0 + 3 * (q.toNeutralR + q.fromNeutralR * ratio * ratio), q.x0 + 3 * (q.toNeutralX + q.fromNeutralX * ratio * ratio));
+                    tap = C((1 + (e.tapPercent || 0) / 100));
                 }
             }
             else if (e.kind === 'cable')
@@ -2302,7 +2686,39 @@ function prepare(net, comp, sequence) {
                 }
         groups.push({ nodes: group, grounded: group.some(j => ground.has(j)) });
     }
-    const size = n + entries.length + shunts.length, M = Array.from({ length: size }, () => Array.from({ length: size }, () => C()));
+    const size = n + entries.length + shunts.length, groupOf = new Int32Array(n);
+    groups.forEach((g, k) => { for (const i of g.nodes)
+        groupOf[i] = k; });
+    const floating = groups.filter(g => !g.grounded);
+    if (size > exports.DENSE_MAX_SIZE) {
+        // Large models: the same modified-nodal stamps, factorised by a sparse LU with threshold pivoting.
+        const rows = Array.from({ length: size }, () => new Map()), set = (r, c, z) => rows[r].set(c, [z.r, z.i]);
+        for (const [k, s] of shunts.entries()) {
+            s.row = n + entries.length + k;
+            set(s.a, s.row, C(-1));
+            set(s.row, s.a, C(1));
+            set(s.row, s.row, s.z);
+        }
+        for (const [k, e] of entries.entries()) {
+            const row = n + k;
+            set(e.a, row, div(C(1), conj(e.tap)));
+            set(row, e.a, div(C(1), e.tap));
+            if (e.b !== null) {
+                set(e.b, row, C(-1));
+                set(row, e.b, C(-1));
+            }
+            set(row, row, scale(e.z, -1));
+        }
+        for (const g of floating) {
+            const row = g.nodes[0];
+            rows[row] = new Map([[row, [1, 0]]]);
+        }
+        const solveT = (0, sparse_complex_lu_mjs_v_20261108_v32_1.sparseFactorC)(rows), solve = rhs => { const [xr, xi] = solveT(rhs); const out = new Array(size); for (let k = 0; k < size; k++)
+            out[k] = C(xr[k], xi[k]); return out; }, zero = () => Array.from({ length: size }, () => C()), unit = f => { const rhs = zero(); rhs[f] = C(1); return solve(rhs); };
+        const unitT = f => { const r = new Float64Array(size), i = new Float64Array(size); r[f] = 1; const [xr, xi] = solveT([r, i], true); return { tr: xr, ti: xi }; };
+        return { n, size, entries, shunts, local, comp, groups, groupOf, floating, solve, zero, unit, unitT, sparse: true };
+    }
+    const M = Array.from({ length: size }, () => Array.from({ length: size }, () => C()));
     // Solve source terminal current directly; (E-V)/Z loses it for very stiff sources.
     for (const [k, s] of shunts.entries()) {
         s.row = n + entries.length + k;
@@ -2320,14 +2736,14 @@ function prepare(net, comp, sequence) {
         }
         M[row][row] = scale(e.z, -1);
     }
-    const floating = groups.filter(g => !g.grounded);
     for (const g of floating) {
         const row = g.nodes[0];
         M[row] = Array.from({ length: size }, () => C());
         M[row][row] = C(1);
     }
     const solve = factor(M), zero = () => Array.from({ length: size }, () => C()), unit = f => { const rhs = zero(); rhs[f] = C(1); return solve(rhs); };
-    return { n, size, entries, shunts, local, comp, groups, floating, solve, zero, unit };
+    const unitT = f => { const x = unit(f); return { tr: Float64Array.from(x, v => v.r), ti: Float64Array.from(x, v => v.i) }; };
+    return { n, size, entries, shunts, local, comp, groups, groupOf, floating, solve, zero, unit, unitT };
 }
 function faultCurrents(type, E, z1, z2, z0, zf) { let zero = C(), positive = C(), negative = C(); if (type === '3phase' || type === '3phase-ground')
     positive = div(E, add(z1, zf));
@@ -2352,14 +2768,17 @@ else {
     positive = div(E, add(z1, z2));
     negative = scale(positive, -1);
 } return { zero, positive, negative }; }
-function outputs(net, prepared, solutions) {
-    const branchFlows = net.edges.filter(e => prepared.positive.local.has(e.i)).map(e => ({ id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, fromSequenceCurrents: emptySeq(), toSequenceCurrents: emptySeq() })), flows = new Map(branchFlows.map(e => [e.id, e]));
+function outputs(net, prepared, solutions, keep = null) {
+    const branchFlows = net.edges.filter(e => prepared.positive.local.has(e.i) && (!keep || keep.has(e.id))).map(e => ({ id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, fromSequenceCurrents: emptySeq(), toSequenceCurrents: emptySeq() })), flows = new Map(branchFlows.map(e => [e.id, e]));
     for (const seq of seqKeys) {
         const model = prepared[seq];
         if (!model)
             continue;
         for (const [k, e] of model.entries.entries()) {
-            const current = solutions[seq][model.n + k], flow = flows.get(e.e.id);
+            const flow = flows.get(e.e.id);
+            if (!flow)
+                continue;
+            const current = sv(solutions[seq], model.n + k);
             if (e.b === null) {
                 const side = e.a === model.local.get(e.e.i) ? 'from' : 'to';
                 flow[side + 'SequenceCurrents'][seq] = scale(current, bi(net.buses[e.a === model.local.get(e.e.i) ? e.e.i : e.e.j].voltage, net.base));
@@ -2393,92 +2812,295 @@ function terminalCurrents(net, prepared, solutions, activeId) { return net.sourc
         continue;
     const shunt = model.shunts.find(sh => sh.src.id === s.id);
     if (shunt) {
-        currents[seq] = scale(solutions[seq][shunt.row], bi(s.voltage, net.base));
+        currents[seq] = scale(sv(solutions[seq], shunt.row), bi(s.voltage, net.base));
     }
 } const phaseCurrents = sequenceToPhase(currents); return { sourceId: s.id, name: s.name, kind: s.kind, bus: s.bus, sequenceCurrents: { i0: currents.zero, i1: currents.positive, i2: currents.negative }, currents, phaseCurrents, phaseRMSA: rms(phaseCurrents), amps: largest(phaseCurrents) }; }); }
-function busResult(net, busId) {
+// Components, factorised sequence models and source prefault solutions do not depend on the faulted bus: build them once per component.
+function components(net) {
+    if (net.comps)
+        return net.comps;
+    const n = net.buses.length, parent = Int32Array.from({ length: n }, (_, k) => k), find = x => { while (parent[x] !== x) {
+        parent[x] = parent[parent[x]];
+        x = parent[x];
+    } return x; };
+    for (const e of net.edges)
+        if (e.i !== undefined && e.j !== undefined) {
+            const a = find(e.i), b = find(e.j);
+            if (a !== b)
+                parent[a] = b;
+        }
+    const compOf = new Int32Array(n), lists = [], ids = new Map();
+    for (let k = 0; k < n; k++) {
+        const r = find(k);
+        if (!ids.has(r)) {
+            ids.set(r, lists.length);
+            lists.push([]);
+        }
+        compOf[k] = ids.get(r);
+        lists[compOf[k]].push(k);
+    }
+    return net.comps = { compOf, lists };
+}
+function componentModel(net, f) {
+    const { compOf, lists } = components(net), id = compOf[f];
+    net.models ??= new Map();
+    if (net.models.has(id))
+        return net.models.get(id);
+    const comp = lists[id], inComp = new Set(comp), sources = net.sources.filter(s => inComp.has(s.i));
+    let model;
+    if (!sources.length)
+        model = { comp, inComp, sources };
+    else
+        try {
+            const prepared = { positive: prepare(net, comp, 'positive') };
+            if (needsNegative(net.p))
+                prepared.negative = prepare(net, comp, 'negative');
+            if (needsZero(net.p))
+                prepared.zero = prepare(net, comp, 'zero');
+            const positive = prepared.positive, prefault = new Map();
+            for (const source of sources) {
+                const rhs = positive.zero(), shunt = positive.shunts.find(x => x.src.id === source.id);
+                rhs[shunt.row] = source.emf;
+                prefault.set(source.id, positive.solve(rhs));
+            }
+            model = { comp, inComp, sources, prepared, prefault, meshed: net.edges.filter(e => inComp.has(e.i)).length >= comp.length };
+        }
+        catch (error) {
+            model = { comp, inComp, sources, error };
+        }
+    net.models.set(id, model);
+    return model;
+}
+// Sequence solutions for a fault at bus f (identical arithmetic to the per-bus calculation).
+function faultSolutions(net, model, f, bus, perSource) {
+    const { prepared, sources } = model, localF = prepared.positive.local.get(f), columns = {}, z = {};
+    for (const seq of seqKeys) {
+        const m = prepared[seq];
+        if (!m) {
+            z[seq] = null;
+            continue;
+        }
+        const group = m.groups[m.groupOf[localF]];
+        columns[seq] = group.grounded ? m.unit(localF) : null;
+        z[seq] = columns[seq]?.[localF] ?? null;
+    }
+    const sumSolutions = Object.fromEntries(seqKeys.filter(s => prepared[s]).map(s => [s, prepared[s].zero()])), sumCurrents = emptySeq(), parts = [];
+    let referenceVoltage = C();
+    const faultZ = scale(C(net.p.settings.faultR, net.p.settings.faultX), 1 / bz(bus.voltage, net.base));
+    for (const source of sources) {
+        const prefault = model.prefault.get(source.id), E = prefault[localF], current = faultCurrents(net.p.settings.faultType, E, z.positive, z.negative, z.zero, faultZ), solutions = {};
+        referenceVoltage = add(referenceVoltage, scale(E, bus.voltage / Math.sqrt(3)));
+        for (const seq of seqKeys) {
+            const m = prepared[seq];
+            if (!m)
+                continue;
+            solutions[seq] = m.zero();
+            if (seq === 'positive')
+                solutions[seq] = prefault.slice();
+            if (columns[seq])
+                solutions[seq] = solutions[seq].map((v, k) => sub(v, mul(columns[seq][k], current[seq])));
+            else if (seq === 'zero') {
+                const floating = net.p.settings.faultType === 'slg' ? scale(E, -1) : sub(E, mul(z.positive, current.positive));
+                const group = m.groups[m.groupOf[localF]];
+                for (const i of group.nodes)
+                    solutions[seq][i] = floating;
+            }
+            sumSolutions[seq] = sumSolutions[seq].map((v, k) => add(v, solutions[seq][k]));
+            sumCurrents[seq] = add(sumCurrents[seq], scale(current[seq], bi(bus.voltage, net.base)));
+        }
+        parts.push({ source, current, solutions: perSource ? solutions : null, terminal: terminalCurrents(net, prepared, solutions, source.id) });
+    }
+    return { z, sumSolutions, sumCurrents, parts, referenceVoltage };
+}
+// Compact (summary) buses: the sum over sources is linear, so the summed sequence solution is built once in typed arrays.
+function compactSolutions(net, model, f, bus) {
+    const { prepared, sources } = model, localF = prepared.positive.local.get(f), columns = {}, z = {};
+    for (const seq of seqKeys) {
+        const m = prepared[seq];
+        if (!m) {
+            z[seq] = null;
+            continue;
+        }
+        const group = m.groups[m.groupOf[localF]];
+        columns[seq] = group.grounded ? m.unitT(localF) : null;
+        z[seq] = columns[seq] ? C(columns[seq].tr[localF], columns[seq].ti[localF]) : null;
+    }
+    if (!model.prefaultSum) {
+        const P = prepared.positive, tr = new Float64Array(P.size), ti = new Float64Array(P.size);
+        for (const v of model.prefault.values())
+            for (let k = 0; k < P.size; k++) {
+                tr[k] += v[k].r;
+                ti[k] += v[k].i;
+            }
+        model.prefaultSum = { tr, ti };
+    }
+    const sumCurrents = emptySeq(), total = emptySeq(), parts = [];
+    let referenceVoltage = C(), floatSum = C();
+    const faultZ = scale(C(net.p.settings.faultR, net.p.settings.faultX), 1 / bz(bus.voltage, net.base));
+    for (const source of sources) {
+        const E = model.prefault.get(source.id)[localF], current = faultCurrents(net.p.settings.faultType, E, z.positive, z.negative, z.zero, faultZ);
+        referenceVoltage = add(referenceVoltage, scale(E, bus.voltage / Math.sqrt(3)));
+        for (const seq of seqKeys) {
+            if (!prepared[seq])
+                continue;
+            total[seq] = add(total[seq], current[seq]);
+            sumCurrents[seq] = add(sumCurrents[seq], scale(current[seq], bi(bus.voltage, net.base)));
+        }
+        if (prepared.zero && !columns.zero)
+            floatSum = add(floatSum, net.p.settings.faultType === 'slg' ? scale(E, -1) : sub(E, mul(z.positive, current.positive)));
+        parts.push({ source, current, solutions: null, terminal: null });
+    }
+    const sumSolutions = {};
+    for (const seq of seqKeys) {
+        const m = prepared[seq];
+        if (!m)
+            continue;
+        const tr = seq === 'positive' ? Float64Array.from(model.prefaultSum.tr) : new Float64Array(m.size), ti = seq === 'positive' ? Float64Array.from(model.prefaultSum.ti) : new Float64Array(m.size), col = columns[seq], I = total[seq];
+        if (col) {
+            for (let k = 0; k < m.size; k++) {
+                tr[k] -= col.tr[k] * I.r - col.ti[k] * I.i;
+                ti[k] -= col.tr[k] * I.i + col.ti[k] * I.r;
+            }
+        }
+        else if (seq === 'zero') {
+            const group = m.groups[m.groupOf[localF]];
+            for (const i of group.nodes) {
+                tr[i] = floatSum.r;
+                ti[i] = floatSum.i;
+            }
+        }
+        sumSolutions[seq] = { tr, ti };
+    }
+    return { z, sumSolutions, sumCurrents, parts, referenceVoltage };
+}
+// Largest phase current at each branch end, without building result objects (used to keep each branch's worst case in compact output).
+function flowMaxima(net, prepared, solutions, fromA, toA) {
+    const E = net.edges.length, acc = new Float64Array(E * 12);
+    const seqIndex = { zero: 0, positive: 1, negative: 2 };
+    for (const seq of seqKeys) {
+        const m = prepared[seq];
+        if (!m)
+            continue;
+        const o = seqIndex[seq];
+        for (const [k, e] of m.entries.entries()) {
+            const cur = sv(solutions[seq], m.n + k), ed = e.e, base = ed._k * 12;
+            if (e.b === null) {
+                const fromSide = e.a === m.local.get(ed.i), sc = bi(net.buses[fromSide ? ed.i : ed.j].voltage, net.base), at = base + (fromSide ? 0 : 6) + o * 2;
+                acc[at] = cur.r * sc;
+                acc[at + 1] = cur.i * sc;
+            }
+            else {
+                const t = conj(e.tap), d = t.r * t.r + t.i * t.i, fr = (cur.r * t.r + cur.i * t.i) / d, fi = (cur.i * t.r - cur.r * t.i) / d, sf = bi(net.buses[ed.i].voltage, net.base), st = -bi(net.buses[ed.j].voltage, net.base);
+                acc[base + o * 2] = fr * sf;
+                acc[base + o * 2 + 1] = fi * sf;
+                acc[base + 6 + o * 2] = cur.r * st;
+                acc[base + 6 + o * 2 + 1] = cur.i * st;
+            }
+        }
+    }
+    const ar = -0.5, ai = Math.sqrt(3) / 2;
+    const phaseMax = (z0r, z0i, p1r, p1i, n2r, n2i) => { const a = Math.hypot(z0r + p1r + n2r, z0i + p1i + n2i), b = Math.hypot(z0r + (ar * p1r + ai * p1i) + (ar * n2r - ai * n2i), z0i + (ar * p1i - ai * p1r) + (ar * n2i + ai * n2r)), c = Math.hypot(z0r + (ar * p1r - ai * p1i) + (ar * n2r + ai * n2i), z0i + (ar * p1i + ai * p1r) + (ar * n2i - ai * n2r)); return Math.max(a, b, c); };
+    for (const e of net.edges) {
+        const b = e._k * 12;
+        fromA[e._k] = phaseMax(acc[b], acc[b + 1], acc[b + 2], acc[b + 3], acc[b + 4], acc[b + 5]);
+        toA[e._k] = phaseMax(acc[b + 6], acc[b + 7], acc[b + 8], acc[b + 9], acc[b + 10], acc[b + 11]);
+    }
+}
+function outputsFor(net, prepared, solutions, keep) { return outputs(net, prepared, solutions, keep); }
+function busResult(net, busId, options = {}) {
     const f = net.at.get(busId), bus = net.buses[f], baseResult = { busId, busName: bus?.name, voltage: bus?.voltage, totalA: null, phaseModel: 'connected-sequences', details: [], branchFlows: [], sourceTerminalCurrents: [], peakA: null, asymA: null, xr: null, bound: false, derBound: 0, conventionalA: null, groups: {}, issues: net.issues };
     if (f === undefined)
         return { ...baseResult, status: 'MISSING BUS' };
     try {
-        const comp = component(net, f), sources = net.sources.filter(s => comp.includes(s.i));
+        const model = componentModel(net, f), sources = model.sources;
         if (!sources.length)
             return { ...baseResult, status: 'DISCONNECTED / NO ACTIVE SOURCE' };
-        const prepared = { positive: prepare(net, comp, 'positive') };
-        if (needsNegative(net.p))
-            prepared.negative = prepare(net, comp, 'negative');
-        if (needsZero(net.p))
-            prepared.zero = prepare(net, comp, 'zero');
-        const localF = prepared.positive.local.get(f), columns = {}, z = {};
-        for (const seq of seqKeys) {
-            const m = prepared[seq];
-            if (!m) {
-                z[seq] = null;
-                continue;
-            }
-            const group = m.groups.find(g => g.nodes.includes(localF));
-            columns[seq] = group.grounded ? m.unit(localF) : null;
-            z[seq] = columns[seq]?.[localF] ?? null;
-        }
-        const details = [], terminalParts = [], sumSolutions = Object.fromEntries(seqKeys.filter(s => prepared[s]).map(s => [s, prepared[s].zero()])), sumCurrents = emptySeq();
-        let referenceVoltage = C();
-        const faultZ = scale(C(net.p.settings.faultR, net.p.settings.faultX), 1 / bz(bus.voltage, net.base));
-        for (const source of sources) {
-            const positive = prepared.positive, rhs = positive.zero(), shunt = positive.shunts.find(s => s.src.id === source.id);
-            rhs[shunt.row] = source.emf;
-            const prefault = positive.solve(rhs), E = prefault[localF], current = faultCurrents(net.p.settings.faultType, E, z.positive, z.negative, z.zero, faultZ), solutions = {};
-            referenceVoltage = add(referenceVoltage, scale(E, bus.voltage / Math.sqrt(3)));
-            for (const seq of seqKeys) {
-                const model = prepared[seq];
-                if (!model)
-                    continue;
-                solutions[seq] = model.zero();
-                if (seq === 'positive')
-                    solutions[seq] = prefault.slice();
-                if (columns[seq])
-                    solutions[seq] = solutions[seq].map((v, k) => sub(v, mul(columns[seq][k], current[seq])));
-                else if (seq === 'zero') {
-                    const floating = net.p.settings.faultType === 'slg' ? scale(E, -1) : sub(E, mul(z.positive, current.positive));
-                    const group = model.groups.find(g => g.nodes.includes(localF));
-                    for (const i of group.nodes)
-                        solutions[seq][i] = floating;
-                }
-                sumSolutions[seq] = sumSolutions[seq].map((v, k) => add(v, solutions[seq][k]));
-                sumCurrents[seq] = add(sumCurrents[seq], scale(current[seq], bi(bus.voltage, net.base)));
-            }
-            const amps = Object.fromEntries(seqKeys.map(seq => [seq, scale(current[seq], bi(bus.voltage, net.base))])), phaseCurrents = sequenceToPhase(amps), branchFlows = outputs(net, prepared, solutions);
-            details.push({ sourceId: source.id, name: source.name, kind: source.kind, current: false, expired: false, unknownAngle: false, amps: largest(phaseCurrents), phasor: phaseCurrents.a, phaseCurrents, phaseRMSA: rms(phaseCurrents), sequenceCurrents: { i0: amps.zero, i1: amps.positive, i2: amps.negative }, branchFlows, contributionBasis: 'Independent positive-sequence source EMF; all source impedances retained', path: [], meshed: net.edges.filter(e => comp.includes(e.i)).length >= comp.length });
-            terminalParts.push(terminalCurrents(net, prepared, solutions, source.id));
-        }
+        if (model.error)
+            throw model.error;
+        const prepared = model.prepared, compact = !!options.compact && !options.full, sol = compact ? compactSolutions(net, model, f, bus) : faultSolutions(net, model, f, bus, true), { z, sumSolutions, sumCurrents, parts, referenceVoltage } = sol;
+        const keep = compact ? new Set(net.edges.filter(e => e.i === f || e.j === f || (e.deviceId && net.deviceLinks)).map(e => e.id)) : null;
+        const details = parts.map(({ source, current, solutions }) => { const amps = Object.fromEntries(seqKeys.map(seq => [seq, scale(current[seq], bi(bus.voltage, net.base))])), phaseCurrents = sequenceToPhase(amps); return { sourceId: source.id, name: source.name, kind: source.kind, current: false, expired: false, unknownAngle: false, amps: largest(phaseCurrents), phasor: phaseCurrents.a, phaseCurrents, phaseRMSA: rms(phaseCurrents), sequenceCurrents: { i0: amps.zero, i1: amps.positive, i2: amps.negative }, branchFlows: solutions ? outputs(net, prepared, solutions) : [], contributionBasis: 'Independent positive-sequence source EMF; all source impedances retained', path: [], meshed: model.meshed }; });
+        const terminalParts = compact ? [terminalCurrents(net, prepared, sumSolutions, null)] : parts.map(x => x.terminal);
         const sourceTerminalCurrents = sources.map(s => { const currents = emptySeq(); for (const part of terminalParts) {
             const source = part.find(d => d.sourceId === s.id);
             for (const seq of seqKeys)
                 currents[seq] = add(currents[seq], source.currents[seq]);
         } const phaseCurrents = sequenceToPhase(currents); return { sourceId: s.id, name: s.name, kind: s.kind, bus: s.bus, sequenceCurrents: { i0: currents.zero, i1: currents.positive, i2: currents.negative }, phaseCurrents, phaseRMSA: rms(phaseCurrents), amps: largest(phaseCurrents), basis: 'Actual source terminal current, including passive sequence return and circulating current' }; });
-        const phaseCurrents = sequenceToPhase(sumCurrents), groundPhasor = scale(sumCurrents.zero, 3), sequenceCurrents = { i0: sumCurrents.zero, i1: sumCurrents.positive, i2: sumCurrents.negative }, ohms = x => x ? scale(x, bz(bus.voltage, net.base)) : null, branchFlows = outputs(net, prepared, sumSolutions);
-        return requireFiniteOutput({ ...baseResult, status: 'CALCULATED', totalA: largest(phaseCurrents), conventionalA: largest(phaseCurrents), phaseCurrents, phaseRMSA: rms(phaseCurrents), phaseAmps: rms(phaseCurrents), groundPhasor, groundA: abs(groundPhasor), sequenceCurrents, details, sourceTerminalCurrents, branchFlows, sequence: { z1: ohms(z.positive), z2: ohms(z.negative), z0: ohms(z.zero), faultZ: C(net.p.settings.faultR, net.p.settings.faultX), referenceVoltage, currents: sumCurrents, zeroPath: needsZero(net.p) ? (z.zero ? 'grounded' : 'open') : 'not-required' }, zth: ohms(z.positive), faultNote: needsZero(net.p) && !z.zero ? 'Explicit zero-sequence network has no ground return: SLG is zero; DLG follows the LL limit. Shunt capacitance is excluded.' : 'Connected sequence RMS screening; source fault contributions and actual source terminal currents are reported separately.', groups: details.reduce((a, d) => (a[d.kind] = (a[d.kind] || 0) + d.amps, a), {}) });
+        if (options.maxima)
+            flowMaxima(net, prepared, sumSolutions, options.maxima.fromA, options.maxima.toA);
+        const phaseCurrents = sequenceToPhase(sumCurrents), groundPhasor = scale(sumCurrents.zero, 3), sequenceCurrents = { i0: sumCurrents.zero, i1: sumCurrents.positive, i2: sumCurrents.negative }, ohms = x => x ? scale(x, bz(bus.voltage, net.base)) : null, branchFlows = outputsFor(net, prepared, sumSolutions, keep);
+        return requireFiniteOutput({ ...baseResult, status: 'CALCULATED', totalA: largest(phaseCurrents), conventionalA: largest(phaseCurrents), phaseCurrents, phaseRMSA: rms(phaseCurrents), phaseAmps: rms(phaseCurrents), groundPhasor, groundA: abs(groundPhasor), sequenceCurrents, details, sourceTerminalCurrents, branchFlows, sequence: { z1: ohms(z.positive), z2: ohms(z.negative), z0: ohms(z.zero), faultZ: C(net.p.settings.faultR, net.p.settings.faultX), referenceVoltage, currents: sumCurrents, zeroPath: needsZero(net.p) ? (z.zero ? 'grounded' : 'open') : 'not-required' }, zth: ohms(z.positive), faultNote: needsZero(net.p) && !z.zero ? 'Explicit zero-sequence network has no ground return: SLG is zero; DLG follows the LL limit. Shunt capacitance is excluded.' : 'Connected sequence RMS screening; source fault contributions and actual source terminal currents are reported separately.', groups: details.reduce((a, d) => (a[d.kind] = (a[d.kind] || 0) + d.amps, a), {}), ...(options.compact ? { outputScope: 'compact', detailScope: compact ? 'summary' : 'full' } : {}) });
     }
     catch (e) {
         return { ...baseResult, status: 'NETWORK ERROR', faultNote: e.message };
     }
 }
+// Compact projects: each bus keeps its own connections and protective-device links; every branch's worst-case flow is added
+// back to the bus that produces it, so duty and cable checks see the same maxima as a full calculation.
+function compactProject(net, project) {
+    const E = net.edges.length, best = new Float64Array(E).fill(-1), bestTo = new Float64Array(E).fill(-1), bestBus = new Int32Array(E).fill(-1), bestToBus = new Int32Array(E).fill(-1), fromA = new Float64Array(E), toA = new Float64Array(E);
+    net.deviceLinks = net.edges.filter(e => e.deviceId).length <= 400;
+    const results = project.buses.map((b, f) => {
+        fromA.fill(0);
+        toA.fill(0);
+        const r = busResult(net, b.id, { compact: true, full: b.id === project.selectedBus, maxima: { fromA, toA } });
+        if (r.status === 'CALCULATED')
+            for (let k = 0; k < E; k++) {
+                const m = Math.max(fromA[k], toA[k]);
+                if (m > best[k]) {
+                    best[k] = m;
+                    bestBus[k] = f;
+                }
+                if (toA[k] > bestTo[k]) {
+                    bestTo[k] = toA[k];
+                    bestToBus[k] = f;
+                }
+            }
+        return r;
+    });
+    const need = new Map();
+    for (let k = 0; k < E; k++)
+        for (const f of [bestBus[k], bestToBus[k]])
+            if (f >= 0) {
+                if (!need.has(f))
+                    need.set(f, new Set());
+                need.get(f).add(net.edges[k].id);
+            }
+    for (const [f, ids] of need) {
+        const r = results[f];
+        if (r.detailScope === 'full')
+            continue;
+        const have = new Set(r.branchFlows.map(x => x.id)), missing = [...ids].filter(id => !have.has(id));
+        if (!missing.length)
+            continue;
+        const model = componentModel(net, f), sol = compactSolutions(net, model, f, net.buses[f]);
+        r.branchFlows = [...r.branchFlows, ...outputsFor(net, model.prepared, sol.sumSolutions, new Set(missing))];
+    }
+    return results;
+}
 function calculateConnectedProject(project) { const issues = validateConnectedSequences(project), errors = issues.filter(i => i.severity === 'error'); if (errors.length)
     return { issues, results: (Array.isArray(project?.buses) ? project.buses.filter(b => b && typeof b === 'object' && !Array.isArray(b) && typeof b.id === 'string') : []).map(b => ({ busId: b.id, busName: b.name, voltage: b.voltage, status: 'INPUT REQUIRED', totalA: null, details: [], branchFlows: [], sourceTerminalCurrents: [], peakA: null, asymA: null, sequence: null, issues, faultNote: errors.map(e => e.message).join(' ') })), net: { sequenceModel: 'connected', issues, errors } }; try {
     const net = network(project, issues);
-    return { issues, results: project.buses.map(b => busResult(net, b.id)), net: { sequenceModel: 'connected', base: net.base, issues, errors: [] } };
+    const compact = project.buses.length > exports.CONNECTED_COMPACT_MIN_BUSES;
+    return { issues, results: compact ? compactProject(net, project) : project.buses.map(b => busResult(net, b.id)), net: { sequenceModel: 'connected', base: net.base, issues, errors: [], ...(compact ? { outputScope: 'compact' } : {}) } };
 }
 catch (e) {
     return { issues, results: project.buses.map(b => ({ busId: b.id, busName: b.name, voltage: b.voltage, status: 'NETWORK ERROR', totalA: null, details: [], branchFlows: [], sourceTerminalCurrents: [], peakA: null, asymA: null, sequence: null, issues, faultNote: e.message })), net: { sequenceModel: 'connected', issues, errors: [] } };
 } }
+// Full detail for one bus of a compact project (all branch flows, per-source flows).
+function calculateConnectedBusDetail(project, busId) { const issues = validateConnectedSequences(project); if (issues.some(i => i.severity === 'error'))
+    return null; const net = network(project, issues); return { ...busResult(net, busId, { compact: true, full: true }), faultType: project.settings.faultType }; }
 function calculateConnectedBus(project, busId) { const calculated = calculateConnectedProject(project); return calculated.results.find(r => r.busId === busId) || { busId, status: 'MISSING BUS', totalA: null, issues: calculated.issues }; }
-
 },
 "split-phase-network.mjs": function(module,exports,require){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.splitPhaseScope = exports.isSplitPhaseFault = exports.SPLIT_PHASE_FAULTS = void 0;
+exports.SPLIT_COMPACT_MIN_BUSES = exports.SPLIT_DENSE_MAX = exports.splitPhaseScope = exports.isSplitPhaseFault = exports.SPLIT_PHASE_FAULTS = void 0;
 exports.splitPhaseIssues = splitPhaseIssues;
+exports.setSplitThresholds = setSplitThresholds;
+exports.calculateSplitPhaseBusDetail = calculateSplitPhaseBusDetail;
 exports.calculateSplitPhaseProject = calculateSplitPhaseProject;
+const sparse_complex_lu_mjs_v_20261108_v32_1 = require("./sparse-complex-lu.mjs?v=20261108-v32");
 // Opt-in documented center-tapped one-leg fault loop. Existing sequence/L-L modes are untouched.
 exports.SPLIT_PHASE_FAULTS = Object.freeze(['split-l1-n', 'split-l2-n', 'split-l1-g', 'split-l2-g']);
 const isSplitPhaseFault = p => exports.SPLIT_PHASE_FAULTS.includes(p?.settings?.faultType);
@@ -2563,6 +3185,8 @@ function splitPhaseIssues(p) {
         if (!positive(b.voltage) || Math.abs(b.voltage - cfg.fullVoltage) > 1e-6)
             error(b.id, 'Split-phase bus voltage must equal the documented full-winding voltage.');
     const transformer = branches.find(e => e.id === cfg.transformerId);
+    if (transformer && transformer.tapPercent)
+        error(cfg.transformerId, 'Off-nominal transformer tap is not modelled in the split-phase method; set the tap to 0 %.');
     if (!transformer || transformer.kind !== 'transformer' || transformer.phaseRating !== 'single' || transformer.to !== cfg.busId || set.has(transformer.from) || !activeBranch(p, transformer) || !positive(transformer.v1) || transformer.v2 !== cfg.fullVoltage)
         error(cfg.transformerId || 'settings', 'Select the enabled single-phase source transformer, oriented from its primary bus to the center-tapped secondary.');
     if (cfg.halfWinding?.basis !== 'documented-half-winding-ohms' || !impedance(cfg.halfWinding?.L1) || !impedance(cfg.halfWinding?.L2))
@@ -2644,6 +3268,54 @@ function solve(matrix, rhs) {
     }
     return x;
 }
+// The admittance matrix does not depend on the faulted bus: factor it once. Dense LU with the same partial pivoting and
+// singularity test as solve() up to SPLIT_DENSE_MAX nodes; a sparse LU above that.
+exports.SPLIT_DENSE_MAX = 600, exports.SPLIT_COMPACT_MIN_BUSES = 150;
+function setSplitThresholds({ denseMax = 600, compactMinBuses = 150 } = {}) { exports.SPLIT_DENSE_MAX = denseMax; exports.SPLIT_COMPACT_MIN_BUSES = compactMinBuses; }
+function factorY(matrix) {
+    const n = matrix.length;
+    let magnitude = 0;
+    for (const row of matrix)
+        for (const v of row.values())
+            magnitude = Math.max(magnitude, abs(v));
+    const message = 'Explicit circuit is singular or numerically ill-conditioned; review impedance scale and connectivity';
+    if (matrix[0] instanceof Map) {
+        const rows = matrix.map(row => { const m = new Map(); for (const [j, v] of row)
+            m.set(j, [v.r, v.i]); return m; });
+        const solveT = (0, sparse_complex_lu_mjs_v_20261108_v32_1.sparseFactorC)(rows, { tiny: magnitude * 1e-13, message });
+        const f = rhs => { const [xr, xi] = solveT(rhs); return Array.from({ length: n }, (_, k) => C(xr[k], xi[k])); };
+        f.typed = (r, i) => solveT([r, i], true);
+        return f;
+    }
+    const a = matrix.map(row => row.map(v => C(v.r, v.i))), perm = Array.from({ length: n }, (_, i) => i);
+    for (let k = 0; k < n; k++) {
+        let pivot = k;
+        for (let i = k + 1; i < n; i++)
+            if (abs(a[i][k]) > abs(a[pivot][k]))
+                pivot = i;
+        if (abs(a[pivot][k]) <= magnitude * 1e-13)
+            throw Error(message);
+        [a[pivot], a[k]] = [a[k], a[pivot]];
+        [perm[pivot], perm[k]] = [perm[k], perm[pivot]];
+        for (let i = k + 1; i < n; i++) {
+            const f = div(a[i][k], a[k][k]);
+            a[i][k] = f;
+            for (let j = k + 1; j < n; j++)
+                a[i][j] = sub(a[i][j], mul(f, a[k][j]));
+        }
+    }
+    return rhs => { const y = new Array(n); for (let i = 0; i < n; i++) {
+        let v = C(rhs[perm[i]].r, rhs[perm[i]].i);
+        for (let j = 0; j < i; j++)
+            v = sub(v, mul(a[i][j], y[j]));
+        y[i] = v;
+    } const x = new Array(n); for (let i = n - 1; i >= 0; i--) {
+        let v = y[i];
+        for (let j = i + 1; j < n; j++)
+            v = sub(v, mul(a[i][j], x[j]));
+        x[i] = div(v, a[i][i]);
+    } return x; };
+}
 function network(p, issues) {
     const c = p.splitPhaseNetwork, leg = p.settings.faultType.includes('l2') ? 'L2' : 'L1', ret = p.settings.faultType.endsWith('-g') ? 'G' : 'N', reference = node(c.busId, 'N'), sourceHot = node(c.busId, leg);
     const sourceImpedance = add(z(c.halfWinding[leg]), scale(z(c.upstream), (c.fullVoltage / 2 / c.upstream.voltage) ** 2));
@@ -2666,82 +3338,251 @@ function network(p, issues) {
                 queue.push(next);
             }
         }
-    const nodes = [...reached].filter(id => id !== reference), at = new Map(nodes.map((id, i) => [id, i])), Y = nodes.map(() => nodes.map(() => C())), J = nodes.map(() => C());
+    const nodes = [...reached].filter(id => id !== reference), at = new Map(nodes.map((id, i) => [id, i])), sparseY = nodes.length > exports.SPLIT_DENSE_MAX, Y = sparseY ? nodes.map(() => new Map()) : nodes.map(() => nodes.map(() => C())), J = nodes.map(() => C());
     const inject = (rhs, id, value) => { if (at.has(id))
         rhs[at.get(id)] = add(rhs[at.get(id)], value); };
+    // Large networks keep Y as one Map per row (same additions in the same order).
+    const get = (i, j) => sparseY ? (Y[i].get(j) || C()) : Y[i][j], put = (i, j, v) => { if (sparseY)
+        Y[i].set(j, v);
+    else
+        Y[i][j] = v; };
     for (const e of edges) {
         if (!reached.has(e.a) || !reached.has(e.b))
             continue;
         const y = div(C(1), e.ohms), i = at.get(e.a), j = at.get(e.b);
         if (i !== undefined)
-            Y[i][i] = add(Y[i][i], y);
+            put(i, i, add(get(i, i), y));
         if (j !== undefined)
-            Y[j][j] = add(Y[j][j], y);
+            put(j, j, add(get(j, j), y));
         if (i !== undefined && j !== undefined) {
-            Y[i][j] = sub(Y[i][j], y);
-            Y[j][i] = sub(Y[j][i], y);
+            put(i, j, sub(get(i, j), y));
+            put(j, i, sub(get(j, i), y));
         }
         if (e.source) {
             inject(J, e.a, mul(y, emf));
             inject(J, e.b, scale(mul(y, emf), -1));
         }
     }
-    const prefault = solve(Y, J), voltage = (values, id) => id === reference ? C() : at.has(id) ? values[at.get(id)] : null;
-    return { issues, errors: [], project: p, splitPhase: true, singlePhase: false, phaseModel: 'split-phase-explicit-loop', buses: p.buses, sources: [{ id: c.sourceId, kind: p.sources.find(x => x.id === c.sourceId).kind }], branches, edges, leg, ret, reference, sourceHot, sourceImpedance, emf, reached, nodes, at, Y, prefault, inject, voltage };
+    const luSolve = factorY(Y), prefault = luSolve(J), voltage = (values, id) => id === reference ? C() : at.has(id) ? values[at.get(id)] : null;
+    const edgeOf = new Map();
+    for (const e of edges)
+        if (e.conductor)
+            edgeOf.set(e.id + '\u0000' + e.conductor, e);
+    return { issues, errors: [], project: p, splitPhase: true, singlePhase: false, phaseModel: 'split-phase-explicit-loop', buses: p.buses, sources: [{ id: c.sourceId, kind: p.sources.find(x => x.id === c.sourceId).kind }], branches, edges, leg, ret, reference, sourceHot, sourceImpedance, emf, reached, nodes, at, Y, prefault, inject, voltage, luSolve, edgeOf, meshed: edges.filter(e => reached.has(e.a) && reached.has(e.b)).length >= reached.size };
 }
 // A solvable matrix alone does not establish usable physical precision. Very
 // small conductor drops can lose digits when reconstructed from node voltages.
 function verifyBalance(net, values, hot, ret, current, closed, faultZ) {
-    const residual = new Map([...net.reached].map(id => [id, C()])), magnitude = new Map([...net.reached].map(id => [id, 0]));
-    const accumulate = (id, amps) => { if (!residual.has(id))
-        return; residual.set(id, add(residual.get(id), amps)); magnitude.set(id, magnitude.get(id) + abs(amps)); };
-    for (const e of net.edges) {
-        if (!net.reached.has(e.a) || !net.reached.has(e.b))
-            continue;
-        const drop = sub(net.voltage(values, e.a), net.voltage(values, e.b)), amps = div(e.source ? sub(drop, net.emf) : drop, e.ohms);
-        accumulate(e.a, amps);
-        accumulate(e.b, scale(amps, -1));
+    // Node index per edge end (reference = -1), built once per network.
+    if (!net.edgeIdx) {
+        net.edgeIdx = net.edges.map(e => net.reached.has(e.a) && net.reached.has(e.b) ? [e.a === net.reference ? -1 : net.at.get(e.a), e.b === net.reference ? -1 : net.at.get(e.b)] : null);
     }
+    const N = net.nodes.length, rr = new Float64Array(N + 1), ri = new Float64Array(N + 1), mag = new Float64Array(N + 1), slot = k => k < 0 ? N : k;
+    const accumulate = (k, amps) => { const q = slot(k); rr[q] += amps.r; ri[q] += amps.i; mag[q] += abs(amps); };
+    const V = k => k < 0 ? C() : values[k];
+    net.edges.forEach((e, q) => {
+        const ends = net.edgeIdx[q];
+        if (!ends)
+            return;
+        const drop = sub(V(ends[0]), V(ends[1])), amps = div(e.source ? sub(drop, net.emf) : drop, e.ohms);
+        accumulate(ends[0], amps);
+        accumulate(ends[1], scale(amps, -1));
+    });
     if (closed) {
-        accumulate(hot, current);
-        accumulate(ret, scale(current, -1));
-        const drop = sub(net.voltage(values, hot), net.voltage(values, ret)), required = mul(faultZ, current);
+        const h = hot === net.reference ? -1 : net.at.get(hot), t = ret === net.reference ? -1 : net.at.get(ret);
+        accumulate(h, current);
+        accumulate(t, scale(current, -1));
+        const drop = sub(V(h), V(t)), required = mul(faultZ, current);
         if (abs(sub(drop, required)) > 1e-8 * Math.max(1, abs(drop), abs(required)))
             throw Error('Fault voltage residual exceeds numerical precision; review impedance scale.');
     }
-    for (const [id, amps] of residual)
-        if (abs(amps) > 1e-8 * Math.max(1, magnitude.get(id)))
+    for (let q = 0; q <= N; q++)
+        if (Math.hypot(rr[q], ri[q]) > 1e-8 * Math.max(1, mag[q]))
             throw Error('Conductor KCL residual exceeds numerical precision; review impedance scale.');
 }
-function response(p, net, bus, issues) {
+function response(p, net, bus, issues, options = {}) {
     const c = p.splitPhaseNetwork, common = { busId: bus.id, busName: bus.name, voltage: bus.voltage, faultVoltage: c.fullVoltage / 2, phaseModel: 'split-phase-explicit-loop', peakA: null, asymA: null, sequence: null, bound: false, derBound: 0, xr: null, issues, faultNote: exports.splitPhaseScope };
     if (!c.busIds.includes(bus.id))
         return { ...common, status: 'OUTSIDE SPLIT-PHASE MODEL', totalA: null, details: [], branchFlows: [] };
     const hot = node(bus.id, net.leg), ret = node(bus.id, net.ret), closed = net.reached.has(hot) && net.reached.has(ret);
+    if (options.compact && !options.full && net.luSolve.typed)
+        return compactResponse(p, net, bus, issues, options, common, hot, ret, closed);
     let current = C(), unit = net.nodes.map(() => C()), zth = null;
     if (closed) {
         const J = net.nodes.map(() => C());
         net.inject(J, hot, C(1));
         net.inject(J, ret, C(-1));
-        unit = solve(net.Y, J);
+        unit = net.luSolve(J);
         zth = sub(net.voltage(unit, hot), net.voltage(unit, ret));
         const vth = sub(net.voltage(net.prefault, hot), net.voltage(net.prefault, ret));
         current = div(vth, add(zth, C(p.settings.faultR, p.settings.faultX)));
     }
     const values = net.prefault.map((v, i) => sub(v, mul(unit[i], current)));
     verifyBalance(net, values, hot, ret, current, closed, C(p.settings.faultR, p.settings.faultX));
-    const nodeVoltages = Object.fromEntries(c.busIds.map(id => [id, Object.fromEntries(['L1', 'L2', 'N', 'G'].map(k => [k, net.voltage(values, node(id, k))]))]));
+    const compact = !!options.compact && !options.full, shown = compact ? new Set([bus.id, ...(options.keepBuses || [])]) : null;
+    const nodeVoltages = Object.fromEntries((compact ? c.busIds.filter(id => shown.has(id)) : c.busIds).map(id => [id, Object.fromEntries(['L1', 'L2', 'N', 'G'].map(k => [k, net.voltage(values, node(id, k))]))]));
     const flow = e => { const va = net.voltage(values, e.a), vb = net.voltage(values, e.b); return va && vb ? div(sub(va, vb), e.ohms) : C(); };
-    const conductorFlows = net.branches.map(e => ({ id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, conductors: Object.fromEntries(['L1', 'L2', 'N', 'G'].map(k => { const edge = net.edges.find(x => x.id === e.id && x.conductor === k), fromPhasor = edge ? flow(edge) : C(); return [k, { fromPhasor, toPhasor: scale(fromPhasor, -1), fromA: abs(fromPhasor), toA: abs(fromPhasor), open: e.splitPhase.conductors[k].open === true, modeled: k !== (net.leg === 'L1' ? 'L2' : 'L1') }]; })) }));
+    if (options.maxima) {
+        const mx = options.maxima;
+        net.branches.forEach((e, q) => { let m = 0; for (const k of ['L1', 'L2', 'N', 'G']) {
+            const edge = net.edgeOf.get(e.id + '\u0000' + k);
+            if (edge)
+                m = Math.max(m, abs(flow(edge)));
+        } mx[q] = m; });
+    }
+    const keep = compact ? new Set(options.keepBranches || []) : null;
+    const conductorFlows = net.branches.filter(e => !compact || e.from === bus.id || e.to === bus.id || keep.has(e.id)).map(e => ({ id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, conductors: Object.fromEntries(['L1', 'L2', 'N', 'G'].map(k => { const edge = net.edgeOf.get(e.id + '\u0000' + k), fromPhasor = edge ? flow(edge) : C(); return [k, { fromPhasor, toPhasor: scale(fromPhasor, -1), fromA: abs(fromPhasor), toA: abs(fromPhasor), open: e.splitPhase.conductors[k].open === true, modeled: k !== (net.leg === 'L1' ? 'L2' : 'L1') }]; })) }));
     const branchFlows = conductorFlows.map(e => ({ ...e, ...e.conductors[net.leg] }));
     const t = p.branches.find(e => e.id === c.transformerId), primary = scale(current, (net.leg === 'L1' ? 1 : -1) * c.fullVoltage / 2 / c.upstream.voltage);
     branchFlows.push({ id: t.id, name: t.name, kind: t.kind, from: t.from, to: t.to, fromA: abs(primary), toA: abs(current), fromPhasor: primary, toPhasor: scale(current, -1), voltageBasis: 'primary loop / secondary half-winding', conductor: net.leg });
-    const bondFlows = net.edges.filter(e => e.bond).map(e => ({ id: e.id, bus: e.bus, fromPhasor: flow(e), amps: abs(flow(e)), direction: 'N-to-G' }));
-    const totalA = abs(current), details = [{ sourceId: c.sourceId, name: p.sources.find(s => s.id === c.sourceId).name || 'Documented source', kind: p.sources.find(s => s.id === c.sourceId).kind, current: false, amps: totalA, phasor: current, sourceImpedance: net.sourceImpedance, sourceImpedanceAtFault: net.sourceImpedance, branchFlows, conductorFlows, bondFlows, unknownAngle: false, expired: false, path: [], meshed: net.edges.filter(e => net.reached.has(e.a) && net.reached.has(e.b)).length >= net.reached.size }];
+    const bondFlows = net.edges.filter(e => e.bond && (!compact || shown.has(e.bus))).map(e => ({ id: e.id, bus: e.bus, fromPhasor: flow(e), amps: abs(flow(e)), direction: 'N-to-G' }));
+    const totalA = abs(current), details = [{ sourceId: c.sourceId, name: p.sources.find(s => s.id === c.sourceId).name || 'Documented source', kind: p.sources.find(s => s.id === c.sourceId).kind, current: false, amps: totalA, phasor: current, sourceImpedance: net.sourceImpedance, sourceImpedanceAtFault: net.sourceImpedance, branchFlows, conductorFlows, bondFlows, unknownAngle: false, expired: false, path: [], meshed: net.meshed }];
     if (!Number.isFinite(totalA) || values.some(v => !Number.isFinite(v.r) || !Number.isFinite(v.i)))
         throw Error('Explicit circuit exceeds numerical range');
-    return { ...common, status: closed ? 'CALCULATED' : net.reached.has(hot) ? 'OPEN RETURN PATH' : 'OPEN SUPPLY PATH', totalA, conventionalA: totalA, phasor: current, zth, sourceImpedance: net.sourceImpedance, nodeVoltages, branchFlows, conductorFlows, bondFlows, details, groups: { [details[0].kind]: totalA } };
+    return { ...common, status: closed ? 'CALCULATED' : net.reached.has(hot) ? 'OPEN RETURN PATH' : 'OPEN SUPPLY PATH', totalA, conventionalA: totalA, phasor: current, zth, sourceImpedance: net.sourceImpedance, nodeVoltages, branchFlows, conductorFlows, bondFlows, details, groups: { [details[0].kind]: totalA }, ...(options.compact ? { outputScope: 'compact', detailScope: compact ? 'summary' : 'full' } : {}) };
 }
+// Summary bus of a large network: the same equations in typed arrays (no per-node objects); same precision checks.
+function compactResponse(p, net, bus, issues, options, common, hot, ret, closed) {
+    const c = p.splitPhaseNetwork, N = net.nodes.length, idx = id => id === net.reference ? -1 : net.at.get(id), h = idx(hot), t = idx(ret);
+    let current = C(), zth = null, ur = new Float64Array(N), ui = new Float64Array(N);
+    if (closed) {
+        const r = new Float64Array(N), i = new Float64Array(N);
+        if (h >= 0)
+            r[h] += 1;
+        if (t >= 0)
+            r[t] -= 1;
+        [ur, ui] = net.luSolve.typed(r, i);
+        const U = k => k < 0 ? C() : C(ur[k], ui[k]);
+        zth = sub(U(h), U(t));
+        const vth = sub(net.voltage(net.prefault, hot), net.voltage(net.prefault, ret));
+        current = div(vth, add(zth, C(p.settings.faultR, p.settings.faultX)));
+    }
+    const vr = new Float64Array(N), vi = new Float64Array(N);
+    for (let k = 0; k < N; k++) {
+        const v = net.prefault[k], mr = ur[k] * current.r - ui[k] * current.i, mi = ur[k] * current.i + ui[k] * current.r;
+        vr[k] = v.r - mr;
+        vi[k] = v.i - mi;
+        if (!Number.isFinite(vr[k]) || !Number.isFinite(vi[k]))
+            throw Error('Explicit circuit exceeds numerical range');
+    }
+    const values = { length: N }, V = k => k < 0 ? C() : C(vr[k], vi[k]);
+    verifyBalanceTyped(net, vr, vi, h, t, current, closed, C(p.settings.faultR, p.settings.faultX));
+    const vAt = id => id === net.reference ? C() : net.at.has(id) ? V(net.at.get(id)) : null;
+    const flow = e => { const va = vAt(e.a), vb = vAt(e.b); return va && vb ? div(sub(va, vb), e.ohms) : C(); };
+    if (options.maxima) {
+        const mx = options.maxima;
+        if (!net.branchEdges) {
+            const pos = new Map(net.edges.map((e, q) => [e, q]));
+            net.branchEdges = net.branches.map(e => ['L1', 'L2', 'N', 'G'].map(k => net.edgeOf.get(e.id + '\u0000' + k)).filter(Boolean).map(x => pos.get(x)));
+        }
+        if (!net.edgeIdx)
+            net.edgeIdx = net.edges.map(e => net.reached.has(e.a) && net.reached.has(e.b) ? [e.a === net.reference ? -1 : net.at.get(e.a), e.b === net.reference ? -1 : net.at.get(e.b)] : null);
+        for (let q = 0; q < net.branches.length; q++) {
+            let m = 0;
+            for (const k of net.branchEdges[q]) {
+                const ends = net.edgeIdx[k];
+                if (!ends)
+                    continue;
+                const e = net.edges[k], a = ends[0], b = ends[1], dr = (a < 0 ? 0 : vr[a]) - (b < 0 ? 0 : vr[b]), di = (a < 0 ? 0 : vi[a]) - (b < 0 ? 0 : vi[b]);
+                m = Math.max(m, Math.hypot(dr, di) / Math.hypot(e.ohms.r, e.ohms.i));
+            }
+            mx[q] = m;
+        }
+    }
+    const keep = new Set(options.keepBranches || []), shown = new Set([bus.id]);
+    const nodeVoltages = Object.fromEntries(c.busIds.filter(id => shown.has(id)).map(id => [id, Object.fromEntries(['L1', 'L2', 'N', 'G'].map(k => [k, vAt(node(id, k))]))]));
+    const conductorFlows = net.branches.filter(e => e.from === bus.id || e.to === bus.id || keep.has(e.id)).map(e => ({ id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, conductors: Object.fromEntries(['L1', 'L2', 'N', 'G'].map(k => { const edge = net.edgeOf.get(e.id + '\u0000' + k), fromPhasor = edge ? flow(edge) : C(); return [k, { fromPhasor, toPhasor: scale(fromPhasor, -1), fromA: abs(fromPhasor), toA: abs(fromPhasor), open: e.splitPhase.conductors[k].open === true, modeled: k !== (net.leg === 'L1' ? 'L2' : 'L1') }]; })) }));
+    const branchFlows = conductorFlows.map(e => ({ ...e, ...e.conductors[net.leg] }));
+    const tr = p.branches.find(e => e.id === c.transformerId), primary = scale(current, (net.leg === 'L1' ? 1 : -1) * c.fullVoltage / 2 / c.upstream.voltage);
+    branchFlows.push({ id: tr.id, name: tr.name, kind: tr.kind, from: tr.from, to: tr.to, fromA: abs(primary), toA: abs(current), fromPhasor: primary, toPhasor: scale(current, -1), voltageBasis: 'primary loop / secondary half-winding', conductor: net.leg });
+    const bondFlows = net.edges.filter(e => e.bond && shown.has(e.bus)).map(e => ({ id: e.id, bus: e.bus, fromPhasor: flow(e), amps: abs(flow(e)), direction: 'N-to-G' }));
+    const totalA = abs(current), src = p.sources.find(s => s.id === c.sourceId), details = [{ sourceId: c.sourceId, name: src.name || 'Documented source', kind: src.kind, current: false, amps: totalA, phasor: current, sourceImpedance: net.sourceImpedance, sourceImpedanceAtFault: net.sourceImpedance, branchFlows, conductorFlows, bondFlows, unknownAngle: false, expired: false, path: [], meshed: net.meshed }];
+    if (!Number.isFinite(totalA))
+        throw Error('Explicit circuit exceeds numerical range');
+    return { ...common, status: closed ? 'CALCULATED' : net.reached.has(hot) ? 'OPEN RETURN PATH' : 'OPEN SUPPLY PATH', totalA, conventionalA: totalA, phasor: current, zth, sourceImpedance: net.sourceImpedance, nodeVoltages, branchFlows, conductorFlows, bondFlows, details, groups: { [details[0].kind]: totalA }, outputScope: 'compact', detailScope: 'summary' };
+}
+function verifyBalanceTyped(net, vr, vi, h, t, current, closed, faultZ) {
+    if (!net.edgeIdx)
+        net.edgeIdx = net.edges.map(e => net.reached.has(e.a) && net.reached.has(e.b) ? [e.a === net.reference ? -1 : net.at.get(e.a), e.b === net.reference ? -1 : net.at.get(e.b)] : null);
+    const N = vr.length, rr = new Float64Array(N + 1), ri = new Float64Array(N + 1), mag = new Float64Array(N + 1), emf = net.emf;
+    for (let q = 0; q < net.edges.length; q++) {
+        const ends = net.edgeIdx[q];
+        if (!ends)
+            continue;
+        const e = net.edges[q], a = ends[0], b = ends[1];
+        let dr = (a < 0 ? 0 : vr[a]) - (b < 0 ? 0 : vr[b]), di = (a < 0 ? 0 : vi[a]) - (b < 0 ? 0 : vi[b]);
+        if (e.source) {
+            dr -= emf.r;
+            di -= emf.i;
+        }
+        const m = Math.max(Math.abs(e.ohms.r), Math.abs(e.ohms.i));
+        if (!(m > 0) || !Number.isFinite(m))
+            throw Error('Invalid or singular explicit loop impedance');
+        const zr = e.ohms.r / m, zi = e.ohms.i / m, d = zr * zr + zi * zi, ar = ((dr / m) * zr + (di / m) * zi) / d, ai = ((di / m) * zr - (dr / m) * zi) / d, am = Math.hypot(ar, ai);
+        const qa = a < 0 ? N : a, qb = b < 0 ? N : b;
+        rr[qa] += ar;
+        ri[qa] += ai;
+        mag[qa] += am;
+        rr[qb] -= ar;
+        ri[qb] -= ai;
+        mag[qb] += am;
+    }
+    if (closed) {
+        const qa = h < 0 ? N : h, qb = t < 0 ? N : t, cm = abs(current);
+        rr[qa] += current.r;
+        ri[qa] += current.i;
+        mag[qa] += cm;
+        rr[qb] -= current.r;
+        ri[qb] -= current.i;
+        mag[qb] += cm;
+        const drop = C((h < 0 ? 0 : vr[h]) - (t < 0 ? 0 : vr[t]), (h < 0 ? 0 : vi[h]) - (t < 0 ? 0 : vi[t])), required = mul(faultZ, current);
+        if (abs(sub(drop, required)) > 1e-8 * Math.max(1, abs(drop), abs(required)))
+            throw Error('Fault voltage residual exceeds numerical precision; review impedance scale.');
+    }
+    for (let q = 0; q <= N; q++)
+        if (Math.hypot(rr[q], ri[q]) > 1e-8 * Math.max(1, mag[q]))
+            throw Error('Conductor KCL residual exceeds numerical precision; review impedance scale.');
+}
+// Compact output for large split-phase networks: each bus keeps its own connections; every connection's largest conductor
+// current is added back at the bus that produces it (two passes), so conductor duty sees the same maxima.
+function compactSplit(p, net, issues) {
+    const B = net.branches.length, best = new Float64Array(B).fill(-1), bestBus = new Int32Array(B).fill(-1), mx = new Float64Array(B);
+    const results = p.buses.map((b, f) => {
+        mx.fill(0);
+        let r;
+        try {
+            r = response(p, net, b, issues, { compact: true, full: b.id === p.selectedBus, maxima: mx });
+        }
+        catch (e) {
+            throw e;
+        }
+        if (r.totalA !== null)
+            for (let q = 0; q < B; q++)
+                if (mx[q] > best[q]) {
+                    best[q] = mx[q];
+                    bestBus[q] = f;
+                }
+        return r;
+    });
+    const need = new Map();
+    for (let q = 0; q < B; q++) {
+        const f = bestBus[q];
+        if (f < 0)
+            continue;
+        if (!need.has(f))
+            need.set(f, []);
+        need.get(f).push(net.branches[q].id);
+    }
+    for (const [f, ids] of need) {
+        if (results[f].detailScope === 'full')
+            continue;
+        results[f] = response(p, net, p.buses[f], issues, { compact: true, keepBranches: ids });
+    }
+    return results;
+}
+// Full detail for one bus of a compact split-phase project.
+function calculateSplitPhaseBusDetail(p, busId) { const issues = splitPhaseIssues(p); if (issues.some(i => i.severity === 'error'))
+    return null; const net = network(p, issues), bus = p.buses.find(b => b.id === busId); return bus ? { ...response(p, net, bus, issues, { compact: true, full: true }), faultType: p.settings.faultType } : null; }
 function calculateSplitPhaseProject(p) {
     const issues = (0, exports.isSplitPhaseFault)(p) ? splitPhaseIssues(p) : [{ id: 'settings', severity: 'error', message: 'Select an explicit split-phase L1/L2-neutral/ground fault mode.' }], errors = issues.filter(i => i.severity === 'error');
     const safeBuses = Array.isArray(p?.buses) ? p.buses.filter(b => record(b) && doc(b.id)) : [];
@@ -2750,7 +3591,7 @@ function calculateSplitPhaseProject(p) {
         return failed('INPUT REQUIRED', errors.map(e => e.message).join(' '));
     try {
         const net = network(p, issues);
-        return { issues, net, results: p.buses.map(b => response(p, net, b, issues)) };
+        return { issues, net, results: p.buses.length > exports.SPLIT_COMPACT_MIN_BUSES ? compactSplit(p, net, issues) : p.buses.map(b => response(p, net, b, issues)) };
     }
     catch (e) {
         const issue = { id: 'settings', severity: 'error', message: e.message };
@@ -2759,7 +3600,6 @@ function calculateSplitPhaseProject(p) {
         return failed('NETWORK ERROR', e.message);
     }
 }
-
 },
 "analysis-fields.mjs": function(module,exports,require){
 "use strict";
@@ -4545,7 +5385,7 @@ function normalizeProject(p) {
     copy.settings = { ...emptyProject().settings, ...copy.settings, ...(['dlg', 'single-ll'].includes(copy.settings?.faultType) ? { assumeZ2: copy.settings.assumeZ2 === true } : {}) };
     if (copy.inputErrors !== undefined && (!Array.isArray(copy.inputErrors) || copy.inputErrors.some(e => !object(e) || !validId(e.id) || typeof e.key !== 'string' || e.key.length > 80 || typeof e.message !== 'string' || e.message.length > 2000)))
         throw Error('Invalid input-error records');
-    if (copy.inputErrors?.some(e => !['settings', 'project', ...copy.buses.map(x => x.id), ...copy.sources.map(x => x.id), ...copy.branches.map(x => x.id), ...copy.devices.map(x => x.id), ...copy.pvArrays.map(x => x.id)].includes(e.id) || !['userManufacturer', 'userModel', 'dataReference', 'insulationCustomDesignation', 'insulationProductTemp', 'temperature', 'material', 'size', 'cableType', 'name', 'caseName', 'preparedBy', 'date', 'voltage', 'v1', 'v2', 'power', 'faultA', 'faultMVA', 'xr', 'angle', 'r', 'x', 'xdpp', 'xdp', 'xd', 'multiplier', 'duration', 'peakA', 'zPercent', 'shift', 'neutralR', 'neutralX', 'length', 'runs', 'rPerM', 'xPerM', 'r0PerM', 'x0PerM', 'ratedVoltage', 'interruptA', 'sccrA', 'frequency', 'baseMVA', 'voltageFactor', 'time', 'faultR', 'faultX', 'sequence.r0', 'sequence.x0', 'sequence.r2', 'sequence.x2'].concat(analysis_fields_mjs_v_20261022_pv_final_1.analysisEditableKeys, pv_arrays_mjs_v_20261022_pv_final_1.pvEditableKeys).includes(e.key)))
+    if (copy.inputErrors?.some(e => !['settings', 'project', ...copy.buses.map(x => x.id), ...copy.sources.map(x => x.id), ...copy.branches.map(x => x.id), ...copy.devices.map(x => x.id), ...copy.pvArrays.map(x => x.id)].includes(e.id) || !['userManufacturer', 'userModel', 'dataReference', 'insulationCustomDesignation', 'insulationProductTemp', 'temperature', 'material', 'size', 'cableType', 'name', 'caseName', 'preparedBy', 'date', 'voltage', 'v1', 'v2', 'power', 'faultA', 'faultMVA', 'xr', 'angle', 'r', 'x', 'xdpp', 'xdp', 'xd', 'multiplier', 'duration', 'peakA', 'zPercent', 'shift', 'tapPercent', 'neutralR', 'neutralX', 'length', 'runs', 'rPerM', 'xPerM', 'r0PerM', 'x0PerM', 'ratedVoltage', 'interruptA', 'sccrA', 'frequency', 'baseMVA', 'voltageFactor', 'time', 'faultR', 'faultX', 'sequence.r0', 'sequence.x0', 'sequence.r2', 'sequence.x2'].concat(analysis_fields_mjs_v_20261022_pv_final_1.analysisEditableKeys, pv_arrays_mjs_v_20261022_pv_final_1.pvEditableKeys).includes(e.key)))
         throw Error('Input-error records must identify an editable field');
     if (copy.settings.sequenceModel !== undefined && !['equivalent', 'connected'].includes(copy.settings.sequenceModel))
         throw Error('Invalid sequence-network method');
@@ -4771,13 +5611,14 @@ function migrateLegacy(inputs, data) { const p = emptyProject(); p.name = inputs
 "operating-studies.mjs": function(module,exports,require){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IEC_INVERSE_CURVES = exports.STUDY_LIMITS = void 0;
+exports.IEC_INVERSE_CURVES = exports.LARGE_STUDY_LIMITS = exports.STUDY_LIMITS = void 0;
 exports.solveBalancedPowerFlow = solveBalancedPowerFlow;
 exports.validateOperatingSettings = validateOperatingSettings;
 exports.operatingNetworkFromStudio = operatingNetworkFromStudio;
 exports.iecInverseTime = iecInverseTime;
 exports.harmonicTHD = harmonicTHD;
 exports.arcFlashEligibility = arcFlashEligibility;
+exports.solveSparsePowerFlow = solveSparsePowerFlow;
 /*
  * Operating studies, Batch 01. Balanced positive-sequence AC *screening*;
  * does not implement IEC 60909, IEEE 1584 incident energy, or device coordination.
@@ -4822,15 +5663,15 @@ function realSolve(A, b) {
         fail('non-finite Newton step');
     return x;
 }
-function validatePowerNetwork(net) {
+function validatePowerNetwork(net, limits = exports.STUDY_LIMITS) {
     if (!net || !Array.isArray(net.buses) || !Array.isArray(net.branches))
         fail('network buses and branches required');
     if (!finite(net.baseMVA) || net.baseMVA <= 0 || net.baseMVA > 1e6)
         fail('positive base MVA required');
-    if (net.buses.length < 2 || net.buses.length > exports.STUDY_LIMITS.maxBuses)
-        fail('supported bus count 2–40');
-    if (net.branches.length === 0 || net.branches.length > exports.STUDY_LIMITS.maxBranches)
-        fail('supported branch count 1–200');
+    if (net.buses.length < 2 || net.buses.length > limits.maxBuses)
+        fail(limits === exports.STUDY_LIMITS ? 'supported bus count 2–40' : 'supported bus count 2–' + limits.maxBuses);
+    if (net.branches.length === 0 || net.branches.length > limits.maxBranches)
+        fail(limits === exports.STUDY_LIMITS ? 'supported branch count 1–200' : 'supported branch count 1–' + limits.maxBranches);
     const ids = new Set();
     for (const b of net.buses) {
         if (!b || typeof b.id !== 'string' || !b.id || ids.has(b.id))
@@ -4852,6 +5693,8 @@ function validatePowerNetwork(net) {
     for (const branch of net.branches) {
         if (!ids.has(branch.from) || !ids.has(branch.to) || branch.from === branch.to)
             fail('branch with invalid terminals');
+        if (branch.tap != null && (!finite(branch.tap) || branch.tap < 0.85 || branch.tap > 1.15))
+            fail('transformer off-nominal tap ratio must be 0.85–1.15');
         if (!finite(branch.rPu) || !finite(branch.xPu) || Math.hypot(branch.rPu, branch.xPu) < 1e-8 || Math.hypot(branch.rPu, branch.xPu) > 10000)
             fail('documented nonzero R/X per-unit impedance required');
     }
@@ -4871,15 +5714,17 @@ function validatePowerNetwork(net) {
         fail('disconnected island; every active bus must have a path to reference source');
 }
 function solveBalancedPowerFlowCore(net) {
+    if (isLargePowerNetwork(net))
+        return solveSparsePowerFlowCore(net);
     validatePowerNetwork(net);
     const n = net.buses.length, base = net.baseMVA, at = new Map(net.buses.map((b, i) => [b.id, i]));
     const Y = Array.from({ length: n }, () => Array.from({ length: n }, () => complex()));
     for (const e of net.branches) {
-        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu));
-        Y[i][i] = add(Y[i][i], y);
+        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu)), t = e.tap ?? 1;
+        Y[i][i] = add(Y[i][i], divide(y, complex(t * t)));
         Y[j][j] = add(Y[j][j], y);
-        Y[i][j] = sub(Y[i][j], y);
-        Y[j][i] = sub(Y[j][i], y);
+        Y[i][j] = sub(Y[i][j], divide(y, complex(t)));
+        Y[j][i] = sub(Y[j][i], divide(y, complex(t)));
     }
     const slack = net.buses.findIndex(b => b.type === 'SLACK'), others = net.buses.map((b, i) => b.type !== 'SLACK' ? i : null).filter(i => i !== null), pq = others.filter(i => net.buses[i].type === 'PQ');
     const angN = others.length, m = angN + pq.length, angles = Array(n).fill(0), vm = net.buses.map(b => b.type === 'SLACK' || b.type === 'PV' ? b.vSetPu : 1);
@@ -4929,11 +5774,14 @@ function solveBalancedPowerFlowCore(net) {
     }
     if (solution.norm > exports.STUDY_LIMITS.tolerance)
         fail('Newton power flow did not reach the specified mismatch tolerance');
+    return finishPowerFlow(net, at, base, solution, iterations);
+}
+function finishPowerFlow(net, at, base, solution, iterations) {
     const buses = net.buses.map((b, i) => ({ id: b.id, type: b.type, voltagePu: solution.mag[i], angleDegrees: solution.phi[i] * 180 / Math.PI, pMW: solution.powers[i].re * base, qMvar: solution.powers[i].im * base }));
     const branches = net.branches.map(e => {
-        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu)), current = multiply(y, sub(solution.V[i], solution.V[j]));
-        const from = multiply(solution.V[i], conjugate(current)), to = multiply(solution.V[j], conjugate(complex(-current.re, -current.im)));
-        return { id: e.id ?? null, from: e.from, to: e.to, currentPu: abs(current), fromMW: from.re * base, fromMvar: from.im * base, toMW: to.re * base, toMvar: to.im * base, lossMW: (from.re + to.re) * base, lossMvar: (from.im + to.im) * base };
+        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu)), t = e.tap ?? 1, current = multiply(y, sub(divide(solution.V[i], complex(t)), solution.V[j])), fromI = divide(current, complex(t));
+        const from = multiply(solution.V[i], conjugate(fromI)), to = multiply(solution.V[j], conjugate(complex(-current.re, -current.im)));
+        return { id: e.id ?? null, from: e.from, to: e.to, currentPu: abs(current), fromCurrentPu: abs(fromI), tap: t, fromMW: from.re * base, fromMvar: from.im * base, toMW: to.re * base, toMvar: to.im * base, lossMW: (from.re + to.re) * base, lossMvar: (from.im + to.im) * base };
     });
     const totalLossMW = branches.reduce((sum, r) => sum + r.lossMW, 0), sumBusP = buses.reduce((sum, r) => sum + r.pMW, 0);
     for (const [i, b] of net.buses.entries())
@@ -4944,7 +5792,7 @@ function solveBalancedPowerFlowCore(net) {
         }
     if (!Number.isFinite(totalLossMW) || Math.abs(sumBusP - totalLossMW) > base * 3e-7)
         fail('network real-power balance did not close');
-    return { status: 'BALANCED_AC_SCREENING', converged: true, iterations, mismatchPu: solution.norm, baseMVA: base, buses, branches, totalLossMW, totalLossMvar: branches.reduce((sum, r) => sum + r.lossMvar, 0), source: 'Steady-state balanced Ybus Newton-Raphson; constant P/Q; no voltage-dependent loads, device control, taps, shunts or Q limits' };
+    return { status: 'BALANCED_AC_SCREENING', converged: true, iterations, mismatchPu: solution.norm, baseMVA: base, buses, branches, totalLossMW, totalLossMvar: branches.reduce((sum, r) => sum + r.lossMvar, 0), source: 'Steady-state balanced Ybus Newton-Raphson; constant P/Q; no voltage-dependent loads, device control, automatic tap changing, shunts or Q limits; fixed off-nominal transformer taps included' };
 }
 /**
  * Optional finite active-set PV Q-limit preview. The legacy/default mode stays
@@ -4956,14 +5804,251 @@ function solveBalancedPowerFlowCore(net) {
  * this is not a generator capability curve, remote voltage control or plant
  * controller simulation. Report every limit action and resulting bus voltage.
  */
+// Large networks (more than 40 buses or 200 branches): same balanced model, same convergence test and
+// line search, with an analytic polar Jacobian and a sparse LU (minimum-degree order). Small networks keep
+// the original dense solver unchanged.
+exports.LARGE_STUDY_LIMITS = Object.freeze({ maxBuses: 20000, maxBranches: 60000, maxIterations: exports.STUDY_LIMITS.maxIterations, tolerance: exports.STUDY_LIMITS.tolerance });
+function isLargePowerNetwork(net) { return !!net && Array.isArray(net.buses) && Array.isArray(net.branches) && (net.buses.length > exports.STUDY_LIMITS.maxBuses || net.branches.length > exports.STUDY_LIMITS.maxBranches); }
+function sparseFactor(rows) {
+    const n = rows.length, elim = new Uint8Array(n), order = new Int32Array(n), Lp = [0], Li = [], Lv = [], Up = [0], Uj = [], Uv = [], d = new Float64Array(n), heap = [];
+    const scale = rows.map(r => { let m = 0; for (const v of r.values())
+        m = Math.max(m, Math.abs(v)); return m; });
+    const less = (a, b) => a[0] < b[0] || (a[0] === b[0] && a[1] < b[1]), deg = k => rows[k].size - (rows[k].has(k) ? 1 : 0);
+    const push = (x, k) => { heap.push([x, k]); let c = heap.length - 1; while (c > 0) {
+        const q = (c - 1) >> 1;
+        if (!less(heap[c], heap[q]))
+            break;
+        [heap[c], heap[q]] = [heap[q], heap[c]];
+        c = q;
+    } };
+    const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) {
+        heap[0] = last;
+        let c = 0;
+        for (;;) {
+            const l = 2 * c + 1, r = l + 1;
+            let m = c;
+            if (l < heap.length && less(heap[l], heap[m]))
+                m = l;
+            if (r < heap.length && less(heap[r], heap[m]))
+                m = r;
+            if (m === c)
+                break;
+            [heap[c], heap[m]] = [heap[m], heap[c]];
+            c = m;
+        }
+    } return top; };
+    for (let k = 0; k < n; k++)
+        push(deg(k), k);
+    let t = 0;
+    while (t < n) {
+        const [x, k] = pop();
+        if (elim[k] || x !== deg(k))
+            continue;
+        const row = rows[k], piv = row.get(k) || 0;
+        if (!finite(piv) || !(Math.abs(piv) > 1e-12 * Math.max(scale[k], Number.MIN_VALUE)))
+            fail('singular Newton Jacobian; check islands and system assumptions');
+        const urow = [];
+        for (const [j, v] of row)
+            if (j !== k)
+                urow.push([j, v]);
+        for (const [i] of urow) {
+            const ri = rows[i], aik = ri.get(k) || 0;
+            ri.delete(k);
+            const l = aik / piv;
+            Li.push(i);
+            Lv.push(l);
+            if (l === 0)
+                continue;
+            for (const [j, u] of urow)
+                ri.set(j, (ri.get(j) || 0) - l * u);
+        }
+        for (const [j, v] of urow) {
+            Uj.push(j);
+            Uv.push(v);
+        }
+        Lp.push(Li.length);
+        Up.push(Uj.length);
+        d[k] = piv;
+        elim[k] = 1;
+        order[t++] = k;
+        rows[k] = null;
+        for (const [i] of urow)
+            push(deg(i), i);
+    }
+    return { n, order, Lp, Li, Lv, Up, Uj, Uv, d };
+}
+function sparseSolve(F, b) {
+    const { n, order, Lp, Li, Lv, Up, Uj, Uv, d } = F, x = Float64Array.from(b);
+    for (let t = 0; t < n; t++) {
+        const k = order[t], a = x[k];
+        if (a === 0)
+            continue;
+        for (let q = Lp[t]; q < Lp[t + 1]; q++)
+            x[Li[q]] -= Lv[q] * a;
+    }
+    for (let t = n - 1; t >= 0; t--) {
+        const k = order[t];
+        let v = x[k];
+        for (let q = Up[t]; q < Up[t + 1]; q++)
+            v -= Uv[q] * x[Uj[q]];
+        x[k] = v / d[k];
+    }
+    for (let k = 0; k < n; k++)
+        if (!Number.isFinite(x[k]))
+            fail('non-finite Newton step');
+    return x;
+}
+function solveSparsePowerFlowCore(net) {
+    validatePowerNetwork(net, exports.LARGE_STUDY_LIMITS);
+    const n = net.buses.length, base = net.baseMVA, at = new Map(net.buses.map((b, i) => [b.id, i]));
+    // Sparse Y = G + jB as one Map per row: column -> [g, b].
+    const Y = Array.from({ length: n }, () => new Map()), addY = (i, j, c) => { const e = Y[i].get(j); if (e) {
+        e[0] += c.re;
+        e[1] += c.im;
+    }
+    else
+        Y[i].set(j, [c.re, c.im]); };
+    for (const e of net.branches) {
+        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu)), t = e.tap ?? 1;
+        addY(i, i, divide(y, complex(t * t)));
+        addY(j, j, y);
+        const m = divide(y, complex(t));
+        addY(i, j, complex(-m.re, -m.im));
+        addY(j, i, complex(-m.re, -m.im));
+    }
+    const slack = net.buses.findIndex(b => b.type === 'SLACK'), others = net.buses.map((b, i) => b.type !== 'SLACK' ? i : null).filter(i => i !== null), pq = others.filter(i => net.buses[i].type === 'PQ');
+    const angN = others.length, m = angN + pq.length, angles = new Float64Array(n), vm = Float64Array.from(net.buses.map(b => b.type === 'SLACK' || b.type === 'PV' ? b.vSetPu : 1));
+    const thetaVar = new Int32Array(n).fill(-1), vVar = new Int32Array(n).fill(-1);
+    others.forEach((i, k) => thetaVar[i] = k);
+    pq.forEach((i, k) => vVar[i] = angN + k);
+    const pSpec = others.map(i => net.buses[i].pMW / base), qSpec = pq.map(i => net.buses[i].qMvar / base);
+    const mapState = state => { const phi = Float64Array.from(angles), mag = Float64Array.from(vm); for (let k = 0; k < angN; k++)
+        phi[others[k]] = state[k]; for (let k = 0; k < pq.length; k++)
+        mag[pq[k]] = state[angN + k]; for (let i = 0; i < n; i++) {
+        const x = mag[i];
+        if (!finite(x) || x <= 0.05 || x > 3)
+            return null;
+    } return { mag, phi }; };
+    const evaluate = state => {
+        const mapped = mapState(state);
+        if (!mapped)
+            return null;
+        const { mag, phi } = mapped, P = new Float64Array(n), Q = new Float64Array(n);
+        for (let i = 0; i < n; i++) {
+            let p = 0, q = 0;
+            for (const [j, [g, bb]] of Y[i]) {
+                const a = phi[i] - phi[j], c = Math.cos(a), s = Math.sin(a);
+                p += mag[j] * (g * c + bb * s);
+                q += mag[j] * (g * s - bb * c);
+            }
+            P[i] = mag[i] * p;
+            Q[i] = mag[i] * q;
+        }
+        const errors = new Float64Array(m);
+        let norm = 0;
+        for (let k = 0; k < angN; k++) {
+            errors[k] = pSpec[k] - P[others[k]];
+            norm = Math.max(norm, Math.abs(errors[k]));
+        }
+        for (let k = 0; k < pq.length; k++) {
+            errors[angN + k] = qSpec[k] - Q[pq[k]];
+            norm = Math.max(norm, Math.abs(errors[angN + k]));
+        }
+        if (!Number.isFinite(norm))
+            return null;
+        return { mag, phi, P, Q, errors, norm };
+    };
+    const jacobian = sol => {
+        const { mag: V, phi, P, Q } = sol, rows = Array.from({ length: m }, () => new Map());
+        for (let i = 0; i < n; i++) {
+            const ti = thetaVar[i], vi = vVar[i];
+            if (ti < 0 && vi < 0)
+                continue;
+            const [gii, bii] = Y[i].get(i) || [0, 0];
+            for (const [j, [g, bb]] of Y[i]) {
+                const tj = thetaVar[j], vj = vVar[j];
+                if (j === i) {
+                    if (ti >= 0) {
+                        rows[ti].set(ti, -Q[i] - bii * V[i] * V[i]);
+                        if (vi >= 0)
+                            rows[ti].set(vi, P[i] / V[i] + gii * V[i]);
+                    }
+                    if (vi >= 0) {
+                        rows[vi].set(vi, Q[i] / V[i] - bii * V[i]);
+                        if (ti >= 0)
+                            rows[vi].set(ti, P[i] - gii * V[i] * V[i]);
+                    }
+                    continue;
+                }
+                const a = phi[i] - phi[j], c = Math.cos(a), s = Math.sin(a), gs = g * s - bb * c, gc = g * c + bb * s;
+                if (ti >= 0) {
+                    if (tj >= 0)
+                        rows[ti].set(tj, V[i] * V[j] * gs);
+                    if (vj >= 0)
+                        rows[ti].set(vj, V[i] * gc);
+                }
+                if (vi >= 0) {
+                    if (tj >= 0)
+                        rows[vi].set(tj, -V[i] * V[j] * gc);
+                    if (vj >= 0)
+                        rows[vi].set(vj, V[i] * gs);
+                }
+            }
+        }
+        // Keep the pattern structurally symmetric for the symmetric-pattern elimination.
+        for (let r = 0; r < m; r++)
+            for (const c of [...rows[r].keys()])
+                if (!rows[c].has(r))
+                    rows[c].set(r, 0);
+        return rows;
+    };
+    let x = new Float64Array(m);
+    for (let k = 0; k < angN; k++)
+        x[k] = angles[others[k]];
+    for (let k = 0; k < pq.length; k++)
+        x[angN + k] = vm[pq[k]];
+    let solution = evaluate(x), iterations = 0;
+    if (!solution)
+        fail('invalid initial voltage');
+    for (; iterations < exports.LARGE_STUDY_LIMITS.maxIterations && solution.norm > exports.LARGE_STUDY_LIMITS.tolerance; iterations++) {
+        const step = sparseSolve(sparseFactor(jacobian(solution)), solution.errors);
+        let next = null, nextState = null;
+        for (let scale = 1; scale >= 1 / 2048; scale /= 2) {
+            const tryState = x.map((v, k) => v + scale * step[k]);
+            const candidate = evaluate(tryState);
+            if (candidate && candidate.norm < solution.norm) {
+                next = candidate;
+                nextState = tryState;
+                break;
+            }
+        }
+        if (!next)
+            fail('Newton power flow did not converge; check loads, voltage bases and impedances');
+        x = nextState;
+        solution = next;
+    }
+    if (solution.norm > exports.LARGE_STUDY_LIMITS.tolerance)
+        fail('Newton power flow did not reach the specified mismatch tolerance');
+    const mag = [...solution.mag], phi = [...solution.phi], V = mag.map((v, i) => complex(v * Math.cos(phi[i]), v * Math.sin(phi[i]))), powers = mag.map((_, i) => complex(solution.P[i], solution.Q[i]));
+    const out = finishPowerFlow(net, at, base, { mag, phi, V, powers, norm: solution.norm }, iterations);
+    return { ...out, solver: 'sparse-newton' };
+}
 function solveBalancedPowerFlow(net) {
+    const merge = net?.merge;
+    if (merge) {
+        const res = solveBalancedPowerFlowUnmerged(net);
+        return expandMergedResult(res, merge);
+    }
+    return solveBalancedPowerFlowUnmerged(net);
+}
+function solveBalancedPowerFlowUnmerged(net) {
     const mode = net?.qLimitMode ?? 'block';
     if (!['block', 'clamp'].includes(mode))
         fail('unknown PV reactive-limit handling mode');
     if (mode === 'block')
         return solveBalancedPowerFlowCore(net);
     // Run the complete existing topology/impedance/input validation first.
-    validatePowerNetwork(net);
+    validatePowerNetwork(net, isLargePowerNetwork(net) ? exports.LARGE_STUDY_LIMITS : exports.STUDY_LIMITS);
     const working = { ...net, buses: net.buses.map(b => ({ ...b })), qLimitMode: 'block' };
     const originallyLimited = new Map(net.buses.filter(b => b.type === 'PV' && b.qMinMvar != null && b.qMaxMvar != null).map(b => [b.id, b]));
     const switched = [];
@@ -5054,12 +6139,21 @@ function operatingNetworkFromStudio(p) {
     });
     const voltage = new Map(p.buses.map(b => [b.id, b.voltage]));
     const branches = [];
-    for (const e of p.branches.filter(e => e.enabled !== false && (!e.deviceId || p.devices.find(d => d.id === e.deviceId)?.enabled !== false))) {
+    const deviceOpen = new Set((p.devices || []).filter(d => d.enabled === false).map(d => d.id));
+    const active = p.branches.filter(e => e.enabled !== false && (!e.deviceId || !deviceOpen.has(e.deviceId)));
+    // Closed switches / breakers (ideal links) join their buses into one electrical node.
+    const merge = mergeLinkedBuses(p, buses, active.filter(e => e.kind === 'link'), voltage);
+    const rep = merge ? id => merge.rep.get(id) : id => id;
+    for (const e of active) {
         if (!voltage.has(e.from) || !voltage.has(e.to))
             fail(e.name + ': invalid connected endpoints');
         if (e.kind === 'link')
-            fail(e.name + ': ideal links require an explicit bus merger before operating-study calculation');
-        let rPu, xPu;
+            continue;
+        if (merge && rep(e.from) === rep(e.to)) {
+            merge.shorted.push(e);
+            continue;
+        }
+        let rPu, xPu, tap = 1;
         if (e.kind === 'cable') {
             if (!finite(e.rPerM) || !finite(e.xPerM) || !finite(e.length) || e.length <= 0 || !Number.isSafeInteger(e.runs) || e.runs <= 0)
                 fail(e.name + ': actual R/X Ω/m, length m and parallel runs required');
@@ -5074,15 +6168,168 @@ function operatingNetworkFromStudio(p) {
                 fail(e.name + ': rating VA, %Z, X/R and winding voltages required');
             if (Math.abs(voltage.get(e.from) - e.v1) > 1e-4 * e.v1 || Math.abs(voltage.get(e.to) - e.v2) > 1e-4 * e.v2)
                 fail(e.name + ': transformer nominal ratios do not match actual connected voltage bases (tap modeling pending)');
+            if (e.tapPercent != null && e.tapPercent !== '' && (!finite(e.tapPercent) || Math.abs(e.tapPercent) > 10))
+                fail(e.name + ': off-nominal tap must be between -10 % and +10 %');
+            tap = 1 + (e.tapPercent || 0) / 100;
             const z = e.zPercent / 100 * base * 1e6 / e.power;
             rPu = z / Math.hypot(1, e.xr);
             xPu = rPu * e.xr;
         }
         else
             fail(e.name + ': unsupported operating-network branch kind');
-        branches.push({ id: e.id, from: e.from, to: e.to, rPu, xPu });
+        branches.push(tap !== 1 ? { id: e.id, from: rep(e.from), to: rep(e.to), rPu, xPu, tap } : { id: e.id, from: rep(e.from), to: rep(e.to), rPu, xPu });
     }
-    return { baseMVA: base, buses, branches, qLimitMode: cfg.qLimitMode ?? 'block' };
+    const net = { baseMVA: base, buses: merge ? merge.buses : buses, branches, qLimitMode: cfg.qLimitMode ?? 'block' };
+    if (merge)
+        Object.defineProperty(net, 'merge', { value: { ...merge, active, original: buses, names: new Map(p.buses.map(b => [b.id, b.name])) }, enumerable: false });
+    return net;
+}
+function mergeLinkedBuses(p, buses, links, voltage) {
+    if (!links.length)
+        return null;
+    const parent = new Map(buses.map(b => [b.id, b.id])), find = x => { while (parent.get(x) !== x) {
+        parent.set(x, parent.get(parent.get(x)));
+        x = parent.get(x);
+    } return x; };
+    const name = id => p.buses.find(b => b.id === id)?.name || id;
+    for (const e of links) {
+        if (!voltage.has(e.from) || !voltage.has(e.to))
+            fail(e.name + ': invalid connected endpoints');
+        const a = voltage.get(e.from), b = voltage.get(e.to);
+        if (Math.abs(a - b) > 1e-6 * Math.max(a, b))
+            fail(e.name + ': closed switch joins buses with different nominal voltages');
+        const ra = find(e.from), rb = find(e.to);
+        if (ra !== rb)
+            parent.set(ra, rb);
+    }
+    const groups = new Map();
+    for (const b of buses) {
+        const r = find(b.id);
+        if (!groups.has(r))
+            groups.set(r, []);
+        groups.get(r).push(b);
+    }
+    const repOf = new Map(), out = [], merged = [];
+    for (const b of buses) {
+        const members = groups.get(find(b.id));
+        if (members[0] !== b)
+            continue;
+        if (members.length === 1) {
+            repOf.set(b.id, b.id);
+            out.push(b);
+            continue;
+        }
+        const slack = members.find(x => x.type === 'SLACK'), pv = members.filter(x => x.type === 'PV');
+        if (slack && pv.length)
+            fail(name(pv[0].id) + ': a voltage-controlled (PV) bus is joined to the reference bus by closed switches; set it to PQ or open the switch');
+        if (pv.length > 1) {
+            if (pv.some(x => !finite(x.vSetPu) || Math.abs(x.vSetPu - pv[0].vSetPu) > 1e-9))
+                fail(pv.map(x => name(x.id)).join(', ') + ': PV buses joined by closed switches need the same voltage setpoint');
+            if (pv.filter(x => x.qMinMvar != null || x.qMaxMvar != null).length > 1)
+                fail(pv.map(x => name(x.id)).join(', ') + ': only one PV bus in a switch-joined group may carry reactive limits');
+        }
+        const r = slack || pv[0] || members[0];
+        for (const x of members) {
+            if (x === r || x.type === 'PV')
+                continue;
+            if (!finite(x.pMW))
+                fail(name(x.id) + ': actual net real-power injection required (generation positive); enter 0 for a bus with no load or generation');
+            if (!finite(x.qMvar))
+                fail(name(x.id) + ': actual net reactive-power injection required (generation positive); enter 0 for a bus with no load or generation');
+        }
+        const others = members.filter(x => x !== r), sumP = others.reduce((t, x) => t + (finite(x.pMW) ? x.pMW : 0), 0), sumQ = others.filter(x => x.type !== 'PV').reduce((t, x) => t + x.qMvar, 0);
+        const m = { ...r };
+        if (r.type !== 'SLACK')
+            m.pMW = finite(r.pMW) ? r.pMW + sumP : r.pMW;
+        if (r.type === 'PQ')
+            m.qMvar = finite(r.qMvar) ? r.qMvar + sumQ : r.qMvar;
+        if (r.type === 'PV') {
+            const lim = pv.find(x => x.qMinMvar != null || x.qMaxMvar != null);
+            if (lim && finite(lim.qMinMvar) && finite(lim.qMaxMvar)) {
+                m.qMinMvar = lim.qMinMvar + sumQ;
+                m.qMaxMvar = lim.qMaxMvar + sumQ;
+            }
+        }
+        for (const x of members)
+            repOf.set(x.id, r.id);
+        out.push(m);
+        merged.push({ rep: r.id, members: members.map(x => x.id) });
+    }
+    return { rep: repOf, buses: out, groups: merged, links, shorted: [] };
+}
+// Restore every original bus and connection in the result; closed-switch through-flows follow from KCL on the switch tree.
+function expandMergedResult(res, merge) {
+    const base = res.baseMVA, byBus = new Map(res.buses.map(b => [b.id, b])), byBranch = new Map(res.branches.map(b => [b.id, b])), orig = new Map(merge.original.map(b => [b.id, b]));
+    const buses = merge.original.map(b => { const r = byBus.get(merge.rep.get(b.id)); if (b.id === r.id)
+        return r; return { id: b.id, type: b.type, voltagePu: r.voltagePu, angleDegrees: r.angleDegrees, pMW: b.type === 'PV' ? b.pMW : b.pMW, qMvar: b.type === 'PV' ? 0 : b.qMvar, joinedTo: r.id }; });
+    const busOut = new Map(buses.map(b => [b.id, b]));
+    for (const g of merge.groups) {
+        const r = busOut.get(g.rep), others = g.members.filter(x => x !== g.rep).map(x => busOut.get(x));
+        r.pMW -= others.reduce((t, x) => t + x.pMW, 0);
+        r.qMvar -= others.reduce((t, x) => t + x.qMvar, 0);
+        r.joinedBuses = g.members.filter(x => x !== g.rep);
+    }
+    const out = new Map(merge.original.map(b => [b.id, [0, 0]]));
+    const branches = [];
+    for (const e of merge.active) {
+        if (e.kind === 'link') {
+            branches.push(null);
+            continue;
+        }
+        if (merge.shorted.includes(e)) {
+            const z = { id: e.id, from: e.from, to: e.to, currentPu: 0, fromCurrentPu: 0, tap: 1, fromMW: 0, fromMvar: 0, toMW: 0, toMvar: 0, lossMW: 0, lossMvar: 0, note: 'Both ends are joined by closed switches; no current' };
+            branches.push(z);
+            continue;
+        }
+        const r = byBranch.get(e.id);
+        if (!r) {
+            branches.push(null);
+            continue;
+        }
+        const x = { ...r, from: e.from, to: e.to };
+        branches.push(x);
+        const a = out.get(e.from), b = out.get(e.to);
+        a[0] += x.fromMW;
+        a[1] += x.fromMvar;
+        b[0] += x.toMW;
+        b[1] += x.toMvar;
+    }
+    // Switch tree per group, rooted at the representative bus.
+    const flows = new Map();
+    for (const g of merge.groups) {
+        const inGroup = new Set(g.members), adj = new Map(g.members.map(m => [m, []]));
+        for (const e of merge.links)
+            if (inGroup.has(e.from)) {
+                adj.get(e.from).push([e, e.to]);
+                adj.get(e.to).push([e, e.from]);
+            }
+        const seen = new Set([g.rep]), orderList = [g.rep], parentEdge = new Map(), tree = new Set();
+        for (let i = 0; i < orderList.length; i++) {
+            const u = orderList[i];
+            for (const [e, v] of adj.get(u))
+                if (!seen.has(v)) {
+                    seen.add(v);
+                    orderList.push(v);
+                    parentEdge.set(v, [e, u]);
+                    tree.add(e);
+                }
+        }
+        const sub = new Map(g.members.map(m => { const o = out.get(m), bb = busOut.get(m); return [m, [o[0] - bb.pMW, o[1] - bb.qMvar]]; }));
+        for (let i = orderList.length - 1; i > 0; i--) {
+            const v = orderList[i], [e, u] = parentEdge.get(v), sv = sub.get(v), su = sub.get(u);
+            su[0] += sv[0];
+            su[1] += sv[1];
+            // sv = power flowing from u into v through e.
+            const fromIsU = e.from === u, fp = fromIsU ? sv[0] : -sv[0], fq = fromIsU ? sv[1] : -sv[1], vm = busOut.get(v).voltagePu, cur = Math.hypot(sv[0], sv[1]) / base / vm;
+            flows.set(e.id, { id: e.id, from: e.from, to: e.to, idealLink: true, currentPu: cur, fromCurrentPu: cur, tap: 1, fromMW: fp, fromMvar: fq, toMW: -fp, toMvar: -fq, lossMW: 0, lossMvar: 0 });
+        }
+        for (const [e] of [...adj.values()].flat())
+            if (!tree.has(e) && !flows.has(e.id))
+                flows.set(e.id, { id: e.id, from: e.from, to: e.to, idealLink: true, currentPu: null, fromCurrentPu: null, tap: 1, fromMW: null, fromMvar: null, toMW: null, toMvar: null, lossMW: 0, lossMvar: 0, note: 'Closed switches in a loop share current in a way an ideal-switch model cannot determine' });
+    }
+    merge.active.forEach((e, k) => { if (e.kind === 'link')
+        branches[k] = flows.get(e.id) || { id: e.id, from: e.from, to: e.to, idealLink: true, currentPu: 0, fromCurrentPu: 0, tap: 1, fromMW: 0, fromMvar: 0, toMW: 0, toMvar: 0, lossMW: 0, lossMvar: 0 }; });
+    return { ...res, buses, branches: branches.filter(Boolean), switchGroups: merge.groups.map(g => ({ representative: g.rep, buses: g.members })), switchModel: 'Closed switches and breakers join their buses into one node (ideal, zero impedance). Switch through-flow is found from the bus balance on each switch tree.' };
 }
 exports.IEC_INVERSE_CURVES = Object.freeze({ normal: { alpha: 0.02, beta: 0.14 }, very: { alpha: 1, beta: 13.5 }, extreme: { alpha: 2, beta: 80 }, long: { alpha: 1, beta: 120 } });
 function iecInverseTime({ curve, pickupA, currentA, tms }) {
@@ -5111,7 +6358,8 @@ function arcFlashEligibility({ voltageV, phaseModel = 'three-phase-ac' }) {
         return { eligible: false, reason: 'Outside IEEE 1584-2018 nominal 208–15000 V applicability' };
     return { eligible: true, reason: 'Nominal voltage and phase scope only. IEEE 1584 electrode arrangement, enclosure geometry, bolted and arcing fault-current ranges, working distance and device clearing times are still mandatory. No incident energy computed.' };
 }
-
+// Sparse solver on any network size (used automatically above 40 buses / 200 branches; exported for QA comparison).
+function solveSparsePowerFlow(net) { return solveSparsePowerFlowCore(net); }
 },
 "protection-study.mjs": function(module,exports,require){
 "use strict";
@@ -5284,7 +6532,11 @@ function trial(fn) { try {
 catch (e) {
     return { data: null, error: e.message };
 } ; }
-function advancedPreview(project) {
+// Same inputs, same screens: reuse the last result while the relevant project data is unchanged.
+let previewKey = null, previewValue = null;
+function advancedPreview(project) { const key = JSON.stringify([project.advancedStudy ?? null, project.operatingStudy?.protection ?? null, project.selectedBus ?? null, project.settings?.faultType ?? null, (project.buses || []).map(b => [b.id, b.voltage]), (project.branches || []).map(e => [e.id, e.from, e.to, e.enabled]), (project.sources || []).map(s => [s.bus, s.enabled])]); if (key === previewKey)
+    return previewValue; previewKey = key; previewValue = advancedPreviewUncached(project); return previewValue; }
+function advancedPreviewUncached(project) {
     const x = project.advancedStudy || {}, results = {};
     const pc = x.protectionCases || {}, settings = project.operatingStudy?.protection || {};
     results.protectionCases = trial(() => (0, advanced_screening_mjs_v_20261024_b03b08_1.protectionCases)({ ...settings, cases: [{ caseId: 'Case 1: confirmed CT through currents', downstreamPrimaryA: pc.case1Downstream, upstreamPrimaryA: pc.case1Upstream }, { caseId: 'Case 2: confirmed CT through currents', downstreamPrimaryA: pc.case2Downstream, upstreamPrimaryA: pc.case2Upstream }] }));
@@ -5313,7 +6565,7 @@ function advancedWorkspaceMarkup(project) {
     const v = project.advancedStudy || {}, r = advancedPreview(project), arc = v.arc || {}, rel = v.reliability || {};
     const cards = [];
     cards.push(`<section class="operating-card"><h3>Batch 03B — multiple fault-path relay scenarios</h3><p>Uses the existing Operating studies TCC device/CT settings. Enter actual independent through-fault current at each device in each case; a bus fault is NOT an automatic through-CT current. Nominal IEC curves only, no manufacturer tolerances.</p>${grid('protectionCases', [['case1Downstream', 'Case 1 downstream CT primary A'], ['case1Upstream', 'Case 1 upstream CT primary A'], ['case2Downstream', 'Case 2 downstream CT primary A'], ['case2Upstream', 'Case 2 upstream CT primary A']], v.protectionCases)}${report(r.protectionCases, o => `<p><strong>${escape(o.status)}</strong></p>${o.rows.map(x => `<p>${escape(x.caseId)}: ${escape(x.status)}, nominal margin ${num(x.marginS)} s</p>`).join('')}`)}</section>`);
-    cards.push(`<section class="operating-card"><h3>Batch 04 — IEEE 1584 arc-flash intake</h3><p>Data completeness only; incident energy remains blocked without licensed, validated IEEE 1584 equations and equipment conditions. At selected fault bus: ${escape(project.buses?.find(x => x.id === project.selectedBus)?.name || 'none')}.</p>${grid('arc', [['boltedFaultKA', 'Bolted available current (kA)'], ['workingDistanceMm', 'Actual working distance (mm)'], ['electrodeGapMm', 'Electrode gap (mm)'], ['enclosureHeightMm', 'Enclosure height (mm)'], ['enclosureWidthMm', 'Enclosure width (mm)'], ['enclosureDepthMm', 'Enclosure depth (mm)'], ['clearingTimeS', 'Total clearing time at arcing current (s)']], arc)}<label class="operating-field">Verified electrode type<select data-advanced-module="arc" data-advanced-field="electrodeConfiguration"><option value="">Choose</option>${['VCB', 'VCBB', 'HCB', 'VOA', 'HOA'].map(x => `<option value="${x}" ${arc.electrodeConfiguration === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label>${report(r.arc, o => `<p role="status"><strong>${escape(o.status)}</strong>. ${o.missing.length ? escape(o.missing.join('; ')) : 'Data captured. No incident-energy calculation implemented.'}</p>`)}</section>`);
+    cards.push(`<section class="operating-card"><h3>Batch 04 — IEEE 1584 arc-flash intake</h3><p>IEEE 1584-2018 incident energy and arc-flash boundary for one equipment location, with one documented total clearing time used at both the full and the reduced arcing current. For clearing times read from protective-device curves at every bus, use Arc flash · all buses. At selected fault bus: ${escape(project.buses?.find(x => x.id === project.selectedBus)?.name || 'none')}.</p>${grid('arc', [['boltedFaultKA', 'Bolted available current (kA)'], ['workingDistanceMm', 'Actual working distance (mm)'], ['electrodeGapMm', 'Electrode gap (mm)'], ['enclosureHeightMm', 'Enclosure height (mm)'], ['enclosureWidthMm', 'Enclosure width (mm)'], ['enclosureDepthMm', 'Enclosure depth (mm)'], ['clearingTimeS', 'Total clearing time at arcing current (s)']], arc)}<label class="operating-field">Verified electrode type<select data-advanced-module="arc" data-advanced-field="electrodeConfiguration"><option value="">Choose</option>${['VCB', 'VCBB', 'HCB', 'VOA', 'HOA'].map(x => `<option value="${x}" ${arc.electrodeConfiguration === x ? 'selected' : ''}>${x}</option>`).join('')}</select></label>${report(r.arc, o => o.status === 'CALCULATED' ? `<p role="status"><strong>Incident energy ${escape(num(o.incidentEnergyCalCm2))} cal/cm²</strong> at the working distance · arc-flash boundary ${escape(num(o.boundaryMm))} mm · governing case: ${escape(o.governingCase)} · arcing current ${o.cases.map(c => escape(num(c.arcingCurrentKA)) + ' kA (' + escape(c.case) + ')').join(', ')}.</p><p class="micro">${escape(o.basis)}</p>` : `<p role="status"><strong>${escape(o.status)}</strong>. ${escape(o.missing.join('; '))}</p>`)}</section>`);
     cards.push(`<section class="operating-card"><h3>Batch 05 — bounded thermal resistance</h3><p>Actual cable current and an externally documented complete equivalent thermal resistance are mandatory. This is not IEC 60287, duct-bank/soil dry-out or the separate Thermal Studio solver.</p>${grid('thermal', [['loadCurrentA', 'Load RMS total (A)'], ['runs', 'Identical parallel runs'], ['racOhmPerM', 'Conductor AC R (Ω/m)'], ['thermalResistanceKmPerW', 'Effective thermal resistance K·m/W'], ['ambientC', 'Ambient (°C)'], ['limitC', 'Maximum conductor (°C)']], v.thermal)}${report(r.thermal, o => result('Estimated °C', o.estimatedConductorC) + result('Simplified maximum total A', o.maximumTotalA) + `<p>${escape(o.status)}</p>`)}</section>`);
     cards.push(`<section class="operating-card"><h3>Batch 06 — PCC harmonic TDD arithmetic</h3><p>Provide RMS harmonic-current components and the defined maximum demand I_L. TDD is not the same denominator as THDi; no IEEE 519 pass/fail or network harmonic scan.</p>${grid('harmonic', [['demandCurrentA', 'PCC maximum-demand I_L (A)'], ['harmonic3A', '3rd harmonic RMS (A)'], ['harmonic5A', '5th harmonic RMS (A)'], ['harmonic7A', '7th harmonic RMS (A)']], v.harmonic)}${report(r.harmonic, o => result('TDD % for 3/5/7 only', o.tddPercent))}</section>`);
     cards.push(`<section class="operating-card"><h3>Batch 07 — resistive DC and battery arithmetic</h3><p>Document complete source plus outward/return loop resistance. No battery peak-current or time-dependent arc-flash duty model.</p>${grid('dc', [['voltageV', 'Documented DC V'], ['sourceResistanceOhm', 'Source internal Ω'], ['conductorLoopOhm', 'Outgoing + return loop Ω'], ['otherLoopOhm', 'Additional series Ω'], ['nameplateAh', 'Battery nameplate Ah (ideal only)'], ['constantLoadA', 'Constant battery discharge A'], ['usableFraction', 'Usable fraction 0–1']], v.dc)}${report(r.dc, o => result('Initial resistive DC fault A', o.initialCurrentA))}${report(r.battery, o => result('Ideal battery hours', o.hours))}</section>`);
@@ -5324,7 +6576,6 @@ function advancedWorkspaceMarkup(project) {
 }
 function advancedEvidenceRows(p) { const results = advancedPreview(p); const rows = [['Field', 'Value'], ['Scope', 'Batches 03-08 bounded prototype; not manufacturer/certified studies'], ['Project', p.name], ['Export source', 'Explicit advancedStudy inputs on this project'], ['Study', 'Status', 'Data (JSON)']]; for (const [k, r] of Object.entries(results))
     rows.push([k, r.error ? 'INCOMPLETE' : r.data.status, JSON.stringify(r.error ? { issue: r.error } : r.data)]); return rows; }
-
 },
 "advanced-screening.mjs": function(module,exports,require){
 "use strict";
@@ -5341,6 +6592,7 @@ exports.groundPotentialRise = groundPotentialRise;
 exports.motorStartDivider = motorStartDivider;
 exports.reliabilityIndices = reliabilityIndices;
 exports.nMinusOneConnectivity = nMinusOneConnectivity;
+const ieee1584_2018_mjs_1 = require("./ieee1584-2018.mjs");
 /*
  * Fault Current Studio, candidate Batches 03B–08.
  * Pure, bounded engineering screening calculators. No manufacturer settings,
@@ -5383,7 +6635,19 @@ function arcFlashIntake(x) {
             missing.push(label);
     if (!['VCB', 'VCBB', 'HCB', 'VOA', 'HOA'].includes(x.electrodeConfiguration))
         missing.push('Actual IEEE 1584 electrode configuration');
-    return { status: missing.length ? 'DATA_INCOMPLETE' : 'DATA_READY_NO_APPROVED_ENGINE', missing, incidentEnergyCalCm2: null, boundaryMm: null, method: exports.SCREEN_METHODS.arc };
+    if (missing.length)
+        return { status: 'DATA_INCOMPLETE', missing, incidentEnergyCalCm2: null, boundaryMm: null, method: exports.SCREEN_METHODS.arc };
+    // Complete data: the Studio's IEEE 1584-2018 engine (the same one used by the arc-flash tools). One documented total
+    // clearing time is applied at both the full and the reduced arcing current.
+    const ms = x.clearingTimeS * 1000;
+    try {
+        const a = (0, ieee1584_2018_mjs_1.ieee1584Calculate)({ voltageKV: voltageV / 1000, boltedFaultKA: x.boltedFaultKA, electrodeConfiguration: x.electrodeConfiguration, gapMM: x.electrodeGapMm, workingDistanceMM: x.workingDistanceMm, enclosureHeightMM: x.enclosureHeightMm, enclosureWidthMM: x.enclosureWidthMm, enclosureDepthMM: x.enclosureDepthMm, clearingFullMS: ms, clearingReducedMS: ms });
+        const g = a.cases.find(c => c.case === a.governingCase);
+        return { status: 'CALCULATED', missing, incidentEnergyCalCm2: g.incidentEnergyCalPerCm2, boundaryMm: Math.max(...a.cases.map(c => c.arcFlashBoundaryMM)), governingCase: a.governingCase, cases: a.cases.map(c => ({ case: c.case, arcingCurrentKA: c.arcingCurrentKA, clearingTimeMS: c.clearingTimeMS, incidentEnergyCalPerCm2: c.incidentEnergyCalPerCm2, arcFlashBoundaryMM: c.arcFlashBoundaryMM })), warnings: a.warnings, method: 'IEEE 1584-2018 (Studio engine) with one total clearing time for both arcing-current cases', basis: 'Confirm that the clearing time is valid at both the full and the reduced arcing current; otherwise use Arc flash · all buses with the protective-device curve.' };
+    }
+    catch (e) {
+        return { status: 'INPUT OUTSIDE IEEE 1584-2018 RANGE', missing: [e.message], incidentEnergyCalCm2: null, boundaryMm: null, method: exports.SCREEN_METHODS.arc };
+    }
 }
 function thermalResistanceScreen(x) {
     const I = v('actual load current A', x.loadCurrentA, { min: 0, allowZero: true }), runs = v('number of actual equal parallel runs', x.runs, { min: 1, max: 10000 });
@@ -5475,12 +6739,11 @@ function nMinusOneConnectivity({ busIds, edges, sourceIds, loadIds }) {
     const outages = edges.filter(e => e.enabled !== false).map(e => ({ outagedBranchId: e.id, newlyUnservedLoadIds: service(e.id).filter(id => !initiallyUnserved.includes(id)) }));
     return { status: initiallyUnserved.length ? 'BASELINE_LOADS_ALREADY_UNSERVED' : outages.some(e => e.newlyUnservedLoadIds.length) ? 'N_MINUS_ONE_TOPOLOGY_FAILURE' : 'N_MINUS_ONE_TOPOLOGY_PASSES', initiallyUnservedLoadIds: initiallyUnserved, outages, method: exports.SCREEN_METHODS.reliability };
 }
-
 },
 "network-engine.mjs": function(module,exports,require){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.solveComplex = exports.baseI = exports.baseZ = exports.powerVA = exports.polar = exports.div = exports.abs = exports.conj = exports.scale = exports.mul = exports.sub = exports.add = exports.C = void 0;
+exports.COMPACT_WORK = exports.SPARSE_MIN_BUSES = exports.solveComplex = exports.baseI = exports.baseZ = exports.powerVA = exports.polar = exports.div = exports.abs = exports.conj = exports.scale = exports.mul = exports.sub = exports.add = exports.C = void 0;
 exports.zFromMagnitude = zFromMagnitude;
 exports.factorComplex = factorComplex;
 exports.solveFactored = solveFactored;
@@ -5488,13 +6751,20 @@ exports.validateProject = validateProject;
 exports.buildNetwork = buildNetwork;
 exports.calculateBus = calculateBus;
 exports.calculateProject = calculateProject;
+exports.calculateBusDetail = calculateBusDetail;
 exports.deviceDuty = deviceDuty;
-const analysis_models_mjs_v_20261022_pv_final_1 = require("./analysis-models.mjs?v=20261022-pv-final");
+exports.sparseFactor = sparseFactor;
+exports.sparseSolve = sparseSolve;
+exports.calculateScaled = calculateScaled;
+const analysis_models_mjs_v_20261108_v32_1 = require("./analysis-models.mjs?v=20261108-v32");
+const split_phase_network_mjs_v_20261108_v32_1 = require("./split-phase-network.mjs?v=20261108-v32");
+const connected_sequences_mjs_v_20261108_v32_1 = require("./connected-sequences.mjs?v=20261108-v32");
 // Balanced network screening, on a common MVA base and each bus's nominal voltage base.
 const network_flow_mjs_v_20261022_pv_final_1 = require("./network-flow.mjs?v=20261022-pv-final");
 const network_model_mjs_v_20261022_pv_final_1 = require("./network-model.mjs?v=20261022-pv-final");
 const network_voltage_mjs_v_20261022_pv_final_1 = require("./network-voltage.mjs?v=20261022-pv-final");
 const dlg_fault_mjs_v_20261022_pv_final_1 = require("./dlg-fault.mjs?v=20261022-pv-final");
+const dc_network_mjs_v_20261108_v32_1 = require("./dc-network.mjs?v=20261108-v32");
 const single_phase_mjs_v_20261022_pv_final_1 = require("./single-phase.mjs?v=20261022-pv-final");
 const finiteComplex = z => Number.isFinite(z?.r) && Number.isFinite(z?.i);
 const C = (r = 0, i = 0) => ({ r, i }), add = (a, b) => (0, exports.C)(a.r + b.r, a.i + b.i), sub = (a, b) => (0, exports.C)(a.r - b.r, a.i - b.i), mul = (a, b) => (0, exports.C)(a.r * b.r - a.i * b.i, a.r * b.i + a.i * b.r), scale = (a, k) => (0, exports.C)(a.r * k, a.i * k), conj = a => (0, exports.C)(a.r, -a.i), abs = a => Math.hypot(a.r, a.i), div = (a, b) => { if (!finiteComplex(a) || !finiteComplex(b))
@@ -5580,8 +6850,8 @@ function flagIssues(p) {
     return issues;
 }
 function validateProject(p) {
-    if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(p))
-        return (0, analysis_models_mjs_v_20261022_pv_final_1.validateExtendedProject)(p);
+    if ((0, analysis_models_mjs_v_20261108_v32_1.isExtendedStudy)(p))
+        return (0, analysis_models_mjs_v_20261108_v32_1.validateExtendedProject)(p);
     const issues = [...flagIssues(p), ...(0, single_phase_mjs_v_20261022_pv_final_1.singlePhaseIssues)(p)], warn = (id, message, severity = 'error') => issues.push({ id, message, severity }), ids = new Set();
     for (const list of [p.buses, p.sources, p.branches, p.devices])
         for (const x of list) {
@@ -5590,7 +6860,7 @@ function validateProject(p) {
             ids.add(x.id);
         }
     for (const x of [...p.buses, ...p.sources, ...p.branches, ...p.devices]) {
-        for (const key of ['voltage', 'v1', 'v2', 'power', 'faultA', 'faultMVA', 'xr', 'angle', 'r', 'x', 'xdpp', 'xdp', 'xd', 'multiplier', 'duration', 'peakA', 'zPercent', 'shift', 'neutralR', 'neutralX', 'length', 'runs', 'rPerM', 'xPerM', 'r0PerM', 'x0PerM', 'ratedVoltage', 'interruptA', 'sccrA', 'frequency'])
+        for (const key of ['voltage', 'v1', 'v2', 'power', 'faultA', 'faultMVA', 'xr', 'angle', 'r', 'x', 'xdpp', 'xdp', 'xd', 'multiplier', 'duration', 'peakA', 'zPercent', 'shift', 'tapPercent', 'neutralR', 'neutralX', 'length', 'runs', 'rPerM', 'xPerM', 'r0PerM', 'x0PerM', 'ratedVoltage', 'interruptA', 'sccrA', 'frequency'])
             if (x[key] !== null && x[key] !== undefined && x[key] !== '' && (typeof x[key] !== 'number' || !Number.isFinite(x[key])))
                 warn(x.id, x.name + ': ' + key + ' must be a finite numeric value.');
         for (const key of ['interruptA', 'sccrA', 'peakA', 'ratedVoltage', 'neutralR', 'neutralX', 'r0PerM', 'x0PerM'])
@@ -5687,6 +6957,10 @@ function validateProject(p) {
                 warn(e.id, e.name + ': enter both winding voltages and rated kVA/MVA.');
             if (!(e.zPercent > 0) && !(e.zPercent === 0 && e.allowIdeal))
                 warn(e.id, e.name + ': impedance must be positive; select intentional ideal transformer to use 0%.');
+            if (e.tapPercent !== null && e.tapPercent !== undefined && e.tapPercent !== '' && !(Math.abs(e.tapPercent) <= 10))
+                warn(e.id, e.name + ': off-nominal tap must be between -10 % and +10 % of nameplate primary voltage.');
+            else if (e.tapPercent)
+                warn(e.id, e.name + ': off-nominal primary tap ' + e.tapPercent + ' % applied to the turns ratio (impedance kept on the nameplate base).', 'info');
             if (Math.abs(a.voltage - e.v1) > 1e-3 || Math.abs(b.voltage - e.v2) > 1e-3)
                 warn(e.id, e.name + ': bus voltages must match their assigned transformer winding voltages.');
             if (e.v1 === e.v2 && !e.allowOneToOne)
@@ -5722,7 +6996,59 @@ function validateProject(p) {
     }
     for (const d of p.devices)
         if (d.enabled !== false && !buses.has(d.bus))
-            warn(d.id, d.name + ': select its connection bus.');
+            warn(d.id, d.name + ': select its connection bus.'); /*V29 plausibility data check: warnings only, never changes a calculated value.*/
+    (() => {
+        const pw = (id, m) => warn(id, 'Plausibility check: ' + m, 'warning'), fin = x => typeof x === 'number' && Number.isFinite(x), on = x => x.enabled !== false;
+        for (const s of p.sources) {
+            if (!on(s))
+                continue;
+            const V = fin(s.voltage) && s.voltage > 0 ? s.voltage : null;
+            if (s.method === 'ka' && fin(s.faultA) && s.faultA > 0 && !['pv', 'bess'].includes(s.kind) && s.model !== 'current') {
+                if (s.faultA > 300e3)
+                    pw(s.id, s.name + ': available fault current ' + (s.faultA / 1e3).toPrecision(4) + ' kA exceeds 300 kA. Verify A versus kA units and the utility letter.');
+                else if (V && Math.sqrt(3) * V * s.faultA > 1e11)
+                    pw(s.id, s.name + ': implied short-circuit level exceeds 100,000 MVA. Verify units.');
+            }
+            if (s.method === 'mva' && fin(s.faultMVA) && s.faultMVA > 1e5)
+                pw(s.id, s.name + ': short-circuit level exceeds 100,000 MVA. Verify MVA versus kVA units.');
+            if (fin(s.xr) && s.method !== 'impedance' && !['pv', 'bess'].includes(s.kind) && s.model !== 'current') {
+                if (s.xr > 150)
+                    pw(s.id, s.name + ': X/R above 150 is outside typical published source data; peak duty becomes very sensitive.');
+                else if (s.xr === 0)
+                    pw(s.id, s.name + ': X/R = 0 models a purely resistive source, which is not physical for utility, generator or motor contributions.');
+            }
+            if (s.kind === 'generator' && s.method !== 'impedance') {
+                const st = p.settings.generatorStage, xd = st === 'transient' ? s.xdp : st === 'steady' ? s.xd : s.xdpp, lo = st === 'steady' ? .3 : .03, hi = st === 'steady' ? 4 : st === 'transient' ? 1 : .6;
+                if (fin(xd) && xd > 0 && (xd < lo || xd > hi))
+                    pw(s.id, s.name + ': per-unit reactance ' + xd + ' is outside the typical ' + lo + '–' + hi + ' pu range for this stage. Enter per-unit on the machine rating, not percent.');
+            }
+        }
+        for (const e of p.branches) {
+            if (!(0, network_model_mjs_v_20261022_pv_final_1.isBranchEnabled)(e, p))
+                continue;
+            if (e.kind === 'transformer') {
+                if (fin(e.zPercent) && e.zPercent > 0 && (e.zPercent < .5 || e.zPercent > 25))
+                    pw(e.id, e.name + ': impedance ' + e.zPercent + '% is outside the typical 0.5–25% range. Enter percent, not per-unit.');
+                if (fin(e.xr) && e.xr > 100)
+                    pw(e.id, e.name + ': X/R above 100 is outside typical transformer data.');
+                if (fin(e.power) && e.power > 2e9)
+                    pw(e.id, e.name + ': rating exceeds 2,000 MVA. Verify VA/kVA/MVA units.');
+            }
+            if (e.kind === 'cable') {
+                if (fin(e.length) && e.length > 1e5)
+                    pw(e.id, e.name + ': length exceeds 100 km. Verify m/ft units.');
+                if (fin(e.rPerM) && e.rPerM > .05)
+                    pw(e.id, e.name + ': resistance ' + (e.rPerM * 1e3).toPrecision(4) + ' Ω/km is higher than #18 AWG copper. Verify Ω/km versus Ω/m units.');
+                if (fin(e.xPerM) && e.xPerM > .002)
+                    pw(e.id, e.name + ': reactance ' + (e.xPerM * 1e3).toPrecision(4) + ' Ω/km exceeds typical cable and overhead-line data. Verify units.');
+                if (fin(e.length) && e.length > 0 && e.rPerM === 0 && e.xPerM === 0)
+                    pw(e.id, e.name + ': cable with length but zero R and X is treated as an ideal connection.');
+            }
+        }
+        for (const b of p.buses)
+            if (fin(b.voltage) && b.voltage > 8e5)
+                pw(b.id, b.name + ': nominal voltage above 800 kV. Verify V versus kV units.');
+    })();
     return issues;
 }
 function sourceImpedance(s, settings) { if (settings.faultType === 'single-ll')
@@ -5733,16 +7059,17 @@ function sourceImpedance(s, settings) { if (settings.faultType === 'single-ll')
 } const mag = s.method === 'mva' ? voltage ** 2 / (s.faultMVA * 1e6) : voltage / (Math.sqrt(3) * s.faultA); return zFromMagnitude(mag, s.xr); }
 function enabledInCase(s, p) { return s.enabled !== false && (p.settings.scenario !== 'maximum' || s.maxInclude !== false) && (p.settings.scenario !== 'minimum' || s.minInclude !== false); }
 function strength(s, p) { const value = p.settings.scenario === 'maximum' ? s.maxStrength : p.settings.scenario === 'minimum' ? s.minStrength : 1; return value === null || value === undefined || value === '' ? 1 : value; }
-function buildNetwork(p) {
-    if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(p)) {
-        const calculation = (0, analysis_models_mjs_v_20261022_pv_final_1.calculateExtendedProject)(p);
+function buildNetwork(p, options = {}) {
+    if ((0, analysis_models_mjs_v_20261108_v32_1.isExtendedStudy)(p)) {
+        const calculation = (0, analysis_models_mjs_v_20261108_v32_1.calculateExtendedProject)(p);
         return { ...calculation.net, issues: calculation.issues, extensionResults: calculation.results };
     }
     const issues = validateProject(p), errors = issues.filter(x => x.severity === 'error');
     if (errors.length)
         return { issues, errors };
-    const base = p.settings.baseMVA || 1, singlePhase = (0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(p), buses = p.buses, at = new Map(buses.map((b, i) => [b.id, i])), Y = buses.map(() => buses.map(() => (0, exports.C)())), adj = buses.map(() => []), branches = [];
-    const stamp = (i, j, y, tap = (0, exports.C)(1)) => { const tc = (0, exports.conj)(tap); Y[i][i] = (0, exports.add)(Y[i][i], (0, exports.scale)(y, 1 / ((0, exports.abs)(tap) ** 2))); Y[i][j] = (0, exports.sub)(Y[i][j], (0, exports.div)(y, tc)); Y[j][i] = (0, exports.sub)(Y[j][i], (0, exports.div)(y, tap)); Y[j][j] = (0, exports.add)(Y[j][j], y); };
+    const base = p.settings.baseMVA || 1, singlePhase = (0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(p), buses = p.buses, sparse = options.sparse ?? (buses.length > exports.SPARSE_MIN_BUSES || buses.length * Math.max(1, p.branches.length) * Math.max(1, p.sources.length) > exports.COMPACT_WORK), at = new Map(buses.map((b, i) => [b.id, i])), Y = sparse ? buses.map(() => new Map()) : buses.map(() => buses.map(() => (0, exports.C)())), adj = buses.map(() => []), branches = [];
+    const yget = sparse ? (i, j) => Y[i].get(j) ?? (0, exports.C)() : (i, j) => Y[i][j], yset = sparse ? (i, j, v) => { Y[i].set(j, v); } : (i, j, v) => { Y[i][j] = v; };
+    const stamp = (i, j, y, tap = (0, exports.C)(1)) => { const tc = (0, exports.conj)(tap); yset(i, i, (0, exports.add)(yget(i, i), (0, exports.scale)(y, 1 / ((0, exports.abs)(tap) ** 2)))); yset(i, j, (0, exports.sub)(yget(i, j), (0, exports.div)(y, tc))); yset(j, i, (0, exports.sub)(yget(j, i), (0, exports.div)(y, tap))); yset(j, j, (0, exports.add)(yget(j, j), y)); };
     for (const e of p.branches) {
         if (!(0, network_model_mjs_v_20261022_pv_final_1.isBranchEnabled)(e, p))
             continue;
@@ -5752,7 +7079,7 @@ function buildNetwork(p) {
         let ohms, tap = (0, exports.C)(1);
         if (e.kind === 'transformer') {
             ohms = zFromMagnitude(e.v2 ** 2 / e.power * (e.zPercent / 100), e.xr);
-            tap = (0, exports.polar)((e.v1 / e.v2) / (buses[i].voltage / buses[j].voltage), e.shift || 0);
+            tap = (0, exports.polar)((e.v1 * (1 + (e.tapPercent || 0) / 100) / e.v2) / (buses[i].voltage / buses[j].voltage), e.shift || 0);
         }
         else
             ohms = e.kind === 'cable' ? (0, exports.C)(e.rPerM * e.length / e.runs * (singlePhase ? (0, single_phase_mjs_v_20261022_pv_final_1.cableLoopFactor)(e) : 1), e.xPerM * e.length / e.runs * (singlePhase ? (0, single_phase_mjs_v_20261022_pv_final_1.cableLoopFactor)(e) : 1)) : (0, exports.C)();
@@ -5782,12 +7109,12 @@ function buildNetwork(p) {
         }
         else {
             const impedance = (0, exports.scale)(sourceImpedance(s, p.settings), 1 / factor), zpu = (0, exports.scale)(impedance, 1 / (0, exports.baseZ)(buses[i].voltage, base)), y = (0, exports.div)((0, exports.C)(1), zpu);
-            Y[i][i] = (0, exports.add)(Y[i][i], y);
+            yset(i, i, (0, exports.add)(yget(i, i), y));
             const emf = (0, exports.polar)(p.settings.voltageFactor || 1, s.angle ?? 0);
             sources.push({ ...s, i, current: false, injection: (0, exports.mul)(y, emf), impedance, zpu, y, emf });
         }
     }
-    return { issues, errors: [], base, buses, at, Y, adj, branches, sources, ...(singlePhase ? { singlePhase: true } : {}) };
+    return { issues, errors: [], base, buses, at, Y, adj, branches, sources, ...(singlePhase ? { singlePhase: true } : {}), ...(sparse ? { sparse: true } : {}) };
 }
 function component(net, index) { const set = new Set([index]), queue = [index]; for (let n = 0; n < queue.length; n++)
     for (const j of net.adj[queue[n]])
@@ -5862,6 +7189,8 @@ function calculateBus(net, p, busId) {
     const f = net.at.get(busId);
     if (f === undefined)
         return { busId, status: 'MISSING BUS', totalA: null };
+    if (net.sparse)
+        return calculateScaled(net, p, { only: busId }).results[f];
     const comp = component(net, f), sources = net.sources.filter(s => comp.includes(s.i)), bus = net.buses[f];
     if (!sources.length)
         return { busId, busName: bus.name, voltage: bus.voltage, status: 'DISCONNECTED / NO ACTIVE SOURCE', totalA: null, issues: net.issues };
@@ -5962,8 +7291,15 @@ function calculateBus(net, p, busId) {
         return { busId, busName: bus.name, voltage: bus.voltage, status: 'NETWORK ERROR', totalA: null, faultNote: e.message, issues: net.issues };
     }
 }
-function calculateProject(p) { if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(p))
-    return (0, analysis_models_mjs_v_20261022_pv_final_1.calculateExtendedProject)(p); const net = buildNetwork(p), results = p.buses.map(b => calculateBus(net, p, b.id)); return { issues: net.issues, results, net }; }
+function calculateProject(p) { if ((0, analysis_models_mjs_v_20261108_v32_1.isExtendedStudy)(p))
+    return (0, analysis_models_mjs_v_20261108_v32_1.calculateExtendedProject)(p); const net = buildNetwork(p); if (net.sparse && !net.errors?.length && !net.extensionResults)
+    return { issues: net.issues, results: calculateScaled(net, p).results, net }; const results = p.buses.map(b => calculateBus(net, p, b.id)); return { issues: net.issues, results, net }; }
+// Detail for one bus of a large network (compact sweep keeps reduced branch tables for the other buses).
+function calculateBusDetail(p, busId) { if (p?.settings?.faultType === 'dc')
+    return (0, dc_network_mjs_v_20261108_v32_1.calculateDcBusDetail)(p, busId); if ((0, analysis_models_mjs_v_20261108_v32_1.usesConnectedSequences)(p))
+    return (0, connected_sequences_mjs_v_20261108_v32_1.calculateConnectedBusDetail)(p, busId); if ((0, split_phase_network_mjs_v_20261108_v32_1.isSplitPhaseFault)(p))
+    return (0, split_phase_network_mjs_v_20261108_v32_1.calculateSplitPhaseBusDetail)((0, analysis_models_mjs_v_20261108_v32_1.prepareSplitPhaseProject)(p), busId); if ((0, analysis_models_mjs_v_20261108_v32_1.isExtendedStudy)(p))
+    return null; const net = buildNetwork(p); return calculateBus(net, p, busId); }
 function deviceDuty(d, result, p, results = []) {
     if (p?.settings?.faultType === 'dc')
         return { status: 'REVIEW REQUIRED — DC RATING / INTERRUPTING MODEL', classification: 'REVIEW REQUIRED', checks: [], sccrDutyA: null, interruptDutyA: null, interruptBusId: null, basis: 'AC equipment ratings are not applied to DC prospective current. Documented DC rating, voltage, polarity and circuit time constant require separate review.' };
@@ -5991,7 +7327,7 @@ function deviceDuty(d, result, p, results = []) {
         interruptBound = false;
     }
     if (linked && (0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(p)) {
-        const flows = candidates.flatMap(r => r.totalA !== null ? (r.branchFlows || []).filter(e => e.id === link.id).map(e => ({ r, e })) : []);
+        const flows = linkFlows(candidates, link.id);
         if (flows.length) {
             const worst = flows.reduce((a, b) => b.e.toA > a.e.toA ? b : a);
             interruptDutyA = worst.e.toA;
@@ -6029,7 +7365,530 @@ function deviceDuty(d, result, p, results = []) {
         return { status: 'REVIEW REQUIRED — PEAK DATA', classification: 'REVIEW REQUIRED', ...extra, marginA };
     return { status: 'PASS — ENTERED RMS RATING', classification: 'PASS', ...extra, marginA };
 }
-
+// ===================== V31 large-network path =====================
+// Same superposition equations as the dense path above: one factorization of the component admittance
+// matrix, prefault vectors per source, and one impedance column per faulted bus. The matrix is held
+// sparse and factorized with minimum-degree ordering, so cost grows with the number of connections rather
+// than with the cube of the bus count. Networks at or below SPARSE_MIN_BUSES keep the dense path unchanged.
+exports.SPARSE_MIN_BUSES = 150, exports.COMPACT_WORK = 4e5;
+const rangeError = () => Error('Calculation exceeds numerical range. Check input values and units.');
+const flowIndex = new WeakMap();
+function linkFlows(results, id) { let index = flowIndex.get(results); if (!index) {
+    index = new Map();
+    for (const r of results) {
+        if (!r || r.totalA === null)
+            continue;
+        for (const e of r.branchFlows || []) {
+            let list = index.get(e.id);
+            if (!list)
+                index.set(e.id, list = []);
+            list.push({ r, e });
+        }
+    }
+    flowIndex.set(results, index);
+} return index.get(id) || []; }
+function cdiv(ar, ai, br, bi) { const m = Math.max(Math.abs(br), Math.abs(bi)); if (!(m > 0))
+    throw Error('Zero impedance / singular system'); const r = br / m, i = bi / m, d = r * r + i * i; return [((ar / m) * r + (ai / m) * i) / d, ((ai / m) * r - (ar / m) * i) / d]; }
+// rows: array of Map(localColumn -> complex). Consumed by the factorization.
+function sparseFactor(rows) {
+    const n = rows.length, elim = new Uint8Array(n), order = new Int32Array(n), Lp = [0], Li = [], Lr = [], Lm = [], Up = [0], Uj = [], Ur = [], Um = [], dr = new Float64Array(n), dm = new Float64Array(n), heap = [];
+    for (const row of rows)
+        for (const v of row.values())
+            if (!finiteComplex(v))
+                throw rangeError();
+    const less = (a, b) => a[0] < b[0] || (a[0] === b[0] && a[1] < b[1]), deg = k => rows[k].size - (rows[k].has(k) ? 1 : 0);
+    const push = (d, k) => { heap.push([d, k]); let c = heap.length - 1; while (c > 0) {
+        const q = (c - 1) >> 1;
+        if (!less(heap[c], heap[q]))
+            break;
+        [heap[c], heap[q]] = [heap[q], heap[c]];
+        c = q;
+    } };
+    const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) {
+        heap[0] = last;
+        let c = 0;
+        for (;;) {
+            const l = 2 * c + 1, r = l + 1;
+            let s = c;
+            if (l < heap.length && less(heap[l], heap[s]))
+                s = l;
+            if (r < heap.length && less(heap[r], heap[s]))
+                s = r;
+            if (s === c)
+                break;
+            [heap[c], heap[s]] = [heap[s], heap[c]];
+            c = s;
+        }
+    } return top; };
+    for (let k = 0; k < n; k++)
+        push(deg(k), k);
+    let t = 0;
+    while (t < n) {
+        const [d, k] = pop();
+        if (elim[k] || d !== deg(k))
+            continue;
+        const row = rows[k], piv = row.get(k) || (0, exports.C)();
+        if ((0, exports.abs)(piv) < 1e-12)
+            throw Error('Disconnected or floating network — no solvable path to the fault');
+        const urow = [];
+        for (const [j, v] of row)
+            if (j !== k)
+                urow.push([j, v]);
+        for (const [i] of urow) {
+            const ri = rows[i], aik = ri.get(k);
+            ri.delete(k);
+            const l = aik ? (0, exports.div)(aik, piv) : (0, exports.C)();
+            Li.push(i);
+            Lr.push(l.r);
+            Lm.push(l.i);
+            if (l.r === 0 && l.i === 0)
+                continue;
+            for (const [j, u] of urow) {
+                const prod = (0, exports.mul)(l, u), cur = ri.get(j);
+                ri.set(j, cur ? (0, exports.sub)(cur, prod) : (0, exports.C)(-prod.r, -prod.i));
+            }
+        }
+        for (const [j, v] of urow) {
+            Uj.push(j);
+            Ur.push(v.r);
+            Um.push(v.i);
+        }
+        Lp.push(Li.length);
+        Up.push(Uj.length);
+        dr[k] = piv.r;
+        dm[k] = piv.i;
+        elim[k] = 1;
+        order[t++] = k;
+        rows[k] = null;
+        for (const [i] of urow)
+            push(deg(i), i);
+    }
+    return { n, order, Lp: Int32Array.from(Lp), Li: Int32Array.from(Li), Lr: Float64Array.from(Lr), Lm: Float64Array.from(Lm), Up: Int32Array.from(Up), Uj: Int32Array.from(Uj), Ur: Float64Array.from(Ur), Um: Float64Array.from(Um), dr, dm };
+}
+function sparseSolve(F, br, bi) {
+    const { n, order, Lp, Li, Lr, Lm, Up, Uj, Ur, Um, dr, dm } = F, xr = Float64Array.from(br), xi = Float64Array.from(bi);
+    for (let t = 0; t < n; t++) {
+        const k = order[t], ar = xr[k], ai = xi[k];
+        if (ar === 0 && ai === 0)
+            continue;
+        for (let q = Lp[t]; q < Lp[t + 1]; q++) {
+            const i = Li[q], lr = Lr[q], li = Lm[q];
+            xr[i] -= lr * ar - li * ai;
+            xi[i] -= lr * ai + li * ar;
+        }
+    }
+    for (let t = n - 1; t >= 0; t--) {
+        const k = order[t];
+        let vr = xr[k], vi = xi[k];
+        for (let q = Up[t]; q < Up[t + 1]; q++) {
+            const j = Uj[q], ur = Ur[q], ui = Um[q];
+            vr -= ur * xr[j] - ui * xi[j];
+            vi -= ur * xi[j] + ui * xr[j];
+        }
+        const z = cdiv(vr, vi, dr[k], dm[k]);
+        xr[k] = z[0];
+        xi[k] = z[1];
+    }
+    for (let k = 0; k < n; k++)
+        if (!Number.isFinite(xr[k]) || !Number.isFinite(xi[k]))
+            throw rangeError();
+    return [xr, xi];
+}
+function localRows(net, list, loc, extra) { return list.map(g => { const out = new Map(); for (const [j, v] of net.Y[g]) {
+    const k = loc[j];
+    if (k >= 0)
+        out.set(k, (0, exports.C)(v.r, v.i));
+} const e = extra?.get(g); if (e) {
+    const k = loc[g];
+    out.set(k, (0, exports.add)(out.get(k) || (0, exports.C)(), e));
+} return out; }); }
+function residualCheck(net, list, loc, x, b) { let worst = 0; for (let a = 0; a < list.length; a++) {
+    let r = -b[0][a], i = -b[1][a], scaleSum = Math.hypot(b[0][a], b[1][a]);
+    for (const [j, v] of net.Y[list[a]]) {
+        const k = loc[j];
+        if (k < 0)
+            continue;
+        const pr = v.r * x[0][k] - v.i * x[1][k], pi = v.r * x[1][k] + v.i * x[0][k];
+        r += pr;
+        i += pi;
+        scaleSum += Math.hypot(pr, pi);
+    }
+    if (scaleSum > 0)
+        worst = Math.max(worst, Math.hypot(r, i) / scaleSum);
+} if (!(worst <= 1e-9))
+    throw Error('Large-network solver accuracy check failed (relative residual ' + worst.toExponential(2) + '). Check for extreme impedance ratios or floating sections.'); }
+function calculateScaled(net, p, { only = null, compact: forceCompact } = {}) {
+    net.project = p;
+    const n = net.buses.length, branches = net.branches, hbc = (0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(p), selected = only ?? p.selectedBus;
+    const badj = Array.from({ length: n }, () => []);
+    branches.forEach((e, k) => { badj[e.i].push(k); if (e.j !== e.i)
+        badj[e.j].push(k); });
+    const compId = new Int32Array(n).fill(-1), comps = [];
+    for (let s = 0; s < n; s++) {
+        if (compId[s] >= 0)
+            continue;
+        const id = comps.length, q = [s];
+        compId[s] = id;
+        for (let h = 0; h < q.length; h++)
+            for (const j of net.adj[q[h]])
+                if (compId[j] < 0) {
+                    compId[j] = id;
+                    q.push(j);
+                }
+        q.sort((a, b) => a - b);
+        comps.push({ list: q });
+    }
+    for (const c of comps) {
+        c.sources = [];
+        c.branches = [];
+    }
+    for (const s of net.sources)
+        comps[compId[s.i]].sources.push(s);
+    branches.forEach((e, k) => comps[compId[e.i]].branches.push(k));
+    const work = n * Math.max(1, branches.length) * Math.max(1, net.sources.length), compact = forceCompact ?? work > exports.COMPACT_WORK;
+    const pathEntry = branches.map(e => ({ id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, ohms: e.ohms, atVoltage: net.buses[e.j].voltage }));
+    const trees = new Map();
+    const tree = root => { let t = trees.get(root); if (t)
+        return t; const parent = new Int32Array(n).fill(-2), via = new Int32Array(n).fill(-1), q = [root]; parent[root] = -1; for (let h = 0; h < q.length; h++) {
+        const u = q[h];
+        for (const k of badj[u]) {
+            const e = branches[k], j = e.i === u ? e.j : e.i;
+            if (parent[j] === -2) {
+                parent[j] = u;
+                via[j] = k;
+                q.push(j);
+            }
+        }
+    } t = { parent, via }; trees.set(root, t); return t; };
+    const pathOf = (src, f) => { const { parent, via } = tree(src.i); if (parent[f] === -2)
+        return []; const out = []; for (let cur = f; cur !== src.i; cur = parent[cur])
+        out.push(via[cur]); return out.reverse(); };
+    const coef = branches.map(e => ({ c: (0, exports.div)(e.y, (0, exports.conj)(e.tap)), inv: (0, exports.div)((0, exports.C)(1), e.tap) }));
+    const branchConstants = c => { if (c.K)
+        return c.K; const mb = c.branches.length, K = { mb, cr: new Float64Array(mb), ci: new Float64Array(mb), yr: new Float64Array(mb), yi: new Float64Array(mb), ca: new Float64Array(mb), ya: new Float64Array(mb) }; c.branches.forEach((k, q) => { const e = branches[k], cc = coef[k].c, bi = networkBaseI(net, net.buses[e.i].voltage), bj = networkBaseI(net, net.buses[e.j].voltage); K.cr[q] = cc.r * bi; K.ci[q] = cc.i * bi; K.yr[q] = -e.y.r * bj; K.yi[q] = -e.y.i * bj; K.ca[q] = (0, exports.abs)(cc) * bi; K.ya[q] = (0, exports.abs)(e.y) * bj; }); c.K = K; c.env = { toVal: new Float64Array(mb), toRow: new Array(mb).fill(null), toF: new Int32Array(mb), maxVal: new Float64Array(mb), maxRow: new Array(mb).fill(null), maxF: new Int32Array(mb) }; return K; };
+    const prepare = c => {
+        if (c.prep !== undefined)
+            return c.prep;
+        try {
+            const loc = new Int32Array(n).fill(-1);
+            c.list.forEach((g, k) => loc[g] = k);
+            c.loc = loc;
+            c.meshed = c.branches.length >= c.list.length;
+            c.xrKnown = c.sources.filter(s => !s.current).every(s => s.method === 'impedance' || number(s.xr)) && c.branches.every(k => branches[k].kind !== 'transformer' || number(branches[k].xr));
+            if (!c.sources.some(s => !s.current)) {
+                c.prep = null;
+                return null;
+            }
+            const F = sparseFactor(localRows(net, c.list, loc)), N = c.list.length, P = new Map();
+            for (const s of c.sources) {
+                if (P.has(s.id))
+                    continue;
+                const b = [new Float64Array(N), new Float64Array(N)];
+                b[0][loc[s.i]] = s.injection.r;
+                b[1][loc[s.i]] = s.injection.i;
+                const x = sparseSolve(F, b[0], b[1]);
+                residualCheck(net, c.list, loc, x, b);
+                P.set(s.id, x);
+            }
+            const dP = new Map();
+            for (const s of c.sources) {
+                const [pr, pi] = P.get(s.id), d = new Float64Array(2 * c.branches.length);
+                c.branches.forEach((k, q) => { const e = branches[k], a = loc[e.i], b = loc[e.j], v = coef[k].inv; d[2 * q] = pr[a] * v.r - pi[a] * v.i - pr[b]; d[2 * q + 1] = pr[a] * v.i + pi[a] * v.r - pi[b]; });
+                dP.set(s.id, d);
+            }
+            const m2 = 2 * c.branches.length, dPk = new Float64Array(m2);
+            for (const s of c.sources)
+                if (!(s.current && s.unknownAngle)) {
+                    const d = dP.get(s.id);
+                    for (let q = 0; q < m2; q++)
+                        dPk[q] += d[q];
+                }
+            const us = c.sources.filter(s => s.current && s.unknownAngle), U = us.length, mb = c.branches.length, dPU = new Float64Array(2 * U * mb);
+            us.forEach((s, h) => { const d = dP.get(s.id); for (let q = 0; q < mb; q++) {
+                dPU[2 * (q * U + h)] = d[2 * q];
+                dPU[2 * (q * U + h) + 1] = d[2 * q + 1];
+            } });
+            c.prep = { F, P, dP, dPk, dPU };
+            return c.prep;
+        }
+        catch (error) {
+            c.prep = { error };
+            return c.prep;
+        }
+    };
+    const results = new Array(n);
+    const targets = only === null ? net.buses.map((_, k) => k) : [net.at.get(only)];
+    for (const f of targets) {
+        const bus = net.buses[f], c = comps[compId[f]], srcs = c.sources;
+        if (!srcs.length) {
+            results[f] = { busId: bus.id, busName: bus.name, voltage: bus.voltage, status: 'DISCONNECTED / NO ACTIVE SOURCE', totalA: null, issues: net.issues };
+            continue;
+        }
+        try {
+            const prep = prepare(c);
+            if (prep?.error)
+                throw prep.error;
+            const loc = c.loc, N = c.list.length, lf = loc[f], zf = (0, exports.C)(p.settings.faultR || 0, p.settings.faultX || 0), faultZpu = (0, exports.scale)(zf, 1 / (0, exports.baseZ)(bus.voltage, net.base)), busI = networkBaseI(net, bus.voltage);
+            const per = [];
+            let zth = null, Zf = null;
+            if (prep) {
+                const b = [new Float64Array(N), new Float64Array(N)];
+                b[0][lf] = 1;
+                Zf = sparseSolve(prep.F, b[0], b[1]);
+                zth = (0, exports.scale)((0, exports.C)(Zf[0][lf], Zf[1][lf]), (0, exports.baseZ)(bus.voltage, net.base));
+                for (const s of srcs) {
+                    const [pr, pi] = prep.P.get(s.id), ipu = (0, exports.div)((0, exports.C)(pr[lf], pi[lf]), (0, exports.add)((0, exports.C)(Zf[0][lf], Zf[1][lf]), faultZpu)), k = loc[s.i];
+                    per.push({ s, ipu, vAt: a => (0, exports.C)(pr[a] - (Zf[0][a] * ipu.r - Zf[1][a] * ipu.i), pi[a] - (Zf[0][a] * ipu.i + Zf[1][a] * ipu.r)), term: (0, exports.C)(pr[k] - (Zf[0][k] * ipu.r - Zf[1][k] * ipu.i), pi[k] - (Zf[0][k] * ipu.i + Zf[1][k] * ipu.r)) });
+                }
+            }
+            else {
+                const bolted = (0, exports.abs)(faultZpu) < 1e-14, unknown = c.list.filter(i => !bolted || i !== f), uloc = new Int32Array(n).fill(-1);
+                unknown.forEach((g, k) => uloc[g] = k);
+                const extra = bolted ? null : new Map([[f, (0, exports.div)((0, exports.C)(1), faultZpu)]]), F = sparseFactor(localRows(net, unknown, uloc, extra));
+                for (const s of srcs) {
+                    const b = [new Float64Array(unknown.length), new Float64Array(unknown.length)];
+                    if (uloc[s.i] >= 0) {
+                        b[0][uloc[s.i]] = s.injection.r;
+                        b[1][uloc[s.i]] = s.injection.i;
+                    }
+                    const x = sparseSolve(F, b[0], b[1]);
+                    const V = g => uloc[g] >= 0 ? (0, exports.C)(x[0][uloc[g]], x[1][uloc[g]]) : (0, exports.C)();
+                    let ipu;
+                    if (bolted) {
+                        ipu = s.i === f ? s.injection : (0, exports.C)();
+                        for (const [j, v] of net.Y[f])
+                            if (uloc[j] >= 0)
+                                ipu = (0, exports.sub)(ipu, (0, exports.mul)(v, V(j)));
+                    }
+                    else
+                        ipu = (0, exports.div)(V(f), faultZpu);
+                    per.push({ s, ipu, vAt: a => V(c.list[a]), term: V(s.i) });
+                }
+            }
+            let total = (0, exports.C)(), conventional = (0, exports.C)(), derKnown = (0, exports.C)(), derBound = 0;
+            const details = [];
+            const full = !compact || f === net.at.get(selected);
+            for (const { s, ipu, vAt, term } of per) {
+                const amps = (0, exports.scale)(ipu, busI);
+                total = (0, exports.add)(total, amps);
+                if (s.current) {
+                    if (s.unknownAngle)
+                        derBound += (0, exports.abs)(amps);
+                    else
+                        derKnown = (0, exports.add)(derKnown, amps);
+                }
+                else
+                    conventional = (0, exports.add)(conventional, amps);
+                const pathIdx = pathOf(s, f), busPhaseScale = s.voltage / bus.voltage;
+                let pathSeriesZ = s.impedance ? (0, exports.scale)(s.impedance, busPhaseScale ** -2) : (0, exports.C)();
+                for (const k of pathIdx) {
+                    const e = branches[k];
+                    pathSeriesZ = (0, exports.add)(pathSeriesZ, (0, exports.scale)(e.ohms, (bus.voltage / net.buses[e.j].voltage) ** 2));
+                }
+                let flows = [];
+                if (hbc && full) {
+                    const list = compact ? pathIdx : c.branches;
+                    flows = list.map(k => { const e = branches[k], vi = vAt(loc[e.i]), vj = vAt(loc[e.j]), drop = (0, exports.sub)((0, exports.div)(vi, e.tap), vj), fromPhasor = (0, exports.scale)((0, exports.mul)(coef[k].c, drop), networkBaseI(net, net.buses[e.i].voltage)), toPhasor = (0, exports.scale)((0, exports.mul)(e.y, drop), -networkBaseI(net, net.buses[e.j].voltage)); return { id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, amps: (0, exports.abs)(fromPhasor), toAmps: (0, exports.abs)(toPhasor), fromPhasor, toPhasor }; });
+                }
+                details.push({ sourceId: s.id, name: s.name, kind: s.kind, current: s.current, expired: s.expired, unknownAngle: s.unknownAngle, amps: (0, exports.abs)(amps), phasor: amps, sourceImpedance: s.impedance, pathSeriesZ, sourceImpedanceAtFault: s.impedance ? (0, exports.scale)(s.impedance, busPhaseScale ** -2) : null, terminalA: s.current ? s.amps : (0, exports.abs)(s.injection) * networkBaseI(net, s.voltage), path: full ? pathIdx.map(k => pathEntry[k]) : [], meshed: c.meshed, branchFlows: flows, terminalVoltagePu: (0, exports.abs)(term), _path: pathIdx });
+            }
+            let branchFlows = [];
+            if (hbc) {
+                if (!compact)
+                    branchFlows = (0, network_flow_mjs_v_20261022_pv_final_1.combineBranchFlows)(details);
+                else {
+                    const keep = new Set(full ? c.branches : badj[f]);
+                    if (!full) {
+                        const count = new Map(), dist = new Map();
+                        let near = Infinity;
+                        for (const d of details) {
+                            const L = d._path.length;
+                            d._path.forEach((k, x) => { if (!branches[k].deviceId)
+                                return; count.set(k, (count.get(k) || 0) + 1); const g = L - 1 - x; if (!(dist.get(k) <= g))
+                                dist.set(k, g); near = Math.min(near, g); });
+                        }
+                        for (const [k, g] of dist)
+                            if (g <= near + 2 || count.get(k) === details.length)
+                                keep.add(k);
+                    }
+                    const dZ = new Float64Array(2 * c.branches.length);
+                    c.branches.forEach((k, q) => { const e = branches[k], a = loc[e.i], b = loc[e.j], v = coef[k].inv; if (Zf) {
+                        dZ[2 * q] = Zf[0][a] * v.r - Zf[1][a] * v.i - Zf[0][b];
+                        dZ[2 * q + 1] = Zf[0][a] * v.i + Zf[1][a] * v.r - Zf[1][b];
+                    } });
+                    const rows = [], known = per.filter(x => !(x.s.current && x.s.unknownAngle)), unknownSrc = per.filter(x => x.s.current && x.s.unknownAngle), U = unknownSrc.length, uR = new Float64Array(U), uI = new Float64Array(U);
+                    let kR = 0, kI = 0;
+                    for (const x of known) {
+                        kR += x.ipu.r;
+                        kI += x.ipu.i;
+                    }
+                    unknownSrc.forEach((x, h) => { uR[h] = x.ipu.r; uI[h] = x.ipu.i; });
+                    const K = prep?.K || branchConstants(c);
+                    for (let q = 0; q < K.mb; q++) {
+                        const k = c.branches[q], q2 = 2 * q, zr = dZ[q2], zi = dZ[q2 + 1];
+                        let xr = 0, xi = 0, su = 0;
+                        if (prep) {
+                            xr = prep.dPk[q2] - (zr * kR - zi * kI);
+                            xi = prep.dPk[q2 + 1] - (zr * kI + zi * kR);
+                            const D = prep.dPU, o = 2 * q * U;
+                            for (let h = 0; h < U; h++) {
+                                const ir = uR[h], ii = uI[h], ar = D[o + 2 * h] - (zr * ir - zi * ii), ai = D[o + 2 * h + 1] - (zr * ii + zi * ir);
+                                su += Math.sqrt(ar * ar + ai * ai);
+                            }
+                        }
+                        else {
+                            const e = branches[k], dropOf = x => (0, exports.sub)((0, exports.div)(x.vAt(loc[e.i]), e.tap), x.vAt(loc[e.j]));
+                            for (const x of known) {
+                                const d = dropOf(x);
+                                xr += d.r;
+                                xi += d.i;
+                            }
+                            for (const x of unknownSrc)
+                                su += (0, exports.abs)(dropOf(x));
+                        }
+                        const fr = K.cr[q] * xr - K.ci[q] * xi, fi = K.cr[q] * xi + K.ci[q] * xr, tr = K.yr[q] * xr - K.yi[q] * xi, ti = K.yr[q] * xi + K.yi[q] * xr, fb = K.ca[q] * su, tb = K.ya[q] * su;
+                        const fromA = Math.sqrt(fr * fr + fi * fi) + fb, toA = Math.sqrt(tr * tr + ti * ti) + tb;
+                        if (!Number.isFinite(fromA) || !Number.isFinite(toA))
+                            throw Error('Branch current exceeds numerical range. Check input values and units.');
+                        let row = null;
+                        const make = () => { if (!row) {
+                            const e = branches[k];
+                            row = { id: e.id, name: e.name, kind: e.kind, from: e.from, to: e.to, fromPhasor: { r: fr, i: fi }, toPhasor: { r: tr, i: ti }, fromBoundA: fb, toBoundA: tb, fromA, toA, bound: fb > 0 || tb > 0, _k: k };
+                        } return row; };
+                        if (keep.has(k))
+                            rows.push(make());
+                        if (only === null) {
+                            const E = c.env;
+                            const mx = fromA > toA ? fromA : toA;
+                            if (E.toRow[q] === null || toA > E.toVal[q]) {
+                                E.toVal[q] = toA;
+                                E.toRow[q] = make();
+                                E.toF[q] = f;
+                            }
+                            if (E.maxRow[q] === null || mx > E.maxVal[q]) {
+                                E.maxVal[q] = mx;
+                                E.maxRow[q] = make();
+                                E.maxF[q] = f;
+                            }
+                        }
+                    }
+                    branchFlows = rows;
+                }
+            }
+            for (const d of details)
+                delete d._path;
+            results[f] = finishScaled(net, p, f, bus, srcs, details, total, conventional, derKnown, derBound, zth, c.xrKnown, branchFlows, { compact, full });
+        }
+        catch (e) {
+            results[f] = { busId: bus.id, busName: bus.name, voltage: bus.voltage, status: 'NETWORK ERROR', totalA: null, faultNote: e.message, issues: net.issues };
+        }
+    }
+    if (compact) {
+        const extra = new Map();
+        for (const c of comps) {
+            if (!c.env)
+                continue;
+            const E = c.env;
+            for (let q = 0; q < c.branches.length; q++)
+                for (const w of [{ f: E.toF[q], row: E.toRow[q] }, { f: E.maxF[q], row: E.maxRow[q] }]) {
+                    if (!w.row)
+                        continue;
+                    const r = results[w.f];
+                    if (!r || r.totalA === null || !Array.isArray(r.branchFlows))
+                        continue;
+                    if (!r.branchFlows.includes(w.row)) {
+                        let set = extra.get(w.f);
+                        if (!set)
+                            extra.set(w.f, set = new Set());
+                        set.add(w.row);
+                    }
+                }
+        }
+        for (const [f, set] of extra) {
+            const r = results[f];
+            r.branchFlows = [...r.branchFlows, ...set].sort((a, b) => a._k - b._k);
+        }
+        for (const r of results)
+            for (const e of r?.branchFlows || [])
+                delete e._k;
+    }
+    else
+        for (const r of results)
+            for (const e of r?.branchFlows || [])
+                delete e._k;
+    return { results };
+}
+function finishScaled(net, p, f, bus, sources, details, total, conventional, derKnown, derBound, zth, xrKnownAll, branchFlows, { compact, full }) {
+    let totalA = (0, exports.abs)((0, exports.add)(conventional, derKnown)) + derBound, bound = derBound > 0;
+    const xrKnown = xrKnownAll;
+    const zDuty = zth ? (0, exports.add)(zth, (0, exports.C)(p.settings.faultR || 0, p.settings.faultX || 0)) : null;
+    const xr = zDuty && zDuty.r >= 0 ? (zDuty.r === 0 ? Infinity : zDuty.i / zDuty.r) : null;
+    let peak = null, asym = null;
+    const srcOf = new Map(net.sources.map(s => [s.id, s]));
+    if (xrKnown && zth && xr !== null) {
+        const convPeak = Math.sqrt(2) * (1.02 + .98 * (xr === Infinity ? 1 : Math.exp(-3 / Math.max(xr, 1e-8)))) * (0, exports.abs)(conventional);
+        const currentDetails = details.filter(d => d.current && !d.expired), allPeak = currentDetails.every(d => srcOf.get(d.sourceId).peakA > 0);
+        if (allPeak)
+            peak = convPeak + currentDetails.reduce((sum, d) => { const s = srcOf.get(d.sourceId); return sum + s.peakA * s.strengthFactor * (s.amps > 0 ? d.amps / s.amps : 0); }, 0);
+        if (!currentDetails.length) {
+            const tau = xr / (2 * Math.PI * p.settings.frequency);
+            asym = Math.hypot(totalA, Math.sqrt(2) * (0, exports.abs)(conventional) * (xr === 0 ? 0 : xr === Infinity ? 1 : Math.exp(-p.settings.time / Math.max(tau, 1e-12))));
+        }
+    }
+    if (!sources.some(s => !s.current)) {
+        const active = details.filter(d => d.current && !d.expired && d.amps > 0);
+        if (active.every(d => srcOf.get(d.sourceId).peakA > 0))
+            peak = active.reduce((sum, d) => { const s = srcOf.get(d.sourceId); return sum + s.peakA * s.strengthFactor * (s.amps > 0 ? d.amps / s.amps : 0); }, 0);
+    }
+    let faultNote = null, sequence = null, dlgResult = null;
+    if (!(0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(p)) {
+        if (details.some(d => d.current && !d.expired)) {
+            totalA = null;
+            faultNote = 'Unbalanced inverter fault data is missing. Supply manufacturer positive/negative/zero-sequence control behavior.';
+        }
+        else if (!zth) {
+            totalA = null;
+            faultNote = 'No conventional Thevenin sequence model is available.';
+        }
+        else {
+            const seq = bus.sequence || {}, z2 = number(seq.r2) && seq.r2 >= 0 && number(seq.x2) && seq.x2 >= 0 && (0, exports.abs)((0, exports.C)(seq.r2, seq.x2)) > 0 ? (0, exports.C)(seq.r2, seq.x2) : ((p.settings.faultType === 'dlg' ? p.settings.assumeZ2 === true : p.settings.assumeZ2) ? zth : null), zf = (0, exports.C)(p.settings.faultR || 0, p.settings.faultX || 0), vth = (0, exports.mul)(conventional, (0, exports.add)(zth, zf));
+            sequence = { z1: zth, z2, z0: null, faultZ: zf, referenceVoltage: vth };
+            if (!z2) {
+                totalA = null;
+                faultNote = 'Enter equivalent negative-sequence R2 and X2 at this bus, or explicitly select Z2 = Z1 screening.';
+            }
+            else if (p.settings.faultType === 'll')
+                totalA = (0, exports.abs)((0, exports.div)((0, exports.scale)(vth, Math.sqrt(3)), (0, exports.add)((0, exports.add)(zth, z2), zf)));
+            else if (number(seq.r0) && seq.r0 >= 0 && number(seq.x0) && seq.x0 >= 0 && (0, exports.abs)((0, exports.C)(seq.r0, seq.x0)) > 0) {
+                sequence.z0 = (0, exports.C)(seq.r0, seq.x0);
+                if (p.settings.faultType === 'dlg') {
+                    dlgResult = (0, dlg_fault_mjs_v_20261022_pv_final_1.calculateDlg)(sequence);
+                    totalA = dlgResult.totalA;
+                }
+                else
+                    totalA = (0, exports.abs)((0, exports.div)((0, exports.scale)(vth, 3), (0, exports.add)((0, exports.add)((0, exports.add)(zth, z2), sequence.z0), (0, exports.scale)(zf, 3))));
+            }
+            else {
+                totalA = null;
+                faultNote = (p.settings.faultType === 'dlg' ? 'DLG' : 'SLG') + ' requires equivalent R0 and X0 at this bus, including transformer grounding paths and neutral impedance. No ground-fault value is invented.';
+            }
+        }
+        peak = null;
+        asym = null;
+        bound = false;
+    }
+    if ((0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(p)) {
+        peak = null;
+        asym = null;
+        faultNote = single_phase_mjs_v_20261022_pv_final_1.singlePhaseScope;
+    }
+    if (branchFlows.some(e => !Number.isFinite(e.fromA) || !Number.isFinite(e.toA) || !finiteComplex(e.fromPhasor) || !finiteComplex(e.toPhasor)))
+        throw Error('Branch current exceeds numerical range. Check input values and units.');
+    if ((totalA !== null && (!Number.isFinite(totalA) || totalA < 0)) || [peak, asym].some(v => v !== null && (!Number.isFinite(v) || v < 0)) || !finiteComplex(conventional) || details.some(d => !Number.isFinite(d.amps) || !finiteComplex(d.phasor)) || (zth && !finiteComplex(zth)))
+        throw rangeError();
+    const hbc = (0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(p);
+    return { ...(dlgResult || {}), ...((0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(p) ? { phaseModel: 'single-phase-ll' } : {}), busId: bus.id, busName: bus.name, voltage: bus.voltage, status: totalA === null ? 'DATA REQUIRED' : bound ? 'SCREENING BOUND' : 'CALCULATED', totalA, conventionalA: hbc ? (0, exports.abs)(conventional) : null, derBound: hbc ? derBound : 0, details: hbc ? details : [], branchFlows: hbc ? branchFlows : [], sequence, zth, xr: xrKnown && hbc ? xr : null, peakA: peak, asymA: asym, faultNote, bound, issues: net.issues, groups: hbc ? details.reduce((o, d) => (o[d.kind] = (o[d.kind] || 0) + d.amps, o), {}) : {}, solver: 'sparse-lu', ...(compact ? { outputScope: 'compact', detailScope: full ? 'full' : 'summary' } : {}) };
+}
 },
 "network-flow.mjs": function(module,exports,require){
 "use strict";
@@ -6230,7 +8089,7 @@ exports.conductorSizes = [{ "_row": 2, "Conductor Size": "18 AWG", "kcmil Equiva
 exports.thermalFactors = [{ "_row": 2, "Lookup Key": "PVC <=300 mm2|Copper", "Thermal Class": "PVC <=300 mm2", "Material": "Copper", "k A√s/mm²": 115, "Max Initial Temp °C": 70, "Record ID": "KFA-000001" }, { "_row": 3, "Lookup Key": "PVC <=300 mm2|Aluminum", "Thermal Class": "PVC <=300 mm2", "Material": "Aluminum", "k A√s/mm²": 76, "Max Initial Temp °C": 70, "Record ID": "KFA-000002" }, { "_row": 4, "Lookup Key": "PVC >300 mm2|Copper", "Thermal Class": "PVC >300 mm2", "Material": "Copper", "k A√s/mm²": 103, "Max Initial Temp °C": 70, "Record ID": "KFA-000003" }, { "_row": 5, "Lookup Key": "PVC >300 mm2|Aluminum", "Thermal Class": "PVC >300 mm2", "Material": "Aluminum", "k A√s/mm²": 68, "Max Initial Temp °C": 70, "Record ID": "KFA-000004" }, { "_row": 6, "Lookup Key": "EPR/XLPE|Copper", "Thermal Class": "EPR/XLPE", "Material": "Copper", "k A√s/mm²": 143, "Max Initial Temp °C": 90, "Record ID": "KFA-000005" }, { "_row": 7, "Lookup Key": "EPR/XLPE|Aluminum", "Thermal Class": "EPR/XLPE", "Material": "Aluminum", "k A√s/mm²": 94, "Max Initial Temp °C": 90, "Record ID": "KFA-000006" }, { "_row": 8, "Lookup Key": "Rubber|Copper", "Thermal Class": "Rubber", "Material": "Copper", "k A√s/mm²": 141, "Max Initial Temp °C": 60, "Record ID": "KFA-000007" }, { "_row": 9, "Lookup Key": "Rubber|Aluminum", "Thermal Class": "Rubber", "Material": "Aluminum", "k A√s/mm²": 93, "Max Initial Temp °C": 60, "Record ID": "KFA-000008" }];
 exports.insulationClasses = [{ "_row": 2, "Insulation Class": "EPR", "Typical Family": "EPR / NL-EPR", "Thermal Class Route": "90/105°C source-dependent", "SC k-Factor Class": "EPR/XLPE", "Source Status": "SOURCE REQUIRED PER PRODUCT", "Rule": "Use exact product temperature rating.", "Record ID": "INS-000001" }, { "_row": 3, "Insulation Class": "XLPE", "Typical Family": "XLPE / TR-XLPE", "Thermal Class Route": "90/105°C source-dependent", "SC k-Factor Class": "EPR/XLPE", "Source Status": "SOURCE REQUIRED PER PRODUCT", "Rule": "Use exact product temperature rating.", "Record ID": "INS-000002" }, { "_row": 4, "Insulation Class": "PVC", "Typical Family": "PVC", "Thermal Class Route": "60/75/90°C source-dependent", "SC k-Factor Class": "PVC by size", "Source Status": "SOURCE REQUIRED PER PRODUCT", "Rule": "Use exact product temperature rating.", "Record ID": "INS-000003" }, { "_row": 5, "Insulation Class": "THHN/THWN-2", "Typical Family": "PVC/Nylon", "Thermal Class Route": "90°C dry / 75°C wet context-dependent", "SC k-Factor Class": "PVC by size", "Source Status": "SOURCE REQUIRED PER PRODUCT", "Rule": "Do not infer ampacity solely from insulation name.", "Record ID": "INS-000004" }, { "_row": 6, "Insulation Class": "Other", "Typical Family": "Project / Manufacturer Defined", "Thermal Class Route": "User/source defined", "SC k-Factor Class": "User/source defined", "Source Status": "REVIEW REQUIRED", "Rule": "No automatic thermal assumptions.", "Record ID": "INS-000005" }];
 exports.conductorMaterials = [{ "_row": 2, "Material ID": "CU_IACS", "Material": "Copper (annealed IACS basis)", "Reference Conductivity % IACS": 100, "Reference Resistivity": 17.241, "Resistivity Unit / Temp": "nΩ·m @20°C", "Density g/cm³": 8.89, "Use Rule": "Use exact manufacturer Rdc when available; this is a material reference only.", "Verification": "REFERENCE VERIFIED", "Source URL / Reference": "https://www.copper.org/publications/pub_list/pdf/7014.pdf", "Record ID": "CU_IACS" }, { "_row": 3, "Material ID": "AL_1350", "Material": "Aluminum 1350 conductor reference", "Reference Conductivity % IACS": 61, "Reference Resistivity": 17.345, "Resistivity Unit / Temp": "Ω·cmil/ft @25°C", "Temp Coeff α /°C": 0.00408, "Use Rule": "Southwire power-cable reference; exact alloy/temper/manufacturer conductor data govern.", "Verification": "REFERENCE VERIFIED", "Source URL / Reference": "https://www.southwire.com/medias/sys_master/installation-manuals/installation-manuals/hc5/hcd/8887676076062/Power-Cable-Installation-Guide-Southwire.pdf", "Record ID": "AL_1350" }];
-exports.groundingResistors = [{ "_row": 2, "NGR ID": "NGR-IGARD-FAMILY-8KV", "Description / Model": "I-Gard neutral grounding resistor family up to 8 kV L-N", "Neutral Voltage kV": 8, "Enclosure / Environment": "Indoor / outdoor options", "Temp Rise / Duty Note": "Available 120 V-8 kV L-N; 1-1000 A; continuous, extended, 60 s, 10 s duty", "Source Type": "PRIMARY MANUFACTURER", "Source Reference": "https://i-gard.com/site/assets/files/1118/c-100ea_ngr_application_guide_1.pdf", "Source Revision": "Manufacturer application guide", "Verification State": "PRIMARY_MANUFACTURER_VERIFIED", "Record Status": "CONFIGURE_TO_PROJECT", "Notes": "Family-level record; exact resistance = Vneutral / I and requires selected order data.", "Record ID": "NGR-IGARD-FAMILY-8KV" }, { "_row": 3, "NGR ID": "NGR-PGR-LRG-FAMILY", "Description / Model": "Post Glover low-resistance grounding resistor family", "Enclosure / Environment": "Indoor / outdoor; ventilated options", "Temp Rise / Duty Note": "Systems 240 V-72 kV L-L; current up to 5000 A; commonly 400 A/10 s on MV; IEEE C57.32", "Source Type": "PRIMARY MANUFACTURER", "Source Reference": "https://www.postglover.com/product-types/low-resistance-grounding/", "Source Revision": "Web current 2026", "Verification State": "PRIMARY_MANUFACTURER_VERIFIED", "Record Status": "CONFIGURE_TO_PROJECT", "Notes": "Do not use family range as final design rating.", "Record ID": "NGR-PGR-LRG-FAMILY" }, { "_row": 4, "NGR ID": "NGR-PGR-LRG-13P8-400A-10S-TEMPLATE", "Description / Model": "13.8 kV system / 400 A / 10 s NGR engineering template", "Rated System kV": 13.8, "Neutral Voltage kV": 7.967433714816837, "Resistance Ω": 19.918584287042094, "Rated Current A": 400, "Time Rating s": 10, "Continuous?": "No", "Enclosure / Environment": "Project-specific enclosure required", "Temp Rise / Duty Note": "Derived template: Vneutral = Vline-line / sqrt(3); R = Vneutral / I. Full-precision formulas. Not a catalog SKU or confirmation that a usable system neutral exists.", "Source Type": "MANUFACTURER FAMILY + CALCULATED TEMPLATE", "Source Reference": "https://www.postglover.com/product-types/low-resistance-grounding/", "Source Revision": "2026 engineering template; independent arithmetic checked 2026-10-19", "Verification State": "ENGINEERING_TEMPLATE_REQUIRES_VENDOR_QUOTE", "Record Status": "TEMPLATE", "Notes": "Use only as preliminary sizing; vendor must confirm BIL, resistor duty, enclosure, temperature rise and accessories.", "Record ID": "NGR-PGR-LRG-13P8-400A-10S-TEMPLATE" }, { "_row": 5, "NGR ID": "NGR-PGR-SMARTPULSE-MV", "Description / Model": "Post Glover SmartPulse MV high-resistance grounding family", "Rated System kV": 5, "Enclosure / Environment": "UL-listed assembly family up to 5 kV; higher voltages custom", "Temp Rise / Duty Note": "Available for wye and delta secondaries; adjustable ground-fault current family", "Source Type": "PRIMARY MANUFACTURER", "Source Reference": "https://www.postglover.com/product-types/medium-voltage-high-resistance-grounding/", "Source Revision": "Web current 2026", "Verification State": "PRIMARY_MANUFACTURER_VERIFIED", "Record Status": "CONFIGURE_TO_PROJECT", "Notes": "Family-level record only. Exact resistor current, resistance, NGT/GT and duty must come from the selected package.", "Record ID": "NGR-PGR-SMARTPULSE-MV" }];
+exports.groundingResistors = [{"_row": 2, "NGR ID": "NGR-IGARD-FAMILY-8KV", "Description / Model": "I-Gard neutral grounding resistor family up to 8 kV L-N", "Neutral Voltage kV": 8, "Enclosure / Environment": "Indoor / outdoor options", "Temp Rise / Duty Note": "Available 120 V-8 kV L-N; 1-1000 A; continuous, extended, 60 s, 10 s duty", "Source Type": "PRIMARY MANUFACTURER", "Source Reference": "https://i-gard.com/site/assets/files/1118/c-100ea_ngr_application_guide_1.pdf", "Source Revision": "Manufacturer application guide", "Verification State": "PRIMARY_MANUFACTURER_VERIFIED", "Record Status": "CONFIGURE_TO_PROJECT", "Notes": "Family-level record; exact resistance = Vneutral / I and requires selected order data.", "Record ID": "NGR-IGARD-FAMILY-8KV"}, {"_row": 3, "NGR ID": "NGR-PGR-LRG-FAMILY", "Description / Model": "Post Glover low-resistance grounding resistor family", "Enclosure / Environment": "Indoor / outdoor; ventilated options", "Temp Rise / Duty Note": "Systems 240 V-72 kV L-L; current up to 5000 A; commonly 400 A/10 s on MV; IEEE C57.32", "Source Type": "PRIMARY MANUFACTURER", "Source Reference": "https://www.postglover.com/product-types/low-resistance-grounding/", "Source Revision": "Web current 2026", "Verification State": "PRIMARY_MANUFACTURER_VERIFIED", "Record Status": "CONFIGURE_TO_PROJECT", "Notes": "Do not use family range as final design rating.", "Record ID": "NGR-PGR-LRG-FAMILY"}, {"_row": 4, "NGR ID": "NGR-PGR-LRG-13P8-400A-10S-TEMPLATE", "Description / Model": "13.8 kV system / 400 A / 10 s NGR engineering template", "Rated System kV": 13.8, "Neutral Voltage kV": 7.967433714816837, "Resistance Ω": 19.918584287042094, "Rated Current A": 400, "Time Rating s": 10, "Continuous?": "No", "Enclosure / Environment": "Project-specific enclosure required", "Temp Rise / Duty Note": "Derived template: Vneutral = Vline-line / sqrt(3); R = Vneutral / I. Full-precision formulas. Not a catalog SKU or confirmation that a usable system neutral exists.", "Source Type": "MANUFACTURER FAMILY + CALCULATED TEMPLATE", "Source Reference": "https://www.postglover.com/product-types/low-resistance-grounding/", "Source Revision": "2026 engineering template; independent arithmetic checked 2026-10-19", "Verification State": "ENGINEERING_TEMPLATE_REQUIRES_VENDOR_QUOTE", "Record Status": "TEMPLATE", "Notes": "Use only as preliminary sizing; vendor must confirm BIL, resistor duty, enclosure, temperature rise and accessories.", "Record ID": "NGR-PGR-LRG-13P8-400A-10S-TEMPLATE"}, {"_row": 5, "NGR ID": "NGR-PGR-SMARTPULSE-MV", "Description / Model": "Post Glover SmartPulse MV high-resistance grounding family", "Rated System kV": 5, "Enclosure / Environment": "UL-listed assembly family up to 5 kV; higher voltages custom", "Temp Rise / Duty Note": "Available for wye and delta secondaries; adjustable ground-fault current family", "Source Type": "PRIMARY MANUFACTURER", "Source Reference": "https://www.postglover.com/product-types/medium-voltage-high-resistance-grounding/", "Source Revision": "Web current 2026", "Verification State": "PRIMARY_MANUFACTURER_VERIFIED", "Record Status": "CONFIGURE_TO_PROJECT", "Notes": "Family-level record only. Exact resistor current, resistance, NGT/GT and duty must come from the selected package.", "Record ID": "NGR-PGR-SMARTPULSE-MV"}, {"_row": 6, "NGR ID": "DB09-GND-00057", "Description / Model": "Littelfuse NGRUS138 NGR Series – US", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "EXACT_MODEL_VOLTAGE_CURRENT_TIME_CHECKED_RESISTANCE_CONFLICT", "Record Status": "CATALOG_RESISTANCE_CLARIFICATION_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. Ordering row lists138Ω while page8 general specifications138.5Ω; Resistance Ω left blank pending manufacturer clarification. ", "Record ID": "DB09-GND-00057"}, {"_row": 7, "NGR ID": "DB09-GND-00058", "Description / Model": "Littelfuse NGRUS278 NGR Series – US", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "EXACT_MODEL_VOLTAGE_CURRENT_TIME_CHECKED_RESISTANCE_CONFLICT", "Record Status": "CATALOG_RESISTANCE_CLARIFICATION_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. Ordering row lists138Ω while page8 general specifications138.5Ω; Resistance Ω left blank pending manufacturer clarification. ", "Record ID": "DB09-GND-00058"}, {"_row": 8, "NGR ID": "DB09-GND-00059", "Description / Model": "Littelfuse NGRUS314 NGR Series – US", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "EXACT_MODEL_VOLTAGE_CURRENT_TIME_CHECKED_RESISTANCE_CONFLICT", "Record Status": "CATALOG_RESISTANCE_CLARIFICATION_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. Ordering row lists138Ω while page8 general specifications138.5Ω; Resistance Ω left blank pending manufacturer clarification. ", "Record ID": "DB09-GND-00059"}, {"_row": 9, "NGR ID": "DB09-GND-00060", "Description / Model": "Littelfuse NGRUS315 NGR Series – US", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "EXACT_MODEL_VOLTAGE_CURRENT_TIME_CHECKED_RESISTANCE_CONFLICT", "Record Status": "CATALOG_RESISTANCE_CLARIFICATION_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. Ordering row lists138Ω while page8 general specifications138.5Ω; Resistance Ω left blank pending manufacturer clarification. ", "Record ID": "DB09-GND-00060"}, {"_row": 10, "NGR ID": "DB09-GND-00061", "Description / Model": "Littelfuse NGRUS003 NGR Series – US", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Resistance Ω": 55.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00061"}, {"_row": 11, "NGR ID": "DB09-GND-00062", "Description / Model": "Littelfuse NGRUS194 NGR Series – US", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Resistance Ω": 55.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00062"}, {"_row": 12, "NGR ID": "DB09-GND-00063", "Description / Model": "Littelfuse NGRUS316 NGR Series – US", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Resistance Ω": 55.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00063"}, {"_row": 13, "NGR ID": "DB09-GND-00064", "Description / Model": "Littelfuse NGRUS317 NGR Series – US", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Resistance Ω": 55.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00064"}, {"_row": 14, "NGR ID": "DB09-GND-00065", "Description / Model": "Littelfuse NGRUS318 NGR Series – US", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 173.5, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00065"}, {"_row": 15, "NGR ID": "DB09-GND-00066", "Description / Model": "Littelfuse NGRUS319 NGR Series – US", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 173.5, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00066"}, {"_row": 16, "NGR ID": "DB09-GND-00067", "Description / Model": "Littelfuse NGRUS354 NGR Series – US", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 173.5, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00067"}, {"_row": 17, "NGR ID": "DB09-GND-00068", "Description / Model": "Littelfuse NGRUS355 NGR Series – US", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 173.5, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00068"}, {"_row": 18, "NGR ID": "DB09-GND-00069", "Description / Model": "Littelfuse NGRUS169 NGR Series – US", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 69.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00069"}, {"_row": 19, "NGR ID": "DB09-GND-00070", "Description / Model": "Littelfuse NGRUS170 NGR Series – US", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 69.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00070"}, {"_row": 20, "NGR ID": "DB09-GND-00071", "Description / Model": "Littelfuse NGRUS320 NGR Series – US", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 69.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00071"}, {"_row": 21, "NGR ID": "DB09-GND-00072", "Description / Model": "Littelfuse NGRUS321 NGR Series – US", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 69.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00072"}, {"_row": 22, "NGR ID": "DB09-GND-00073", "Description / Model": "Littelfuse NGRUS114 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00073"}, {"_row": 23, "NGR ID": "DB09-GND-00074", "Description / Model": "Littelfuse NGRUS115 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00074"}, {"_row": 24, "NGR ID": "DB09-GND-00075", "Description / Model": "Littelfuse NGRUS322 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00075"}, {"_row": 25, "NGR ID": "DB09-GND-00076", "Description / Model": "Littelfuse NGRUS323 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00076"}, {"_row": 26, "NGR ID": "DB09-GND-00077", "Description / Model": "Littelfuse NGRUS324 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00077"}, {"_row": 27, "NGR ID": "DB09-GND-00078", "Description / Model": "Littelfuse NGRUS325 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00078"}, {"_row": 28, "NGR ID": "DB09-GND-00079", "Description / Model": "Littelfuse NGRUS356 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00079"}, {"_row": 29, "NGR ID": "DB09-GND-00080", "Description / Model": "Littelfuse NGRUS357 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00080"}, {"_row": 30, "NGR ID": "DB09-GND-00081", "Description / Model": "Littelfuse NGRUS326 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00081"}, {"_row": 31, "NGR ID": "DB09-GND-00082", "Description / Model": "Littelfuse NGRUS327 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00082"}, {"_row": 32, "NGR ID": "DB09-GND-00083", "Description / Model": "Littelfuse NGRUS328 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00083"}, {"_row": 33, "NGR ID": "DB09-GND-00084", "Description / Model": "Littelfuse NGRUS329 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00084"}, {"_row": 34, "NGR ID": "DB09-GND-00085", "Description / Model": "Littelfuse NGRUS358 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00085"}, {"_row": 35, "NGR ID": "DB09-GND-00086", "Description / Model": "Littelfuse NGRUS359 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00086"}, {"_row": 36, "NGR ID": "DB09-GND-00087", "Description / Model": "Littelfuse NGRUS360 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00087"}, {"_row": 37, "NGR ID": "DB09-GND-00088", "Description / Model": "Littelfuse NGRUS361 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00088"}, {"_row": 38, "NGR ID": "DB09-GND-00089", "Description / Model": "Littelfuse NGRUS330 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00089"}, {"_row": 39, "NGR ID": "DB09-GND-00090", "Description / Model": "Littelfuse NGRUS331 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00090"}, {"_row": 40, "NGR ID": "DB09-GND-00091", "Description / Model": "Littelfuse NGRUS332 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00091"}, {"_row": 41, "NGR ID": "DB09-GND-00092", "Description / Model": "Littelfuse NGRUS333 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00092"}, {"_row": 42, "NGR ID": "DB09-GND-00093", "Description / Model": "Littelfuse NGRUS362 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00093"}, {"_row": 43, "NGR ID": "DB09-GND-00094", "Description / Model": "Littelfuse NGRUS363 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00094"}, {"_row": 44, "NGR ID": "DB09-GND-00095", "Description / Model": "Littelfuse NGRUS364 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00095"}, {"_row": 45, "NGR ID": "DB09-GND-00096", "Description / Model": "Littelfuse NGRUS365 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00096"}, {"_row": 46, "NGR ID": "DB09-GND-00097", "Description / Model": "Littelfuse NGRUS244 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00097"}, {"_row": 47, "NGR ID": "DB09-GND-00098", "Description / Model": "Littelfuse NGRUS334 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00098"}, {"_row": 48, "NGR ID": "DB09-GND-00099", "Description / Model": "Littelfuse NGRUS335 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00099"}, {"_row": 49, "NGR ID": "DB09-GND-00100", "Description / Model": "Littelfuse NGRUS336 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00100"}, {"_row": 50, "NGR ID": "DB09-GND-00101", "Description / Model": "Littelfuse NGRUS337 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00101"}, {"_row": 51, "NGR ID": "DB09-GND-00102", "Description / Model": "Littelfuse NGRUS366 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00102"}, {"_row": 52, "NGR ID": "DB09-GND-00103", "Description / Model": "Littelfuse NGRUS367 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00103"}, {"_row": 53, "NGR ID": "DB09-GND-00104", "Description / Model": "Littelfuse NGRUS368 NGR Series – US", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-us-datasheet?assetguid=c15bb643-53b5-48d5-af81-cdd3885172fe", "Source Revision": "Rev1-B-031920; copyright2020; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "US applications and other regions excluding Canada. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. General specification pages round some resistance values (e.g.600V173.5→174); the exact model ordering-table precision is retained. ", "Record ID": "DB09-GND-00104"}, {"_row": 54, "NGR ID": "DB09-GND-00105", "Description / Model": "Littelfuse NGR1050 NGR Series – Canada", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Resistance Ω": 138.5, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00105"}, {"_row": 55, "NGR ID": "DB09-GND-00106", "Description / Model": "Littelfuse NGR1041 NGR Series – Canada", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Resistance Ω": 138.5, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00106"}, {"_row": 56, "NGR ID": "DB09-GND-00107", "Description / Model": "Littelfuse NGR1036 NGR Series – Canada", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Resistance Ω": 55.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00107"}, {"_row": 57, "NGR ID": "DB09-GND-00108", "Description / Model": "Littelfuse NGR1051 NGR Series – Canada", "Rated System kV": 0.48, "Neutral Voltage kV": 0.277, "Resistance Ω": 55.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00108"}, {"_row": 58, "NGR ID": "DB09-GND-00109", "Description / Model": "Littelfuse NGR1052 NGR Series – Canada", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 173.5, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00109"}, {"_row": 59, "NGR ID": "DB09-GND-00110", "Description / Model": "Littelfuse NGR1053 NGR Series – Canada", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 173.5, "Rated Current A": 2, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00110"}, {"_row": 60, "NGR ID": "DB09-GND-00111", "Description / Model": "Littelfuse NGR1038 NGR Series – Canada", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 69.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00111"}, {"_row": 61, "NGR ID": "DB09-GND-00112", "Description / Model": "Littelfuse NGR1045 NGR Series – Canada", "Rated System kV": 0.6, "Neutral Voltage kV": 0.347, "Resistance Ω": 69.4, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "11kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00112"}, {"_row": 62, "NGR ID": "DB09-GND-00113", "Description / Model": "Littelfuse NGR1066 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00113"}, {"_row": 63, "NGR ID": "DB09-GND-00114", "Description / Model": "Littelfuse NGR1067 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00114"}, {"_row": 64, "NGR ID": "DB09-GND-00115", "Description / Model": "Littelfuse NGR1068 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00115"}, {"_row": 65, "NGR ID": "DB09-GND-00116", "Description / Model": "Littelfuse NGR1069 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 480.9, "Rated Current A": 5, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00116"}, {"_row": 66, "NGR ID": "DB09-GND-00117", "Description / Model": "Littelfuse NGR1070 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00117"}, {"_row": 67, "NGR ID": "DB09-GND-00118", "Description / Model": "Littelfuse NGR1071 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00118"}, {"_row": 68, "NGR ID": "DB09-GND-00119", "Description / Model": "Littelfuse NGR1072 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00119"}, {"_row": 69, "NGR ID": "DB09-GND-00120", "Description / Model": "Littelfuse NGR1073 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 240.5, "Rated Current A": 10, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00120"}, {"_row": 70, "NGR ID": "DB09-GND-00121", "Description / Model": "Littelfuse NGR1074 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00121"}, {"_row": 71, "NGR ID": "DB09-GND-00122", "Description / Model": "Littelfuse NGR1075 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00122"}, {"_row": 72, "NGR ID": "DB09-GND-00123", "Description / Model": "Littelfuse NGR1076 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00123"}, {"_row": 73, "NGR ID": "DB09-GND-00124", "Description / Model": "Littelfuse NGR1077 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160.3, "Rated Current A": 15, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00124"}, {"_row": 74, "NGR ID": "DB09-GND-00125", "Description / Model": "Littelfuse NGR1078 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00125"}, {"_row": 75, "NGR ID": "DB09-GND-00126", "Description / Model": "Littelfuse NGR1079 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Time Rating s": 10, "Continuous?": "No", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "10-second duty; 760°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00126"}, {"_row": 76, "NGR ID": "DB09-GND-00127", "Description / Model": "Littelfuse NGR1080 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; sensing-resistor environmental protection per selected installation", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00127"}, {"_row": 77, "NGR ID": "DB09-GND-00128", "Description / Model": "Littelfuse NGR1081 NGR Series – Canada", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96.2, "Rated Current A": 25, "Continuous?": "Yes", "Insulation / BIL": "75kV BIL", "Enclosure / Environment": "Ventilated NEMA3R galvanized steel; floor mount; weather protected sensing resistor", "Temp Rise / Duty Note": "Continuous duty; 385°C temperature rise; stainless steel wire-wound resistor. Published neutral volts277/347/2400 mapped explicitly, not computed.", "Source Type": "OFFICIAL_MANUFACTURER", "Source Reference": "https://www.littelfuse.com/assetdocs/neutral-grounding-resistor-canada-datasheet?assetguid=8ce3a8e8-f113-46ad-b23b-9868ebc015a8", "Source Revision": "Rev121925; copyright2025; retrieved 2026-10-22", "Verification State": "PUBLISHED_ORDERING_ROW_AND_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Canadian applications; manufacturer directs US applications to NGRUS series. Package includes NGR, current transformer and sensing resistor; monitor is separately required. Values reflect exact ordering row. ", "Record ID": "DB09-GND-00128"}, {"_row": 78, "NGR ID": "DB09-GND-00129", "Description / Model": "Line Power 89-0037-01 High Voltage Neutral Grounding Resistor", "Rated System kV": 2.4, "Neutral Voltage kV": 1.387, "Resistance Ω": 92, "Rated Current A": 15, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00129"}, {"_row": 79, "NGR ID": "DB09-GND-00130", "Description / Model": "Line Power 89-0037-02 High Voltage Neutral Grounding Resistor", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 160, "Rated Current A": 15, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00130"}, {"_row": 80, "NGR ID": "DB09-GND-00131", "Description / Model": "Line Power 89-0037-03 High Voltage Neutral Grounding Resistor", "Rated System kV": 7.2, "Neutral Voltage kV": 4.16, "Resistance Ω": 272, "Rated Current A": 15, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00131"}, {"_row": 81, "NGR ID": "DB09-GND-00132", "Description / Model": "Line Power 89-0037-04 High Voltage Neutral Grounding Resistor", "Rated System kV": 12.47, "Neutral Voltage kV": 7.2, "Resistance Ω": 476, "Rated Current A": 15, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00132"}, {"_row": 82, "NGR ID": "DB09-GND-00133", "Description / Model": "Line Power 89-0037-05 High Voltage Neutral Grounding Resistor", "Rated System kV": 13.2, "Neutral Voltage kV": 7.62, "Resistance Ω": 508, "Rated Current A": 15, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00133"}, {"_row": 83, "NGR ID": "DB09-GND-00134", "Description / Model": "Line Power 89-0037-06 High Voltage Neutral Grounding Resistor", "Rated System kV": 13.8, "Neutral Voltage kV": 7.96, "Resistance Ω": 532, "Rated Current A": 15, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00134"}, {"_row": 84, "NGR ID": "DB09-GND-00135", "Description / Model": "Line Power 89-0038-01 High Voltage Neutral Grounding Resistor", "Rated System kV": 2.4, "Neutral Voltage kV": 1.387, "Resistance Ω": 56, "Rated Current A": 25, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00135"}, {"_row": 85, "NGR ID": "DB09-GND-00136", "Description / Model": "Line Power 89-0038-02 High Voltage Neutral Grounding Resistor", "Rated System kV": 4.16, "Neutral Voltage kV": 2.4, "Resistance Ω": 96, "Rated Current A": 25, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00136"}, {"_row": 86, "NGR ID": "DB09-GND-00137", "Description / Model": "Line Power 89-0038-03 High Voltage Neutral Grounding Resistor", "Rated System kV": 7.2, "Neutral Voltage kV": 4.16, "Resistance Ω": 168, "Rated Current A": 25, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00137"}, {"_row": 87, "NGR ID": "DB09-GND-00138", "Description / Model": "Line Power 89-0038-04 High Voltage Neutral Grounding Resistor", "Rated System kV": 12.47, "Neutral Voltage kV": 7.2, "Resistance Ω": 288, "Rated Current A": 25, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00138"}, {"_row": 88, "NGR ID": "DB09-GND-00139", "Description / Model": "Line Power 89-0038-05 High Voltage Neutral Grounding Resistor", "Rated System kV": 13.2, "Neutral Voltage kV": 7.62, "Resistance Ω": 306, "Rated Current A": 25, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00139"}, {"_row": 89, "NGR ID": "DB09-GND-00140", "Description / Model": "Line Power 89-0038-06 High Voltage Neutral Grounding Resistor", "Rated System kV": 13.8, "Neutral Voltage kV": 7.96, "Resistance Ω": 318, "Rated Current A": 25, "Continuous?": "Yes", "Enclosure / Environment": "Outdoor use; galvanized steel frame; optional metal resistor enclosure requires factory consultation", "Temp Rise / Duty Note": "Manufacturer page1 states resistor design continuous duty; edge-wound stainless steel elements;100% stainless terminals/interconnections; porcelain insulators. No temperature-rise limit published in selected sheet.", "Source Type": "OFFICIAL_MANUFACTURER_CORPORATE_BRAND_HOST", "Source Reference": "https://federalpacific.com/wp-content/uploads/2026/04/5-High-Voltage-Grounding-Resistors.pdf", "Source Revision": "LPMS-HVGR-0607; copyright2021; official corporate-host upload2026/04; retrieved 2026-10-22", "Verification State": "LITERAL_PART_NEUTRAL_SYSTEM_OHMS_CURRENT_AND_CONTINUOUS_DUTY_CHECKED", "Record Status": "CATALOG_VERIFIED_PROJECT_REVIEW_REQUIRED", "Notes": "Literal model and resistance from manufacturer table. System Voltage column is distinguished from Specification Line to Neutral volts. Rounded published volts/current do not replace stated ohms. BIL and numeric temperature rise unknown.", "Record ID": "DB09-GND-00140"}];
 
 },
 "cable-insulation.mjs": function(module,exports,require){
@@ -7748,10 +9607,12 @@ const integer = (x, what) => { if (!Number.isSafeInteger(x))
 function screenBalancedNMinusOne({ network, nominalBusVoltageV, busVoltageLimitsPu, branchCurrentLimitsA, maxCases = 200 }) {
     if (!network || !Array.isArray(network.branches) || !Array.isArray(network.buses))
         throw Error('N-1: valid operating network required');
-    if (network.branches.length > 200 || network.buses.length > 40)
-        throw Error('N-1: supported network limit exceeded');
-    if (integer(maxCases, 'maxCases') < 1 || maxCases > 200)
-        throw Error('N-1: maxCases must be 1–200');
+    // Above 40 buses / 200 branches the sparse load flow is used; each outage then keeps only its violations to bound memory.
+    const large = network.branches.length > 200 || network.buses.length > 40;
+    if (network.branches.length > 60000 || network.buses.length > 20000)
+        throw Error('N-1: supported network limit exceeded (20,000 buses / 60,000 branches)');
+    if (integer(maxCases, 'maxCases') < 1 || maxCases > (large ? 5000 : 200))
+        throw Error(large ? 'N-1: maxCases must be 1–5000' : 'N-1: maxCases must be 1–200');
     if (network.branches.some(e => typeof e.id !== 'string' || !e.id))
         throw Error('N-1: each branch requires a stable unique ID');
     const branchIds = network.branches.map(e => e.id), busIds = network.buses.map(b => b.id);
@@ -7795,7 +9656,7 @@ function screenBalancedNMinusOne({ network, nominalBusVoltageV, busVoltageLimits
         const subset = outage ? { ...network, branches: network.branches.filter(e => e.id !== outage) } : network;
         try {
             const results = (0, operating_studies_mjs_1.solveBalancedPowerFlow)(subset), violations = evaluate(results);
-            return { outagedBranchId: outage ?? null, status: violations.length ? 'SCREEN_VIOLATION' : 'SCREEN_WITHIN_SUPPLIED_LIMITS', violations, buses: results.buses, branches: results.branches, iterations: results.iterations, mismatchPu: results.mismatchPu };
+            return { outagedBranchId: outage ?? null, status: violations.length ? 'SCREEN_VIOLATION' : 'SCREEN_WITHIN_SUPPLIED_LIMITS', violations, buses: large && outage ? null : results.buses, branches: large && outage ? null : results.branches, iterations: results.iterations, mismatchPu: results.mismatchPu };
         }
         catch (error) {
             return { outagedBranchId: outage ?? null, status: 'NOT_SOLVED_REVIEW_REQUIRED', reason: String(error.message).slice(0, 500), violations: null, buses: null, branches: null };
@@ -7821,7 +9682,6 @@ function screenStudioBalancedNMinusOne(project, { busVoltageLimitsPu, branchCurr
     const nominalBusVoltageV = Object.fromEntries(project.buses.map(b => [b.id, b.voltage]));
     return screenBalancedNMinusOne({ network, nominalBusVoltageV, busVoltageLimitsPu, branchCurrentLimitsA, maxCases });
 }
-
 },
 "iec60909-peak-network.mjs": function(module,exports,require){
 "use strict";
@@ -8006,13 +9866,135 @@ function faultBusSweep(c) {
 }
 
 },
+"ieee1584-2018.mjs": function(module,exports,require){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * IEEE 1584-2018 arcing current, incident energy and arc-flash boundary, in the browser.
+ *
+ * JavaScript port of the MIT-licensed `arcflash-calc` library
+ *   Copyright (c) 2022 Li-aung Yip - https://www.penwatch.net (MIT License)
+ *   https://github.com/LiaungYip/arcflash
+ * which reproduces IEEE 1584-2018 Annex D.1/D.2 and was compared by its author
+ * with 144,000 results of the official IEEE 1584-2018 calculator spreadsheet.
+ * The MIT notice is reproduced in IEEE1584_LICENSE below.
+ *
+ * Scope: three-phase AC, 208 V to 15 kV, bolted fault current 500 A-106 kA (<=600 V)
+ * or 200 A-65 kA (>600 V), electrode configurations VCB, VCBB, HCB, VOA, HOA.
+ * Clearing times are inputs. They must come from protective-device studies at the
+ * calculated full AND reduced arcing currents. No PPE category is assigned.
+ */
+const IEEE1584_LICENSE='MIT License. Copyright (c) 2022 Li-aung Yip - https://www.penwatch.net. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.';
+const IEEE1584_ENGINE={id:'ieee1584-2018-local-v29',version:'29.0.0',port:'arcflash-calc (LiaungYip/arcflash, MIT)'};
+
+const ECS=['VCB','VCBB','HCB','VOA','HOA'];
+// IEEE 1584-2018 Table 1: k1..k10 for intermediate arcing current at 0.6, 2.7, 14.3 kV
+const T1={
+ VCB:{0.6:[-0.04287,1.035,-0.083,0,0,-4.783e-9,1.962e-6,-0.000229,0.003141,1.092],2.7:[0.0065,1.001,-0.024,-1.557e-12,4.556e-10,-4.186e-8,8.346e-7,5.482e-5,-0.003191,0.9729],14.3:[0.005795,1.015,-0.011,-1.557e-12,4.556e-10,-4.186e-8,8.346e-7,5.482e-5,-0.003191,0.9729]},
+ VCBB:{0.6:[-0.017432,0.98,-0.05,0,0,-5.767e-9,2.524e-6,-0.00034,0.01187,1.013],2.7:[0.002823,0.995,-0.0125,0,-9.204e-11,2.901e-8,-3.262e-6,0.0001569,-0.004003,0.9825],14.3:[0.014827,1.01,-0.01,0,-9.204e-11,2.901e-8,-3.262e-6,0.0001569,-0.004003,0.9825]},
+ HCB:{0.6:[0.054922,0.988,-0.11,0,0,-5.382e-9,2.316e-6,-0.000302,0.0091,0.9725],2.7:[0.001011,1.003,-0.0249,0,0,4.859e-10,-1.814e-7,-9.128e-6,-0.0007,0.9881],14.3:[0.008693,0.999,-0.02,0,-5.043e-11,2.233e-8,-3.046e-6,0.000116,-0.001145,0.9839]},
+ VOA:{0.6:[0.043785,1.04,-0.18,0,0,-4.783e-9,1.962e-6,-0.000229,0.003141,1.092],2.7:[-0.02395,1.006,-0.0188,-1.557e-12,4.556e-10,-4.186e-8,8.346e-7,5.482e-5,-0.003191,0.9729],14.3:[0.005371,1.0102,-0.029,-1.557e-12,4.556e-10,-4.186e-8,8.346e-7,5.482e-5,-0.003191,0.9729]},
+ HOA:{0.6:[0.111147,1.008,-0.24,0,0,-3.895e-9,1.641e-6,-0.000197,0.002615,1.1],2.7:[0.000435,1.006,-0.038,0,0,7.859e-10,-1.914e-7,-9.128e-6,-0.0007,0.9981],14.3:[0.000904,0.999,-0.02,0,0,7.859e-10,-1.914e-7,-9.128e-6,-0.0007,0.9981]}};
+// Table 2: arcing current variation correction factor k1..k7
+const T2={VCB:[0,-0.0000014269,0.000083137,-0.0019382,0.022366,-0.12645,0.30226],VCBB:[1.138e-6,-6.0287e-5,0.0012758,-0.013778,0.080217,-0.24066,0.33524],HCB:[0,-3.097e-6,0.00016405,-0.0033609,0.033308,-0.16182,0.34627],VOA:[9.5606e-7,-5.1543e-5,0.0011161,-0.01242,0.075125,-0.23584,0.33696],HOA:[0,-3.1555e-6,0.0001682,-0.0034607,0.034124,-0.1599,0.34629]};
+// Tables 3, 4, 5: incident energy k1..k13 for 600 V, 2700 V, 14300 V
+const T345={
+ 0.6:{VCB:[0.753364,0.566,1.752636,0,0,-4.783e-9,0.000001962,-0.000229,0.003141,1.092,0,-1.598,0.957],VCBB:[3.068459,0.26,-0.098107,0,0,-5.767e-9,0.000002524,-0.00034,0.01187,1.013,-0.06,-1.809,1.19],HCB:[4.073745,0.344,-0.370259,0,0,-5.382e-9,0.000002316,-0.000302,0.0091,0.9725,0,-2.03,1.036],VOA:[0.679294,0.746,1.222636,0,0,-4.783e-9,0.000001962,-0.000229,0.003141,1.092,0,-1.598,0.997],HOA:[3.470417,0.465,-0.261863,0,0,-3.895e-9,0.000001641,-0.000197,0.002615,1.1,0,-1.99,1.04]},
+ 2.7:{VCB:[2.40021,0.165,0.354202,-1.557e-12,4.556e-10,-4.186e-8,8.346e-7,5.482e-5,-0.003191,0.9729,0,-1.569,0.9778],VCBB:[3.870592,0.185,-0.736618,0,-9.204e-11,2.901e-8,-3.262e-6,0.0001569,-0.004003,0.9825,0,-1.742,1.09],HCB:[3.486391,0.177,-0.193101,0,0,4.859e-10,-1.814e-7,-9.128e-6,-0.0007,0.9881,0.027,-1.723,1.055],VOA:[3.880724,0.105,-1.906033,-1.557e-12,4.556e-10,-4.186e-8,8.346e-7,5.482e-5,-0.003191,0.9729,0,-1.515,1.115],HOA:[3.616266,0.149,-0.761561,0,0,7.859e-10,-1.914e-7,-9.128e-6,-0.0007,0.9981,0,-1.639,1.078]},
+ 14.3:{VCB:[3.825917,0.11,-0.999749,-1.557e-12,4.556e-10,-4.186e-8,8.346e-7,5.482e-5,-0.003191,0.9729,0,-1.568,0.99],VCBB:[3.644309,0.215,-0.585522,0,-9.204e-11,2.901e-8,-3.262e-6,0.0001569,-0.004003,0.9825,0,-1.677,1.06],HCB:[3.044516,0.125,0.245106,0,-5.043e-11,2.233e-8,-3.046e-6,0.000116,-0.001145,0.9839,0,-1.655,1.084],VOA:[3.405454,0.12,-0.93245,-1.557e-12,4.556e-10,-4.186e-8,8.346e-7,5.482e-5,-0.003191,0.9729,0,-1.534,0.979],HOA:[2.04049,0.177,1.005092,0,0,7.859e-10,-1.914e-7,-9.128e-6,-0.0007,0.9981,-0.05,-1.633,1.151]}};
+// Table 7: enclosure size correction b1..b3
+const T7={Typical:{VCB:[-0.000302,0.03441,0.4325],VCBB:[-0.0002976,0.032,0.479],HCB:[-0.0001923,0.01935,0.6899]},Shallow:{VCB:[0.002222,-0.02556,0.6222],VCBB:[-0.002778,0.1194,-0.2778],HCB:[-0.0005556,0.03722,0.4778]}};
+
+const log10=Math.log10,fin=x=>typeof x==='number'&&Number.isFinite(x);
+const fail=m=>{throw Error('IEEE 1584-2018: '+m)};
+const MM_TO_IN=0.03937; // factor printed in IEEE 1584-2018 Table 6
+
+function intermediateIarc(ec,v,ibf,g){const k=T1[ec][v];const x1=k[0]+k[1]*log10(ibf)+k[2]*log10(g);const x2=k[3]*ibf**6+k[4]*ibf**5+k[5]*ibf**4+k[6]*ibf**3+k[7]*ibf**2+k[8]*ibf+k[9];return 10**x1*x2}
+function varCF(ec,voc){const k=T2[ec];return k[0]*voc**6+k[1]*voc**5+k[2]*voc**4+k[3]*voc**3+k[4]*voc**2+k[5]*voc+k[6]}
+function enclosure(ec,voc,h,w,d){
+ if(ec==='HOA'||ec==='VOA')return {type:'Open air',height1In:null,width1In:null,EESIn:null,CF:1};
+ const type=(voc<0.6&&h<508&&w<508&&d<=203.2)?'Shallow':'Typical';
+ const [A,B]={VCB:[4,20],VCBB:[10,24],HCB:[10,22]}[ec];
+ const eq1112=dim=>(660.4+(dim-660.4)*((voc+A)/B))/25.4;
+ let w1,h1;
+ if(w<508)w1=type==='Typical'?20:MM_TO_IN*w;else if(w<=660.4)w1=MM_TO_IN*w;else if(w<=1244.6)w1=eq1112(w);else w1=eq1112(1244.6);
+ if(h<508)h1=type==='Typical'?20:MM_TO_IN*h;else if(h<=660.4)h1=MM_TO_IN*h;else if(h<=1244.6)h1=ec==='VCB'?MM_TO_IN*h:eq1112(h);else h1=ec==='VCB'?49:eq1112(1244.6);
+ const EES=(h1+w1)/2,b=T7[type][ec],x=b[0]*EES**2+b[1]*EES+b[2];
+ return {type,height1In:h1,width1In:w1,EESIn:EES,CF:type==='Typical'?x:1/x};
+}
+function intermediateE(ec,vKey,iarc,ibf,tMS,g,cf,dMM,iarc600){
+ const k=T345[vKey][ec];const x1=12.552/50*tMS,x2=k[0]+k[1]*log10(g);
+ const x3=(k[2]*(iarc600??iarc))/(k[3]*ibf**7+k[4]*ibf**6+k[5]*ibf**5+k[6]*ibf**4+k[7]*ibf**3+k[8]*ibf**2+k[9]*ibf);
+ const x4=k[10]*log10(ibf)+k[12]*log10(iarc)+log10(1/cf),x5=k[11]*log10(dMM);
+ return x1*10**(x2+x3+x4+x5);
+}
+function afbFromE(ec,vKey,E,dMM){const k12=T345[vKey][ec][11];const F=E/dMM**k12;return (5.0208/F)**(1/k12)}
+function interpolate(voc,x600,x2700,x14300){const x1=((x2700-x600)/2.1)*(voc-2.7)+x2700,x2=((x14300-x2700)/11.6)*(voc-14.3)+x14300,x3=(x1*(2.7-voc))/2.1+(x2*(voc-0.6))/2.1;return voc<=2.7?x3:x2}
+function finalIarcLV(voc,i600,ibf){return 1/Math.sqrt((0.6/voc)**2*(1/i600**2-(0.6**2-voc**2)/(0.6**2*ibf**2)))}
+
+function validateIeee1584Input(x){
+ if(!x||typeof x!=='object'||Array.isArray(x))fail('enter a JSON object.');
+ const need=['voltageKV','boltedFaultKA','gapMM','workingDistanceMM','enclosureHeightMM','enclosureWidthMM','enclosureDepthMM','clearingFullMS','clearingReducedMS'];
+ for(const k of need)if(!fin(x[k]))fail(k+' must be a finite number.');
+ if(!ECS.includes(x.electrodeConfiguration))fail('electrodeConfiguration must be one of '+ECS.join(', ')+'.');
+ const v=x.voltageKV,lv=v<=0.6;
+ if(!(v>=0.208&&v<=15))fail('voltageKV must be 0.208 to 15 kV (IEEE 1584-2018 model range).');
+ if(lv&&!(x.boltedFaultKA>=0.5&&x.boltedFaultKA<=106))fail('bolted fault current must be 0.5 to 106 kA for 208-600 V.');
+ if(!lv&&!(x.boltedFaultKA>=0.2&&x.boltedFaultKA<=65))fail('bolted fault current must be 0.2 to 65 kA above 600 V.');
+ if(lv&&!(x.gapMM>=6.35&&x.gapMM<=76.2))fail('conductor gap must be 6.35 to 76.2 mm for 208-600 V.');
+ if(!lv&&!(x.gapMM>=19.05&&x.gapMM<=254))fail('conductor gap must be 19.05 to 254 mm above 600 V.');
+ if(!(x.workingDistanceMM>=305))fail('working distance must be at least 305 mm.');
+ for(const k of ['enclosureHeightMM','enclosureWidthMM','enclosureDepthMM'])if(!(x[k]>0&&x[k]<=10000))fail(k+' must be greater than 0 and at most 10,000 mm.');
+ if(!(x.enclosureWidthMM>=4*x.gapMM))fail('enclosure width must be at least four times the conductor gap.');
+ for(const k of ['clearingFullMS','clearingReducedMS'])if(!(x[k]>=1&&x[k]<=2000))fail(k+' must be 1 to 2,000 ms.');
+}
+
+function ieee1584Calculate(x){
+ validateIeee1584Input(x);
+ const ec=x.electrodeConfiguration,voc=x.voltageKV,ibf=x.boltedFaultKA,g=x.gapMM,d=x.workingDistanceMM,lv=voc<=0.6;
+ const enc=enclosure(ec,voc,x.enclosureHeightMM,x.enclosureWidthMM,x.enclosureDepthMM);
+ if(!(enc.CF>=0&&enc.CF<=3))fail('enclosure correction factor outside 0-3; check enclosure dimensions.');
+ if(enc.type==='Typical'&&enc.EESIn<19.999)fail('equivalent enclosure size below 20 in for a typical enclosure.');
+ const vcf=varCF(ec,voc),red=1-0.5*vcf;
+ const kv=[0.6,2.7,14.3],iFull=kv.map(v=>intermediateIarc(ec,v,ibf,g));
+ const cases=[['full',x.clearingFullMS,1],['reduced',x.clearingReducedMS,red]].map(([name,t,f])=>{
+  let iarc,E,AFB,intermediates;
+  if(lv){
+   const i600=iFull[0],iFinal=finalIarcLV(voc,i600,ibf);iarc=iFinal*f;
+   E=intermediateE(ec,0.6,iarc,ibf,t,g,enc.CF,d,i600);AFB=afbFromE(ec,0.6,E,d);
+   intermediates={iArc600KA:i600};
+  }else{
+   const ii=iFull.map(i=>i*f);iarc=interpolate(voc,...ii);
+   const Es=kv.map((v,j)=>intermediateE(ec,v,ii[j],ibf,t,g,enc.CF,d));const As=kv.map((v,j)=>afbFromE(ec,v,Es[j],d));
+   E=interpolate(voc,...Es);AFB=interpolate(voc,...As);
+   intermediates={iArc600KA:ii[0],iArc2700KA:ii[1],iArc14300KA:ii[2],e600JPerCm2:Es[0],e2700JPerCm2:Es[1],e14300JPerCm2:Es[2],afb600MM:As[0],afb2700MM:As[1],afb14300MM:As[2]};
+  }
+  if(![iarc,E,AFB].every(fin)||iarc<=0||E<0||AFB<=0)fail('calculation left the numerical range; check inputs.');
+  return {case:name,arcingCurrentKA:iarc,clearingTimeMS:t,incidentEnergyJPerCm2:E,incidentEnergyCalPerCm2:E/4.184,arcFlashBoundaryMM:AFB,arcFlashBoundaryFt:AFB/304.8,intermediates};
+ });
+ const governing=cases[0].incidentEnergyJPerCm2>=cases[1].incidentEnergyJPerCm2?'full':'reduced';
+ const warnings=[];
+ if(x.clearingFullMS>x.clearingReducedMS)warnings.push('Reduced-current clearing time is shorter than the full-current time; confirm both from the device curve.');
+ if(Math.max(x.clearingFullMS,x.clearingReducedMS)>=2000)warnings.push('Clearing time at the 2 s limit; IEEE 1584-2018 discusses when a 2 s maximum arc duration may be reasonable. Confirm the basis.');
+ if(enc.type==='Shallow')warnings.push('Shallow enclosure correction applied (below 600 V, height and width under 508 mm, depth 203.2 mm or less).');
+ return {status:'IEEE1584_2018_EXPLICIT_CLEARING_TIMES',engine:IEEE1584_ENGINE,computedIn:'browser (no data sent to any server)',
+  inputs:{...x},voltageLevel:lv?'208-600 V model':'601 V-15 kV model',enclosure:enc,arcingCurrentVariationFactor:vcf,reducedCurrentFactor:red,
+  cases,governingCase:governing,maximumIncidentEnergyCalPerCm2:Math.max(...cases.map(c=>c.incidentEnergyCalPerCm2)),maximumArcFlashBoundaryMM:Math.max(...cases.map(c=>c.arcFlashBoundaryMM)),
+  warnings,scope:'IEEE 1584-2018 empirical model, three-phase AC 208 V-15 kV within the tested ranges. Clearing times are user inputs from protective-device studies. Not for single-phase, DC or above 15 kV. No PPE category or label approval is issued.',
+  reference:'IEEE Std 1584-2018, Guide for Performing Arc-Flash Hazard Calculations: equations 1-25, Tables 1-7.',license:IEEE1584_LICENSE};
+}
+
+exports.IEEE1584_LICENSE=IEEE1584_LICENSE;exports.IEEE1584_ENGINE=IEEE1584_ENGINE;exports.validateIeee1584Input=validateIeee1584Input;exports.ieee1584Calculate=ieee1584Calculate;
+
+},
 "arcflash-study-ui.mjs": function(module,exports,require){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // IEEE 1584-2018 arc-flash calculation interface; opt-in isolated module.
-// Server computes with MIT arcflash-calc 0.1.0. No browser draft is sent.
+// V29: computed in the browser by ieee1584-2018.mjs (port of MIT arcflash-calc). No study data leaves the browser.
 // Explicit documented full/reduced-current clearing times are mandatory.
 const manufacturer_tcc_mjs_1 = require("./manufacturer-tcc.mjs");
+const ieee1584_2018_mjs_1 = require("./ieee1584-2018.mjs"); // V29 local engine
 const API = 'https://fault-studio-ieee1584-api.vercel.app/api/arcflash';
 const exampleTcc = Object.freeze({ model: 'ILLUSTRATIVE SAMPLE — NOT OEM', source: 'DEMONSTRATION ONLY — REPLACE WITH OEM DOCUMENT', revision: 'illustrative-2026-10', singleRadialPathConfirmed: false, curveCsv: '1000,1.2,1.5\n5000,0.35,0.50\n15000,0.10,0.18\n40000,0.045,0.08\n60000,0.03,0.05' });
 const example = Object.freeze({
@@ -8054,7 +10036,7 @@ function setup() {
  <details><summary><b>Optional: derive times from documented manufacturer TCC envelope</b></summary><p>For a <strong>single radial fault path only</strong>, if every ampere of calculated arcing current passes through the studied device, enter its documented total-clearing envelope (primary amperes, min clearing seconds, max clearing seconds). No extrapolation or guessed CT/source factors. Set <code>singleRadialPathConfirmed=true</code> only after verifying that condition. Curves have not been authenticated by this software.</p>
  <label for="fcs-ieee-arc-tcc">Documented TCC input (JSON)</label><textarea id="fcs-ieee-arc-tcc" spellcheck="false"></textarea><button data-arc="curve">Compute from documented worst-case total clearing curve</button></details>
  <p id="fcs-ieee-arc-status" role="status" aria-live="polite"></p><pre id="fcs-ieee-arc-output">No result. Enter studied protection clearing times.</pre>
- <small>Independent Python engine: MIT-licensed <a href="https://github.com/LiaungYip/arcflash" target="_blank" rel="noopener noreferrer">arcflash-calc</a>, validated against IEEE Annex D examples. Study inputs are sent to the project's Vercel calculation service and are not saved by this interface.</small>
+ <small>Independent Python engine: MIT-licensed <a href="https://github.com/LiaungYip/arcflash" target="_blank" rel="noopener noreferrer">arcflash-calc</a>, validated against IEEE Annex D examples. Calculated in your browser by a JavaScript port of the same library, checked against IEEE Annex D.1/D.2 and 105,120 official IEEE 1584-2018 calculator results. Study inputs are not sent anywhere.</small>
  </section>`;
     document.body.append(o);
     const input = o.querySelector('#fcs-ieee-arc-input'), curveInput = o.querySelector('#fcs-ieee-arc-tcc'), result = o.querySelector('#fcs-ieee-arc-output'), status = o.querySelector('#fcs-ieee-arc-status');
@@ -8116,8 +10098,7 @@ function setup() {
             status.textContent = 'Calculating full and reduced arcing-current cases…';
             const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 25000);
             try {
-                const call = async (payload) => { const resp = await fetch(API, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: controller.signal, cache: 'no-store' }); const val = await resp.json(); if (!resp.ok)
-                    throw Error(val.error || 'Calculation not available'); if (val.status !== 'IEEE1584_2018_EXPLICIT_CLEARING_TIMES' || !Array.isArray(val.cases) || val.cases.length !== 2)
+                const call = async (payload) => { const val = (0, ieee1584_2018_mjs_1.ieee1584Calculate)(payload); if (val.status !== 'IEEE1584_2018_EXPLICIT_CLEARING_TIMES' || !Array.isArray(val.cases) || val.cases.length !== 2)
                     throw Error('Unrecognized IEEE calculation response'); return val; };
                 let val = await call(data);
                 let protectionTrace = null;
@@ -8170,6 +10151,493 @@ if (typeof document !== 'undefined') {
 }
 
 },
+"project-folder.mjs": function(module,exports,require){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isProjectFileName = exports.PROJECT_SUFFIX = void 0;
+exports.projectFileName = projectFileName;
+exports.createProjectFolder = createProjectFolder;
+// V31 project folder: the user's projects live as files in a folder on their own computer.
+// The browser asks the user to choose the folder and to allow editing; nothing is uploaded.
+// Uses the File System Access API (Chrome, Edge and other Chromium browsers on desktop). Where it is not
+// available, the Studio keeps the existing Export / Import project JSON route.
+const DB = 'fcs-project-folder-v31', STORE = 'handles', KEY = 'projects';
+exports.PROJECT_SUFFIX = '.fcs.json';
+function projectFileName(name) {
+    const base = String(name || '').normalize('NFKC').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 90) || 'fault-study';
+    return base.toLowerCase().endsWith(exports.PROJECT_SUFFIX) ? base : base + exports.PROJECT_SUFFIX;
+}
+const isProjectFileName = n => typeof n === 'string' && n.toLowerCase().endsWith('.json') && !n.startsWith('.');
+exports.isProjectFileName = isProjectFileName;
+function idbOpen(idb) { return new Promise((resolve, reject) => { const r = idb.open(DB, 1); r.onupgradeneeded = () => r.result.createObjectStore(STORE); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); }); }
+async function idbDo(idb, mode, fn) { const db = await idbOpen(idb); try {
+    return await new Promise((resolve, reject) => { const tx = db.transaction(STORE, mode), req = fn(tx.objectStore(STORE)); tx.oncomplete = () => resolve(req?.result); tx.onerror = () => reject(tx.error); tx.onabort = () => reject(tx.error); });
+}
+finally {
+    db.close();
+} }
+function createProjectFolder({ win = globalThis, onChange = () => { }, autosaveDelay = 1200 } = {}) {
+    const idb = win.indexedDB, supported = typeof win.showDirectoryPicker === 'function' && !!idb && win.isSecureContext !== false;
+    const state = { supported, handle: null, folderName: '', permission: supported ? 'none' : 'unsupported', files: [], linkedFile: null, autosave: true, busy: false, message: '', lastSaved: null };
+    let timer = null, pendingProject = null, saving = Promise.resolve();
+    const changed = () => { try {
+        onChange(state);
+    }
+    catch { } };
+    const fail = (e, prefix) => { state.message = (prefix ? prefix + ': ' : '') + (e?.name === 'AbortError' ? 'cancelled.' : e?.message || String(e)); changed(); };
+    async function permission(handle, ask) { const opts = { mode: 'readwrite' }; if (typeof handle.queryPermission === 'function') {
+        let p = await handle.queryPermission(opts);
+        if (p !== 'granted' && ask && typeof handle.requestPermission === 'function')
+            p = await handle.requestPermission(opts);
+        return p;
+    } return 'granted'; }
+    async function refresh() {
+        if (!state.handle || state.permission !== 'granted')
+            return;
+        state.busy = true;
+        changed();
+        try {
+            const files = [];
+            for await (const [name, entry] of state.handle.entries()) {
+                if (entry.kind !== 'file' || !(0, exports.isProjectFileName)(name))
+                    continue;
+                try {
+                    const f = await entry.getFile();
+                    files.push({ name, size: f.size, modified: f.lastModified });
+                }
+                catch { }
+            }
+            files.sort((a, b) => b.modified - a.modified || a.name.localeCompare(b.name));
+            state.files = files;
+            state.message = '';
+        }
+        catch (e) {
+            fail(e, 'Could not read the folder');
+        }
+        finally {
+            state.busy = false;
+            changed();
+        }
+    }
+    async function adopt(handle) { state.handle = handle; state.folderName = handle.name; state.permission = await permission(handle, false); changed(); if (state.permission === 'granted')
+        await refresh(); }
+    return { state,
+        async restore() { if (!supported)
+            return; try {
+            const h = await idbDo(idb, 'readonly', s => s.get(KEY));
+            if (h)
+                await adopt(h);
+        }
+        catch { } },
+        async connect() { if (!supported)
+            return false; try {
+            const h = await win.showDirectoryPicker({ id: 'fcs-projects', mode: 'readwrite' });
+            await idbDo(idb, 'readwrite', s => s.put(h, KEY));
+            state.linkedFile = null;
+            await adopt(h);
+            if (state.permission !== 'granted') {
+                state.permission = await permission(h, true);
+                changed();
+                if (state.permission === 'granted')
+                    await refresh();
+            }
+            return state.permission === 'granted';
+        }
+        catch (e) {
+            fail(e, 'Folder not connected');
+            return false;
+        } },
+        async reconnect() { if (!state.handle)
+            return this.connect(); try {
+            state.permission = await permission(state.handle, true);
+            changed();
+            if (state.permission === 'granted')
+                await refresh();
+            return state.permission === 'granted';
+        }
+        catch (e) {
+            fail(e, 'Folder access');
+            return false;
+        } },
+        async disconnect() { clearTimeout(timer); timer = null; try {
+            await idbDo(idb, 'readwrite', s => s.delete(KEY));
+        }
+        catch { } Object.assign(state, { handle: null, folderName: '', permission: supported ? 'none' : 'unsupported', files: [], linkedFile: null, message: 'Folder disconnected. Your files are unchanged.' }); changed(); },
+        refresh,
+        async read(name) { if (!state.handle)
+            throw Error('No project folder is connected'); const fh = await state.handle.getFileHandle(name); const f = await fh.getFile(); if (f.size > 50e6)
+            throw Error('Project file exceeds 50 MB'); return JSON.parse(await f.text()); },
+        async write(name, project) { if (!state.handle || state.permission !== 'granted')
+            throw Error('Connect the project folder first'); const text = JSON.stringify(project, null, 1); const run = async () => { const fh = await state.handle.getFileHandle(name, { create: true }); const w = await fh.createWritable(); try {
+            await w.write(text);
+        }
+        catch (e) {
+            await w.abort?.();
+            throw e;
+        } await w.close(); state.lastSaved = Date.now(); }; saving = saving.then(run, run); await saving; await refresh(); return name; },
+        async remove(name) { if (!state.handle)
+            throw Error('No project folder is connected'); await state.handle.removeEntry(name); if (state.linkedFile === name)
+            state.linkedFile = null; await refresh(); },
+        link(name) { state.linkedFile = name; changed(); },
+        unlink() { clearTimeout(timer); timer = null; state.linkedFile = null; changed(); },
+        setAutosave(on) { state.autosave = Boolean(on); changed(); },
+        exists(name) { return state.files.some(f => f.name === name); },
+        // Debounced write of the open project to its linked file; the latest state always wins.
+        schedule(project) { if (!state.linkedFile || !state.autosave || state.permission !== 'granted')
+            return; pendingProject = project; const file = state.linkedFile; clearTimeout(timer); timer = setTimeout(async () => { timer = null; const p = pendingProject; pendingProject = null; if (state.linkedFile !== file || !p)
+            return; try {
+            await this.write(file, p);
+        }
+        catch (e) {
+            fail(e, 'Autosave to ' + file + ' failed');
+        } }, autosaveDelay); },
+        async flush() { if (timer) {
+            clearTimeout(timer);
+            timer = null;
+            const p = pendingProject;
+            pendingProject = null;
+            if (p && state.linkedFile)
+                await this.write(state.linkedFile, p);
+        } await saving; }
+    };
+}
+},
+"report-contents.mjs": function(module,exports,require){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LARGE_REPORT_BUSES = exports.SECTION_KEYS = exports.REPORT_SECTIONS = void 0;
+exports.sectionForSheet = sectionForSheet;
+exports.defaultReportChoice = defaultReportChoice;
+exports.cleanChoice = cleanChoice;
+exports.loadReportChoice = loadReportChoice;
+exports.saveReportChoice = saveReportChoice;
+exports.reportStudyEntries = reportStudyEntries;
+exports.applyReportChoice = applyReportChoice;
+exports.reportChoiceMarkup = reportChoiceMarkup;
+exports.sheetTableMarkup = sheetTableMarkup;
+// Report contents chooser: which study results go into the printed, PDF and Excel report.
+// The choice only filters and appends report sections. It never changes a calculated value.
+exports.REPORT_SECTIONS = [
+    ['basis', 'Study basis', 'Fault type, frequency, scenario and calculation base'],
+    ['diagram', 'Single-line diagram', 'Drawn system with bus fault levels (printed report)'],
+    ['buses', 'Bus fault levels', 'RMS, peak, X/R and status at every bus'],
+    ['sources', 'Source contributions', 'Each source’s current for each fault location'],
+    ['branches', 'Branch currents', 'Current through each connection for each fault location'],
+    ['duty', 'Equipment rating checks', 'SCCR and interrupting duty against the entered ratings'],
+    ['screens', 'Cable and short-time screens', 'Database adiabatic and short-time checks'],
+    ['pv', 'PV array data', 'Module and string nameplate values'],
+    ['inputs', 'Entered network data', 'Every entered property, with database sources'],
+    ['qa', 'Assumptions and input review', 'Warnings, scope notes and QA messages'],
+    ['methodology', 'Method and limits', 'Calculation method text (printed report)']
+];
+exports.SECTION_KEYS = exports.REPORT_SECTIONS.map(s => s[0]);
+// Per-fault-location tables can hold buses × sources rows. Large projects default to the selected fault bus.
+exports.LARGE_REPORT_BUSES = 150;
+const SHEET_SECTION = { 'Summary': null, 'Bus results': 'buses', 'DLG phase currents': 'buses', 'Phase currents': 'buses', 'Conductor currents': 'buses', 'Bond currents': 'buses', 'Source contributions': 'sources', 'Source terminals': 'sources', 'Branch currents': 'branches', 'Branch phases': 'branches', 'Equipment duty': 'duty', 'Database screens': 'screens', 'PV arrays': 'pv', 'Study inputs': 'inputs', 'Workbook references': 'inputs', 'Assumptions & QA': 'qa' };
+const PER_LOCATION = new Set(['Source contributions', 'Source terminals', 'Branch currents', 'Branch phases']);
+function sectionForSheet(name) { return Object.hasOwn(SHEET_SECTION, name) ? SHEET_SECTION[name] : 'buses'; }
+const STORE = 'fcs-report-contents-v1';
+function readStore() { try {
+    const raw = globalThis.localStorage?.getItem(STORE);
+    const v = raw ? JSON.parse(raw) : {};
+    return v && typeof v === 'object' && !Array.isArray(v) ? v : {};
+}
+catch {
+    return {};
+} }
+function defaultReportChoice(project) { return { sections: [...exports.SECTION_KEYS], scope: (project?.buses?.length || 0) > exports.LARGE_REPORT_BUSES ? 'selected' : 'all', studies: [], excluded: [] }; }
+function cleanChoice(choice, project) {
+    const base = defaultReportChoice(project);
+    if (!choice || typeof choice !== 'object')
+        return base;
+    const sections = Array.isArray(choice.sections) ? choice.sections.filter(k => exports.SECTION_KEYS.includes(k)) : base.sections;
+    const keyList = v => Array.isArray(v) ? v.filter(k => typeof k === 'string' && k.length < 120).slice(0, 200) : [];
+    return { sections, scope: choice.scope === 'selected' || choice.scope === 'all' ? choice.scope : base.scope, studies: keyList(choice.studies), excluded: keyList(choice.excluded) };
+}
+function loadReportChoice(project) { return cleanChoice(readStore()[project?.id], project); }
+function saveReportChoice(project, choice) {
+    if (!project?.id)
+        return;
+    try {
+        const all = readStore();
+        delete all[project.id];
+        all[project.id] = cleanChoice(choice, project);
+        const keys = Object.keys(all);
+        for (const k of keys.slice(0, Math.max(0, keys.length - 60)))
+            delete all[k];
+        globalThis.localStorage?.setItem(STORE, JSON.stringify(all));
+    }
+    catch { }
+}
+// ---------- Extra studies (operating, engineering screens and tool panels) ----------
+const MAX_ROWS = 20000, MAX_DEPTH = 24;
+function flatten(value, prefix, rows, part, depth = 0) {
+    if (rows.length > MAX_ROWS)
+        throw Error('Study output is too large for the combined report; use the study’s own export.');
+    if (depth > MAX_DEPTH) {
+        rows.push([part, prefix, '(nested data not shown)']);
+        return rows;
+    }
+    if (value === null || value === undefined || typeof value !== 'object') {
+        rows.push([part, prefix || 'value', value === undefined ? '' : typeof value === 'number' && !Number.isFinite(value) ? String(value) : typeof value === 'string' ? value.slice(0, 8000) : value]);
+        return rows;
+    }
+    if (Array.isArray(value)) {
+        if (!value.length)
+            rows.push([part, prefix || 'list', '(empty)']);
+        for (let i = 0; i < value.length; i++)
+            flatten(value[i], `${prefix}[${i}]`, rows, part, depth + 1);
+        return rows;
+    }
+    const keys = Object.keys(value);
+    if (!keys.length)
+        rows.push([part, prefix || 'object', '(empty)']);
+    for (const k of keys)
+        flatten(value[k], prefix ? `${prefix}.${k}` : k, rows, part, depth + 1);
+    return rows;
+}
+function studySheet(label, study) {
+    const rows = [['Study', 'Method', study.method || label], ['Study', 'Captured', study.createdAt || 'Current project inputs'], ['Study', 'Scope', 'Screening result. Independently verify inputs, standards edition and equipment data before professional use.']];
+    if (study.inputs !== undefined)
+        flatten(study.inputs, '', rows, 'Input');
+    flatten(study.outputs, '', rows, 'Result');
+    return { name: label, headers: ['Part', 'Item', 'Value'], rows };
+}
+const ADVANCED_LABELS = { protectionCases: 'Protection case check', arc: 'Arc flash at one location (IEEE 1584)', thermal: 'Thermal resistance screen', harmonic: 'Harmonic TDD screen', dc: 'DC loop fault', battery: 'Battery runtime', grounding: 'Ground potential rise', motor: 'Motor start voltage dip', reliability: 'Reliability indices', n1: 'N-1 connectivity' };
+// Each entry: {key,label,group,ready,reason,sheets():[sheet]}
+function reportStudyEntries(project, { operatingPreview, advancedPreview } = {}) {
+    const out = [];
+    if (operatingPreview) {
+        let data = null, error = '';
+        try {
+            data = operatingPreview(project);
+        }
+        catch (e) {
+            error = e?.message || String(e);
+        }
+        out.push({ key: 'operating:loadflow', label: 'Load flow (operating study)', group: 'Operating studies', ready: !error, reason: error, sheets: () => [studySheet('Load flow', { method: 'Balanced power flow', inputs: project.operatingStudy || {}, outputs: data })] });
+    }
+    if (advancedPreview) {
+        let all = {};
+        try {
+            all = advancedPreview(project) || {};
+        }
+        catch (e) {
+            all = {};
+        }
+        for (const [k, r] of Object.entries(all)) {
+            const label = ADVANCED_LABELS[k] || k;
+            out.push({ key: 'advanced:' + k, label, group: 'Engineering studies', ready: !!r && !r.error, reason: r?.error || '', sheets: () => [studySheet(label, { method: label, inputs: (project.advancedStudy || {})[k === 'battery' ? 'dc' : k === 'n1' ? 'reliability' : k], outputs: r.data })] });
+        }
+    }
+    const reg = globalThis.__fcsReportStudies;
+    if (reg instanceof Map)
+        for (const [key, entry] of reg) {
+            if (!entry || typeof entry.get !== 'function')
+                continue;
+            if (entry.projectId && project?.id && entry.projectId !== project.id)
+                continue;
+            let study = null, error = '';
+            try {
+                study = entry.get();
+                if (!study)
+                    error = 'Run the study first';
+            }
+            catch (e) {
+                error = e?.message || String(e);
+            }
+            out.push({ key: 'tool:' + key, label: entry.label || key, group: 'Study tools run this session', ready: !error, reason: error, at: entry.at, sheets: () => study?.sheets ? study.sheets.map(s => ({ ...s, name: String(entry.label || key).split(' (')[0].slice(0, 14).trim() + ' · ' + s.name })) : [studySheet(entry.label || key, study)] });
+        }
+    return out;
+}
+// ---------- Applying the choice ----------
+function uniqueNames(sheets) { const used = new Set(); return sheets.map(s => { let raw = String(s.name).replace(/[\\/?*\[\]:]/g, ' '); if (raw.length > 31 && raw.indexOf(' (') > 0 && raw.indexOf(' (') <= 31)
+    raw = raw.slice(0, raw.indexOf(' (')) + raw.slice(raw.indexOf(')', raw.indexOf(' (')) + 1); let base = raw.slice(0, 31).trim(), name = base, i = 2; while (used.has(name.toLowerCase())) {
+    const tag = ' (' + (i++) + ')';
+    name = base.slice(0, 31 - tag.length) + tag;
+} used.add(name.toLowerCase()); return name === s.name ? s : { ...s, name }; }); }
+function applyReportChoice(report, choice, { project, selectedName, studies = [] } = {}) {
+    const c = cleanChoice(choice, project), keep = new Set(c.sections), chosenStudies = new Set(c.studies);
+    const sheets = [], pdfSheets = [];
+    const included = exports.REPORT_SECTIONS.filter(([k]) => keep.has(k)).map(s => s[1]);
+    for (const sheet of report.sheets) {
+        if (sheet.name === 'Summary') {
+            const rows = [...sheet.rows, ['Report contents', included.join(', ') || 'Summary only'], ['Per-location detail', c.scope === 'selected' ? 'Selected fault bus only' + (selectedName ? ' (' + selectedName + ')' : '') : 'All fault locations']];
+            sheets.push({ ...sheet, rows });
+            pdfSheets.push('Summary');
+            continue;
+        }
+        const key = sectionForSheet(sheet.name);
+        if (!keep.has(key))
+            continue;
+        let out = sheet;
+        if (c.scope === 'selected' && PER_LOCATION.has(sheet.name))
+            out = { ...sheet, rows: selectedName ? sheet.rows.filter(r => r[0] === selectedName) : [] };
+        sheets.push(out);
+        pdfSheets.push(out.name);
+    }
+    const extra = [];
+    for (const s of studies) {
+        if (!chosenStudies.has(s.key) || !s.ready)
+            continue;
+        for (const sheet of s.sheets())
+            extra.push(sheet);
+    }
+    if (extra.length) {
+        sheets[0]?.rows.push(['Additional studies', studies.filter(s => chosenStudies.has(s.key) && s.ready).map(s => s.label).join(', ')]);
+    }
+    const named = uniqueNames([...sheets, ...extra]);
+    return { ...report, sheets: named, pdfSheets: named.map(s => s.name), choice: c };
+}
+// ---------- Chooser markup (screen only, never printed) ----------
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function reportChoiceMarkup(choice, { project, studies = [], available = new Set(exports.SECTION_KEYS), open = true } = {}) {
+    const c = cleanChoice(choice, project), keep = new Set(c.sections), chosen = new Set(c.studies), large = (project?.buses?.length || 0) > exports.LARGE_REPORT_BUSES;
+    const box = ([k, label, hint]) => { const off = !available.has(k); return `<label class="report-choice${off ? ' is-off' : ''}"><input type="checkbox" data-report-section="${k}" ${keep.has(k) && !off ? 'checked' : ''} ${off ? 'disabled' : ''}><span><b>${esc(label)}</b><small>${esc(off ? 'Not part of this study type' : hint)}</small></span></label>`; };
+    const groups = [...new Set(studies.map(s => s.group))];
+    const studyBox = s => `<label class="report-choice${s.ready ? '' : ' is-off'}"><input type="checkbox" data-report-study="${esc(s.key)}" ${s.ready && chosen.has(s.key) ? 'checked' : ''} ${s.ready ? '' : 'disabled'}><span><b>${esc(s.label)}</b><small>${esc(s.ready ? 'Calculated · include its inputs and results' : 'Not calculated: ' + s.reason)}</small></span></label>`;
+    return `<details class="panel report-contents no-print" ${open ? 'open' : ''}><summary><span class="eyebrow">REPORT CONTENTS</span><strong>Choose what goes in the printed, PDF and Excel report</strong></summary>
+<div class="report-choice-actions"><button type="button" data-report-all="all">Select all</button><button type="button" data-report-all="none">Clear all</button><span class="micro">${[...keep].filter(k => available.has(k)).length} of ${available.size} sections${chosen.size ? ' · ' + chosen.size + ' additional ' + (chosen.size === 1 ? 'study' : 'studies') : ''}</span></div>
+<div class="report-choice-grid">${exports.REPORT_SECTIONS.map(box).join('')}</div>
+<fieldset class="report-scope"><legend>Source and branch tables</legend><label><input type="radio" name="report-scope" data-report-scope="all" ${c.scope === 'all' ? 'checked' : ''}> All fault locations</label><label><input type="radio" name="report-scope" data-report-scope="selected" ${c.scope === 'selected' ? 'checked' : ''}> Selected fault bus only</label>${large ? `<small>${project.buses.length} buses: every fault location gives about ${(project.buses.length * Math.max(1, project.sources?.length || 1)).toLocaleString('en-US')} source rows. “Selected fault bus only” keeps the report a manageable size.</small>` : ''}</fieldset>
+${groups.map(g => { const ready = studies.filter(s => s.group === g && s.ready), wait = studies.filter(s => s.group === g && !s.ready); return `<h3>${esc(g)}</h3>${ready.length ? `<div class="report-choice-grid">${ready.map(studyBox).join('')}</div>` : ''}${wait.length ? `<p class="micro report-waiting">${ready.length ? 'Also available once calculated' : 'Not calculated yet'}: ${wait.map(s => esc(s.label)).join(', ')}. Run ${wait.length === 1 ? 'it' : 'them'} on the ${g === 'Operating studies' ? 'Operating studies' : g === 'Engineering studies' ? 'Engineering studies' : 'tool'} page, then return here.</p>` : ''}`; }).join('')}
+<p class="micro">The summary page is always included. Your choice is remembered for this project on this device.</p></details>`;
+}
+// Simple printable table for an additional study sheet.
+function sheetTableMarkup(sheet, { limit = 3000 } = {}) {
+    const rows = sheet.rows.slice(0, limit);
+    return `<section class="panel report-extra"><h2>${esc(sheet.name)}</h2><div class="table-scroll"><table><thead><tr>${sheet.headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${sheet.rows.length > limit ? `<p class="micro">First ${limit.toLocaleString('en-US')} of ${sheet.rows.length.toLocaleString('en-US')} rows shown. Download Excel for every row.</p>` : ''}</section>`;
+}
+},
+"sparse-complex-lu.mjs": function(module,exports,require){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sparseFactorC = sparseFactorC;
+// Complex sparse LU for nodal / modified-nodal network matrices. Rows are Map(column -> [re, im]).
+// Pivot order: column with the fewest entries first; within it, threshold partial pivoting (|a| >= 0.1 max) preferring short rows.
+// Returns solve(rhs, typed): rhs as an array of {r,i} or, with typed=true, as [Float64Array re, Float64Array im]; result [re, im].
+function sparseFactorC(rows, { tiny = 1e-13, message = 'Singular sequence network: floating path or indeterminate ideal-link cycle.' } = {}) {
+    const n = rows.length, cols = Array.from({ length: n }, () => new Set());
+    for (let r = 0; r < n; r++)
+        for (const c of rows[r].keys())
+            cols[c].add(r);
+    const done = new Uint8Array(n), heap = [], less = (a, b) => a[0] < b[0] || (a[0] === b[0] && a[1] < b[1]);
+    const push = (x, k) => { heap.push([x, k]); let c = heap.length - 1; while (c > 0) {
+        const q = (c - 1) >> 1;
+        if (!less(heap[c], heap[q]))
+            break;
+        [heap[c], heap[q]] = [heap[q], heap[c]];
+        c = q;
+    } };
+    const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) {
+        heap[0] = last;
+        let c = 0;
+        for (;;) {
+            const l = 2 * c + 1, r = l + 1;
+            let m = c;
+            if (l < heap.length && less(heap[l], heap[m]))
+                m = l;
+            if (r < heap.length && less(heap[r], heap[m]))
+                m = r;
+            if (m === c)
+                break;
+            [heap[c], heap[m]] = [heap[m], heap[c]];
+            c = m;
+        }
+    } return top; };
+    for (let c = 0; c < n; c++)
+        push(cols[c].size, c);
+    const steps = [];
+    while (steps.length < n) {
+        if (!heap.length)
+            throw Error(message);
+        const [x, c] = pop();
+        if (done[c] || x !== cols[c].size)
+            continue;
+        let max = 0;
+        for (const r of cols[c]) {
+            const v = rows[r].get(c);
+            max = Math.max(max, Math.hypot(v[0], v[1]));
+        }
+        if (!(max > tiny))
+            throw Error(message);
+        let r = -1, best = Infinity, bestMag = 0;
+        for (const q of cols[c]) {
+            const v = rows[q].get(c), m = Math.hypot(v[0], v[1]);
+            if (m < 0.1 * max)
+                continue;
+            const cnt = rows[q].size;
+            if (cnt < best || (cnt === best && m > bestMag)) {
+                best = cnt;
+                bestMag = m;
+                r = q;
+            }
+        }
+        const row = rows[r], [pr, pi] = row.get(c), pd = pr * pr + pi * pi, U = [];
+        for (const [j, v] of row)
+            if (j !== c)
+                U.push(j, v[0], v[1]);
+        for (const j of row.keys())
+            cols[j].delete(r);
+        const L = [];
+        for (const i of cols[c]) {
+            const ri = rows[i], [ar, ai] = ri.get(c);
+            ri.delete(c);
+            const lr = (ar * pr + ai * pi) / pd, li = (ai * pr - ar * pi) / pd;
+            L.push(i, lr, li);
+            for (let q = 0; q < U.length; q += 3) {
+                const j = U[q], ur = U[q + 1], ui = U[q + 2], v = ri.get(j);
+                const dr = lr * ur - li * ui, di = lr * ui + li * ur;
+                if (v) {
+                    v[0] -= dr;
+                    v[1] -= di;
+                }
+                else {
+                    ri.set(j, [-dr, -di]);
+                    cols[j].add(i);
+                }
+            }
+        }
+        cols[c].clear();
+        done[c] = 1;
+        rows[r] = null;
+        steps.push({ r, c, pr, pi, pd, L, U });
+        for (let q = 0; q < U.length; q += 3)
+            push(cols[U[q]].size, U[q]);
+    }
+    return (rhs, typed) => {
+        const br = typed ? Float64Array.from(rhs[0]) : new Float64Array(n), bi = typed ? Float64Array.from(rhs[1]) : new Float64Array(n);
+        if (!typed)
+            for (let k = 0; k < n; k++) {
+                br[k] = rhs[k].r;
+                bi[k] = rhs[k].i;
+            }
+        for (const { r, L } of steps) {
+            const xr = br[r], xi = bi[r];
+            if (xr === 0 && xi === 0)
+                continue;
+            for (let q = 0; q < L.length; q += 3) {
+                const i = L[q], lr = L[q + 1], li = L[q + 2];
+                br[i] -= lr * xr - li * xi;
+                bi[i] -= lr * xi + li * xr;
+            }
+        }
+        const xr = new Float64Array(n), xi = new Float64Array(n);
+        for (let t = steps.length - 1; t >= 0; t--) {
+            const { r, c, pr, pi, pd, U } = steps[t];
+            let sr = br[r], si = bi[r];
+            for (let q = 0; q < U.length; q += 3) {
+                const j = U[q], ur = U[q + 1], ui = U[q + 2];
+                sr -= ur * xr[j] - ui * xi[j];
+                si -= ur * xi[j] + ui * xr[j];
+            }
+            xr[c] = (sr * pr + si * pi) / pd;
+            xi[c] = (si * pr - sr * pi) / pd;
+        }
+        return [xr, xi];
+    };
+}
+},
 "network-app.mjs": function(module,exports,require){
 (async function(){
 "use strict";
@@ -8187,7 +10655,7 @@ const analysis_fields_mjs_v_20261022_pv_final_1 = require("./analysis-fields.mjs
 const property_values_mjs_v_20261022_pv_final_1 = require("./property-values.mjs?v=20261022-pv-final");
 const single_phase_mjs_v_20261022_pv_final_1 = require("./single-phase.mjs?v=20261022-pv-final");
 const single_phase_form_mjs_v_20261022_pv_final_1 = require("./single-phase-form.mjs?v=20261022-pv-final");
-const report_download_mjs_v_20261022_pv_final_1 = require("./report-download.mjs?v=20261022-pv-final");
+const report_download_mjs_v_20261108_v32_1 = require("./report-download.mjs?v=20261108-v32");
 const project_history_mjs_v_20261022_pv_final_1 = require("./project-history.mjs?v=20261022-pv-final");
 const manufacturer_library_mjs_v_20261022_pv_final_1 = require("./manufacturer-library.mjs?v=20261022-pv-final");
 const equipment_dialog_mjs_v_20261022_pv_final_1 = require("./equipment-dialog.mjs?v=20261022-pv-final");
@@ -8201,10 +10669,12 @@ const network_model_mjs_v_20261022_pv_final_1 = require("./network-model.mjs?v=2
 const network_storage_mjs_v_20261022_pv_final_1 = require("./network-storage.mjs?v=20261022-pv-final");
 const database_map_mjs_v_20261022_pv_final_1 = require("./database-map.mjs?v=20261022-pv-final");
 const network_calculation_mjs_v_20261022_pv_final_1 = require("./network-calculation.mjs?v=20261022-pv-final");
+const project_folder_mjs_v_20261108_v31_1 = require("./project-folder.mjs?v=20261108-v31");
 const database_selection_mjs_v_20261022_pv_final_1 = require("./database-selection.mjs?v=20261022-pv-final");
 const network_voltage_mjs_v_20261022_pv_final_1 = require("./network-voltage.mjs?v=20261022-pv-final");
 const network_cloud_mjs_v_20261022_pv_final_1 = require("./network-cloud.mjs?v=20261022-pv-final");
 const public_report_engine_mjs_1 = require("./public-report-engine.mjs");
+const report_contents_mjs_v_20261108_v32_1 = require("./report-contents.mjs?v=20261108-v32");
 const cloud_backup_mjs_v_20261025_batch11_1 = require("./cloud-backup.mjs?v=20261025-batch11");
 const master_database_mjs_v_20261022_pv_final_1 = require("./master-database.mjs?v=20261022-pv-final");
 const database_checks_mjs_v_20261022_pv_final_1 = require("./database-checks.mjs?v=20261022-pv-final");
@@ -8219,6 +10689,11 @@ let dbFilters = { fitOnly: true, manufacturer: '', material: '', size: '' }, dbI
 const studyStorage = (0, network_storage_mjs_v_20261022_pv_final_1.createStudyStorage)({ getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) });
 let lastRecoveryMessage = '';
 let diagramViewport = null, showBranchCurrents = true, diagramProjectId = null;
+let findQuery = '', findIndex = 0, findStatus = '';
+// V31: projects saved as files in a folder on the user's computer (see project-folder.mjs).
+const folder = (0, project_folder_mjs_v_20261108_v31_1.createProjectFolder)({ onChange: () => { if (view === 'projects' && !drag)
+        render(); } });
+let folderProjectId = null;
 let replacementRequest = 0, placementKind = null, drawingConnection = null, connectionKind = 'cable';
 const inlineLoading = new Map(), inlineErrors = new Map(), inlineFilters = new Map();
 let cableSearchTimer = null;
@@ -8236,7 +10711,13 @@ const cloudHosted = false; // Public independent host: browser-local studies, no
 let cloudRows = [], cloudSearch = '', cloudSort = 'updated_desc', cloudOffset = 0, cloudMore = false, cloudListLoading = false, cloudListMessage = '', cloudListRequest = 0, cloudSearchTimer = null, deleteCaseId = null;
 const cloud = (0, network_cloud_mjs_v_20261022_pv_final_1.createCloudStudies)({ onState: () => renderCloudState(), remember: link => write('fault-network-cloud-link-v1', link) });
 // Public preview: report files are built on the visitor's device using Studio reportData.
-cloud.report = public_report_engine_mjs_1.browserReport;
+let reportChoiceCache = null;
+function reportChoice(p = project) { if (!reportChoiceCache || reportChoiceCache.id !== p?.id)
+    reportChoiceCache = { id: p?.id, choice: (0, report_contents_mjs_v_20261108_v32_1.loadReportChoice)(p) }; return reportChoiceCache.choice; }
+function setReportChoice(next) { reportChoiceCache = { id: project.id, choice: next }; (0, report_contents_mjs_v_20261108_v32_1.saveReportChoice)(project, next); }
+function reportStudies(p = project) { return (0, report_contents_mjs_v_20261108_v32_1.reportStudyEntries)(p, { operatingPreview: operating_workspace_mjs_v_20261024_batch01_1.calculateOperatingPreview, advancedPreview: advanced_workspace_mjs_v_20261024_b03b08_1.advancedPreview }); }
+const reportHas = key => reportChoice().sections.includes(key);
+cloud.report = (p, format) => (0, public_report_engine_mjs_1.browserReport)(p, format, { choice: reportChoice(p), studies: reportStudies(p) });
 function read(key, fallback) { const value = studyStorage.read(key, fallback); storageOK = studyStorage.available; if (studyStorage.recoveryMessage && studyStorage.recoveryMessage !== lastRecoveryMessage) {
     lastRecoveryMessage = studyStorage.recoveryMessage;
     notice = esc(lastRecoveryMessage);
@@ -8244,8 +10725,20 @@ function read(key, fallback) { const value = studyStorage.read(key, fallback); s
 function write(key, value) { const ok = studyStorage.write(key, value); storageOK = studyStorage.available; return ok; }
 function all() { return [...project.buses, ...project.sources, ...project.branches, ...project.devices, ...(project.pvArrays || [])]; }
 function itemById(itemId) { return all().find(x => x.id === itemId); }
-function result(bus = project.selectedBus) { return calculation.results.find(r => r.busId === bus); }
-const n = (v, d = 3) => v === null || v === undefined || !Number.isFinite(Number(v)) ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: d }), ka = v => !Number.isFinite(v) ? '—' : v >= 1000 ? n(v / 1000) + ' kA' : v > 0 && v < .001 ? v.toExponential(2) + ' A' : n(v) + ' A', voltage = v => v >= 1000 ? n(v / 1000) + ' kV' : n(v) + ' V', z = v => v ? n(v.r, 6) + ' + j' + n(v.i, 6) + ' Ω' : 'Unavailable';
+const resultIndex = new WeakMap();
+function result(bus = project.selectedBus) { const list = calculation.results; if (!Array.isArray(list))
+    return undefined; let m = resultIndex.get(list); if (!m) {
+    m = new Map();
+    for (const r of list)
+        if (r && !m.has(r.busId))
+            m.set(r.busId, r);
+    resultIndex.set(list, m);
+} return m.get(bus); }
+const numberFormats = new Map(), n = (v, d = 3) => { if (v === null || v === undefined || !Number.isFinite(Number(v)))
+    return '—'; let f = numberFormats.get(d); if (!f) {
+    f = new Intl.NumberFormat('en-US', { maximumFractionDigits: d });
+    numberFormats.set(d, f);
+} return f.format(Number(v)); }, ka = v => !Number.isFinite(v) ? '—' : v >= 1000 ? n(v / 1000) + ' kA' : v > 0 && v < .001 ? v.toExponential(2) + ' A' : n(v) + ' A', voltage = v => v >= 1000 ? n(v / 1000) + ' kV' : n(v) + ' V', z = v => v ? n(v.r, 6) + ' + j' + n(v.i, 6) + ' Ω' : 'Unavailable';
 const badge = (status) => `<span class="badge ${/FAIL|ERROR/.test(status) ? 'bad' : /REQUIRED|UNKNOWN|BOUND|DISCONNECT|REVIEW/.test(status) ? 'amber' : ''}">${esc(status)}</span>`;
 function persist({ historyGroup = null } = {}) { if (equipmentEdit)
     return; if (reportDownload && reportDownload.projectId !== project.id) {
@@ -8255,7 +10748,8 @@ function persist({ historyGroup = null } = {}) { if (equipmentEdit)
 } if (browserHandoff && (browserHandoff.projectId !== project.id || browserHandoff.snapshot !== (0, network_cloud_mjs_v_20261022_pv_final_1.canonicalStudy)(project))) {
     browserHandoffRequest++;
     browserHandoff = null;
-} history.record(project, selection, { group: historyGroup }); renderHistoryState(); write('fault-network-draft-v2', project); cloud.edit(project); }
+} history.record(project, selection, { group: historyGroup }); renderHistoryState(); write('fault-network-draft-v2', project); cloud.edit(project); if (folder.state.linkedFile && folderProjectId === project.id)
+    folder.schedule(project); }
 function renderHistoryState() { for (const button of document.querySelectorAll?.('[data-action="undo"], [data-action="redo"]') || [])
     button.disabled = !history.state[button.dataset.action === 'undo' ? 'canUndo' : 'canRedo']; }
 function historyControls() { return `<div class="history-controls" role="group" aria-label="Study edit history"><button data-action="undo" aria-keyshortcuts="Control+z Meta+z" title="Undo (Ctrl+Z / Cmd+Z)" ${history.state.canUndo ? '' : 'disabled'}>↶ Undo</button><button data-action="redo" aria-keyshortcuts="Control+y Control+Shift+z Meta+Shift+z" title="Redo (Ctrl+Y / Ctrl+Shift+Z)" ${history.state.canRedo ? '' : 'disabled'}>↷ Redo</button></div>`; }
@@ -8795,7 +11289,7 @@ function sourceForm(s) {
 }
 function transformerForm(t) { const custom = (0, analysis_fields_mjs_v_20261022_pv_final_1.analysisTransformerFields)(project, t, modelInput, busSelect); if (custom !== null)
     return custom; if ((0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project))
-    return (0, single_phase_form_mjs_v_20261022_pv_final_1.singlePhaseTransformerFields)(t, input, busSelect); return busSelect(t, 'from', 'Primary bus') + busSelect(t, 'to', 'Secondary bus') + `<div class="voltage-bridge">PRIMARY <span>→</span> SECONDARY</div>` + input(t, 'v1', 'Primary winding voltage', { units: voltageUnits, required: true }) + input(t, 'v2', 'Secondary winding voltage', { units: voltageUnits, required: true, help: 'This explicitly sets the downstream bus voltage; use 208 V or 0.208 kV.' }) + input(t, 'power', 'Nameplate rating', { units: powerUnits, required: true }) + input(t, 'zPercent', 'Nameplate impedance (%)', { required: true }) + input(t, 'xr', 'Transformer X/R ratio', { help: 'Leave unknown only for declared reactive-impedance screening.' }) + input(t, 'shift', 'Phase shift: primary to secondary (degrees)', { help: 'Enter the actual vector-group phase shift. Blank assumes aligned phases for balanced screening.' }) + input(t, 'primaryConnection', 'Primary winding', { options: ['Unknown', 'Delta', 'Wye Grounded', 'Wye Ungrounded', 'Zigzag Grounded'] }) + input(t, 'secondaryConnection', 'Secondary winding', { options: ['Unknown', 'Delta', 'Wye Grounded', 'Wye Ungrounded', 'Zigzag Grounded'] }) + input(t, 'grounding', 'Grounding configuration', { options: ['Unknown', 'Solidly grounded', 'Resistance grounded', 'Reactance grounded', 'Ungrounded'] }) + input(t, 'neutralR', 'Neutral grounding resistance (Ω)') + input(t, 'neutralX', 'Neutral grounding reactance (Ω)') + input(t, 'frequency', 'Transformer nameplate frequency (Hz)') + input(t, 'allowOneToOne', 'Intentional 1:1 transformer', { type: 'checkbox' }) + input(t, 'allowIdeal', 'Intentional ideal transformer (0% Z)', { type: 'checkbox' }); }
+    return (0, single_phase_form_mjs_v_20261022_pv_final_1.singlePhaseTransformerFields)(t, input, busSelect); return busSelect(t, 'from', 'Primary bus') + busSelect(t, 'to', 'Secondary bus') + `<div class="voltage-bridge">PRIMARY <span>→</span> SECONDARY</div>` + input(t, 'v1', 'Primary winding voltage', { units: voltageUnits, required: true }) + input(t, 'v2', 'Secondary winding voltage', { units: voltageUnits, required: true, help: 'This explicitly sets the downstream bus voltage; use 208 V or 0.208 kV.' }) + input(t, 'power', 'Nameplate rating', { units: powerUnits, required: true }) + input(t, 'zPercent', 'Nameplate impedance (%)', { required: true }) + input(t, 'xr', 'Transformer X/R ratio', { help: 'Leave unknown only for declared reactive-impedance screening.' }) + input(t, 'tapPercent', 'Off-nominal primary tap (%)', { help: 'Tap changer setting as % of nameplate primary voltage, e.g. +2.5 or -5. Blank or 0 = nominal. Applied to fault studies and load flow; the split-phase study asks for 0 %.' }) + input(t, 'shift', 'Phase shift: primary to secondary (degrees)', { help: 'Enter the actual vector-group phase shift. Blank assumes aligned phases for balanced screening.' }) + input(t, 'primaryConnection', 'Primary winding', { options: ['Unknown', 'Delta', 'Wye Grounded', 'Wye Ungrounded', 'Zigzag Grounded'] }) + input(t, 'secondaryConnection', 'Secondary winding', { options: ['Unknown', 'Delta', 'Wye Grounded', 'Wye Ungrounded', 'Zigzag Grounded'] }) + input(t, 'grounding', 'Grounding configuration', { options: ['Unknown', 'Solidly grounded', 'Resistance grounded', 'Reactance grounded', 'Ungrounded'] }) + input(t, 'neutralR', 'Neutral grounding resistance (Ω)') + input(t, 'neutralX', 'Neutral grounding reactance (Ω)') + input(t, 'frequency', 'Transformer nameplate frequency (Hz)') + input(t, 'allowOneToOne', 'Intentional 1:1 transformer', { type: 'checkbox' }) + input(t, 'allowIdeal', 'Intentional ideal transformer (0% Z)', { type: 'checkbox' }); }
 function cableVoltageContent(c) {
     const check = (0, network_voltage_mjs_v_20261022_pv_final_1.cableVoltageDetails)(project, c);
     let state = 'neutral', label = 'Not checked', message = 'Enter the cable’s documented insulation rating, or choose cable data from the master database.';
@@ -8858,7 +11352,8 @@ function canvas() {
 function diagramPanel(full = false) {
     const missing = (0, network_diagram_mjs_v_20261022_pv_final_1.diagramGeometry)(project).missing, chosen = itemById(selection);
     const instruction = placementKind === 'cable' ? 'Drag from one busbar to another to connect them. Click empty space to add a feeder and its downstream bus.' : placementKind ? 'Move the preview, then click the drawing or a bus to place ' + names[placementKind] + '.' : drawingConnection?.itemId ? 'Click the bus to use for this connection.' : drawingConnection ? (drawingConnection.from ? 'Click the destination bus, or drag to it.' : 'Drag from one busbar to another, or click the starting bus and destination bus.') : 'Double-click for properties · drag bus ends to resize · drag symbols to move';
-    return `<section class="network-panel${full ? ' full-diagram' : ''}"><div class="panel-heading"><div><span class="eyebrow">CONNECTED ELECTRICAL MODEL</span><h2>Your electrical one-line</h2></div><div class="actions"><button data-action="blank">New SLD</button><button data-action="layout" title="Arrange symbols by electrical connections">Arrange</button></div></div><div class="diagram-toolbar" role="toolbar" aria-label="Diagram controls"><div class="diagram-tools"><button data-action="diagram-out" aria-label="Zoom out">−</button><button data-action="diagram-fit">Fit</button><button data-action="diagram-in" aria-label="Zoom in">+</button></div><button data-action="diagram-focus" title="Zoom to the selected equipment">Focus</button><select id="connection-kind" aria-label="Connection type"><option value="cable" ${connectionKind === 'cable' ? 'selected' : ''}>Cable</option><option value="transformer" ${connectionKind === 'transformer' ? 'selected' : ''}>Transformer</option><option value="link" ${connectionKind === 'link' ? 'selected' : ''}>Direct connection</option></select><button data-action="connect-buses" aria-pressed="${Boolean(drawingConnection) && !drawingConnection.itemId}" ${project.buses.length < 2 ? 'disabled' : ''}>Connect buses</button><button data-action="diagram-currents" aria-pressed="${showBranchCurrents}">${showBranchCurrents ? 'Currents on' : 'Show currents'}</button><button data-action="diagram-export" title="Download this diagram as an SVG">SVG</button></div><div class="diagram-selection-actions" role="toolbar" aria-label="Selected diagram equipment"><span id="diagram-selection-name">${chosen ? esc(chosen.name) : 'Select equipment on the drawing'}</span>${chosen ? `<button data-edit-equipment="${esc(chosen.id)}">Edit data</button><button data-duplicate="${esc(chosen.id)}">Duplicate</button><button class="danger" data-delete="${esc(chosen.id)}">Delete</button>` : ''}</div><div class="drawing-instruction" role="status"><span>${esc(instruction)}</span>${placementKind || drawingConnection ? '<button data-action="draw-select">Cancel</button>' : ''}</div>${missing.length ? `<div class="diagram-missing"><strong>${missing.length} missing ${missing.length === 1 ? 'connection' : 'connections'}</strong>${missing.slice(0, 4).map(item => `<button data-edit-equipment="${item.id}">${esc(item.name)} → Connect</button>`).join('')}</div>` : ''}<div class="canvas ${placementKind ? 'placing' : drawingConnection ? 'connecting' : ''}">${canvas()}${diagramMenu ? diagramMenuMarkup() : ''}</div><div class="diagram-legend"><span><i class="legend-bus"></i> Bus fault level</span><span><i class="legend-fault"></i> Selected fault</span><span><i class="legend-open"></i> Open connection</span></div><div class="canvas-foot"><span>Double-click equipment or cables for properties · drag empty space to pan · Ctrl + scroll to zoom · Delete removes selected equipment · arrow keys move · Ctrl+Z undo · Ctrl+Y redo · Esc deselects</span><span>${(0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(project) ? 'Branch RMS: From / To sides for selected fault.' : 'Branch RMS requires a 3-phase study.'}</span></div></section>`;
+    return `<section class="network-panel${full ? ' full-diagram' : ''}"><div class="panel-heading"><div><span class="eyebrow">CONNECTED ELECTRICAL MODEL</span><h2>Your electrical one-line</h2></div><div class="actions"><button data-action="blank">New SLD</button><button data-action="layout" title="Arrange symbols by electrical connections">Arrange</button><button data-plant-builder="open" title="Generate a full PV or BESS plant one-line from block data">Build plant</button><button data-equipment-table="open" title="Export or update all equipment as a spreadsheet table">Equipment table</button></div></div><div class="diagram-toolbar" role="toolbar" aria-label="Diagram controls"><div class="diagram-tools"><button data-action="diagram-out" aria-label="Zoom out">−</button><button data-action="diagram-fit">Fit</button><button data-action="diagram-in" aria-label="Zoom in">+</button></div><button data-action="diagram-focus" title="Zoom to the selected equipment">Focus</button><label class="diagram-find"><input id="diagram-find" type="search" value="${esc(findQuery)}" placeholder="Find bus or equipment" aria-label="Find a bus or equipment by name; Enter shows the next match" autocomplete="off" spellcheck="false"></label>${findStatus ? `<span class="diagram-find-status" role="status">${esc(findStatus)}</span>` : ''}<select id="connection-kind" aria-label="Connection type"><option value="cable" ${connectionKind === 'cable' ? 'selected' : ''}>Cable</option><option value="transformer" ${connectionKind === 'transformer' ? 'selected' : ''}>Transformer</option><option value="link" ${connectionKind === 'link' ? 'selected' : ''}>Direct connection</option></select><button data-action="connect-buses" aria-pressed="${Boolean(drawingConnection) && !drawingConnection.itemId}" ${project.buses.length < 2 ? 'disabled' : ''}>Connect buses</button><button data-action="diagram-currents" aria-pressed="${showBranchCurrents}">${showBranchCurrents ? 'Currents on' : 'Show currents'}</button><button data-action="diagram-export" title="Download this diagram as an SVG">SVG</button></div><div class="diagram-selection-actions" role="toolbar" aria-label="Selected diagram equipment"><span id="diagram-selection-name">${chosen ? esc(chosen.name) : 'Select equipment on the drawing'}</span>${chosen ? `<button data-edit-equipment="${esc(chosen.id)}">Edit data</button><button data-duplicate="${esc(chosen.id)}">Duplicate</button><button class="danger" data-delete="${esc(chosen.id)}">Delete</button>` : ''}</div><div class="drawing-instruction" role="status"><span>${esc(instruction)}</span>${placementKind || drawingConnection ? '<button data-action="draw-select">Cancel</button>' : ''}</div>${missing.length ? `<div class="diagram-missing"><strong>${missing.length} missing ${missing.length === 1 ? 'connection' : 'connections'}</strong>${missing.slice(0, 4).map(item => `<button data-edit-equipment="${item.id}">${esc(item.name)} → Connect</button>`).join('')}</div>` : ''}${(() => { const g = (0, network_diagram_mjs_v_20261022_pv_final_1.diagramGeometry)(project), v = diagramViewport || g.bounds; if (g.items.length <= network_diagram_mjs_v_20261022_pv_final_1.LARGE_DIAGRAM_ITEMS)
+        return ''; return `<p class="diagram-overview-note" role="status" ${v.width > network_diagram_mjs_v_20261022_pv_final_1.OVERVIEW_WIDTH ? '' : 'hidden'}>Large one-line (${g.items.length} items). Zoomed out, it shows lines and symbols only. Zoom in, use Find, or select an item and press Focus to read labels and currents.</p>`; })()}<div class="canvas ${placementKind ? 'placing' : drawingConnection ? 'connecting' : ''}">${canvas()}${diagramMenu ? diagramMenuMarkup() : ''}</div><div class="diagram-legend"><span><i class="legend-bus"></i> Bus fault level</span><span><i class="legend-fault"></i> Selected fault</span><span><i class="legend-open"></i> Open connection</span></div><div class="canvas-foot"><span>Double-click equipment or cables for properties · drag empty space to pan · Ctrl + scroll to zoom · Delete removes selected equipment · arrow keys move · Ctrl+Z undo · Ctrl+Y redo · Esc deselects</span><span>${(0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(project) ? 'Branch RMS: From / To sides for selected fault.' : 'Branch RMS requires a 3-phase study.'}</span></div></section>`;
 }
 function drawingSelectionSummary() {
     if (selection === 'settings')
@@ -8886,16 +11381,46 @@ function mathView(r) { if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExten
     return (0, analysis_presentation_mjs_v_20261022_pv_final_1.analysisResultsMarkup)(project, calculation.results); return `<section class="panel"><div class="panel-heading"><div><span class="eyebrow">CALCULATION DETAILS</span><h2>${esc(r?.busName || 'Select a fault bus')}</h2></div></div>${!r || r.totalA === null ? `<p>${esc(r?.faultNote || 'Complete the input review first.')}</p>` : `<div class="math-intro">${(0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project) ? `Full-voltage two-wire nodal solution. Current base = S / V; transformer leakage = V² / full nameplate VA × %Z. Cable impedance includes the complete outgoing and return loop. Fault current = |Eloop / (Zloop + Zfault)|.` : project.settings.faultType === '3phase' ? `Balanced nodal admittance solution on ${n(project.settings.baseMVA)} MVA with each bus’s nominal voltage base. Voltage sources are Norton equivalents; transformers use ratio, phase shift and leakage impedance. Contributions use the same passive network.` : `Equivalent sequence calculation at this bus. Z1 comes from the positive-sequence nodal model; Z2 and Z0 use the entered bus equivalents${project.settings.assumeZ2 ? ' or the explicitly selected Z2 = Z1 screen' : ''}. ${project.settings.faultType === 'll' ? 'Line current = √3 × |E| / |Z1 + Z2 + Zfault|.' : project.settings.faultType === 'dlg' ? 'I1 = E / [Z1 + Z2 × (Z0 + 3Zfault) / (Z2 + Z0 + 3Zfault)]. I2 = −I1 × (Z0 + 3Zfault) / (Z2 + Z0 + 3Zfault); I0 = −I1 × Z2 / (Z2 + Z0 + 3Zfault). Transform sequence currents to ABC phases; reported RMS is max(|Ib|, |Ic|).' : 'Line current = 3 × |E| / |Z1 + Z2 + Z0 + 3 × Zfault|.'}`}</div><div class="math-grid"><div>Bus voltage<strong>${voltage(r.voltage)}</strong></div><div>Thevenin impedance<strong>${z(r.zth)}</strong></div><div>${project.settings.faultType === 'dlg' ? 'Maximum phase RMS' : 'Total ' + (r.bound ? 'magnitude bound' : 'phasor RMS')}<strong>${ka(r.totalA)}</strong></div><div>Effective X/R<strong>${r.xr === Infinity ? '∞' : n(r.xr)}</strong></div><div>Asymmetrical RMS screening at study time<strong>${ka(r.asymA)}</strong></div><div>Peak screening<strong>${ka(r.peakA)}</strong></div></div>${r.sequence ? `<div class="math-grid"><div>Positive sequence Z1<strong>${z(r.sequence.z1)}</strong></div><div>Negative sequence Z2<strong>${z(r.sequence.z2)}</strong></div><div>Zero sequence Z0<strong>${project.settings.faultType === 'll' ? 'Not used for LL' : z(r.sequence.z0)}</strong></div><div>Prefault phase voltage |E|<strong>${n((0, network_engine_mjs_v_20261022_pv_final_1.abs)(r.sequence.referenceVoltage))} V</strong></div></div>` : ''}${((0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(project) ? r.details : []).map(d => `<details class="math-source" open><summary>${esc(d.name)} <strong>${ka(d.amps)}</strong></summary><div class="math-grid"><div>Source terminal fault level<strong>${ka(d.terminalA)}</strong></div><div>Source impedance at terminal<strong>${z(d.sourceImpedance)}</strong></div><div>Source impedance referred to fault voltage<strong>${z(d.sourceImpedanceAtFault)}</strong></div><div>Calculated fault contribution<strong>${ka(d.amps)}</strong></div><div>Diagnostic series-path impedance at fault voltage<strong>${z(d.pathSeriesZ)}</strong></div></div>${d.current ? `<div class="model-note">Manufacturer-limited current injection. ${d.unknownAngle ? 'Phase unknown: added as a magnitude bound.' : 'Known current phase used.'} ${d.expired ? 'Contribution removed after supplied duration.' : ''} Transformer/cable impedances are in the network; current divides among the fault path and suppressed conventional source admittances. Pure series impedance does not reduce an ideal regulated current.</div>` : ''}<table><thead><tr><th>Path element</th><th>Impedance at element's To side</th><th>Voltage base</th><th>Referred to fault voltage</th></tr></thead><tbody>${d.path.map(e => `<tr><td>${esc(e.name)} · ${esc(e.kind)}</td><td>${z(e.ohms)}</td><td>${voltage(e.atVoltage)}</td><td>${z({ r: e.ohms.r * (r.voltage / e.atVoltage) ** 2, i: e.ohms.i * (r.voltage / e.atVoltage) ** 2 })}</td></tr>`).join('') || '<tr><td colspan="3">Source is at the fault bus.</td></tr>'}</tbody></table>${d.meshed ? '<p class="micro">This is one diagnostic path through a meshed network. The solver uses every connected branch; the table is not an independent series-path sum.</p>' : ''}<details><summary>Branch current from this source during the fault</summary><table><tbody>${d.branchFlows.map(e => `<tr><td>${esc(e.name)}</td><td>From: ${ka(e.amps)}</td><td>To: ${ka(e.toAmps)}</td></tr>`).join('')}</tbody></table></details></details>`).join('')}`}</section>`; }
 function resultsView() { if (pending)
     return '<section class="panel"><h2>Updating network results…</h2><p>Calculate the system to see results for the current inputs.</p></section>'; const r = result(); if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project))
-    return (0, analysis_presentation_mjs_v_20261022_pv_final_1.analysisResultsMarkup)(project, calculation.results); return `<div class="results-grid"><section class="panel"><div class="panel-heading"><h2>${project.settings.faultType === 'dlg' ? 'Phase and ground currents' : 'Contribution at selected bus'}</h2>${badge(r?.status || 'No result')}</div>${contributionView(r)}<div class="result-note">${(0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project) ? single_phase_mjs_v_20261022_pv_final_1.singlePhaseScope : project.settings.faultType !== '3phase' ? 'Unbalanced faults use equivalent sequence data at the fault bus. Source and branch decomposition is available for three-phase studies.' : r?.bound ? 'Unknown inverter phase: conservative magnitude-sum bound; category magnitudes are not an exact phasor total.' : 'Source phasors are combined at the selected fault location, after solving all impedances and transformer ratios.'}</div></section><section class="panel"><h2>All bus fault levels</h2><div class="table-scroll"><table><thead><tr><th>Fault location</th><th>Voltage</th><th>${project.settings.faultType === 'dlg' ? 'Maximum phase RMS' : 'RMS fault'}</th>${project.settings.faultType === 'dlg' ? '<th>Ground return RMS</th>' : ''}<th>Status</th></tr></thead><tbody>${project.buses.map(b => { const q = result(b.id); return `<tr><td><button class="text-button" data-fault-bus="${b.id}">${esc(b.name)}</button></td><td>${voltage(b.voltage)}</td><td>${pending ? 'Updating…' : ka(q?.totalA)}</td>${project.settings.faultType === 'dlg' ? `<td>${ka(q?.groundA)}</td>` : ''}<td>${badge(q?.status || 'Not calculated')}</td></tr>`; }).join('')}</tbody></table></div></section></div>${mathView(r)}${branchView(r)}${dutyView()}${databaseScreensView()}`; }
+    return (0, analysis_presentation_mjs_v_20261022_pv_final_1.analysisResultsMarkup)(project, calculation.results); return `<div class="results-grid">${contributionPanel(r)}${allBusPanel()}</div>${mathView(r)}${branchView(r)}${dutyView()}${databaseScreensView()}`; }
+function contributionPanel(r) { return `<section class="panel"><div class="panel-heading"><h2>${project.settings.faultType === 'dlg' ? 'Phase and ground currents' : 'Contribution at selected bus'}</h2>${badge(r?.status || 'No result')}</div>${contributionView(r)}<div class="result-note">${(0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project) ? single_phase_mjs_v_20261022_pv_final_1.singlePhaseScope : project.settings.faultType !== '3phase' ? 'Unbalanced faults use equivalent sequence data at the fault bus. Source and branch decomposition is available for three-phase studies.' : r?.bound ? 'Unknown inverter phase: conservative magnitude-sum bound; category magnitudes are not an exact phasor total.' : 'Source phasors are combined at the selected fault location, after solving all impedances and transformer ratios.'}</div></section>`; }
+function allBusPanel() { return `<section class="panel"><h2>All bus fault levels</h2><div class="table-scroll"><table><thead><tr><th>Fault location</th><th>Voltage</th><th>${project.settings.faultType === 'dlg' ? 'Maximum phase RMS' : 'RMS fault'}</th>${project.settings.faultType === 'dlg' ? '<th>Ground return RMS</th>' : ''}<th>Status</th></tr></thead><tbody>${project.buses.map(b => { const q = result(b.id); return `<tr><td><button class="text-button" data-fault-bus="${b.id}">${esc(b.name)}</button></td><td>${voltage(b.voltage)}</td><td>${pending ? 'Updating…' : ka(q?.totalA)}</td>${project.settings.faultType === 'dlg' ? `<td>${ka(q?.groundA)}</td>` : ''}<td>${badge(q?.status || 'Not calculated')}</td></tr>`; }).join('')}</tbody></table></div></section>`; }
+function reportResultsView() {
+    if (pending)
+        return resultsView();
+    if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project))
+        return reportHas('buses') || reportHas('sources') || reportHas('branches') ? part('buses sources branches', (0, analysis_presentation_mjs_v_20261022_pv_final_1.analysisResultsMarkup)(project, calculation.results)) : '';
+    const r = result(), grid = (reportHas('sources') ? part('sources', contributionPanel(r)) : '') + (reportHas('buses') ? part('buses', allBusPanel()) : '');
+    return (grid ? `<div class="results-grid">${grid}</div>` : '') + (reportHas('buses') ? part('buses', mathView(r)) : '') + (reportHas('branches') ? part('branches', branchView(r)) : '') + (reportHas('duty') ? part('duty', dutyView()) : '') + (reportHas('screens') ? part('screens', databaseScreensView()) : '');
+}
+// A report part can be removed from the page without rebuilding the rest of a large report.
+function part(keys, html) { return html ? `<div class="report-part" data-report-part="${keys}">${html}</div>` : ''; }
+function reportAvailable() { const a = new Set(report_contents_mjs_v_20261108_v32_1.SECTION_KEYS); if (!(project.pvArrays || []).length)
+    a.delete('pv'); if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project)) {
+    a.delete('methodology');
+} return a; }
+function reportContentsPanel() { return (0, report_contents_mjs_v_20261108_v32_1.reportChoiceMarkup)(reportChoice(), { project, studies: reportStudies(), available: reportAvailable() }); }
+function reportExtraStudies() { const chosen = new Set(reportChoice().studies); let html = ''; for (const s of reportStudies()) {
+    if (!chosen.has(s.key) || !s.ready)
+        continue;
+    try {
+        for (const sheet of s.sheets())
+            html += (0, report_contents_mjs_v_20261108_v32_1.sheetTableMarkup)(sheet);
+    }
+    catch (e) {
+        html += `<section class="panel"><h2>${esc(s.label)}</h2><p>Not included: ${esc(e.message)}</p></section>`;
+    }
+} return html; }
+function reportPvView() { return reportHas('pv') && !reportHas('inputs') && (project.pvArrays || []).length ? `<section class="panel"><h2>PV array data</h2>${project.pvArrays.map(a => `<h3>${esc(a.name)}</h3>${(0, pv_arrays_mjs_v_20261022_pv_final_1.pvArraySummaryMarkup)(a)}`).join('')}</section>` : ''; }
 function branchView(r) {
     if (!(0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(project) || !r || r.totalA === null)
         return '';
-    return `<section class="panel"><div class="panel-heading"><div><span class="eyebrow">CURRENT THROUGH THE NETWORK</span><h2>Branch currents · fault at ${esc(r.busName)}</h2></div></div><div class="table-scroll"><table><thead><tr><th>Connection</th><th>From bus</th><th>From-side RMS</th><th>To bus</th><th>To-side RMS</th><th>Basis</th></tr></thead><tbody>${(r.branchFlows || []).map(e => `<tr><td><button class="text-button" data-select="${e.id}">${esc(e.name)}</button></td><td>${esc(project.buses.find(b => b.id === e.from)?.name || '—')}</td><td>${ka(e.fromA)}</td><td>${esc(project.buses.find(b => b.id === e.to)?.name || '—')}</td><td>${ka(e.toA)}</td><td>${e.bound ? 'Magnitude bound' : 'Phasor RMS'}</td></tr>`).join('') || '<tr><td colspan="6">No separate branch at this location.</td></tr>'}</tbody></table></div><p class="micro">Terminal phasors point into each branch. Transformer currents use each winding’s voltage base; cable and switch currents are equal and opposite. Unknown inverter phases give a stated magnitude bound.</p></section>`;
+    const busName = new Map(project.buses.map(b => [b.id, b.name]));
+    return `<section class="panel"><div class="panel-heading"><div><span class="eyebrow">CURRENT THROUGH THE NETWORK</span><h2>Branch currents · fault at ${esc(r.busName)}</h2></div></div><div class="table-scroll"><table><thead><tr><th>Connection</th><th>From bus</th><th>From-side RMS</th><th>To bus</th><th>To-side RMS</th><th>Basis</th></tr></thead><tbody>${(r.branchFlows || []).map(e => `<tr><td><button class="text-button" data-select="${e.id}">${esc(e.name)}</button></td><td>${esc(busName.get(e.from) || '—')}</td><td>${ka(e.fromA)}</td><td>${esc(busName.get(e.to) || '—')}</td><td>${ka(e.toA)}</td><td>${e.bound ? 'Magnitude bound' : 'Phasor RMS'}</td></tr>`).join('') || '<tr><td colspan="6">No separate branch at this location.</td></tr>'}</tbody></table></div><p class="micro">Terminal phasors point into each branch. Transformer currents use each winding’s voltage base; cable and switch currents are equal and opposite. Unknown inverter phases give a stated magnitude bound.</p>${r.outputScope === 'compact' ? `<p class="micro">Large network (${project.buses.length} buses): the selected fault bus lists every branch. For the other buses the stored table keeps the connections at the faulted bus, the nearest protective devices and every branch’s worst-case fault, which is what the equipment and cable duty checks use. Select a bus to see its full table.</p>` : ''}</section>`;
 }
 function dutyView() { return `<section class="panel"><h2>Equipment rating checks</h2><div class="table-scroll"><table><thead><tr><th>Equipment / bus</th><th>Assembly SCCR</th><th>Interrupting RMS</th><th>Check</th></tr></thead><tbody>${project.devices.filter(d => d.enabled !== false).map(d => { const q = result(d.bus), duty = (0, network_engine_mjs_v_20261022_pv_final_1.deviceDuty)(d, q, project, calculation.results); return `<tr><td><button class="text-button" data-select="${d.id}">${esc(d.name)}</button><small>${esc(project.buses.find(b => b.id === d.bus)?.name || 'Disconnected')}</small></td><td>${ka(duty.sccrDutyA)} / ${ka(d.sccrA)}<small>Available bus RMS / entered SCCR</small></td><td>${ka(duty.interruptDutyA)} / ${ka(d.interruptA)}<small>${esc(duty.basis || 'Calculation required')}${d.linkId && duty.interruptBusId ? ' · fault at ' + esc(project.buses.find(b => b.id === duty.interruptBusId)?.name || '—') : ''}</small></td><td>${badge(duty.status)}${duty.failedType ? '<small>' + esc(duty.failedType) + ' rating exceeded</small>' : ''}</td></tr>`; }).join('') || '<tr><td colspan="4">Add equipment ratings at the locations you want to check.</td></tr>'}</tbody></table></div><p class="micro">SCCR uses the available RMS at the assembly bus. With a separate equipment connection, interrupting RMS checks the largest through-connection current across calculated bus faults in this scenario. Equipment without a separate connection uses a bus RMS screen. Peak is a bus screen; branch-specific peak and contact timing require further review.</p></section>`; }
 function reviewView() { if (pending)
     return `<section id="input-review" class="panel"><h2>Input review & engineering assumptions</h2><p>${running ? 'Checking the current network…' : 'Inputs have changed. Calculate to check the current network.'}</p></section>`; return `<section id="input-review" class="panel"><h2>Input review & engineering assumptions</h2>${calculation.issues.length ? calculation.issues.map(i => `<div class="review-row ${i.severity}"><span>${i.severity === 'error' ? 'Fix input' : i.severity === 'info' ? 'Unused item' : 'Assumption'}</span><p>${esc(i.message)}</p><button data-select="${i.id}">Open item</button></div>`).join('') : '<p>No missing or inconsistent inputs detected. Review the stated model assumptions before using equipment-duty results.</p>'}${project.notes.map(t => `<div class="model-note">${esc(t)}</div>`).join('')}</section>`; }
-function settingsView() { const s = { ...project.settings, id: 'settings' }, inactiveTime = (0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(project) || (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(project), timeError = (project.inputErrors || []).some(e => e.id === 'settings' && e.key === 'time'); return `<section id="study-controls" class="panel"><h2>Study controls</h2><p>Set the fault type, operating case and calculation assumptions for this study.</p>${(0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project) ? '<p class="model-note">' + single_phase_mjs_v_20261022_pv_final_1.singlePhaseScope + '</p>' : ''}<div class="form-grid">${input(s, 'frequency', 'System frequency (Hz)', { required: true }) + input(s, 'scenario', 'Operating scenario', { options: [['base', 'Normal / base'], ['maximum', 'Maximum'], ['minimum', 'Minimum']] }) + input(s, 'voltageFactor', 'Prefault voltage factor (pu)', { help: 'Engineering prefault factor; not a full IEC correction-factor implementation.' }) + input(s, 'faultType', 'Fault type', { options: analysis_models_mjs_v_20261022_pv_final_1.analysisFaultTypes }) + (!inactiveTime || timeError ? input(s, 'time', inactiveTime ? 'Retained study time (seconds)' : 'Study time after fault (seconds)', { help: inactiveTime ? 'This model does not use time. Correct the incomplete stored number to resolve its input error.' : 'Used for inverter contribution duration and DC-offset screening.' }) : '') + (inactiveTime ? '' : input(s, 'generatorStage', 'Generator reactance stage', { options: [['initial', 'Initial · Xd″'], ['transient', 'Transient · Xd′'], ['steady', 'Steady state · Xd']] })) + input(s, 'faultR', s.faultType === 'dlg' ? 'Common ground resistance (Ω)' : 'Fault resistance (Ω)', { help: s.faultType === 'dlg' ? ((0, analysis_models_mjs_v_20261022_pv_final_1.usesConnectedSequences)(project) ? 'B and C are joined through one common ground impedance. Enter the explicit equipment sequence paths in their properties.' : 'B and C are bolted together, then connected to ground through this one impedance. Enter equivalent R0/X0 in each bus property popup.') : s.faultType === 'll' ? 'Impedance between the two faulted phases.' : 'Fault-path resistance.' }) + input(s, 'faultX', s.faultType === 'dlg' ? 'Common ground reactance (Ω)' : 'Fault reactance (Ω)', { help: s.faultType === 'dlg' ? 'Reactance of the same common path to ground; it is not a separate impedance in each phase.' : 'Fault-path reactance.' }) + input(s, 'baseMVA', 'Calculation base MVA', { required: true, help: 'Changing this base should not change physical results.' }) + ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project) ? '' : input(s, 'assumeZ2', 'Explicit unbalanced screening assumption: Z2 = Z1', { type: 'checkbox' })) + input(s, 'auto', 'Automatically recalculate edits', { type: 'checkbox' }) + (0, analysis_fields_mjs_v_20261022_pv_final_1.analysisSettingsFields)(project, input)}</div>${(0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project) ? '<p class="model-note">' + esc((0, analysis_models_mjs_v_20261022_pv_final_1.analysisScope)(project)) + '</p><button data-action="example-model">Load an illustrative worked example of this model</button>' : ''}</section>`; }
+function settingsView() { const s = { ...project.settings, id: 'settings' }, inactiveTime = (0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(project) || (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(project), timeError = (project.inputErrors || []).some(e => e.id === 'settings' && e.key === 'time'); return `<section id="study-controls" class="panel"><h2>Study controls</h2><p>Set the fault type, operating case and calculation assumptions for this study.</p>${(0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project) ? '<p class="model-note">' + single_phase_mjs_v_20261022_pv_final_1.singlePhaseScope + '</p>' : ''}<div class="form-grid">${input(s, 'frequency', 'System frequency (Hz)', { required: true }) + input(s, 'scenario', 'Operating scenario', { options: [['base', 'Normal / base'], ['maximum', 'Maximum'], ['minimum', 'Minimum']] }) + input(s, 'voltageFactor', 'Prefault voltage factor (pu)', { help: 'Engineering prefault factor; not a full IEC correction-factor implementation.' }) + input(s, 'faultType', 'Fault type', { options: analysis_models_mjs_v_20261022_pv_final_1.analysisFaultTypes }) + (!inactiveTime || timeError ? input(s, 'time', inactiveTime ? 'Retained study time (seconds)' : 'Study time after fault (seconds)', { help: inactiveTime ? 'This model does not use time. Correct the incomplete stored number to resolve its input error.' : 'Used for inverter contribution duration and DC-offset screening.' }) : '') + (inactiveTime ? '' : input(s, 'generatorStage', 'Generator reactance stage', { options: [['initial', 'Initial · Xd″'], ['transient', 'Transient · Xd′'], ['steady', 'Steady state · Xd']] })) + input(s, 'faultR', s.faultType === 'dlg' ? 'Common ground resistance (Ω)' : 'Fault resistance (Ω)', { help: s.faultType === 'dlg' ? ((0, analysis_models_mjs_v_20261022_pv_final_1.usesConnectedSequences)(project) ? 'B and C are joined through one common ground impedance. Enter the explicit equipment sequence paths in their properties.' : 'B and C are bolted together, then connected to ground through this one impedance. Enter equivalent R0/X0 in each bus property popup.') : s.faultType === 'll' ? 'Impedance between the two faulted phases.' : 'Fault-path resistance.' }) + input(s, 'faultX', s.faultType === 'dlg' ? 'Common ground reactance (Ω)' : 'Fault reactance (Ω)', { help: s.faultType === 'dlg' ? 'Reactance of the same common path to ground; it is not a separate impedance in each phase.' : 'Fault-path reactance.' }) + input(s, 'baseMVA', 'Calculation base MVA', { required: true, help: 'Changing this base should not change physical results.' }) + ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project) ? '' : input(s, 'assumeZ2', 'Explicit unbalanced screening assumption: Z2 = Z1', { type: 'checkbox', help: 'Covers the negative sequence only. SLG and DLG still need each bus’s zero-sequence R0 and X0, which include the actual grounding path.' })) + input(s, 'auto', 'Automatically recalculate edits', { type: 'checkbox' }) + (0, analysis_fields_mjs_v_20261022_pv_final_1.analysisSettingsFields)(project, input)}</div>${(0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project) ? '<p class="model-note">' + esc((0, analysis_models_mjs_v_20261022_pv_final_1.analysisScope)(project)) + '</p><button data-action="example-model">Load an illustrative worked example of this model</button>' : ''}</section>`; }
 let manifestRequest = null;
 async function loadManifest() { if (databaseManifest)
     return databaseManifest; if (manifestRequest)
@@ -8943,50 +11468,64 @@ else if (k === 'power')
 else if (units[k])
     val += ' ' + units[k]; return `<span class="db-value"><b>${esc(labels[k] || k)}</b> ${val}</span>`; }
 function databaseView() { const item = itemById(dbTarget), cats = Object.entries(databaseManifest?.sheets || {}).filter(([sheet, m]) => (compatibleDB[item?.kind] || []).includes(sheet) && m.count > 0), rows = dbRows?.records || [], filtered = (0, database_selection_mjs_v_20261022_pv_final_1.filterCatalog)(dbSheet, rows, item, project, { ...dbFilters, search: dbSearch }), page = filtered.slice(dbPage * 25, (dbPage + 1) * 25), selectFilter = (key, label, values) => `<label>${label}<select data-db-filter="${key}"><option value="">All ${label.toLowerCase()}</option>${[...new Set(values.filter(Boolean))].sort().map(v => `<option value="${esc(v)}" ${dbFilters[key] === v ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></label>`; return `<section class="panel"><div class="panel-heading"><div><span class="eyebrow">MASTER DATABASE · FAULT STUDY RECORDS</span><h2>Choose ${esc(names[item?.kind] || 'equipment')} data</h2><p>Populate ${esc(item?.name)}. Existing bus voltages stay unchanged; missing data stays editable.</p>${item?.kind === 'cable' ? `<p class="db-voltage-context">Connected buses: From ${esc((0, network_voltage_mjs_v_20261022_pv_final_1.voltageLabel)(project.buses.find(b => b.id === item.from)?.voltage))} → To ${esc((0, network_voltage_mjs_v_20261022_pv_final_1.voltageLabel)(project.buses.find(b => b.id === item.to)?.voltage))}. Cable insulation rating must cover the operating voltage.</p>` : ''}</div></div><div class="db-controls"><select id="db-category" aria-label="Database category">${cats.map(([sheet, m]) => `<option value="${sheet}" ${sheet === dbSheet ? 'selected' : ''}>${esc(sheet.replaceAll('_', ' '))} · ${(databaseManifest.workbookSheets?.[sheet]?.count ?? m.count).toLocaleString()}</option>`).join('')}</select><input id="db-search" type="search" value="${esc(dbSearch)}" placeholder="Search model, manufacturer, conductor size…" aria-label="Search master database"></div><div class="db-filters">${selectFilter('manufacturer', 'Manufacturer', rows.map(r => (0, database_selection_mjs_v_20261022_pv_final_1.catalogRecord)(dbSheet, r).manufacturer))}${item?.kind === 'cable' ? selectFilter('material', 'Material', rows.map(r => (0, database_selection_mjs_v_20261022_pv_final_1.catalogRecord)(dbSheet, r).values.material)) + selectFilter('size', 'Size', rows.map(r => (0, database_selection_mjs_v_20261022_pv_final_1.catalogRecord)(dbSheet, r).values.size)) : ''}<label class="db-fit"><input type="checkbox" data-db-filter="fitOnly" ${dbFilters.fitOnly ? 'checked' : ''}>Match connected voltage & study frequency</label></div><div class="db-count">${dbError ? 'Records unavailable' : dbRows ? filtered.length.toLocaleString() + ' matching records · page ' + (dbPage + 1) : 'Loading useful equipment records…'}</div>${dbError ? `<div class="inline-issue" role="alert">${esc(dbError)} <button data-action="retry-db">Retry loading records</button></div>` : ''}${dbInspect ? `<details class="raw-record" open><summary>Original database values · row ${dbInspect._row}</summary><pre>${esc(JSON.stringify(dbInspect, null, 2))}</pre></details>` : ''}<div class="table-scroll"><table><thead><tr><th>Record / model</th><th>Useful electrical data</th><th>Source / verification</th><th>Selection</th></tr></thead><tbody>${page.map(row => { const mapped = (0, database_selection_mjs_v_20261022_pv_final_1.catalogRecord)(dbSheet, row), reasons = (0, database_selection_mjs_v_20261022_pv_final_1.recordCompatibility)(dbSheet, row, item, project), voltageIssue = item?.kind === 'cable' ? (0, network_voltage_mjs_v_20261022_pv_final_1.cableVoltageMessage)(project, { ...item, ratedVoltage: mapped.values.ratedVoltage }) : null, values = Object.entries(mapped.values).filter(([, v]) => v !== null && v !== '' && v !== undefined && typeof v !== 'boolean').slice(0, 9); return `<tr><td><strong>${esc((0, database_map_mjs_v_20261022_pv_final_1.recordName)(row))}</strong>${reasons.length ? `<small class="text-warning">${esc(reasons.join('. '))}</small>` : ''}</td><td>${values.map(([k, v]) => dbValue(k, v)).join('')}</td><td>${esc(mapped.db.status || 'Not supplied')}<small>${esc(mapped.db.notes.slice(0, 160))}</small></td><td><button data-apply-db="${row._row}" class="primary" ${voltageIssue ? `disabled title="${esc(voltageIssue)}"` : ""}>Use record</button><button data-inspect-db="${row._row}">Source data</button></td></tr>`; }).join('') || '<tr><td colspan="4">No matching records. Adjust filters, or enter documented values manually.</td></tr>'}</tbody></table></div><div class="actions"><button data-db-prev ${dbPage === 0 ? 'disabled' : ''}>← Previous</button><button data-db-next ${(dbPage + 1) * 25 >= filtered.length ? 'disabled' : ''}>Next →</button><button data-action="cancel-db">Enter manually / close</button></div><p class="micro">Only records relevant to this calculation are included. Ratings are taken from their stated source; manufacturer applicability and missing properties remain visible.</p></section>`; }
-function deviceProjectView() { const saved = read('fault-network-studies-v2', []), legacy = read('fault-studies-v1', []); return `<section class="panel"><h2>Project details & backups</h2><p>Edit project details in Study setup. Double-click equipment on the single line to edit its values.</p><div class="actions"><button class="primary" data-action="save">Save named study</button><button data-action="export">Export project JSON</button><button data-action="import">Import project JSON</button><button data-action="csv">Export results CSV</button><button data-action="blank">New blank study</button><button data-action="example">Worked example</button></div><p class="micro">${cloudHosted ? 'These backups are kept on this device. Open one and Save study to keep it across devices.' : 'Projects and layout positions stay in this browser. Export JSON for a portable backup.'} Earlier version saves remain available.</p></section><section class="panel"><h2>${cloudHosted ? 'Device backups' : 'Saved studies'}</h2>${saved.map((s, i) => `<div class="saved-row"><div><strong>${esc(s.project.name)}</strong><small>${esc(new Date(s.saved).toLocaleString())}</small></div><button data-load-project="${i}">Open</button></div>`).join('') || '<p>No named network studies yet.</p>'}${studyStorage.recoveries().length ? '<h3>Stored-data recovery</h3><p>Original JSON is kept here when a stored draft or study list cannot be read.</p>' + studyStorage.recoveries().map((entry, i) => `<div class="saved-row"><div><strong>${esc(entry.key)}</strong><small>${esc(entry.saved)}</small></div><button data-download-recovery="${i}">Download original JSON</button></div>`).join('') : ''}${legacy.length ? '<h3>Earlier calculator studies</h3>' + legacy.map((s, i) => `<div class="saved-row"><div><strong>${esc(s.name)}</strong><small>Workbook model · converted on opening; original retained</small></div><button data-load-legacy="${i}">Convert & open</button></div>`).join('') : ''}</section>`; }
+function folderView() {
+    const f = folder.state, linked = f.linkedFile && folderProjectId === project.id ? f.linkedFile : null, size = n => n >= 1e6 ? (n / 1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1e3)) + ' kB';
+    if (!f.supported)
+        return `<section class="panel folder-panel"><span class="eyebrow">PROJECT FOLDER</span><h2>Projects on your computer</h2><p>This browser cannot connect to a folder. Use Chrome or Edge on a desktop computer to keep projects as files in a folder of your choice, or use Export project JSON and Import project JSON below.</p></section>`;
+    const head = `<span class="eyebrow">PROJECT FOLDER</span><h2>Projects on your computer</h2>`;
+    if (!f.handle)
+        return `<section class="panel folder-panel">${head}<p>Choose a folder on this computer for your project files. Each project is saved there as a file you can open, update, rename or delete. Nothing is uploaded.</p><div class="actions"><button class="primary" data-action="folder-connect">Connect project folder</button></div>${f.message ? `<p class="micro" role="status">${esc(f.message)}</p>` : ''}</section>`;
+    if (f.permission !== 'granted')
+        return `<section class="panel folder-panel">${head}<p>Folder <strong>${esc(f.folderName)}</strong> needs your permission again before the Studio can read or save files.</p><div class="actions"><button class="primary" data-action="folder-reconnect">Allow access to ${esc(f.folderName)}</button><button data-action="folder-disconnect">Disconnect</button></div>${f.message ? `<p class="micro" role="status">${esc(f.message)}</p>` : ''}</section>`;
+    const rows = f.files.map(x => `<div class="saved-row"><div><strong>${esc(x.name)}</strong><small>${esc(new Date(x.modified).toLocaleString())} · ${size(x.size)}${x.name === linked ? ' · open now' : ''}</small></div><div class="actions"><button data-folder-open="${esc(x.name)}">Open</button><button data-folder-delete="${esc(x.name)}">Delete file</button></div></div>`).join('') || '<p>No project files in this folder yet. Save the current project to create one.</p>';
+    return `<section class="panel folder-panel">${head}<p>Connected folder: <strong>${esc(f.folderName)}</strong>${linked ? ` · the open project ${f.autosave ? 'saves automatically to' : 'is linked to'} <strong>${esc(linked)}</strong>` : ''}.</p><div class="field folder-name-field"><label for="folder-file-name">File name for the current project</label><input id="folder-file-name" value="${esc(linked || (0, project_folder_mjs_v_20261108_v31_1.projectFileName)(project.name))}" autocomplete="off" spellcheck="false"></div><div class="actions"><button class="primary" data-action="folder-save">Save project to folder</button><button data-action="folder-refresh">Refresh list</button>${linked ? `<button data-action="folder-autosave" aria-pressed="${f.autosave}">${f.autosave ? 'Autosave on' : 'Autosave off'}</button>` : ''}<button data-action="folder-disconnect">Disconnect folder</button></div>${f.message ? `<p class="micro" role="status">${esc(f.message)}</p>` : ''}<h3>Project files</h3>${f.busy && !f.files.length ? '<p>Reading folder…</p>' : rows}</section>`;
+}
+function deviceProjectView() { const saved = read('fault-network-studies-v2', []), legacy = read('fault-studies-v1', []); return folderView() + `<section class="panel"><h2>Project details & backups</h2><p>Edit project details in Study setup. Double-click equipment on the single line to edit its values.</p><div class="actions"><button class="primary" data-action="save">Save named study</button><button data-action="export">Export project JSON</button><button data-action="import">Import project JSON</button><button data-action="csv">Export results CSV</button><button data-action="blank">New blank study</button><button data-action="example">Worked example</button></div><p class="micro">${cloudHosted ? 'These backups are kept on this device. Open one and Save study to keep it across devices.' : 'Projects and layout positions stay in this browser. Export JSON for a portable backup.'} Earlier version saves remain available.</p></section><section class="panel"><h2>${cloudHosted ? 'Device backups' : 'Saved studies'}</h2>${saved.map((s, i) => `<div class="saved-row"><div><strong>${esc(s.project.name)}</strong><small>${esc(new Date(s.saved).toLocaleString())}</small></div><button data-load-project="${i}">Open</button></div>`).join('') || '<p>No named network studies yet.</p>'}${studyStorage.recoveries().length ? '<h3>Stored-data recovery</h3><p>Original JSON is kept here when a stored draft or study list cannot be read.</p>' + studyStorage.recoveries().map((entry, i) => `<div class="saved-row"><div><strong>${esc(entry.key)}</strong><small>${esc(entry.saved)}</small></div><button data-download-recovery="${i}">Download original JSON</button></div>`).join('') : ''}${legacy.length ? '<h3>Earlier calculator studies</h3>' + legacy.map((s, i) => `<div class="saved-row"><div><strong>${esc(s.name)}</strong><small>Workbook model · converted on opening; original retained</small></div><button data-load-legacy="${i}">Convert & open</button></div>`).join('') : ''}</section>`; }
 function projectView() { return (cloudHosted ? cloudProjectsView() : '') + deviceProjectView(); }
 // V25 capability benchmark: feature coverage must never be mistaken for standards certification.
+// [sector, title, status, current scope, workspace, internal benchmark (not displayed), internal reference URL (not displayed), next gate]
+// Benchmark products are kept for the engineering team's comparison work only; the page never shows them.
 const atlasAreas = [
-    ['Fault current', 'Connected network fault modelling', 'bounded', 'Positive-sequence bus/branch network methods, source contribution and equipment-duty screens.', 'network', 'ETAP', 'https://etap.com/packages', 'Full IEC 60909-0:2026 and ANSI C37 example suites remain open'],
-    ['Fault current', 'IEC 60909 multi-method certification', 'gap', 'Existing peak, transformer and sequence screening is not a complete independently certified IEC 60909 solver.', 'advanced', 'pandapower', 'https://pandapower.readthedocs.io/en/latest/shortcircuit.html', 'Finish correction factors, machine/IBR rules and published benchmarks'],
-    ['Arc flash', 'Incident energy and clearing time', 'partial', 'A separate arc-flash service interface exists, but its live availability, conditions and IEEE 1584 fidelity are not accepted here.', 'advanced', 'EasyPower', 'https://www.easypower.com/products/easypower', 'Validate entire IEEE 1584 model and protective-device time integration'],
-    ['Protection', 'Coordination and manufacturer TCC', 'partial', 'Curve and selectivity screens exist; exhaustive vendor-curves and selectivity verification remain outstanding.', 'operating', 'SKM', 'https://skm.com/', 'Source-revisioned breaker trip units and validated multi-device TCCs'],
-    ['Cable systems', 'IEC 60287 steady-state cable thermal', 'bounded', 'AC resistance and single-core direct-burial demonstrations are bounded.', 'advanced', 'CYMCAP', 'https://www.eaton.com/us/en-us/catalog/software/power-cable-ampacity-software.html', 'Duct banks, grouped trefoils, bonding losses, solar heating and IEC 60853 cycles'],
-    ['Cable systems', 'Cable pulling and cleat forces', 'gap', 'Cable mechanical pulling tension, sidewall pressure and verified short-circuit cleat forces are not production-complete.', 'database', 'Cableizer', 'https://www.cableizer.com/', 'Integrate geometric routing, bends, friction and dynamic force models'],
-    ['Power flow', 'AC load flow and contingencies', 'partial', 'Operating-study and network screening exists; meshed, unbalanced and time-series fidelity needs benchmarks.', 'operating', 'DIgSILENT PowerFactory', 'https://www.digsilent.com/', 'IEEE test networks, convergence and N-1 scenario result comparison'],
-    ['Power flow', 'Advanced distribution hosting capacity', 'gap', 'DER hosting-capacity and feeder time-series workflows are not validated as comprehensive studies.', 'operating', 'OpenDSS', 'https://opendss.epri.com/IntroductiontoOpenDSS.html', 'Time-series volt-var, tap controls, unbalance and hosting capacity'],
-    ['Power quality', 'Harmonics and impedance sweeps', 'partial', 'Harmonic network screening is present; frequency-dependent scan, resonance and IEEE 519/2800 studies need expansion.', 'advanced', 'CYME', 'https://www.eaton.com/in/en-us/products/utility-grid-solutions/software-modules.html', 'Sweep-dependent frequency models and measured harmonic cases'],
-    ['Grounding', 'Grounding grid and touch/step', 'gap', 'Grounding component references exist; full IEEE 80 / soil multilayer mesh modelling is not certified.', 'advanced', 'XGSLab', 'https://www.easypower.com/products', 'Soil layers, conductor grid, touch/step, transfer potential and safe designs'],
-    ['Energy storage', 'BESS DC short circuit', 'bounded', 'DC resistive network calculation is available and independently compared for synthetic cases.', 'advanced', 'EasyPower', 'https://www.easypower.com/products/easypower', 'Complete IEC 61660 duties, battery electrochemistry and DC arc flash'],
-    ['Energy storage', 'Storage dispatch and optimisation', 'gap', 'Year-long tariff dispatch, degradation and capacity-sizing optimiser are not implemented as verified engines.', 'operating', 'REopt', 'https://www.nlr.gov/reopt/', '8760 dispatch, import/export constraints, economics and resilience'],
-    ['Solar', 'PV yield and clipping simulation', 'partial', 'PV array reference inputs and fault-source interfaces exist; full production, shade and loss models remain outside this Studio.', 'advanced', 'PVsyst', 'https://www.pvsyst.com/help/', 'Weather, bifacial, clipping, shading and PV-plus-thermal interactions'],
-    ['Microgrid', 'Dispatch and dynamic stability', 'gap', 'Dynamic controls, island transitions and probabilistic resource sizing are not validated.', 'operating', 'HOMER Pro', 'https://homerenergy.com/homer-pro/features', 'Islanded transitions, reserve and converter behaviour'],
-    ['Equipment', 'Manufacturer catalogue provenance', 'partial', 'Curated records with conflict quarantine; not all OEM model revisions and curves have source sign-off.', 'database', 'EasyPower', 'https://www.easypower.com/products/easypower', 'Per-record datasheet links, approved revision and nameplate reconciliation'],
-    ['Project tools', 'One-line, backups and reporting', 'partial', 'Connected one-line, local save/reopen, JSON transfer and PDF/XLSX exports; owner-private cloud recovery remains unverified.', 'projects', 'ETAP', 'https://etap.com/packages', 'Version comparison, audit trails, role access and live cloud acceptance'],
-    ['Interoperability', 'CAD/BIM and utility data import', 'gap', 'Portable JSON and spreadsheet outputs exist, but IFC, Revit, GIS, and CIM interchange are not accepted.', 'projects', 'EasyPower', 'https://www.easypower.com/products/easypower', 'CIM / PowerFactory / OpenDSS exchange and model reconciliation'],
-    ['Engineering QA', 'Reproducible, traceable study evidence', 'partial', 'Some independent bounded numerical suites and export checks; full methods certification and regression coverage remain open.', 'report', 'pandapower', 'https://pandapower.readthedocs.io/', 'Each result links input hash, source revision, units, method, benchmark and reviewer']
+    ['Fault current', 'Connected network fault modelling', 'bounded', 'Three-phase, LL, SLG, DLG and connected-sequence faults on meshed and radial networks, source contributions and equipment duty. Sparse solvers handle plant-scale models: a 1,970-bus, 71-source PV plant calculates in seconds; 2,000-bus connected-sequence and split-phase networks calculate in under ten seconds. Each matches its dense solver on the QA networks.', 'network', 'ETAP', 'https://etap.com/packages', 'Full IEC 60909-0 and ANSI C37 example suites'],
+    ['Fault current', 'IEC 60909 multi-method certification', 'gap', 'Peak, transformer and sequence screening exist; the complete IEC 60909 method set (correction factors, machine and inverter rules) is not yet built.', 'advanced', 'pandapower', 'https://pandapower.readthedocs.io/en/latest/shortcircuit.html', 'Correction factors, machine and inverter-based resource rules, published benchmarks'],
+    ['Arc flash', 'Incident energy and clearing time', 'bounded', 'IEEE 1584-2018 incident energy at every bus, clearing time from relay or manufacturer curves with tolerance bands, and the one-line protective device for each bus. Checked against the standard’s Annex D examples and 105,120 published cases.', 'advanced', 'EasyPower', 'https://www.easypower.com/products/easypower', 'DC arc flash and field-validated device curve sources'],
+    ['Protection', 'Coordination and manufacturer TCC', 'partial', 'Relay curves, fuse and LSI trip models, tolerance bands and clearing-time lookup exist. Multi-device selectivity checking is not complete.', 'operating', 'SKM', 'https://skm.com/', 'Source-revisioned trip units and automatic selectivity across device pairs'],
+    ['Cable systems', 'Conductor sizing and steady-state thermal', 'bounded', 'NEC 310 ampacity with corrections, 240.4 protection, 250.122 grounding conductor and I²t short-circuit duty. IEC 60287 is limited to single-core direct-burial cases.', 'advanced', 'CYMCAP', 'https://www.eaton.com/us/en-us/catalog/software/power-cable-ampacity-software.html', 'Duct banks, grouped trefoils, bonding losses, solar heating and IEC 60853 cycles'],
+    ['Cable systems', 'Cable pulling and cleat forces', 'gap', 'Pulling tension, sidewall pressure and short-circuit cleat forces are not built yet.', 'database', 'Cableizer', 'https://www.cableizer.com/', 'Route geometry, bends, friction and dynamic force models'],
+    ['Power flow', 'AC load flow and contingencies', 'partial', 'Balanced load flow with off-nominal transformer taps, checked against an independent π-equivalent oracle. A sparse Newton solver handles plant-scale networks (closed breakers join their buses; the 1,970-bus plant solves in under a second). Balanced N-1 screening and AC time series exist. Unbalanced load flow is not built yet.', 'operating', 'DIgSILENT PowerFactory', 'https://www.digsilent.com/', 'IEEE test networks, N-1 contingency and unbalanced load flow'],
+    ['Power flow', 'Distribution hosting capacity', 'gap', 'Feeder time-series, volt-var and hosting-capacity workflows are not built yet.', 'operating', 'OpenDSS', 'https://opendss.epri.com/IntroductiontoOpenDSS.html', 'Time-series volt-var, tap controls, unbalance and hosting capacity'],
+    ['Power quality', 'Harmonics and impedance sweeps', 'partial', 'Harmonic network screening, IEEE 519 PCC limits and power-factor correction sizing. Frequency sweeps and resonance scans are not complete.', 'advanced', 'CYME', 'https://www.eaton.com/in/en-us/products/utility-grid-solutions/software-modules.html', 'Frequency-dependent sweeps, resonance and measured harmonic cases'],
+    ['Grounding', 'Grounding grid and touch/step', 'gap', 'Grounding references exist; IEEE 80 grid, multilayer soil, touch and step potential are not built yet.', 'advanced', 'XGSLab', 'https://www.easypower.com/products', 'Soil layers, grid conductors, touch/step and transfer potential'],
+    ['Energy storage', 'BESS and PV DC short circuit', 'bounded', 'DC resistive network fault current, independently compared on 120 networks and 525 bus faults. The plant builder creates DC arrays (strings, fuses, combiner boxes, inverter inputs) from your string and cable data.', 'advanced', 'EasyPower', 'https://www.easypower.com/products/easypower', 'IEC 61660 time-dependent duty and DC arc flash'],
+    ['Energy storage', 'Storage dispatch and optimisation', 'gap', 'Year-long dispatch, degradation and capacity sizing are not built yet.', 'operating', 'REopt', 'https://www.nlr.gov/reopt/', '8760 dispatch, import/export limits, economics and resilience'],
+    ['Solar', 'PV yield and clipping simulation', 'partial', 'PV arrays, inverter fault sources and plant one-lines are modelled. Energy yield, shading and loss simulation are not built yet.', 'advanced', 'PVsyst', 'https://www.pvsyst.com/help/', 'Weather, bifacial gain, clipping and shading losses'],
+    ['Microgrid', 'Dispatch and dynamic stability', 'gap', 'Island transitions, control dynamics and reserve sizing are not built yet.', 'operating', 'HOMER Pro', 'https://homerenergy.com/homer-pro/features', 'Islanded transitions, reserve and converter behaviour'],
+    ['Equipment', 'Manufacturer catalogue provenance', 'partial', 'Curated equipment records with conflict quarantine; not every manufacturer revision and curve has a source sign-off.', 'database', 'EasyPower', 'https://www.easypower.com/products/easypower', 'Per-record datasheet link, approved revision and nameplate check'],
+    ['Project tools', 'One-line, projects and reporting', 'partial', 'Connected one-line that stays responsive at plant scale, a plant builder (AC collector systems, several block types, DC arrays), an equipment table that edits, adds and deletes equipment, project files saved to a folder on your computer, and printed, PDF and Excel reports where you choose which studies are included. Version comparison is not built yet.', 'projects', 'ETAP', 'https://etap.com/packages', 'Version comparison and audit trail'],
+    ['Interoperability', 'CAD/BIM and utility data import', 'gap', 'JSON and spreadsheet transfer exist; IFC, Revit, GIS and CIM utility-model exchange are not built yet.', 'projects', 'EasyPower', 'https://www.easypower.com/products/easypower', 'CIM utility-model exchange with model reconciliation'],
+    ['Engineering QA', 'Reproducible, traceable study evidence', 'partial', 'Independent numerical test suites run on every release (oracle, physics, sequence, DC, arc flash, cable, load flow). Results do not yet carry an input hash and method record.', 'report', 'pandapower', 'https://pandapower.readthedocs.io/', 'Each result linked to its input hash, method, test evidence and reviewer']
 ];
 function capabilityAtlasMarkup() {
     const total = atlasAreas.length, live = atlasAreas.filter(x => x[2] === 'bounded').length, partial = atlasAreas.filter(x => x[2] === 'partial').length;
-    const tags = { bounded: 'Bounded method', partial: 'Partly implemented', gap: 'Engineering gap' };
+    const tags = { bounded: 'Verified in stated scope', partial: 'Partly built', gap: 'Not built yet' };
     return `<section class="atlas-page" aria-label="Capability atlas">
- <div class="atlas-hero"><div class="atlas-hero-copy"><span class="atlas-eyebrow">ENGINEERING SYSTEM / V25</span><h2>One workspace.<br><em>Every study accountable.</em></h2><p>Explore the actual scope of this calculator, benchmark it against established engineering software, and see what still requires implementation or acceptance. Benchmarks are references, not copied software.</p><div class="atlas-hero-actions"><a href="#network" class="atlas-hero-primary">Open single-line studio <span aria-hidden="true">↗</span></a><a href="#projects" class="atlas-hero-link">Study backups</a><button type="button" data-quick-nav="open">Find a tool <kbd>Ctrl K</kbd></button></div></div><div class="atlas-hero-mark" aria-hidden="true"><span>FCS</span><strong>25</strong><small>CAPABILITY ATLAS</small></div></div>
- <div class="atlas-metric-strip" aria-label="Benchmark coverage"><div><strong>${total}</strong><span>Assessed capabilities</span></div><div><strong>${live}</strong><span>Bounded methods</span></div><div><strong>${partial}</strong><span>Partial workflows</span></div><div><strong>${total - live - partial}</strong><span>Gaps / future work</span></div></div>
- <div class="atlas-toolbar"><div><span class="atlas-section-kicker">THE ENGINEERING LIBRARY</span><h3>Capabilities & comparison</h3><p>Search by discipline, capability, or competing software. All status descriptions refer only to this Studio.</p></div><label for="atlas-search"><span>Search capabilities</span><input id="atlas-search" type="search" placeholder="Try: grounding, IEC 60909, ETAP…" autocomplete="off" spellcheck="false"></label></div>
- <div class="atlas-filters" role="group" aria-label="Filter capability status"><button data-atlas-filter="all" aria-pressed="true">All capabilities</button><button data-atlas-filter="bounded" aria-pressed="false">Bounded methods</button><button data-atlas-filter="partial" aria-pressed="false">Partial workflows</button><button data-atlas-filter="gap" aria-pressed="false">Open gaps</button><span id="atlas-count" aria-live="polite">${total} of ${total} shown</span></div>
- <div class="atlas-card-grid" id="atlas-cards">${atlasAreas.map(([sector, title, status, scope, href, benchmark, url, next], index) => `<article class="atlas-card" data-atlas-status="${status}" data-atlas-text="${esc([sector, title, status, scope, benchmark, next].join(' ').toLowerCase())}"><div class="atlas-card-head"><span class="atlas-card-number">${String(index + 1).padStart(2, '0')} / ${esc(sector)}</span><span class="atlas-chip atlas-${status}">${tags[status]}</span></div><h4>${esc(title)}</h4><p>${esc(scope)}</p><div class="atlas-next"><strong>Next engineering gate</strong><span>${esc(next)}</span></div><div class="atlas-card-links"><a href="#${href}">Open related workspace ↗</a><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">Reference: ${esc(benchmark)} ↗</a></div></article>`).join('')}</div><p id="atlas-empty" class="atlas-empty" hidden>No matching capabilities. Clear the search or choose another filter.</p>
+ <div class="atlas-hero"><div class="atlas-hero-copy"><span class="atlas-eyebrow">ENGINEERING SYSTEM / V32</span><h2>One workspace.<br><em>Every study accountable.</em></h2><p>The actual scope of this calculator: what is built and tested, what is partly built, and what is still to be built.</p><div class="atlas-hero-actions"><a href="#network" class="atlas-hero-primary">Open single-line studio <span aria-hidden="true">↗</span></a><a href="#projects" class="atlas-hero-link">Study backups</a><button type="button" data-quick-nav="open">Find a tool <kbd>Ctrl K</kbd></button></div></div><div class="atlas-hero-mark" aria-hidden="true"><span>FCS</span><strong>31</strong><small>CAPABILITY ATLAS</small></div></div>
+ <div class="atlas-metric-strip" aria-label="Capability coverage"><div><strong>${total}</strong><span>Assessed capabilities</span></div><div><strong>${live}</strong><span>Verified in scope</span></div><div><strong>${partial}</strong><span>Partly built</span></div><div><strong>${total - live - partial}</strong><span>Not built yet</span></div></div>
+ <div class="atlas-toolbar"><div><span class="atlas-section-kicker">THE ENGINEERING LIBRARY</span><h3>Capabilities & comparison</h3><p>Search by discipline or capability. All status descriptions refer only to this Studio.</p></div><label for="atlas-search"><span>Search capabilities</span><input id="atlas-search" type="search" placeholder="Try: grounding, IEC 60909, arc flash…" autocomplete="off" spellcheck="false"></label></div>
+ <div class="atlas-filters" role="group" aria-label="Filter capability status"><button data-atlas-filter="all" aria-pressed="true">All capabilities</button><button data-atlas-filter="bounded" aria-pressed="false">Verified in scope</button><button data-atlas-filter="partial" aria-pressed="false">Partly built</button><button data-atlas-filter="gap" aria-pressed="false">Not built yet</button><span id="atlas-count" aria-live="polite">${total} of ${total} shown</span></div>
+ <div class="atlas-card-grid" id="atlas-cards">${atlasAreas.map(([sector, title, status, scope, href, , , next], index) => `<article class="atlas-card" data-atlas-status="${status}" data-atlas-text="${esc([sector, title, tags[status], scope, next].join(' ').toLowerCase())}"><div class="atlas-card-head"><span class="atlas-card-number">${String(index + 1).padStart(2, '0')} / ${esc(sector)}</span><span class="atlas-chip atlas-${status}">${tags[status]}</span></div><h4>${esc(title)}</h4><p>${esc(scope)}</p><div class="atlas-next"><strong>Next engineering gate</strong><span>${esc(next)}</span></div><div class="atlas-card-links"><a href="#${href}">Open related workspace ↗</a></div></article>`).join('')}</div><p id="atlas-empty" class="atlas-empty" hidden>No matching capabilities. Clear the search or choose another filter.</p>
  <div class="atlas-footer-note"><strong>Engineering release status</strong><p>A model, chart or calculator appearing here does not imply full IEC/IEEE certification, manufacturer approval, legal compliance or suitability for an equipment safety decision. Always verify nameplate inputs, assumptions and standards edition. Private studies are never recovered from a public website without owner-authorised access.</p><a href="#report">Open report workflows ↗</a></div></section>`;
 }
 function reportInputs() {
     const busName = id => project.buses.find(b => b.id === id)?.name || 'Disconnected';
     const extras = { valueSource: 'Value entry mode', userManufacturer: 'Manufacturer (user data)', userModel: 'Model / part number (user data)', dataReference: 'User data source / notes', insulationCustomDesignation: 'Custom product insulation marking', temperature: 'Impedance-data temperature (°C)', singlePhaseBasis: 'Utility two-wire input basis', phaseRating: 'Transformer phase/nameplate basis', loopImpedanceBasis: 'Cable complete-loop basis', method: 'Source data method', angle: 'Angle (degrees)', xdpp: 'Xd″ (pu)', xdp: 'Xd′ (pu)', xd: 'Xd (pu)', length: 'Length (m)', runs: 'Parallel conductors per phase', r: 'Resistance (Ω)', x: 'Reactance (Ω)', material: 'Conductor', size: 'Size', cableType: 'R/X library / construction', insulationType: 'Installed insulation designation', insulationLocation: 'Installation location', insulationProductTemp: 'Insulation temperature from product marking (°C)', cableCategory: 'Cable type filter', shift: 'Phase shift (degrees)', primaryConnection: 'Primary winding', secondaryConnection: 'Secondary winding', grounding: 'Grounding', neutralR: 'Neutral R (Ω)', neutralX: 'Neutral X (Ω)', maxInclude: 'Maximum case included', minInclude: 'Minimum case included', maxStrength: 'Maximum strength', minStrength: 'Minimum strength' };
     Object.assign(extras, Object.fromEntries(pv_arrays_mjs_v_20261022_pv_final_1.pvArrayFields.map(([k, l, u]) => [k, l + (u ? ' (' + u + ')' : '')])), { modulesPerString: 'Modules in series per string', parallelStrings: 'Strings in parallel' });
-    const keys = [...pv_arrays_mjs_v_20261022_pv_final_1.pvArrayFields.map(f => f[0]), 'modulesPerString', 'parallelStrings', 'valueSource', 'userManufacturer', 'userModel', 'dataReference', 'insulationCustomDesignation', 'temperature', 'singlePhaseBasis', 'phaseRating', 'loopImpedanceBasis', 'method', 'voltage', 'v1', 'v2', 'power', 'faultA', 'faultMVA', 'xr', 'angle', 'r', 'x', 'xdpp', 'xdp', 'xd', 'multiplier', 'duration', 'peakA', 'zPercent', 'shift', 'primaryConnection', 'secondaryConnection', 'grounding', 'neutralR', 'neutralX', 'length', 'runs', 'material', 'size', 'cableType', 'insulationType', 'insulationLocation', 'insulationProductTemp', 'cableCategory', 'ratedVoltage', 'interruptA', 'sccrA', 'rPerM', 'xPerM', 'r0PerM', 'x0PerM', 'frequency', 'maxInclude', 'minInclude', 'maxStrength', 'minStrength'];
+    const keys = [...pv_arrays_mjs_v_20261022_pv_final_1.pvArrayFields.map(f => f[0]), 'modulesPerString', 'parallelStrings', 'valueSource', 'userManufacturer', 'userModel', 'dataReference', 'insulationCustomDesignation', 'temperature', 'singlePhaseBasis', 'phaseRating', 'loopImpedanceBasis', 'method', 'voltage', 'v1', 'v2', 'power', 'faultA', 'faultMVA', 'xr', 'angle', 'r', 'x', 'xdpp', 'xdp', 'xd', 'multiplier', 'duration', 'peakA', 'zPercent', 'tapPercent', 'shift', 'primaryConnection', 'secondaryConnection', 'grounding', 'neutralR', 'neutralX', 'length', 'runs', 'material', 'size', 'cableType', 'insulationType', 'insulationLocation', 'insulationProductTemp', 'cableCategory', 'ratedVoltage', 'interruptA', 'sccrA', 'rPerM', 'xPerM', 'r0PerM', 'x0PerM', 'frequency', 'maxInclude', 'minInclude', 'maxStrength', 'minStrength'];
     return `<section class="panel report-inputs"><h2>Entered network data</h2><p class="micro">Values below use SI units. ${(0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project) ? 'All entered values are retained here, including previous-mode references. The selected model uses only its documented model-specific inputs.' : "Missing properties are not inferred. Cable R0/X0 and winding/neutral records do not synthesize a sequence network; unbalanced calculations use the equivalent bus sequence data."}</p><div class="table-scroll"><table><thead><tr><th>Item</th><th>Connection / service</th><th>Entered electrical data</th></tr></thead><tbody>${all().map(x => `<tr><td><strong>${esc(x.name)}</strong><small>${esc(names[x.equipmentType || x.kind] || 'Bus')}</small></td><td>${esc(x.kind === 'pv-array' ? 'PV reference → ' + (project.sources.find(s => s.id === x.inverterId)?.name || 'None') : x.from ? busName(x.from) + ' → ' + busName(x.to) : x.bus ? busName(x.bus) : 'Bus / connection point')}<small>${x.kind === 'pv-array' ? 'Nameplate reference only' : x.enabled === false ? 'Out of service' : 'In service'}</small></td><td>${keys.filter(k => x[k] !== null && x[k] !== undefined && x[k] !== '').map(k => (0, single_phase_mjs_v_20261022_pv_final_1.singlePhaseInputLabel)(project, x, k) ? `<span class="db-value"><b>${(0, single_phase_mjs_v_20261022_pv_final_1.singlePhaseInputLabel)(project, x, k)}</b> ${esc(typeof x[k] === 'number' ? n(x[k], 6) : x[k])}${['rPerM', 'xPerM'].includes(k) ? ' Ω/m' : k === 'faultA' ? ' A' : k === 'faultMVA' ? ' MVA' : ['r', 'x'].includes(k) ? ' Ω' : ''}</span>` : extras[k] ? `<span class="db-value"><b>${extras[k]}</b> ${esc(typeof x[k] === 'number' ? n(x[k], 6) : typeof x[k] === 'boolean' ? x[k] ? 'Yes' : 'No' : x[k])}</span>` : dbValue(k, x[k])).join('')}${x.kind === 'pv-array' ? (0, pv_arrays_mjs_v_20261022_pv_final_1.pvArraySummaryMarkup)(x) : ''}${(0, analysis_fields_mjs_v_20261022_pv_final_1.analysisInputRows)(project, x).map(([label, value, unit]) => `<span class="db-value"><b>${esc(label)}</b> ${esc(typeof value === 'object' ? JSON.stringify(value) : value)} ${esc(unit)}</span>`).join('')}${x.sequence && !(0, analysis_models_mjs_v_20261022_pv_final_1.usesConnectedSequences)(project) ? Object.entries(x.sequence).filter(([, v]) => v !== null && v !== undefined).map(([k, v]) => `<span class="db-value"><b>Equivalent ${esc(k.toUpperCase())}</b> ${n(v, 6)} Ω</span>`).join('') : ''}${x.db ? `<${x.kind === 'cable' ? 'details' : 'div'} class="provenance">${x.kind === 'cable' ? '<summary>' + (x.db.origin === 'manufacturer' ? 'Manufacturer source and overrides' : 'Workbook source and overrides') + '</summary>' : ''}<strong>${esc(x.db.label)}</strong><span>${esc(x.db.sheet)} · row ${esc(x.db.row)} · ${esc(x.db.status || 'Status not supplied')}</span><p>${esc(x.db.notes)}</p>${x.db.source.startsWith('https://') ? `<a href="${esc(x.db.source)}">Source reference</a>` : esc(x.db.source)}${x.db.overrides?.length ? `<small>Manual overrides: ${esc(x.db.overrides.join(', '))}</small>` : ''}</div>` : ''}</td></tr>`).join('')}</tbody></table></div></section>`;
 }
-function extendedReportView() { return `<div class="report-title"><span class="eyebrow">DOCUMENTED NETWORK FAULT STUDY</span><h1>${esc(project.name)}</h1><p>${esc(project.preparedBy || 'Prepared by: not supplied')} · ${esc(project.date)}</p><button class="primary no-print" data-action="print">Print report</button><button class="no-print" data-action="pdf">Download PDF</button><button class="no-print" data-action="xlsx">Download Excel</button></div><section class="panel"><h2>Study basis</h2><p>${esc(faultTypeLabel())}</p><p>${esc((0, analysis_models_mjs_v_20261022_pv_final_1.analysisScope)(project))}</p>${(0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(project) ? '<p>Steady-state resistive DC equivalent. No AC RMS/peak or IEC/ANSI duty calculation.</p>' : `<p>${esc(project.settings.frequency)} Hz · fault impedance ${z({ r: project.settings.faultR, i: project.settings.faultX })}</p>`}</section><section class="panel report-diagram"><h2>System single-line</h2>${canvas()}</section>${pending ? '<section class="panel"><p>Calculate the current inputs before printing results.</p></section>' : (0, analysis_presentation_mjs_v_20261022_pv_final_1.analysisResultsMarkup)(project, calculation.results)}${reportInputs()}`; }
+function extendedReportView() { return `<div class="report-title"><span class="eyebrow">DOCUMENTED NETWORK FAULT STUDY</span><h1>${esc(project.name)}</h1><p>${esc(project.preparedBy || 'Prepared by: not supplied')} · ${esc(project.date)}</p><button class="primary no-print" data-action="print">Print report</button><button class="no-print" data-action="pdf">Download PDF</button><button class="no-print" data-action="xlsx">Download Excel</button></div>${reportContentsPanel()}${reportHas('basis') ? `<section class="panel" data-report-part="basis"><h2>Study basis</h2><p>${esc(faultTypeLabel())}</p><p>${esc((0, analysis_models_mjs_v_20261022_pv_final_1.analysisScope)(project))}</p>${(0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(project) ? '<p>Steady-state resistive DC equivalent. No AC RMS/peak or IEC/ANSI duty calculation.</p>' : `<p>${esc(project.settings.frequency)} Hz · fault impedance ${z({ r: project.settings.faultR, i: project.settings.faultX })}</p>`}</section>` : ''}${reportHas('diagram') ? `<section class="panel report-diagram" data-report-part="diagram"><h2>System single-line</h2>${canvas()}</section>` : ''}${pending ? '<section class="panel"><p>Calculate the current inputs before printing results.</p></section>' : reportResultsView()}${part('pv', reportPvView())}${reportHas('inputs') ? part('inputs', reportInputs()) : ''}${reportHas('qa') ? part('qa', reviewView()) : ''}${part('studies', reportExtraStudies())}`; }
 function reportView() { if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project))
-    return extendedReportView(); return `<div class="report-title"><span class="eyebrow">CONNECTED-NETWORK FAULT STUDY</span><h1>${esc(project.name)}</h1><p>${esc(project.preparedBy || 'Prepared by: not supplied')} · ${esc(project.date)}</p><button class="primary no-print" data-action="print">Print report</button><button class="no-print" data-action="pdf">Download PDF</button><button class="no-print" data-action="xlsx">Download Excel</button></div><section class="panel"><h2>Study basis</h2><p>${esc(faultTypeLabel())} · ${esc(project.settings.frequency)} Hz · ${esc(project.settings.scenario)} · ${esc(project.settings.time)} s after fault · prefault factor ${esc(project.settings.voltageFactor)}</p><p>Calculation base: ${n(project.settings.baseMVA)} MVA · Generator stage: ${esc(project.settings.generatorStage)} · ${project.settings.faultType === 'dlg' ? 'Common ground impedance' : 'Fault impedance'}: ${z({ r: project.settings.faultR, i: project.settings.faultX })} · Z2 = Z1 screening: ${project.settings.assumeZ2 ? 'Selected' : 'Not selected'}</p></section><section class="panel report-diagram"><h2>System single-line</h2>${(0, network_diagram_mjs_v_20261022_pv_final_1.renderOneLine)(project, { results: calculation.results, issues: calculation.issues, pending, selection: null, showCurrents: true })}<p class="micro">${project.settings.faultType === 'dlg' ? 'Bus labels show maximum DLG phase RMS and separate ground return RMS. B and C share the entered common ground impedance.' : 'Bus values are available fault RMS at each bus. Branch values are From / To currents for the selected fault bus.'}</p></section>${resultsView()}${reportInputs()}${reviewView()}<section class="panel"><h2>Methodology & limits</h2>${(0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project) ? '<p>' + single_phase_mjs_v_20261022_pv_final_1.singlePhaseScope + ' Full-voltage loop current base is S/V; transformer kVA is the full nameplate rating.</p>' : ''}<p>Complex per-unit nodal admittance solution with voltage sources represented by their Norton equivalents. Transformer ratios and leakage impedances, cable R/X, source strengths and phase angles are included. Source contributions are found by superposition at each fault location. Loops and parallel paths use the full matrix, rather than a single path sum. Generator Xd defines reactance; when X/R is supplied, resistance is X divided by X/R.</p><p>Current-limited inverters use ideal manufacturer-current injections. Without phase data, the total is a magnitude-sum bound. A pure series path does not attenuate an ideal regulated current; actual voltage compliance, controls and sequence behavior require manufacturer data. LL requires valid Z2 or the explicit Z2 = Z1 screen. SLG and DLG require equivalent Z0 that includes the actual grounding path. DLG uses one common B–C–ground impedance and reports maximum phase and ground return RMS separately. Loads, arcing faults, saturation, protection coordination and complete IEC/ANSI correction procedures are outside this model.</p><p>Reference methodology: <a href="https://opendss.epri.com/OpenDSSFaultStudyMode.html">EPRI OpenDSS fault-study nodal method</a>. Inverter model limitations: <a href="https://www1.eere.energy.gov/solar/pdfs/distribution_modeling_wkshp2012_behnke.pdf">DOE/NREL/SNL inverter short-circuit characteristics</a>.</p></section>`; }
+    return extendedReportView(); return `<div class="report-title"><span class="eyebrow">CONNECTED-NETWORK FAULT STUDY</span><h1>${esc(project.name)}</h1><p>${esc(project.preparedBy || 'Prepared by: not supplied')} · ${esc(project.date)}</p><button class="primary no-print" data-action="print">Print report</button><button class="no-print" data-action="pdf">Download PDF</button><button class="no-print" data-action="xlsx">Download Excel</button></div>${reportContentsPanel()}${reportHas('basis') ? `<section class="panel" data-report-part="basis"><h2>Study basis</h2><p>${esc(faultTypeLabel())} · ${esc(project.settings.frequency)} Hz · ${esc(project.settings.scenario)} · ${esc(project.settings.time)} s after fault · prefault factor ${esc(project.settings.voltageFactor)}</p><p>Calculation base: ${n(project.settings.baseMVA)} MVA · Generator stage: ${esc(project.settings.generatorStage)} · ${project.settings.faultType === 'dlg' ? 'Common ground impedance' : 'Fault impedance'}: ${z({ r: project.settings.faultR, i: project.settings.faultX })} · Z2 = Z1 screening: ${project.settings.assumeZ2 ? 'Selected' : 'Not selected'}</p></section>` : ''}${reportHas('diagram') ? `<section class="panel report-diagram" data-report-part="diagram"><h2>System single-line</h2>${(0, network_diagram_mjs_v_20261022_pv_final_1.renderOneLine)(project, { results: calculation.results, issues: calculation.issues, pending, selection: null, showCurrents: true })}<p class="micro">${project.settings.faultType === 'dlg' ? 'Bus labels show maximum DLG phase RMS and separate ground return RMS. B and C share the entered common ground impedance.' : 'Bus values are available fault RMS at each bus. Branch values are From / To currents for the selected fault bus.'}</p></section>` : ''}${reportResultsView()}${part('pv', reportPvView())}${reportHas('inputs') ? part('inputs', reportInputs()) : ''}${reportHas('qa') ? part('qa', reviewView()) : ''}${part('studies', reportExtraStudies())}${reportHas('methodology') ? `<section class="panel" data-report-part="methodology"><h2>Methodology & limits</h2>${(0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project) ? '<p>' + single_phase_mjs_v_20261022_pv_final_1.singlePhaseScope + ' Full-voltage loop current base is S/V; transformer kVA is the full nameplate rating.</p>' : ''}<p>Complex per-unit nodal admittance solution with voltage sources represented by their Norton equivalents. Transformer ratios and leakage impedances, cable R/X, source strengths and phase angles are included. Source contributions are found by superposition at each fault location. Loops and parallel paths use the full matrix, rather than a single path sum. Generator Xd defines reactance; when X/R is supplied, resistance is X divided by X/R.</p><p>Current-limited inverters use ideal manufacturer-current injections. Without phase data, the total is a magnitude-sum bound. A pure series path does not attenuate an ideal regulated current; actual voltage compliance, controls and sequence behavior require manufacturer data. LL requires valid Z2 or the explicit Z2 = Z1 screen. SLG and DLG require equivalent Z0 that includes the actual grounding path. DLG uses one common B–C–ground impedance and reports maximum phase and ground return RMS separately. Loads, arcing faults, saturation, protection coordination and complete IEC/ANSI correction procedures are outside this model.</p><p>Method: nodal bus-admittance fault study with superposition of source injections. Inverter model limitations: <a href="https://www1.eere.energy.gov/solar/pdfs/distribution_modeling_wkshp2012_behnke.pdf">DOE/NREL/SNL inverter short-circuit characteristics</a>.</p></section>` : ''}`; }
 function drawingCalculationStatus() {
     if (pending)
         return `<section class="calculation-state compact waiting" role="status"><strong>${running ? 'Calculating…' : 'Inputs changed'}</strong><span>${running ? 'Updating the connected network.' : 'Calculate to update fault currents.'}</span>${running ? '' : '<button data-action="calculate">Calculate</button>'}</section>`;
@@ -8994,8 +11533,9 @@ function drawingCalculationStatus() {
     if (errors.length)
         return `<section class="calculation-state compact blocked" role="alert"><strong>${errors.length} input ${errors.length === 1 ? 'issue' : 'issues'}</strong><span title="${esc(errors[0].message)}">${esc(errors[0].message)}</span>${errors[0].id === 'engine' ? '<button data-action="calculate">Retry</button>' : `<button data-edit-equipment="${esc(errors[0].id)}">Fix input</button>`}<button data-action="review-inputs">All issues</button></section>`;
     if (r?.totalA != null)
-        return `<section class="calculation-state compact ready" role="status"><strong>Calculated</strong><span>${esc(ka(r.totalA))} at ${esc(r.busName)}</span><a href="#results">View results →</a></section>`;
-    return `<section class="calculation-state compact waiting" role="status"><strong>${project.buses.length ? 'Choose fault bus' : 'Start your drawing'}</strong><span>${esc(r?.faultNote || 'Place equipment, connect buses and enter their values.')}</span>${project.buses.length ? '<button data-action="choose-fault">Choose bus</button>' : ''}</section>`;
+        return `<section class="calculation-state compact ready" role="status"><strong>${r.status && r.status !== 'CALCULATED' ? esc(r.status.charAt(0) + r.status.slice(1).toLowerCase()) : 'Calculated'}</strong><span>${esc(ka(r.totalA))} at ${esc(r.busName)}${r.status === 'SCREENING BOUND' ? ' · upper bound: inverter fault-current angle unknown' : ''}</span><a href="#results">View results →</a></section>`;
+    const label = !project.buses.length ? 'Start your drawing' : !r || !project.selectedBus ? 'Choose fault bus' : r.status === 'DATA REQUIRED' ? 'Data required' : r.status?.startsWith('DISCONNECTED') ? 'No source reaches this bus' : r.status === 'NETWORK ERROR' ? 'Network needs attention' : r.status === 'INPUT REQUIRED' ? 'Input required' : 'Choose fault bus';
+    return `<section class="calculation-state compact waiting" role="status"><strong>${label}</strong><span>${esc(r?.faultNote || 'Place equipment, connect buses and enter their values.')}</span>${project.buses.length ? '<button data-action="choose-fault">Choose bus</button>' : ''}</section>`;
 }
 function pvReferenceStatusView() { const issues = (0, pv_arrays_mjs_v_20261022_pv_final_1.pvReferenceIssues)(project); return issues.length ? `<section class="calculation-state pv-reference-state" role="status"><strong>PV reference data: ${issues.length} ${issues.length === 1 ? 'item' : 'items'} to review</strong><p>Electrical fault results use the source network. Correct these module/array reference values separately.</p>${issues.map(i => `<p>${esc(i.message)} <button data-edit-equipment="${esc(i.id)}">Edit array</button></p>`).join('')}</section>` : ''; }
 function calculationStatusView() { if (view === 'network')
@@ -9214,7 +11754,7 @@ async function downloadReport(format, { print = false } = {}) {
     if (pending)
         calculate();
     try {
-        const blob = await (0, report_download_mjs_v_20261022_pv_final_1.validateReportBlob)(await cloud.report(snapshot, format), format);
+        const blob = await (0, report_download_mjs_v_20261108_v32_1.validateReportBlob)(await cloud.report(snapshot, format), format);
         if (request !== reportRequest || project.id !== currentId)
             return;
         let saved = null, saveMessage = '';
@@ -9276,10 +11816,26 @@ async function downloadReport(format, { print = false } = {}) {
     }
 }
 let lastRenderContext = null;
+// Large networks return reduced branch tables for most buses. The selected bus is recalculated in full on
+// this device when it is chosen, from the same inputs, so its contributions and branch currents are complete.
+function ensureBusDetail() {
+    if (pending || running || !project || !Array.isArray(calculation?.results))
+        return;
+    const r = calculation.results.find(x => x?.busId === project.selectedBus);
+    if (!r || r.outputScope !== 'compact' || r.detailScope === 'full')
+        return;
+    try {
+        const d = (0, network_engine_mjs_v_20261022_pv_final_1.calculateBusDetail)(clone(project), project.selectedBus);
+        if (d && d.busId === r.busId)
+            calculation = { ...calculation, results: calculation.results.map(x => x === r ? { ...d, outputScope: 'compact', detailScope: 'full' } : x) };
+    }
+    catch { }
+}
 function render() {
     // Async database/calculation updates must not interrupt an active drawing gesture.
     if (drag)
         return;
+    ensureBusDetail();
     const nextDialog = dbTarget ? 'db-' + dbTarget : addOpen ? 'add' : equipmentEdit ? 'equipment-' + equipmentEdit.itemId : null;
     if (nextDialog && !activeDialog)
         dialogReturnFocus = document.activeElement;
@@ -9326,7 +11882,7 @@ function render() {
     void ensureInlineCatalog();
 }
 function renderContent() { if (!project)
-    return; const r = result(), errors = calculation.issues.filter(i => i.severity === 'error').length; $('#app').innerHTML = `<aside class="sidebar" ${equipmentEdit ? 'inert' : ''}><a class="brand" href="#network"><span>ϟ</span><div>FAULT CURRENT<small>CONNECTED NETWORK STUDIO</small></div></a><div class="workspace-label">ENGINEERING WORKSPACE</div><nav>${pages.map(([v, l, icon]) => `<a href="#${v}" class="${view === v ? 'active' : ''}"><i>${icon}</i>${l}${v === 'review' && errors ? `<b>${errors}</b>` : ''}</a>`).join('')}</nav><div class="sidebar-bottom"><div class="local-dot"></div> ${cloudHosted ? 'Cloud saved studies' : 'Public · local project data'}<small>${storageOK ? 'Draft saved on this device' : 'Storage unavailable: export a backup'}<br>Relevant fault-study database connected</small></div></aside><main class="studio-main ${view === 'network' ? 'drawing-view' : ''}" ${equipmentEdit ? 'inert' : ''}><header><div><span class="eyebrow">POWER SYSTEM ANALYSIS</span><h1>${esc(project.name)}</h1></div><div class="actions">${historyControls()}<button type="button" class="atlas-command-trigger" data-quick-nav="open" title="Search tools (Ctrl+K)">⌕ Tools <kbd>Ctrl K</kbd></button><button data-action="refresh" title="Save the draft and reload Studio">↻ Refresh</button>${embedded() ? '<button data-action="open-browser" title="Save the current study and open it outside the embedded view">Open in browser ↗</button>' : ''}<button data-select="settings">Study setup</button><button data-action="save">Save study</button><button data-action="calculate">${running ? 'Calculating…' : pending ? 'Calculate changes' : 'Calculate system'}</button><button class="primary" data-action="add-menu">+ Add equipment</button></div></header>${cloudHosted ? cloudStatusMarkup() : ''}${notice ? `<div class="notice" role="status">${notice}</div>` : ''}${(0, report_download_mjs_v_20261022_pv_final_1.browserHandoffMarkup)(browserHandoff)}${(0, report_download_mjs_v_20261022_pv_final_1.reportDownloadMarkup)(reportDownload, { pending, embedded: embedded() })}<div class="study-bar"><label>FAULT LOCATION<select id="fault-bus"><option value="">Choose bus</option>${project.buses.map(b => `<option value="${b.id}" ${b.id === project.selectedBus ? 'selected' : ''}>${esc(b.name)} · ${voltage(b.voltage)}</option>`).join('')}</select></label><div class="study-context"><small>FAULT TYPE</small><strong id="study-fault-type">${esc(faultTypeLabel())}</strong></div><div class="study-context"><small>SCENARIO</small><strong id="study-scenario">${esc(project.settings.scenario)}</strong></div><button data-select="settings">Edit study setup</button></div><div class="metrics"><div class="metric dark"><span>${esc(faultTypeLabel())} ${(0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project) ? (0, analysis_models_mjs_v_20261022_pv_final_1.analysisQuantity)(project) : project.settings.faultType === 'dlg' ? 'MAX PHASE RMS' : 'FAULT RMS'}</span><strong>${pending ? '…' : ka(r?.totalA)}</strong><small>${esc(pending ? (running ? 'Updating results' : 'Inputs changed · calculate to update') : r?.status || 'Choose a fault location')}</small></div><div class="metric"><span>FAULT-BUS VOLTAGE</span><strong>${!pending && r?.voltage ? voltage(r.voltage) : voltage(project.buses.find(b => b.id === project.selectedBus)?.voltage)}</strong><small>Changes through transformer winding ratios</small></div><div class="metric"><span>PEAK DUTY SCREENING</span><strong>${pending ? '…' : ka(r?.peakA)}</strong><small>${r?.peakA == null ? (project.settings.faultType === '3phase' ? 'Needs X/R and DER peak data' : 'Available for 3-phase studies') : 'IEC-style screening · not a full standard study'}</small></div><div class="metric"><span>CONNECTED EQUIPMENT</span><strong>${project.sources.length + project.branches.filter(b => b.kind !== 'link').length + project.devices.length + (project.pvArrays || []).length}<em>items</em></strong><small>${project.buses.length} buses · ${pending ? 'Review pending' : errors + ' input issues'}</small></div></div><div id="calculation-status">${calculationStatusView()}</div><div id="pv-reference-status">${pvReferenceStatusView()}</div>${view === 'network' ? networkView() : view === 'results' ? resultsView() : view === 'operating' ? (0, operating_workspace_mjs_v_20261024_batch01_1.operatingWorkspaceMarkup)(project) : view === 'advanced' ? (0, advanced_workspace_mjs_v_20261024_b03b08_1.advancedWorkspaceMarkup)(project) : view === 'projects' ? projectView() : view === 'database' ? libraryMarkup() : view === 'atlas' ? capabilityAtlasMarkup() : reportView()}<footer>Fault Current Studio · Connected model v2<span>Master database · edit equipment on the single line</span></footer></main>${equipmentEdit && !dbTarget && !addOpen ? equipmentPopupMarkup() : ''}${dbTarget ? `<div class="modal-backdrop database-backdrop"><div class="database-dialog" role="dialog" aria-modal="true" aria-label="Choose fault-study database record"><button class="database-close" data-action="cancel-db">× Close database</button>${databaseView()}</div></div>` : ''}${addOpen ? `<div class="modal-backdrop"><section class="add-dialog" role="dialog" aria-modal="true" aria-label="Add equipment"><div class="panel-heading"><div><span class="eyebrow">BUILD YOUR LINEUP</span><h2>Add equipment</h2></div><button data-action="close-add" aria-label="Close">×</button></div><p>New cables and transformers start at the selected bus. Edit either endpoint at any time.</p><div class="add-grid">${Object.entries(names).filter(([k]) => k !== 'link').map(([k, l]) => `<button data-add="${k}"><span>${k === 'transformer' ? '◉' : k === 'cable' ? '⇄' : k === 'utility' ? 'ϟ' : '⊞'}</span>${l}</button>`).join('')}</div></section></div>` : ''}`; }
+    return; const r = result(), errors = calculation.issues.filter(i => i.severity === 'error').length; $('#app').innerHTML = `<aside class="sidebar" ${equipmentEdit ? 'inert' : ''}><a class="brand" href="#network"><span>ϟ</span><div>FAULT CURRENT<small>CONNECTED NETWORK STUDIO</small></div></a><div class="workspace-label">ENGINEERING WORKSPACE</div><nav>${pages.map(([v, l, icon]) => `<a href="#${v}" class="${view === v ? 'active' : ''}"><i>${icon}</i>${l}${v === 'review' && errors ? `<b>${errors}</b>` : ''}</a>`).join('')}</nav><div class="sidebar-bottom"><div class="local-dot"></div> ${cloudHosted ? 'Cloud saved studies' : 'Public · local project data'}<small>${storageOK ? 'Draft saved on this device' : 'Storage unavailable: export a backup'}${folder.state.linkedFile && folderProjectId === project.id ? '<br>Project file: ' + esc(folder.state.linkedFile) : ''}<br>Relevant fault-study database connected</small></div></aside><main class="studio-main ${view === 'network' ? 'drawing-view' : ''}" ${equipmentEdit ? 'inert' : ''}><header><div><span class="eyebrow">POWER SYSTEM ANALYSIS</span><h1>${esc(project.name)}</h1></div><div class="actions">${historyControls()}<button type="button" class="atlas-command-trigger" data-quick-nav="open" title="Search tools (Ctrl+K)">⌕ Tools <kbd>Ctrl K</kbd></button><button data-action="refresh" title="Save the draft and reload Studio">↻ Refresh</button>${embedded() ? '<button data-action="open-browser" title="Save the current study and open it outside the embedded view">Open in browser ↗</button>' : ''}<button data-select="settings">Study setup</button><button data-action="save">Save study</button><button data-action="calculate">${running ? 'Calculating…' : pending ? 'Calculate changes' : 'Calculate system'}</button><button class="primary" data-action="add-menu">+ Add equipment</button></div></header>${cloudHosted ? cloudStatusMarkup() : ''}${notice ? `<div class="notice" role="status">${notice}</div>` : ''}${(0, report_download_mjs_v_20261108_v32_1.browserHandoffMarkup)(browserHandoff)}${(0, report_download_mjs_v_20261108_v32_1.reportDownloadMarkup)(reportDownload, { pending, embedded: embedded(), handoff: !!cloud.state.available })}<div class="study-bar"><label>FAULT LOCATION<select id="fault-bus"><option value="">Choose bus</option>${project.buses.map(b => `<option value="${b.id}" ${b.id === project.selectedBus ? 'selected' : ''}>${esc(b.name)} · ${voltage(b.voltage)}</option>`).join('')}</select></label><div class="study-context"><small>FAULT TYPE</small><strong id="study-fault-type">${esc(faultTypeLabel())}</strong></div><div class="study-context"><small>SCENARIO</small><strong id="study-scenario">${esc(project.settings.scenario)}</strong>${project.settings.scenario !== 'base' && project.sources.every(x => (x.maxStrength ?? 1) === 1 && (x.minStrength ?? 1) === 1 && x.maxInclude !== false && x.minInclude !== false) ? '<small class="scenario-note">No source has maximum/minimum data, so this equals the base case.</small>' : ''}</div><button data-select="settings">Edit study setup</button></div><div class="metrics"><div class="metric dark"><span>${esc(faultTypeLabel())} ${(0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project) ? (0, analysis_models_mjs_v_20261022_pv_final_1.analysisQuantity)(project) : project.settings.faultType === 'dlg' ? 'MAX PHASE RMS' : 'FAULT RMS'}</span><strong>${pending ? '…' : ka(r?.totalA)}</strong><small>${esc(pending ? (running ? 'Updating results' : 'Inputs changed · calculate to update') : r?.status || 'Choose a fault location')}</small></div><div class="metric"><span>FAULT-BUS VOLTAGE</span><strong>${!pending && r?.voltage ? voltage(r.voltage) : voltage(project.buses.find(b => b.id === project.selectedBus)?.voltage)}</strong><small>Changes through transformer winding ratios</small></div><div class="metric"><span>PEAK DUTY SCREENING</span><strong>${pending ? '…' : ka(r?.peakA)}</strong><small>${r?.peakA == null ? (project.settings.faultType === '3phase' ? 'Needs X/R and DER peak data' : 'Available for 3-phase studies') : 'IEC-style screening · not a full standard study'}</small></div><div class="metric"><span>CONNECTED EQUIPMENT</span><strong>${project.sources.length + project.branches.filter(b => b.kind !== 'link').length + project.devices.length + (project.pvArrays || []).length}<em>items</em></strong><small>${project.buses.length} buses · ${pending ? 'Review pending' : errors + ' input issues'}</small></div></div><div id="calculation-status">${calculationStatusView()}</div><div id="pv-reference-status">${pvReferenceStatusView()}</div>${view === 'network' ? networkView() : view === 'results' ? resultsView() : view === 'operating' ? (0, operating_workspace_mjs_v_20261024_batch01_1.operatingWorkspaceMarkup)(project) : view === 'advanced' ? (0, advanced_workspace_mjs_v_20261024_b03b08_1.advancedWorkspaceMarkup)(project) : view === 'projects' ? projectView() : view === 'database' ? libraryMarkup() : view === 'atlas' ? capabilityAtlasMarkup() : reportView()}<footer>Fault Current Studio · Connected model v2<span>Master database · edit equipment on the single line</span></footer></main>${equipmentEdit && !dbTarget && !addOpen ? equipmentPopupMarkup() : ''}${dbTarget ? `<div class="modal-backdrop database-backdrop"><div class="database-dialog" role="dialog" aria-modal="true" aria-label="Choose fault-study database record"><button class="database-close" data-action="cancel-db">× Close database</button>${databaseView()}</div></div>` : ''}${addOpen ? `<div class="modal-backdrop"><section class="add-dialog" role="dialog" aria-modal="true" aria-label="Add equipment"><div class="panel-heading"><div><span class="eyebrow">BUILD YOUR LINEUP</span><h2>Add equipment</h2></div><button data-action="close-add" aria-label="Close">×</button></div><p>New cables and transformers start at the selected bus. Edit either endpoint at any time.</p><div class="add-grid">${Object.entries(names).filter(([k]) => k !== 'link').map(([k, l]) => `<button data-add="${k}"><span>${k === 'transformer' ? '◉' : k === 'cable' ? '⇄' : k === 'utility' ? 'ϟ' : '⊞'}</span>${l}</button>`).join('')}</div></section></div>` : ''}`; }
 const safeProject = network_model_mjs_v_20261022_pv_final_1.normalizeProject;
 function saveNamed() { const saved = read('fault-network-studies-v2', []); saved.unshift({ saved: new Date().toISOString(), project: clone(project) }); const ok = write('fault-network-studies-v2', saved); notice = ok ? 'Study saved. Export JSON for a portable backup.' : 'Could not save to browser storage. Export JSON to keep this study.'; render(); return ok; }
 function startDownloadURL(name, url) { const a = document.createElement('a'); a.href = url; a.download = name; document.body?.appendChild?.(a); try {
@@ -9437,7 +11993,95 @@ async function printCurrentReport() {
         render();
     }
 }
+async function openFolderFile(name) {
+    const request = ++replacementRequest, startRevision = revision, startProject = project.id;
+    try {
+        const parsed = await folder.read(name);
+        let imported;
+        if (parsed.format === 'fault-current-studio' && parsed.version === 1) {
+            legacyData ??= await (await fetch('workbook.json')).json();
+            imported = (0, network_model_mjs_v_20261022_pv_final_1.migrateLegacy)(parsed.inputs, legacyData);
+        }
+        else
+            imported = safeProject(parsed);
+        if (request !== replacementRequest || revision !== startRevision || project.id !== startProject)
+            throw Error('The study changed while the file was loading. Open it again.');
+        if (folder.state.linkedFile && folderProjectId === project.id)
+            await folder.flush();
+        if (!await backupForReplace())
+            throw Error('The current study could not be backed up. Export it before opening another study.');
+        project = imported;
+        cloud.attach(project);
+        linkFolderFile(name);
+        diagramViewport = null;
+        selection = null;
+        view = 'network';
+        location.hash = 'network';
+        notice = 'Opened ' + esc(name) + ' from your project folder. Changes save back to that file.';
+        persist();
+        render();
+        calculate();
+    }
+    catch (error) {
+        notice = 'Could not open ' + esc(name) + ': ' + esc(error.message);
+        render();
+    }
+}
+// V31: narrow hook for add-on tools (plant builder, equipment table). Every change goes through the normal
+// validation, undo history, draft save, folder autosave and recalculation.
+function installStudioHook() {
+    try {
+        Object.defineProperty(globalThis, '__fcsStudio', { configurable: true, value: Object.freeze({
+                snapshot: () => clone(project),
+                projectId: () => project?.id ?? null,
+                apply(mutator, message) { const next = clone(project); mutator(next); const checked = safeProject(next); if (checked.id !== project.id)
+                    throw Error('A tool cannot replace the open project.'); project = checked; if (selection && !itemById(selection))
+                    selection = null; notice = message ? esc(message) : ''; persist(); render(); calculate(); return true; },
+                replace(next, message) { const checked = safeProject(next); project = checked; cloud.attach(project); folderProjectId = null; diagramViewport = null; selection = null; view = 'network'; location.hash = 'network'; notice = message ? esc(message) : ''; persist(); render(); calculate(); return true; },
+                fit() { diagramViewport = null; render(); }
+            }) });
+    }
+    catch { }
+}
+function linkFolderFile(name) { folder.link(name); folderProjectId = project.id; write('fault-network-folder-link-v1', { projectId: project.id, file: name }); }
+async function folderAction(a) {
+    try {
+        if (a === 'folder-connect') {
+            if (await folder.connect())
+                notice = 'Project folder connected.';
+        }
+        else if (a === 'folder-reconnect')
+            await folder.reconnect();
+        else if (a === 'folder-refresh')
+            await folder.refresh();
+        else if (a === 'folder-disconnect') {
+            if (folder.state.linkedFile && folderProjectId === project.id)
+                await folder.flush();
+            await folder.disconnect();
+            folderProjectId = null;
+            write('fault-network-folder-link-v1', null);
+        }
+        else if (a === 'folder-autosave')
+            folder.setAutosave(!folder.state.autosave);
+        else if (a === 'folder-save') {
+            const typed = document.getElementById('folder-file-name')?.value, name = (0, project_folder_mjs_v_20261108_v31_1.projectFileName)(typed || project.name), linked = folder.state.linkedFile && folderProjectId === project.id ? folder.state.linkedFile : null;
+            if (folder.exists(name) && name !== linked && !confirm('A file named ' + name + ' already exists in ' + folder.state.folderName + '. Replace it with the current project?'))
+                return;
+            await folder.write(name, project);
+            linkFolderFile(name);
+            notice = 'Saved to ' + esc(name) + ' in ' + esc(folder.state.folderName) + '. Further changes save to this file automatically.';
+        }
+    }
+    catch (error) {
+        notice = esc(error.message);
+    }
+    render();
+}
 async function action(a) {
+    if (a.startsWith('folder-')) {
+        await folderAction(a);
+        return;
+    }
     if (a === 'advanced-csv') {
         try {
             const rows = (0, advanced_workspace_mjs_v_20261024_b03b08_1.advancedEvidenceRows)(project);
@@ -9480,6 +12124,33 @@ async function action(a) {
             notice = esc(error.message);
             render();
         }
+        return;
+    }
+    if (a === 'operating-fill-zero') {
+        const cfg = project.operatingStudy ??= { buses: {}, screening: {} };
+        cfg.buses ??= {};
+        let n = 0;
+        for (const b of project.buses) {
+            if (b.id === cfg.slackBusId)
+                continue;
+            const d = cfg.buses[b.id] ??= {};
+            if (d.type === 'PV') {
+                if (d.pMW == null) {
+                    d.pMW = 0;
+                    n++;
+                }
+                continue;
+            }
+            if (d.pMW == null || d.qMvar == null) {
+                d.type ??= 'PQ';
+                d.pMW ??= 0;
+                d.qMvar ??= 0;
+                n++;
+            }
+        }
+        notice = n + ' blank bus' + (n === 1 ? '' : 'es') + ' set to 0 MW / 0 Mvar. Enter the actual load or generation where there is some.';
+        persist();
+        render();
         return;
     }
     if (a === 'example-model') {
@@ -10574,6 +13245,26 @@ document.addEventListener('click', async (e) => {
         dbPage = Math.max(0, dbPage - 1);
         render();
     }
+    if (d.folderOpen !== undefined) {
+        await openFolderFile(d.folderOpen);
+        return;
+    }
+    if (d.folderDelete !== undefined) {
+        const name = d.folderDelete;
+        if (!confirm('Delete ' + name + ' from ' + folder.state.folderName + '? This removes the file from your computer and cannot be undone here.'))
+            return;
+        try {
+            await folder.remove(name);
+            if (folder.state.linkedFile === null && folderProjectId === project.id)
+                folderProjectId = null;
+            notice = 'Deleted ' + esc(name) + '.';
+        }
+        catch (error) {
+            notice = 'Could not delete ' + esc(name) + ': ' + esc(error.message);
+        }
+        render();
+        return;
+    }
     if (d.loadProject !== undefined) {
         try {
             const entry = read('fault-network-studies-v2', [])[Number(d.loadProject)];
@@ -10763,7 +13454,9 @@ document.addEventListener('contextmenu', e => {
     render();
 });
 function localDiagramPoint(svg, event) { const point = svg.createSVGPoint(); point.x = event.clientX; point.y = event.clientY; return point.matrixTransform(svg.getScreenCTM().inverse()); }
-function refreshDiagram(svg) { const markup = canvas(); svg.innerHTML = markup.slice(markup.indexOf('>') + 1, markup.lastIndexOf('</svg>')); const v = diagramViewport || (0, network_diagram_mjs_v_20261022_pv_final_1.diagramGeometry)(project).bounds; svg.setAttribute('viewBox', `${v.x} ${v.y} ${v.width} ${v.height}`); }
+function refreshDiagram(svg) { const markup = canvas(), open = markup.slice(0, markup.indexOf('>')), cls = /class="([^"]*)"/.exec(open)?.[1]; svg.innerHTML = markup.slice(markup.indexOf('>') + 1, markup.lastIndexOf('</svg>')); if (cls !== undefined && svg.getAttribute('class') !== cls)
+    svg.setAttribute('class', cls); const note = document.querySelector('.diagram-overview-note'); if (note)
+    note.hidden = !/\boverview\b/.test(cls || ''); const v = diagramViewport || (0, network_diagram_mjs_v_20261022_pv_final_1.diagramGeometry)(project).bounds; svg.setAttribute('viewBox', `${v.x} ${v.y} ${v.width} ${v.height}`); }
 function diagramScale(svg) { const m = svg.getScreenCTM(); return Math.hypot(m.a, m.b) || 1; }
 function clearDrawingFeedback(svg) { svg?.querySelector?.('[data-drawing-feedback]')?.remove?.(); }
 function updateDrawingFeedback(svg, e) {
@@ -11076,6 +13769,101 @@ window.addEventListener('hashchange', () => { if (equipmentEdit && normalizeView
     cancelEquipmentEditor(); const v = location.hash.slice(1); view = normalizeView(v); placementKind = null; drawingConnection = null; diagramMenu = null; render(); if (view === 'projects' && cloudHosted)
     refreshCloudList(); if (view === 'database' && !masterState.loading && !masterState.data)
     refreshMasterSheet(); });
+function reportChoiceChanged(t) {
+    const c = reportChoice(), next = { ...c, sections: [...c.sections], studies: [...c.studies] };
+    if (t.dataset.reportSection) {
+        const k = t.dataset.reportSection;
+        next.sections = t.checked ? [...new Set([...next.sections, k])] : next.sections.filter(x => x !== k);
+        next.sections = report_contents_mjs_v_20261108_v32_1.SECTION_KEYS.filter(x => next.sections.includes(x));
+    }
+    else if (t.dataset.reportStudy) {
+        const k = t.dataset.reportStudy;
+        next.studies = t.checked ? [...new Set([...next.studies, k])] : next.studies.filter(x => x !== k);
+    }
+    else if (t.dataset.reportScope && t.checked)
+        next.scope = t.dataset.reportScope;
+    setReportChoice(next);
+    const removing = (t.dataset.reportSection || t.dataset.reportStudy) && !t.checked, scopeOnly = !!t.dataset.reportScope;
+    if ((removing || scopeOnly) && document.querySelector('.report-contents')) {
+        if (t.dataset.reportSection) {
+            const keys = new Set(next.sections);
+            document.querySelectorAll('[data-report-part]').forEach(el => { const own = el.dataset.reportPart.split(' '); if (own.includes(t.dataset.reportSection) && !own.some(k => keys.has(k)))
+                el.remove(); });
+            if (t.dataset.reportSection === 'inputs' && next.sections.includes('pv') && (project.pvArrays || []).length) {
+                const y = window.scrollY;
+                render();
+                window.scrollTo?.(0, y);
+                return;
+            }
+        }
+        else if (t.dataset.reportStudy) {
+            document.querySelectorAll('[data-report-part="studies"]').forEach(el => el.remove());
+            if (next.studies.length) {
+                const y = window.scrollY;
+                render();
+                window.scrollTo?.(0, y);
+                return;
+            }
+        }
+        const count = document.querySelector('.report-choice-actions .micro');
+        if (count)
+            count.textContent = document.querySelectorAll('[data-report-section]:checked').length + ' of ' + document.querySelectorAll('[data-report-section]:not(:disabled)').length + ' sections' + (next.studies.length ? ' · ' + next.studies.length + ' additional ' + (next.studies.length === 1 ? 'study' : 'studies') : '');
+        return;
+    }
+    const y = window.scrollY;
+    render();
+    window.scrollTo?.(0, y);
+}
+document.addEventListener('change', e => { const t = e.target; if (view === 'report' && (t?.dataset?.reportSection || t?.dataset?.reportStudy || t?.dataset?.reportScope)) {
+    e.stopImmediatePropagation?.();
+    reportChoiceChanged(t);
+} }, true);
+document.addEventListener('click', e => { const b = e.target?.closest?.('[data-report-all]'); if (!b || view !== 'report')
+    return; e.stopImmediatePropagation?.(); const all = b.dataset.reportAll === 'all', c = reportChoice(); setReportChoice({ ...c, sections: all ? [...report_contents_mjs_v_20261108_v32_1.SECTION_KEYS] : [], studies: all ? reportStudies().filter(s => s.ready).map(s => s.key) : [] }); const y = window.scrollY; render(); window.scrollTo?.(0, y); }, true);
+globalThis.addEventListener?.('fcs-report-studies', () => { if (view === 'report' && !reportDownload)
+    render(); });
+document.addEventListener('input', e => { if (e.target?.id === 'diagram-find') {
+    if (e.target.value !== findQuery) {
+        findQuery = e.target.value;
+        findIndex = 0;
+    }
+} });
+document.addEventListener('keydown', e => {
+    if (e.target?.id !== 'diagram-find' || e.key !== 'Enter')
+        return;
+    e.preventDefault();
+    findQuery = e.target.value;
+    const q = findQuery.trim().toLowerCase();
+    if (!q) {
+        findStatus = '';
+        render();
+        return;
+    }
+    const items = [...project.buses, ...project.sources, ...project.devices, ...project.branches.filter(x => x.kind !== 'link'), ...(project.pvArrays || [])], hits = items.filter(x => String(x.name || '').toLowerCase().includes(q)).sort((x, y) => (String(y.name).toLowerCase() === q) - (String(x.name).toLowerCase() === q));
+    if (!hits.length) {
+        findStatus = 'No match for “' + findQuery.trim() + '”';
+        render();
+        refocusFind();
+        return;
+    }
+    const hit = hits[findIndex % hits.length];
+    findIndex++;
+    selection = hit.id;
+    if (project.buses.includes(hit)) {
+        project.selectedBus = hit.id;
+        persist();
+    }
+    findStatus = (((findIndex - 1) % hits.length) + 1) + ' of ' + hits.length + ': ' + hit.name;
+    diagramAction('diagram-focus');
+    refocusFind();
+});
+function refocusFind() { setTimeout(() => { const f = document.getElementById('diagram-find'); if (f) {
+    f.focus();
+    try {
+        f.setSelectionRange(f.value.length, f.value.length);
+    }
+    catch { }
+} }, 0); }
 $('#project-file').addEventListener('change', async (e) => {
     const request = ++replacementRequest, startRevision = revision, startProject = project.id;
     try {
@@ -11143,6 +13931,13 @@ try {
     persist();
     render();
     calculate();
+    installStudioHook();
+    folder.restore().then(() => { const l = read('fault-network-folder-link-v1', null); if (folder.state.handle && l && l.projectId === project?.id && typeof l.file === 'string') {
+        folder.link(l.file);
+        folderProjectId = project.id;
+        if (view === 'projects')
+            render();
+    } });
 }
 catch (error) {
     const backedUp = studyStorage.backup('fault-network-draft-v2');
@@ -11199,6 +13994,7 @@ const protection_workspace_mjs_v_20261024_batch02_1 = require("./protection-work
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = (n, d = 4) => Number.isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits: d }) : '—';
 const val = x => x == null ? '' : esc(x);
+const blankFilled = d => !!d && (d.type === 'PV' ? d.pMW != null : d.pMW != null && d.qMvar != null);
 const busInputs = (p, c) => p.buses.map(b => {
     const data = c.buses?.[b.id] || {}, slack = b.id === c.slackBusId, type = slack ? 'SLACK' : (data.type || 'PQ');
     return `<tr>
@@ -11211,7 +14007,27 @@ const busInputs = (p, c) => p.buses.map(b => {
  <td>${type !== 'PV' ? '—' : `<input type="number" step="any" data-op-bus="${esc(b.id)}" data-op-field="qMaxMvar" value="${val(data.qMaxMvar)}" aria-label="${esc(b.name)} PV maximum reactive power Mvar" placeholder="optional pair">`}</td></tr>`;
 }).join('');
 const field = (label, key, data, opts = {}) => `<label class="operating-field">${esc(label)}${opts.values ? `<select data-op-screening="${esc(key)}">${opts.values.map(([v, name]) => `<option value="${esc(v)}" ${data[key] === v ? 'selected' : ''}>${esc(name)}</option>`).join('')}</select>` : `<input type="number" step="any" data-op-screening="${esc(key)}" value="${val(data[key])}" placeholder="Required"/>`}</label>`;
-function calculateOperatingPreview(project) { return (0, operating_studies_mjs_v_20261024_batch01_1.solveBalancedPowerFlow)((0, operating_studies_mjs_v_20261024_batch01_1.operatingNetworkFromStudio)(project)); }
+// The same inputs give the same load flow: reuse the last result while the network and operating data are unchanged.
+let previewKey = null, previewResult = null, previewError = null;
+function calculateOperatingPreview(project) {
+    const key = JSON.stringify([project.operatingStudy ?? null, project.settings?.faultType ?? null, project.buses, project.branches, (project.devices || []).map(d => [d.id, d.enabled !== false])]);
+    if (key === previewKey) {
+        if (previewError)
+            throw previewError;
+        return previewResult;
+    }
+    previewKey = key;
+    previewResult = null;
+    previewError = null;
+    try {
+        previewResult = (0, operating_studies_mjs_v_20261024_batch01_1.solveBalancedPowerFlow)((0, operating_studies_mjs_v_20261024_batch01_1.operatingNetworkFromStudio)(project));
+        return previewResult;
+    }
+    catch (e) {
+        previewError = e;
+        throw e;
+    }
+}
 function operatingWorkspaceMarkup(project) {
     const cfg = project.operatingStudy || {}, scr = cfg.screening || {};
     let res = null, error = '';
@@ -11241,15 +14057,14 @@ function operatingWorkspaceMarkup(project) {
     return `<section class="panel operating-workspace"><div class="panel-heading"><div><span class="eyebrow">OPERATING STUDIES · BATCH 01 · BOUNDED NUMERICAL SCOPE</span><h2>Balanced AC network study</h2></div><button data-action="operating-csv" ${res ? '' : 'disabled'}>Export operating results CSV</button></div>
  <p><strong>Separate from fault duty.</strong> Constant-P/Q steady-state network calculation, one slack, PQ/PV buses, cables/transformer impedance, meshed connections. Real and reactive injection: <strong>positive = generation, negative = consumption</strong>. Enter actual operating dispatch; no arbitrary equipment defaults or synthetic source powers are inferred from fault ratings.</p>
  <div class="operating-grid"><label class="operating-field">Base power (MVA)<input id="op-base" type="number" min="0.001" step="any" value="${val(cfg.baseMVA)}" placeholder="Required"></label><label class="operating-field">Reference (slack) bus<select id="op-slack"><option value="">Choose actual source/reference</option>${project.buses.map(b => `<option value="${esc(b.id)}" ${b.id === cfg.slackBusId ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}</select></label><label class="operating-field">PV reactive-limit handling<select id="op-q-limit-mode"><option value="block" ${cfg.qLimitMode !== 'clamp' ? 'selected' : ''}>Block if Q limits exceeded (legacy safe default)</option><option value="clamp" ${cfg.qLimitMode === 'clamp' ? 'selected' : ''}>PV→PQ at documented Q limit (screening)</option></select></label></div>
- <div class="operating-table-wrap"><table class="operating-table"><thead><tr><th>Bus</th><th>Control</th><th>Net P (MW)</th><th>Net Q (Mvar)</th><th>Voltage setpoint (pu)</th><th>PV Q min (Mvar)</th><th>PV Q max (Mvar)</th></tr></thead><tbody>${busInputs(project, cfg)}</tbody></table></div>
+ ${(() => { const n = project.buses.filter(b => b.id !== cfg.slackBusId && !blankFilled(cfg.buses?.[b.id])).length; return n ? `<div class="operating-fill"><p>${n} bus${n === 1 ? ' has' : 'es have'} no load or generation entered. A bus with nothing connected needs 0 MW and 0 Mvar.</p><button data-action="operating-fill-zero">Enter 0 MW / 0 Mvar at the ${n} blank bus${n === 1 ? '' : 'es'}</button></div>` : ''; })()}<div class="operating-table-wrap"><table class="operating-table"><thead><tr><th>Bus</th><th>Control</th><th>Net P (MW)</th><th>Net Q (Mvar)</th><th>Voltage setpoint (pu)</th><th>PV Q min (Mvar)</th><th>PV Q max (Mvar)</th></tr></thead><tbody>${busInputs(project, cfg)}</tbody></table></div>
  ${res?.qLimitActions?.length ? `<p class="operating-blocker"><strong>Reactive limits active:</strong> ${res.qLimitActions.map(a => `${esc(project.buses.find(b => b.id === a.id)?.name || a.id)} switched PV→PQ at ${esc(a.limit)} = ${fmt(a.value, 5)} Mvar; voltage ${fmt(a.resultingVoltagePu, 5)} pu (requested ${fmt(a.requestedV, 5)} pu)`).join('; ')}. Screening, not controller or capability certification.</p>` : ''}
  ${error ? `<p class="operating-blocker" role="status"><strong>Calculation blocked:</strong> ${esc(error)}.</p>` : `<p class="operating-ok" role="status"><strong>Converged</strong> in ${res.iterations} iterations · max residual ${fmt(res.mismatchPu, 10)} pu · network loss ${fmt(res.totalLossMW, 5)} MW, ${fmt(res.totalLossMvar, 5)} Mvar</p><div class="operating-table-wrap"><table class="operating-table"><thead><tr><th>Bus</th><th>Mode</th><th>Voltage (pu)</th><th>Angle (deg)</th><th>Net MW</th><th>Net Mvar</th></tr></thead><tbody>${res.buses.map(b => `<tr><td>${esc(project.buses.find(x => x.id === b.id)?.name || b.id)}</td><td>${b.type}</td><td>${fmt(b.voltagePu, 6)}</td><td>${fmt(b.angleDegrees, 5)}</td><td>${fmt(b.pMW, 5)}</td><td>${fmt(b.qMvar, 5)}</td></tr>`).join('')}</tbody></table></div>`}
- <p class="operating-limits"><strong>PV reactive constraints:</strong> Enter both Q min and Q max if known. A voltage-control solution outside those limits now blocks; automatic PV→PQ switching is not implemented in default blocking mode. Optional switching uses finite net reactive limits with a bounded one-way PV→PQ active set; it does NOT simulate AVR or actual OEM control. Blank limits remain unchecked. <strong>Engineering scope:</strong> balanced fundamental-frequency AC only. Excludes phase unbalance, transformer tap controls, ideal bus links, shunts, line charging, PV Q-limit switching, voltage-dependent loads, dynamic stability, motors during starting, nonlinear converter control and full standard compliance. No fault calculation result is modified.</p>
+ <p class="operating-limits"><strong>PV reactive constraints:</strong> Enter both Q min and Q max if known. A voltage-control solution outside those limits now blocks; automatic PV→PQ switching is not implemented in default blocking mode. Optional switching uses finite net reactive limits with a bounded one-way PV→PQ active set; it does NOT simulate AVR or actual OEM control. Blank limits remain unchecked. <strong>Engineering scope:</strong> balanced fundamental-frequency AC only. Closed switches and breakers join their buses into one node; switch through-flow comes from the bus balance (parallel closed switches share current in an undetermined way and are marked). Excludes phase unbalance, transformer tap controls, shunts, line charging, PV Q-limit switching, voltage-dependent loads, dynamic stability, motors during starting, nonlinear converter control and full standard compliance. No fault calculation result is modified.</p>
  <div class="operating-card-grid"><section class="operating-card"><h3>Overcurrent TCC curve preview</h3><p>Mathematical IEC inverse family only; not protective-device coordination or approved settings.</p><div class="operating-grid">${field('IEC curve', 'curve', scr, { values: [['', 'Choose curve'], ['normal', 'Normal inverse'], ['very', 'Very inverse'], ['extreme', 'Extremely inverse'], ['long', 'Long-time inverse']] })}${field('Pickup current (A)', 'pickupA', scr)}${field('Measured relay current (A)', 'testA', scr)}${field('TMS', 'tms', scr)}</div><p role="status">${relayError ? esc(relayError) : relay ? relay.seconds === null ? 'Below pickup (no inverse-curve operation)' : `Nominal inverse curve: ${fmt(relay.seconds, 5)} seconds at ${fmt(relay.multiple)} × pickup` : 'Enter relay values to preview inverse-curve time.'}</p></section>
  <section class="operating-card"><h3>Harmonic RMS / THD preview</h3><p>Arithmetic on individual measured RMS components; not IEEE 519 PCC compliance or harmonic load flow.</p><div class="operating-grid">${field('Fundamental RMS (A)', 'fundamentalA', scr)}${field('3rd harmonic RMS (A)', 'harmonic3A', scr)}${field('5th harmonic RMS (A)', 'harmonic5A', scr)}${field('7th harmonic RMS (A)', 'harmonic7A', scr)}</div><p role="status">${thdError ? esc(thdError) : thd ? `Calculated THDi (entered orders only): ${fmt(thd.thdPercent, 5)}%` : 'Enter a measured fundamental and harmonic RMS components.'}</p></section>
- <section class="operating-card"><h3>Arc-flash eligibility check</h3><p>At fault-selected bus: ${esc(chosen?.name || 'none')} (${fmt(chosen?.voltage)} V).</p><p role="status"><strong>${arc.eligible ? 'Nominal voltage and phase eligible' : 'Outside applicability / information missing'}</strong>: ${esc(arc.reason)}</p><p>No arc-flash incident energy or boundary is calculated. Actual current, enclosure/electrode geometry, arcing current and device clearing time are still required.</p></section></div>${(0, protection_workspace_mjs_v_20261024_batch02_1.protectionWorkspaceMarkup)(project)}</section>`;
+ <section class="operating-card"><h3>Arc-flash scope check</h3><p>At fault-selected bus: ${esc(chosen?.name || 'none')} (${fmt(chosen?.voltage)} V).</p><p role="status"><strong>${arc.eligible ? 'Nominal voltage and phase eligible' : 'Outside applicability / information missing'}</strong>: ${esc(arc.reason)}</p><p>This card checks whether IEEE 1584-2018 applies at the selected bus. Incident energy and arc-flash boundary are calculated in <strong>Arc flash · all buses</strong> (clearing times from protective-device curves at every bus) and in <strong>Engineering studies</strong> (one location with a documented clearing time).</p></section></div>${(0, protection_workspace_mjs_v_20261024_batch02_1.protectionWorkspaceMarkup)(project)}</section>`;
 }
-
 },
 "protection-workspace.mjs": function(module,exports,require){
 "use strict";
@@ -11750,10 +14565,11 @@ function browserHandoffMarkup(state) {
         return `<section class="report-download-panel no-print error" data-browser-handoff role="alert"><div><strong>Browser address could not be prepared</strong><p>${esc(state.message)}</p><button data-action="open-browser">Retry</button></div>${close}</section>`;
     return `<section class="report-download-panel no-print" data-browser-handoff role="status"><div><strong>This study is ready for your browser</strong><p>Check the browser tab requested by your click. If no tab appeared, use the link below or copy its address into your browser address bar. Your private saved revision ${esc(state.revision)} opens with the same inputs. Use the same authorized ChatGPT account if sign-in is requested.</p><div class="actions">${browserAction(state.url)}</div>${addressField(state.url, 'browser')}</div>${close}</section>`;
 }
-function reportDownloadMarkup(state, { pending = false, embedded = false } = {}) {
+// handoff=false: no saved-study browser address can be made on this host (no cloud), so the option is not offered.
+function reportDownloadMarkup(state, { pending = false, embedded = false, handoff = true } = {}) {
     if (!state)
         return '';
-    const browserLink = browserAction(state.browserUrl);
+    const browserLink = state.browserUrl || handoff ? browserAction(state.browserUrl) : '';
     const title = state.format === 'pdf' ? 'PDF' : 'Excel', close = '<button data-action="close-report-download" aria-label="Close report download">× Close</button>';
     if (state.phase === 'print-preview')
         return `<section class="report-download-panel no-print" data-report-download role="status"><div><strong>Print current study</strong><p>Printing uses the current calculated report. PDF and Excel downloads are also available.</p><div class="actions"><button data-action="print-ready" ${pending ? 'disabled' : ''}>${pending ? 'Updating print preview…' : 'Print current report'}</button><button data-action="pdf">Download PDF</button><button data-action="xlsx">Download Excel</button>${browserLink}</div></div>${close}</section>`;
@@ -11766,7 +14582,6 @@ function reportDownloadMarkup(state, { pending = false, embedded = false } = {})
     const copyUrl = state.directUrl && (state.print && state.format === 'pdf' ? inlineDirect : state.directUrl);
     return `<section class="report-download-panel no-print" data-report-download role="status"><div><strong>${title} ready · ${esc(state.name)}</strong><p>${esc(state.message || 'If the automatic download did not start, use the file link below.')}</p>${embedded ? (state.print ? '<p>Check the PDF tab requested by Print. Use the PDF viewer’s Print button or Ctrl+P there. If no tab appeared, use Open PDF below. ChatGPT may block new tabs and file delivery.</p>' : '<p>The ChatGPT embedded view may block downloads. Open the file in your browser. If the link is blocked, copy the report address below into the browser address bar.</p>') : ''}<div class="actions"><a class="button primary" href="${esc(url)}" download="${esc(state.name)}" target="_blank" rel="noopener">Download ${title}</a>${state.format === 'pdf' ? `<a class="button" href="${esc(pdfView)}" target="_blank" rel="noopener">Open PDF to view / print</a>` : ''}${state.print && !embedded ? `<button data-action="print-ready" ${pending ? 'disabled' : ''}>${pending ? 'Updating print preview…' : 'Print current report'}</button>` : ''}${browserLink}</div>${copyUrl ? addressField(copyUrl, 'report') : ''}<small>Report uses the inputs captured when you requested it.${state.revision ? ' Private saved revision ' + esc(state.revision) + '.' : ''}</small></div>${close}</section>`;
 }
-
 },
 "project-history.mjs": function(module,exports,require){
 "use strict";
@@ -11916,7 +14731,7 @@ __exportStar(require("./one-line-editor.mjs?v=20261022-pv-final"), exports);
 "one-line-editor.mjs": function(module,exports,require){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.diagramStyles = exports.equipmentIcon = exports.panViewport = exports.busDrawingWidth = void 0;
+exports.diagramStyles = exports.equipmentIcon = exports.panViewport = exports.TREE_LAYOUT_MIN_BUSES = exports.busDrawingWidth = exports.OVERVIEW_WIDTH = exports.LARGE_DIAGRAM_ITEMS = void 0;
 exports.busGeometry = busGeometry;
 exports.resizeBusEnd = resizeBusEnd;
 exports.arrangeNetwork = arrangeNetwork;
@@ -11958,7 +14773,50 @@ function sourceInputCaption(s, p) {
     return s.faultA > 0 ? '3-phase input ' + amps(s.faultA) : s.power > 0 ? number(s.power / 1e6) + ' MVA' : 'Enter source data';
 }
 const sourceNames = { utility: 'UTILITY', generator: 'GENERATOR', motor: 'MOTOR', pv: 'PV INVERTER', bess: 'BATTERY INVERTER', other: 'SOURCE', otherSource: 'SOURCE' };
+exports.LARGE_DIAGRAM_ITEMS = 400, exports.OVERVIEW_WIDTH = 9000;
 const WIDTH = 180, MIN_BUS_WIDTH = 60, MAX_BUS_WIDTH = 10000, overlaps = (a, b) => a.left < b.right + 10 && a.right > b.left - 10 && a.top < b.bottom + 10 && a.bottom > b.top - 10;
+// Uniform-grid index for label placement: returns exactly the boxes that overlaps() reports, without scanning all.
+function boxGrid(cell = 400) {
+    const cells = new Map(), all = [];
+    const span = (lo, hi) => [Math.floor((lo - 10) / cell), Math.floor((hi + 10) / cell)];
+    return { add(o) { const k = all.length; all.push(o); if (![o.left, o.right, o.top, o.bottom].every(Number.isFinite)) {
+            (cells.get('inf') || cells.set('inf', []).get('inf')).push(k);
+            return;
+        } const [x0, x1] = span(o.left, o.right), [y0, y1] = span(o.top, o.bottom); if ((x1 - x0 + 1) * (y1 - y0 + 1) > 4096) {
+            (cells.get('inf') || cells.set('inf', []).get('inf')).push(k);
+            return;
+        } for (let x = x0; x <= x1; x++)
+            for (let y = y0; y <= y1; y++) {
+                const key = x + ',' + y;
+                (cells.get(key) || cells.set(key, []).get(key)).push(k);
+            } },
+        query(b) { const seen = new Set(), out = []; const visit = list => { for (const k of list || [])
+            if (!seen.has(k)) {
+                seen.add(k);
+                if (overlaps(b, all[k]))
+                    out.push(k);
+            } }; visit(cells.get('inf')); if ([b.left, b.right, b.top, b.bottom].every(Number.isFinite)) {
+            const [x0, x1] = span(b.left, b.right), [y0, y1] = span(b.top, b.bottom);
+            if ((x1 - x0 + 1) * (y1 - y0 + 1) > 4096)
+                for (let k = 0; k < all.length; k++) {
+                    if (!seen.has(k)) {
+                        seen.add(k);
+                        if (overlaps(b, all[k]))
+                            out.push(k);
+                    }
+                }
+            else
+                for (let x = x0; x <= x1; x++)
+                    for (let y = y0; y <= y1; y++)
+                        visit(cells.get(x + ',' + y));
+        }
+        else
+            for (let k = 0; k < all.length; k++)
+                if (!seen.has(k) && overlaps(b, all[k])) {
+                    seen.add(k);
+                    out.push(k);
+                } return out.map(k => all[k]); } };
+}
 const busDrawingWidth = b => Number.isFinite(b.diagramWidth) ? Math.max(MIN_BUS_WIDTH, Math.min(MAX_BUS_WIDTH, b.diagramWidth)) : WIDTH;
 exports.busDrawingWidth = busDrawingWidth;
 function busGeometry(p, b) { return { id: b.id, bus: b, sources: p.sources.filter(s => s.bus === b.id), devices: p.devices.filter(d => d.bus === b.id), x: coordinate(b.position?.x), y: coordinate(b.position?.y), width: (0, exports.busDrawingWidth)(b), height: p.settings.faultType === 'dlg' ? 104 : 80, barY: 0 }; }
@@ -11974,6 +14832,70 @@ function resizeBusEnd(bus, end, delta, start = { ...bus.position, width: (0, exp
     return true;
 }
 // Deterministic vertical arrangement of the existing topology. Layout only.
+// Larger components: a tidy tree on the breadth-first spanning tree. Each bus sits centred above its children, so feeders
+// never cross; a bus with many end buses (strings, inverters) places them in a grid of up to LEAF_COLUMNS columns below it.
+exports.TREE_LAYOUT_MIN_BUSES = 40;
+const LEAF_COLUMNS = 6, ROW = 260;
+function treeLayout(order, levels, adj, at, positions, x0, y0) {
+    const children = new Map(order.map(id => [id, []])), parent = new Map();
+    for (const id of order)
+        for (const next of adj.get(id))
+            if (levels.get(next) === levels.get(id) + 1 && !parent.has(next)) {
+                parent.set(next, id);
+                children.get(id).push(next);
+            }
+    const slot = id => Math.max(520, at.get(id).width + 300), volt = id => at.get(id).bus.voltage, size = new Map(), own = new Map(), cont = new Map();
+    // A same-voltage child of a bus that also feeds other equipment continues the feeder to the right, on the same row.
+    for (const id of order) {
+        const kids = children.get(id);
+        if (kids.length < 2)
+            continue;
+        const c = kids.filter(k => children.get(k).length && volt(k) === volt(id));
+        if (c.length)
+            cont.set(id, c[c.length - 1]);
+    }
+    const parts = id => { const kids = children.get(id).filter(k => k !== cont.get(id)); return { inner: kids.filter(c => children.get(c).length), leaves: kids.filter(c => !children.get(c).length) }; };
+    for (let k = order.length - 1; k >= 0; k--) {
+        const id = order[k], { inner, leaves } = parts(id);
+        let w = 0;
+        for (const c of inner)
+            w += size.get(c);
+        if (leaves.length) {
+            const cols = Math.min(LEAF_COLUMNS, leaves.length), cw = Math.max(...leaves.map(slot));
+            w += cols * cw;
+        }
+        own.set(id, Math.max(slot(id), w));
+        size.set(id, own.get(id) + (cont.has(id) ? size.get(cont.get(id)) : 0));
+    }
+    const place = new Map([[order[0], { x: x0, y: y0 }]]);
+    for (const id of order) {
+        const { x, y } = place.get(id), { inner, leaves } = parts(id), w = own.get(id);
+        let used = 0;
+        for (const c of inner)
+            used += size.get(c);
+        const cols = leaves.length ? Math.min(LEAF_COLUMNS, leaves.length) : 0, cw = leaves.length ? Math.max(...leaves.map(slot)) : 0;
+        used += cols * cw;
+        let cx = x + (w - used) / 2;
+        const below = [];
+        for (const c of inner) {
+            place.set(c, { x: cx, y: y + ROW });
+            below.push(c);
+            cx += size.get(c);
+        }
+        leaves.forEach((c, i) => { place.set(c, { x: cx + (i % cols) * cw, y: y + ROW * (1 + Math.floor(i / cols)) }); if (i < cols)
+            below.push(c); });
+        if (cont.has(id))
+            place.set(cont.get(id), { x: x + w, y });
+        // Centre the bus over the first row of what hangs below it.
+        if (below.length) {
+            const xs = below.map(c => place.get(c).x), mid = (Math.min(...xs) + Math.max(...xs)) / 2;
+            positions.set(id, { x: Math.round(Math.max(x, Math.min(mid, x + w - slot(id)))), y });
+        }
+        else
+            positions.set(id, { x: Math.round(x), y });
+    }
+    return size.get(order[0]);
+}
 function arrangeNetwork(p) {
     const nodes = p.buses.map(b => busGeometry(p, b)), at = new Map(nodes.map(n => [n.id, n])), adj = new Map(nodes.map(n => [n.id, []]));
     for (const e of p.branches)
@@ -12012,6 +14934,10 @@ function arrangeNetwork(p) {
         }
         let widest = 1;
         const sourceRows = Math.max(1, Math.ceil(root.sources.length / 3));
+        if (component.length > exports.TREE_LAYOUT_MIN_BUSES) {
+            componentX += treeLayout(queue, levels, adj, at, positions, componentX, sourceRows * 150 + 50) + 120;
+            continue;
+        }
         for (const [level, layer] of layers) {
             widest = Math.max(widest, layer.length);
             layer.forEach((n, i) => positions.set(n.id, { x: componentX + i * gap, y: sourceRows * 150 + 50 + level * 260 }));
@@ -12023,10 +14949,45 @@ function arrangeNetwork(p) {
 const point = (item, fallback) => ({ x: coordinate(item.position?.x ?? fallback.x), y: coordinate(item.position?.y ?? fallback.y) });
 const busPort = (n, x) => ({ x: Math.max(n.x + 16, Math.min(n.x + n.width - 16, x)), y: n.y });
 const routeTo = (a, s, top) => `M ${a.x} ${a.y} V ${s.y + (top ? -52 : 52)} H ${s.x} V ${s.y + (top ? -30 : 30)}`;
-function diagramGeometry(p) {
-    const nodes = p.buses.map(b => busGeometry(p, b)), at = new Map(nodes.map(n => [n.id, n])), edges = [], missing = [], sources = [], devices = [], arrays = [], pairs = new Map();
+// Geometry depends only on placement, topology and fault type. Large one-lines ask for it several times per
+// render, so the last result is reused while that signature is unchanged.
+let geometryCache = null;
+const geometryKey = p => {
+    const parts = [p.settings?.faultType];
+    const pos = x => (x.position ? x.position.x + ',' + x.position.y : '-');
+    for (const b of p.buses)
+        parts.push(b.id, pos(b), b.diagramWidth);
+    for (const e of p.branches)
+        parts.push(e.id, e.from, e.to, pos(e), e.enabled, e.deviceId);
+    for (const s of p.sources)
+        parts.push(s.id, s.bus, pos(s));
+    for (const d of p.devices)
+        parts.push(d.id, d.bus, d.linkId, pos(d), d.enabled);
+    for (const a of p.pvArrays || [])
+        parts.push(a.id, a.inverterId, pos(a));
+    return parts.join('|');
+};
+function diagramGeometry(p) { const key = geometryKey(p); if (geometryCache && geometryCache.p === p && geometryCache.key === key)
+    return geometryCache.g; const g = computeGeometry(p); geometryCache = { p, key, g }; return g; }
+function computeGeometry(p) {
+    const sourcesAt = new Map(), devicesAt = new Map();
+    for (const s of p.sources) {
+        if (!sourcesAt.has(s.bus))
+            sourcesAt.set(s.bus, []);
+        sourcesAt.get(s.bus).push(s);
+    }
+    for (const d of p.devices) {
+        if (!devicesAt.has(d.bus))
+            devicesAt.set(d.bus, []);
+        devicesAt.get(d.bus).push(d);
+    }
+    const deviceByLink = new Map();
+    for (const d of p.devices)
+        if (d.linkId !== undefined && !deviceByLink.has(d.linkId))
+            deviceByLink.set(d.linkId, d);
+    const nodes = p.buses.map(b => ({ ...busGeometry({ ...p, sources: sourcesAt.get(b.id) || [], devices: devicesAt.get(b.id) || [] }, b) })), at = new Map(nodes.map(n => [n.id, n])), edges = [], missing = [], sources = [], devices = [], arrays = [], pairs = new Map();
     for (const edge of p.branches) {
-        const a = at.get(edge.from), b = at.get(edge.to), device = p.devices.find(d => d.linkId === edge.id);
+        const a = at.get(edge.from), b = at.get(edge.to), device = deviceByLink.get(edge.id);
         if (!a || !b)
             missing.push(edge);
         const key = [edge.from, edge.to].sort().join('|'), i = pairs.get(key) || 0;
@@ -12035,19 +14996,35 @@ function diagramGeometry(p) {
         const s = point(device?.position ? device : edge, fallback), path = [a ? routeTo(busPort(a, s.x), s, true) : `M ${s.x} ${s.y - 65} V ${s.y - 30}`, b ? routeTo(busPort(b, s.x), s, false) : `M ${s.x} ${s.y + 30} V ${s.y + 65}`].join(' ');
         edges.push({ id: device?.id || edge.id, edge, device, a, b, ...s, path, hit: path, vertical: true, enabled: (0, network_model_mjs_v_20261022_pv_final_1.isBranchEnabled)(edge, p), labelOffset: 0, labelBox: { left: s.x + 44, right: s.x + 304, top: s.y - 38, bottom: s.y + 62 }, extent: { left: s.x - 30, right: s.x + 304, top: s.y - 65, bottom: s.y + 65 } });
     }
+    const incomingTo = new Map(), outgoingFrom = new Map();
+    for (const edge of p.branches) {
+        if (!incomingTo.has(edge.to))
+            incomingTo.set(edge.to, []);
+        incomingTo.get(edge.to).push(edge);
+        if (!outgoingFrom.has(edge.from))
+            outgoingFrom.set(edge.from, []);
+        outgoingFrom.get(edge.from).push(edge);
+    }
+    const linkedDevices = new Set(edges.filter(e => e.device).map(e => e.device.id)), looseAt = new Map();
+    for (const d of p.devices)
+        if (!linkedDevices.has(d.id)) {
+            if (!looseAt.has(d.bus))
+                looseAt.set(d.bus, []);
+            looseAt.get(d.bus).push(d);
+        }
     for (const source of p.sources) {
-        const bus = at.get(source.bus), siblings = p.sources.filter(s => s.bus === source.bus), i = siblings.indexOf(source), rows = Math.ceil(siblings.length / 3);
-        const incoming = bus && p.branches.some(edge => edge.to === bus.id && at.get(edge.from)?.y < bus.y);
+        const bus = at.get(source.bus), siblings = sourcesAt.get(source.bus) || [], i = siblings.indexOf(source), rows = Math.ceil(siblings.length / 3);
+        const incoming = bus && (incomingTo.get(bus.id) || []).some(edge => at.get(edge.from)?.y < bus.y);
         const s = point(source, bus ? { x: incoming ? bus.x - 320 - (i % 3) * 340 : bus.x + bus.width / 2 + (i % 3 - (Math.min(3, siblings.length) - 1) / 2) * 340, y: bus.y - 130 - (rows - 1 - Math.floor(i / 3)) * 150 } : { x: 120 + sources.length * 340, y: 70 });
         if (!bus)
             missing.push(source);
         sources.push({ id: source.id, source, bus, ...s, path: bus ? `M ${s.x} ${s.y + 28} V ${bus.y - 36} H ${busPort(bus, s.x).x} V ${bus.y}` : `M ${s.x} ${s.y + 28} V ${s.y + 68}`, extent: { left: s.x - 30, right: s.x + 300, top: s.y - 30, bottom: s.y + 75 } });
     }
     for (const device of p.devices) {
-        if (edges.some(e => e.device?.id === device.id))
+        if (linkedDevices.has(device.id))
             continue;
-        const bus = at.get(device.bus), i = p.devices.filter(d => d.bus === device.bus && !edges.some(e => e.device?.id === d.id)).indexOf(device);
-        const outgoing = bus && p.branches.some(edge => edge.from === bus.id && at.get(edge.to)?.y > bus.y);
+        const bus = at.get(device.bus), i = (looseAt.get(device.bus) || []).indexOf(device);
+        const outgoing = bus && (outgoingFrom.get(bus.id) || []).some(edge => at.get(edge.to)?.y > bus.y);
         const s = point(device, bus ? { x: outgoing ? bus.x - 260 - i * 330 : bus.x + bus.width / 2 + i * 330, y: bus.y + 125 } : { x: 100 + devices.length * 350, y: 350 });
         if (!bus)
             missing.push(device);
@@ -12060,10 +15037,15 @@ function diagramGeometry(p) {
     // Shift annotations, never symbols, so a mesh's labels cannot hide busbars.
     const occupied = [...nodes.map(n => ({ left: n.x - 12, right: n.x + n.width + 300, top: n.y - 18, bottom: n.y + (p.settings.faultType === 'dlg' ? 94 : 70) })), ...[...sources, ...devices, ...arrays].map(n => ({ left: n.x + 44, right: n.extent.right, top: n.y - 24, bottom: n.y + 60 }))];
     const footprints = [...edges, ...sources, ...devices, ...arrays].map(n => ({ left: n.x - 32, right: n.x + 32, top: n.y - 34, bottom: n.y + 34 }));
+    const grid = boxGrid();
+    for (const o of occupied)
+        grid.add(o);
+    for (const o of footprints)
+        grid.add(o);
     for (const e of edges) {
         let box = { ...e.labelBox }, attempts = 0;
         while (attempts++ < nodes.length + edges.length + sources.length + devices.length + 6) {
-            const hits = [...occupied, ...footprints].filter(o => overlaps(box, o));
+            const hits = grid.query(box);
             if (!hits.length)
                 break;
             const dy = Math.max(...hits.map(o => o.bottom)) + 14 - box.top;
@@ -12073,6 +15055,7 @@ function diagramGeometry(p) {
         e.labelOffset = box.top - e.labelBox.top;
         e.labelBox = box;
         occupied.push(box);
+        grid.add(box);
         e.extent = { left: e.x - 32, right: box.right, top: Math.min(e.y - 65, box.top), bottom: Math.max(e.y + 65, box.bottom) };
     }
     const items = [...nodes, ...sources, ...edges, ...devices, ...arrays], extents = [...nodes.map(n => ({ left: n.x - 12, right: n.x + n.width + 300, top: n.y - 20, bottom: n.y + n.height })), ...sources.map(n => n.extent), ...edges.map(n => n.extent), ...devices.map(n => n.extent), ...arrays.map(n => n.extent)];
@@ -12133,29 +15116,48 @@ exports.diagramStyles = `
 .one-line.connecting .bus-node{cursor:crosshair}.one-line .missing-end{fill:#fff1ed;stroke:#ba5c4c;stroke-width:1.5}
 `;
 function renderOneLine(p, { results = [], issues = [], pending = false, selection = null, viewport = null, showCurrents = true, connecting = false, interactive = false } = {}) {
-    const g = diagramGeometry(p), v = viewport || g.bounds, selected = results.find(r => r.busId === p.selectedBus);
-    const faultText = id => { const r = results.find(r => r.busId === id); return pending ? 'Inputs changed' : r?.totalA != null ? ((0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'DC prospective ' : (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) ? p.settings.faultType.replace('split-', '').toUpperCase().replace('-', '–') + ' RMS ' : p.settings.faultType === '3phase-ground' ? '3φ–G RMS ' : (0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(p) ? 'L1–L2 RMS ' : p.settings.faultType === '3phase' ? '3-phase RMS ' : p.settings.faultType === 'll' ? 'LL RMS ' : p.settings.faultType === 'dlg' ? 'DLG max RMS ' : 'SLG RMS ') + amps(r.totalA) : r?.status || 'No result'; };
+    const g = diagramGeometry(p), v = viewport || g.bounds, resultAt = new Map();
+    for (const r of results)
+        if (r && !resultAt.has(r.busId))
+            resultAt.set(r.busId, r);
+    const selected = resultAt.get(p.selectedBus), flowAt = new Map();
+    for (const f of selected?.branchFlows || [])
+        if (!flowAt.has(f.id))
+            flowAt.set(f.id, f);
+    // Large interactive one-lines draw only what is inside (or near) the visible window, and draw symbols without
+    // text when zoomed out so far that labels could not be read. Exports and reports always draw everything.
+    const large = interactive && g.items.length > exports.LARGE_DIAGRAM_ITEMS, overview = large && v.width > exports.OVERVIEW_WIDTH, mx = v.width * .25, my = v.height * .25;
+    const inView = box => !large || (box.right >= v.x - mx && box.left <= v.x + v.width + mx && box.bottom >= v.y - my && box.top <= v.y + v.height + my);
+    const span = (box, ...ns) => { const out = { ...box }; for (const n of ns)
+        if (n) {
+            out.left = Math.min(out.left, n.x);
+            out.right = Math.max(out.right, n.x + n.width);
+            out.top = Math.min(out.top, n.y);
+            out.bottom = Math.max(out.bottom, n.y);
+        } return out; };
+    const faultText = id => { const r = resultAt.get(id); return pending ? 'Inputs changed' : r?.totalA != null ? ((0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'DC prospective ' : (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) ? p.settings.faultType.replace('split-', '').toUpperCase().replace('-', '–') + ' RMS ' : p.settings.faultType === '3phase-ground' ? '3φ–G RMS ' : (0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(p) ? 'L1–L2 RMS ' : p.settings.faultType === '3phase' ? '3-phase RMS ' : p.settings.faultType === 'll' ? 'LL RMS ' : p.settings.faultType === 'dlg' ? 'DLG max RMS ' : 'SLG RMS ') + amps(r.totalA) : r?.status || 'No result'; };
     const attrs = (id, label) => `data-select="${escape(id)}" data-item-drag="${escape(id)}" role="button" tabindex="0" aria-label="${escape(label)}"`;
     const ring = '<rect class="selection-ring" x="-34" y="-38" width="68" height="76" rx="8"/><rect class="symbol-hit" x="-38" y="-40" width="76" height="80"/>';
-    const error = id => !pending && issues.some(i => i.id === id && i.severity === 'error') ? '<circle class="issue-dot" cx="31" cy="-29" r="5"/>' : '';
+    const errorIds = new Set(issues.filter(i => i.severity === 'error').map(i => i.id)), error = id => !pending && errorIds.has(id) ? '<circle class="issue-dot" cx="31" cy="-29" r="5"/>' : '';
     const end = (x, y) => `<circle class="missing-end" cx="${x}" cy="${y}" r="5"/>`;
     const resizeHandles = (bus, width) => interactive && !connecting ? ['left', 'right'].map(side => `<g class="bus-resize-handle" data-bus-resize="${escape(bus.id)}" data-resize-end="${side}" transform="translate(${side === 'left' ? 0 : width} 0)" role="button" tabindex="0" aria-label="Resize ${side} end of ${escape(bus.name)}; drag or use Left and Right arrow keys"><title>Drag this end to resize the bus. Left / Right arrows adjust length; Shift uses a larger step.</title><rect class="bus-resize-hit" x="-12" y="-14" width="24" height="28"/><rect class="bus-resize-grip" x="-5" y="-7" width="10" height="14" rx="2"/></g>`).join('') : '';
-    const edges = g.edges.map(e => {
-        const { edge, device, x, y, a, b, enabled, labelOffset } = e, id = device?.id || edge.id, kind = ['breaker', 'fuse', 'recloser'].includes(device?.equipmentType) ? device.equipmentType : device?.kind || edge.kind, flow = (0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(p) && !pending ? selected?.branchFlows?.find(f => f.id === edge.id) : null;
+    const edges = g.edges.filter(e => inView(span(e.extent, e.a, e.b))).map(e => {
+        const { edge, device, x, y, a, b, enabled, labelOffset } = e, id = device?.id || edge.id, kind = ['breaker', 'fuse', 'recloser'].includes(device?.equipmentType) ? device.equipmentType : device?.kind || edge.kind, flow = (0, single_phase_mjs_v_20261022_pv_final_1.hasBranchCurrents)(p) && !pending ? flowAt.get(edge.id) : null;
+        if (overview)
+            return `<g class="edge ${kind}${selection === id || selection === edge.id ? ' chosen' : ''}${!enabled ? ' disabled' : ''}" ${attrs(id, (device?.name || edge.name) + '; zoom in for details')}><path class="wire" d="${e.path}"/><g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol(kind, enabled)}</g>${error(id)}</g></g>`;
         const details = ((0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) || (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p)) && edge.kind === 'cable' ? ((0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'Documented complete DC loop' : 'Separate L1 / L2 / neutral / ground conductors') : edge.kind === 'transformer' ? `${number(scale(edge.power, .001))} kVA · ${volts(edge.v1)} / ${volts(edge.v2)}` : edge.kind === 'cable' ? `${short(edge.size || 'Choose size', 16)} ${short(edge.material || '', 12)} · ${number(scale(edge.length, edge.units?.length === 'm' ? 1 : 1 / .3048))} ${edge.units?.length || 'ft'} · ${edge.runs || 1} run(s)` : device ? kind.toUpperCase() : 'INTERNAL CONNECTION';
         const extra = (0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) && edge.kind === 'cable' ? 'Loop R ' + number(edge.dcLoopResistanceOhm, 6) + ' Ω' : (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) && edge.kind === 'transformer' ? 'Documented half-winding model' : (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) && edge.kind === 'cable' ? 'Actual conductor loop data · open properties' : edge.kind === 'transformer' ? `Z ${number(edge.zPercent, 3)}% · X/R ${number(edge.xr, 3)}` : edge.kind === 'cable' ? `R ${number(scale(edge.rPerM, 304.8), 5)} / X ${number(scale(edge.xPerM, 304.8), 5)} Ω/kft` : device ? `Rated ${volts(device.ratedVoltage)} · SCCR ${amps(device.sccrA)}` : '';
         const current = flow ? `${(0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'Selected-fault DC' : flow.bound ? 'Bound RMS' : 'Selected-fault RMS'}: ${amps(flow.fromA)}${edge.kind === 'transformer' ? ' / ' + amps(flow.toA) : ''}` : '';
         return `<g class="edge ${kind}${selection === id || selection === edge.id ? ' chosen' : ''}${!enabled ? ' disabled' : ''}" ${attrs(id, (device?.name || edge.name) + '; drag to place; double-click for properties')}><title>${escape(device?.name || edge.name)}. From ${escape(a?.bus.name || 'Disconnected')} to ${escape(b?.bus.name || 'Disconnected')}.</title><path class="wire" d="${e.path}"/><path class="edge-hit" d="${e.hit}"/>${!a ? end(x, y - 65) : ''}${!b ? end(x, y + 65) : ''}<g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol(kind, enabled)}</g>${error(id)}${labelOffset ? `<path class="metadata-leader" d="M 34 0 H 40 V ${labelOffset}"/>` : ''}<g transform="translate(45 ${labelOffset})"><rect class="label-hit" x="0" y="-38" width="260" height="105"/><text class="edge-name" y="-21">${escape(short(device?.name || edge.name))}</text><text class="edge-small" y="0">${escape(details)}</text><text class="edge-small" y="21">${escape(extra)}</text>${showCurrents && current ? `<text class="edge-current" y="43">${escape(current)}</text>` : ''}</g></g></g>`;
     }).join('');
-    const sources = g.sources.map(({ source: s, bus, x, y, path }) => `<g class="source-tag${s.enabled === false ? ' disabled' : ''}${selection === s.id ? ' chosen' : ''}" ${attrs(s.id, s.name + '; ' + (sourceNames[s.kind] || 'SOURCE') + '; drag to place; double-click for properties')}><path class="wire" d="${path}"/>${!bus ? end(x, y + 68) : ''}<g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol((0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'dc-source' : s.kind)}</g>${error(s.id)}<rect class="label-hit" x="40" y="-30" width="260" height="91"/><text class="node-name" x="44" y="-13">${escape(short(s.name))}</text><text class="source-meta" x="44" y="8">${escape(sourceNames[s.kind] || 'SOURCE')} · ${escape(volts(s.voltage))}</text><text class="source-meta" x="44" y="29">${escape(sourceInputCaption(s, p))}${!(0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) && !(0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) && s.xr > 0 ? ' · X/R ' + number(s.xr) : ''}</text>${s.enabled === false ? '<text class="source-meta" x="44" y="49">OUT OF SERVICE</text>' : ''}</g></g>`).join('');
-    const devices = g.devices.map(({ device: d, bus, x, y, path }) => `<g class="device-tag${d.enabled === false ? ' disabled' : ''}${selection === d.id ? ' chosen' : ''}" ${attrs(d.id, d.name + '; drag to place; double-click for properties')}><path class="wire" d="${path}"/>${!bus ? end(x, y - 65) : ''}<g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol(d.kind, d.enabled !== false)}</g>${error(d.id)}<rect class="label-hit" x="40" y="-30" width="260" height="91"/><text class="node-name" x="44" y="-10">${escape(short(d.name))}</text><text class="source-meta" x="44" y="11">${escape(d.kind.toUpperCase())} · ${escape(volts(d.ratedVoltage))}</text><text class="source-meta" x="44" y="32">SCCR ${escape(amps(d.sccrA))} · Interrupting ${escape(amps(d.interruptA))}</text></g></g>`).join('');
-    const arrays = g.arrays.map(({ array: a, x, y, path }) => { const summary = (0, pv_arrays_mjs_v_20261022_pv_final_1.pvArraySummary)(a); return `<g class="pv-array-tag${selection === a.id ? ' chosen' : ''}" ${attrs(a.id, a.name + '; PV module/array nameplate reference; drag to place; double-click for properties')}><title>PV module/array nameplate reference. Dashed line associates the array with its inverter; it does not connect an AC bus.</title>${path ? `<path class="metadata-leader pv-association" d="${path}"/>` : ''}<g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol('pv-array')}</g><rect class="label-hit" x="40" y="-30" width="260" height="100"/><text class="node-name" x="44" y="-12">${escape(short(a.name))}</text><text class="source-meta" x="44" y="9">PV module/array · nameplate reference</text><text class="source-meta" x="44" y="30">${escape(summary.moduleCount == null ? 'Set series / parallel counts' : summary.moduleCount + ' modules')}${summary.powerW == null ? '' : ' · ' + number(summary.powerW / 1000) + ' kW DC'}</text><text class="source-meta" x="44" y="51">${escape(a.moduleModel ? short(a.moduleModel, 30) : 'Choose module in properties')}</text></g></g>`; }).join('');
-    const nodes = g.nodes.map(({ bus, x, y, width }) => `<g class="bus-node${bus.id === p.selectedBus ? ' selected' : ''}${selection === bus.id ? ' chosen' : ''}" transform="translate(${x} ${y})" data-bus-drag="${escape(bus.id)}" ${attrs(bus.id, bus.name + '; ' + volts(bus.voltage) + '; ' + faultText(bus.id))}><title>${escape(bus.name)}. Drag the middle to move; drag either end to resize; double-click for properties.</title><rect class="selection-ring" x="-12" y="-15" width="${width + 24}" height="30" rx="6"/><path class="edge-hit" d="M 0 0 H ${width}"/><line class="busbar" x1="0" y1="0" x2="${width}" y2="0"/><circle class="connection-port" cx="${width / 2}" cy="0" r="6"/>${resizeHandles(bus, width)}<rect class="label-hit" x="${width + 12}" y="-27" width="280" height="${p.settings.faultType === 'dlg' ? 114 : 90}"/><text class="node-name" x="${width + 17}" y="-8">${escape(short(bus.name, 27))}</text><text class="node-voltage" x="${width + 17}" y="13">${escape(volts(bus.voltage))}</text><text class="node-fault${!pending && results.find(r => r.busId === bus.id)?.totalA == null ? ' node-error' : ''}" x="${width + 17}" y="35">${escape(faultText(bus.id))}</text>${p.settings.faultType === 'dlg' && !pending && results.find(r => r.busId === bus.id)?.groundA != null ? `<text class="node-ground" x="${width + 17}" y="56">Ground RMS ${escape(amps(results.find(r => r.busId === bus.id).groundA))}</text>` : ''}${bus.id === p.selectedBus ? `<text class="fault-label" x="${width + 17}" y="${p.settings.faultType === 'dlg' ? 77 : 56}">ϟ FAULT BUS</text>` : ''}</g>`).join('');
+    const sources = g.sources.filter(n => inView(span(n.extent, n.bus))).map(({ source: s, bus, x, y, path }) => overview ? `<g class="source-tag${s.enabled === false ? ' disabled' : ''}${selection === s.id ? ' chosen' : ''}" ${attrs(s.id, s.name + '; zoom in for details')}><path class="wire" d="${path}"/><g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol((0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'dc-source' : s.kind)}</g>${error(s.id)}</g></g>` : `<g class="source-tag${s.enabled === false ? ' disabled' : ''}${selection === s.id ? ' chosen' : ''}" ${attrs(s.id, s.name + '; ' + (sourceNames[s.kind] || 'SOURCE') + '; drag to place; double-click for properties')}><path class="wire" d="${path}"/>${!bus ? end(x, y + 68) : ''}<g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol((0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'dc-source' : s.kind)}</g>${error(s.id)}<rect class="label-hit" x="40" y="-30" width="260" height="91"/><text class="node-name" x="44" y="-13">${escape(short(s.name))}</text><text class="source-meta" x="44" y="8">${escape(sourceNames[s.kind] || 'SOURCE')} · ${escape(volts(s.voltage))}</text><text class="source-meta" x="44" y="29">${escape(sourceInputCaption(s, p))}${!(0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) && !(0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) && s.xr > 0 ? ' · X/R ' + number(s.xr) : ''}</text>${s.enabled === false ? '<text class="source-meta" x="44" y="49">OUT OF SERVICE</text>' : ''}</g></g>`).join('');
+    const devices = g.devices.filter(n => inView(span(n.extent, n.bus))).map(({ device: d, bus, x, y, path }) => overview ? `<g class="device-tag${d.enabled === false ? ' disabled' : ''}${selection === d.id ? ' chosen' : ''}" ${attrs(d.id, d.name + '; zoom in for details')}><path class="wire" d="${path}"/><g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol(d.kind, d.enabled !== false)}</g>${error(d.id)}</g></g>` : `<g class="device-tag${d.enabled === false ? ' disabled' : ''}${selection === d.id ? ' chosen' : ''}" ${attrs(d.id, d.name + '; drag to place; double-click for properties')}><path class="wire" d="${path}"/>${!bus ? end(x, y - 65) : ''}<g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol(d.kind, d.enabled !== false)}</g>${error(d.id)}<rect class="label-hit" x="40" y="-30" width="260" height="91"/><text class="node-name" x="44" y="-10">${escape(short(d.name))}</text><text class="source-meta" x="44" y="11">${escape(d.kind.toUpperCase())} · ${escape(volts(d.ratedVoltage))}</text><text class="source-meta" x="44" y="32">SCCR ${escape(amps(d.sccrA))} · Interrupting ${escape(amps(d.interruptA))}</text></g></g>`).join('');
+    const arrays = g.arrays.filter(n => inView(n.extent)).map(({ array: a, x, y, path }) => { const summary = (0, pv_arrays_mjs_v_20261022_pv_final_1.pvArraySummary)(a); return `<g class="pv-array-tag${selection === a.id ? ' chosen' : ''}" ${attrs(a.id, a.name + '; PV module/array nameplate reference; drag to place; double-click for properties')}><title>PV module/array nameplate reference. Dashed line associates the array with its inverter; it does not connect an AC bus.</title>${path ? `<path class="metadata-leader pv-association" d="${path}"/>` : ''}<g transform="translate(${x} ${y})">${ring}<g class="symbol">${symbol('pv-array')}</g><rect class="label-hit" x="40" y="-30" width="260" height="100"/><text class="node-name" x="44" y="-12">${escape(short(a.name))}</text><text class="source-meta" x="44" y="9">PV module/array · nameplate reference</text><text class="source-meta" x="44" y="30">${escape(summary.moduleCount == null ? 'Set series / parallel counts' : summary.moduleCount + ' modules')}${summary.powerW == null ? '' : ' · ' + number(summary.powerW / 1000) + ' kW DC'}</text><text class="source-meta" x="44" y="51">${escape(a.moduleModel ? short(a.moduleModel, 30) : 'Choose module in properties')}</text></g></g>`; }).join('');
+    const nodes = g.nodes.filter(n => inView({ left: n.x - 12, right: n.x + n.width + 300, top: n.y - 30, bottom: n.y + n.height })).map(({ bus, x, y, width }) => overview ? `<g class="bus-node${bus.id === p.selectedBus ? ' selected' : ''}${selection === bus.id ? ' chosen' : ''}" transform="translate(${x} ${y})" data-bus-drag="${escape(bus.id)}" ${attrs(bus.id, bus.name + '; ' + volts(bus.voltage) + '; ' + faultText(bus.id))}><title>${escape(bus.name)} · ${escape(faultText(bus.id))}</title><rect class="selection-ring" x="-12" y="-15" width="${width + 24}" height="30" rx="6"/><path class="edge-hit" d="M 0 0 H ${width}"/><line class="busbar" x1="0" y1="0" x2="${width}" y2="0"/></g>` : `<g class="bus-node${bus.id === p.selectedBus ? ' selected' : ''}${selection === bus.id ? ' chosen' : ''}" transform="translate(${x} ${y})" data-bus-drag="${escape(bus.id)}" ${attrs(bus.id, bus.name + '; ' + volts(bus.voltage) + '; ' + faultText(bus.id))}><title>${escape(bus.name)}. Drag the middle to move; drag either end to resize; double-click for properties.</title><rect class="selection-ring" x="-12" y="-15" width="${width + 24}" height="30" rx="6"/><path class="edge-hit" d="M 0 0 H ${width}"/><line class="busbar" x1="0" y1="0" x2="${width}" y2="0"/><circle class="connection-port" cx="${width / 2}" cy="0" r="6"/>${resizeHandles(bus, width)}<rect class="label-hit" x="${width + 12}" y="-27" width="280" height="${p.settings.faultType === 'dlg' ? 114 : 90}"/><text class="node-name" x="${width + 17}" y="-8">${escape(short(bus.name, 27))}</text><text class="node-voltage" x="${width + 17}" y="13">${escape(volts(bus.voltage))}</text><text class="node-fault${!pending && resultAt.get(bus.id)?.totalA == null ? ' node-error' : ''}" x="${width + 17}" y="35">${escape(faultText(bus.id))}</text>${p.settings.faultType === 'dlg' && !pending && resultAt.get(bus.id)?.groundA != null ? `<text class="node-ground" x="${width + 17}" y="56">Ground RMS ${escape(amps(resultAt.get(bus.id).groundA))}</text>` : ''}${bus.id === p.selectedBus ? `<text class="fault-label" x="${width + 17}" y="${p.settings.faultType === 'dlg' ? 77 : 56}">ϟ FAULT BUS</text>` : ''}</g>`).join('');
     const selectedItem = g.items.find(n => n.id === selection || n.edge?.id === selection), selectedName = selectedItem?.bus?.name || selectedItem?.source?.name || selectedItem?.device?.name || selectedItem?.edge?.name || selectedItem?.array?.name;
-    const deleteControl = selectedItem && !connecting ? `<g data-delete="${escape(selection)}" class="diagram-delete" transform="translate(${selectedItem.x + (selectedItem.bus ? selectedItem.width - 30 : 48)} ${selectedItem.y - 50})" role="button" tabindex="0" aria-label="Delete ${escape(selectedName)}; Undo is available"><title>Delete ${escape(selectedName)} (Delete key). Undo restores it.</title><rect x="-17" y="-17" width="34" height="34" rx="7" fill="#fff1ee" stroke="#be594a"/><path d="M -8 -7 H 8 M -4 -7 V -11 H 4 V -7 M -6 -4 L -5 9 H 5 L 6 -4 M -2 -3 V 6 M 2 -3 V 6" fill="none" stroke="#a3372e" stroke-width="1.7" style="pointer-events:none"/></g>` : '';
-    return `<svg id="one-line" class="one-line${connecting ? ' connecting' : ''}" xmlns="http://www.w3.org/2000/svg" viewBox="${v.x} ${v.y} ${v.width} ${v.height}" role="group" aria-label="Electrical single-line editor. Double-click any equipment, cable or bus to open its properties. Drag bus ends to resize; drag equipment or bus middles to place them. Connections follow equipment. Bus results are available fault currents; branch results are for the selected fault."><style>${exports.diagramStyles}</style><defs><pattern id="diagram-dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle class="diagram-grid-dot" cx="1" cy="1" r="1"/></pattern></defs><rect class="diagram-grid" data-diagram-background="true" x="${v.x}" y="${v.y}" width="${v.width}" height="${v.height}"/><rect data-diagram-background="true" x="${v.x}" y="${v.y}" width="${v.width}" height="${v.height}" fill="url(#diagram-dots)"/>${edges}${arrays}${sources}${devices}${nodes}${deleteControl}</svg>`;
+    const deleteControl = selectedItem && !connecting ? `<g data-delete="${escape(selection)}" class="diagram-delete" transform="translate(${selectedItem.x + (Number.isFinite(selectedItem.width) ? selectedItem.width - 30 : 48)} ${selectedItem.y - 50})" role="button" tabindex="0" aria-label="Delete ${escape(selectedName)}; Undo is available"><title>Delete ${escape(selectedName)} (Delete key). Undo restores it.</title><rect x="-17" y="-17" width="34" height="34" rx="7" fill="#fff1ee" stroke="#be594a"/><path d="M -8 -7 H 8 M -4 -7 V -11 H 4 V -7 M -6 -4 L -5 9 H 5 L 6 -4 M -2 -3 V 6 M 2 -3 V 6" fill="none" stroke="#a3372e" stroke-width="1.7" style="pointer-events:none"/></g>` : '';
+    return `<svg id="one-line" class="one-line${connecting ? ' connecting' : ''}${overview ? ' overview' : ''}" xmlns="http://www.w3.org/2000/svg" viewBox="${v.x} ${v.y} ${v.width} ${v.height}" role="group" aria-label="Electrical single-line editor. Double-click any equipment, cable or bus to open its properties. Drag bus ends to resize; drag equipment or bus middles to place them. Connections follow equipment. Bus results are available fault currents; branch results are for the selected fault."><style>${exports.diagramStyles}</style><defs><pattern id="diagram-dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle class="diagram-grid-dot" cx="1" cy="1" r="1"/></pattern></defs><rect class="diagram-grid" data-diagram-background="true" x="${v.x}" y="${v.y}" width="${v.width}" height="${v.height}"/><rect data-diagram-background="true" x="${v.x}" y="${v.y}" width="${v.width}" height="${v.height}" fill="url(#diagram-dots)"/>${edges}${arrays}${sources}${devices}${nodes}${deleteControl}</svg>`;
 }
-
 },
 "studio-workspace.mjs": function(module,exports,require){
 "use strict";
@@ -12543,21 +15545,29 @@ function phaseIdentity(phases, rms, seq) {
 const namedSequences = s => ({ zero: s?.i0, positive: s?.i1, negative: s?.i2 });
 function validConductor(f) { return f && nonnegative(f.fromA) && nonnegative(f.toA) && finiteComplex(f.fromPhasor) && finiteComplex(f.toPhasor) && near(f.fromA, magnitude(f.fromPhasor)) && near(f.toA, magnitude(f.toPhasor)); }
 function validExtendedPacket(data, p) {
+    const branchById = new Map();
+    for (const b of p.branches) {
+        let list = branchById.get(b.id);
+        if (!list)
+            branchById.set(b.id, list = []);
+        list.push(b);
+    }
+    const sameBranch = (e, test = () => true) => (branchById.get(e.id) || []).some(b => b.from === e.from && b.to === e.to && test(b)), sourceIds = new Set(p.sources.map(s => s.id));
     if (!Array.isArray(data.results) || data.results.length !== p.buses.length || !Array.isArray(data.issues))
         return false;
     const buses = new Map(p.buses.map(b => [b.id, b])), seen = new Set(), expectedModel = (0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p) ? 'dc-resistive' : (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p) ? 'split-phase-explicit-loop' : 'connected-sequences';
     const split = (0, analysis_models_mjs_v_20261022_pv_final_1.isSplitPhaseFault)(p), dc = (0, analysis_models_mjs_v_20261022_pv_final_1.isDcStudy)(p), seq = (0, analysis_models_mjs_v_20261022_pv_final_1.usesConnectedSequences)(p), leg = p.settings.faultType.includes('l2') ? 'L2' : 'L1';
     const cfg = split ? (0, analysis_models_mjs_v_20261022_pv_final_1.prepareSplitPhaseProject)(p).splitPhaseNetwork : null;
     const branch = e => {
-        if (!e || !p.branches.some(b => b.id === e.id && b.from === e.from && b.to === e.to))
+        if (!e || !sameBranch(e))
             return false;
         if (seq)
             return ['from', 'to'].every(side => phaseIdentity(e[side + 'PhaseCurrents'], e[side + 'PhaseRMSA'], e[side + 'SequenceCurrents']) && near(e[side + 'A'], Math.max(...Object.values(e[side + 'PhaseRMSA']))) && sameComplex(e[side + 'Phasor'], e[side + 'PhaseCurrents'].a));
         return validConductor(e) && (!dc || (near(e.fromPhasor.i, 0) && near(e.toPhasor.i, 0) && Number.isFinite(e.signedA) && near(e.signedA, e.fromPhasor.r)));
     };
-    const conductors = rows => uniqueRecords(rows, 'id', e => e && p.branches.some(b => b.id === e.id && b.kind !== 'transformer' && b.from === e.from && b.to === e.to) && e.conductors && Object.keys(e.conductors).length === 4 && ['L1', 'L2', 'N', 'G'].every(k => { const f = e.conductors[k]; return validConductor(f) && typeof f.open === 'boolean' && typeof f.modeled === 'boolean' && f.modeled === (k !== (leg === 'L1' ? 'L2' : 'L1')) && near(f.fromPhasor.r, -f.toPhasor.r) && near(f.fromPhasor.i, -f.toPhasor.i) && (!(f.open || !f.modeled) || near(f.fromA, 0)); }));
+    const conductors = rows => uniqueRecords(rows, 'id', e => e && sameBranch(e, b => b.kind !== 'transformer') && e.conductors && Object.keys(e.conductors).length === 4 && ['L1', 'L2', 'N', 'G'].every(k => { const f = e.conductors[k]; return validConductor(f) && typeof f.open === 'boolean' && typeof f.modeled === 'boolean' && f.modeled === (k !== (leg === 'L1' ? 'L2' : 'L1')) && near(f.fromPhasor.r, -f.toPhasor.r) && near(f.fromPhasor.i, -f.toPhasor.i) && (!(f.open || !f.modeled) || near(f.fromA, 0)); }));
     const bonds = rows => uniqueRecords(rows, 'id', b => b && cfg?.bonds?.some(x => x.id === b.id && x.bus === b.bus) && finiteComplex(b.fromPhasor) && nonnegative(b.amps) && near(b.amps, magnitude(b.fromPhasor)));
-    const terminals = rows => uniqueRecords(rows, 'sourceId', s => s && p.sources.some(x => x.id === s.sourceId) && nonnegative(s.amps) && (dc ? Number.isFinite(s.signedA) && near(s.amps, Math.abs(s.signedA)) : seq ? phaseIdentity(s.phaseCurrents, s.phaseRMSA, namedSequences(s.sequenceCurrents)) && near(s.amps, Math.max(...Object.values(s.phaseRMSA))) : false));
+    const terminals = rows => uniqueRecords(rows, 'sourceId', s => s && sourceIds.has(s.sourceId) && nonnegative(s.amps) && (dc ? Number.isFinite(s.signedA) && near(s.amps, Math.abs(s.signedA)) : seq ? phaseIdentity(s.phaseCurrents, s.phaseRMSA, namedSequences(s.sequenceCurrents)) && near(s.amps, Math.max(...Object.values(s.phaseRMSA))) : false));
     for (const r of data.results) {
         if (!r || !buses.has(r.busId) || seen.has(r.busId) || typeof r.status !== 'string' || r.phaseModel !== expectedModel || r.faultType !== p.settings.faultType)
             return false;
@@ -12568,7 +15578,7 @@ function validExtendedPacket(data, p) {
             return false;
         if (r.peakA !== null || r.asymA !== null || r.xr !== null || (r.zth !== null && !finiteComplex(r.zth)) || !Array.isArray(r.details) || !Array.isArray(r.branchFlows) || !r.branchFlows.every(branch))
             return false;
-        if (r.details.some(d => !d || !p.sources.some(s => s.id === d.sourceId) || typeof d.name !== 'string' || !nonnegative(d.amps) || !finiteComplex(d.phasor) || !Array.isArray(d.branchFlows) || !d.branchFlows.every(branch)))
+        if (r.details.some(d => !d || !sourceIds.has(d.sourceId) || typeof d.name !== 'string' || !nonnegative(d.amps) || !finiteComplex(d.phasor) || !Array.isArray(d.branchFlows) || !d.branchFlows.every(branch)))
             return false;
         if ((dc || seq) && !terminals(r.sourceTerminalCurrents) || split && r.sourceTerminalCurrents !== undefined)
             return false;
@@ -12611,6 +15621,14 @@ function validDlgResult(r) {
 function validPacket(data, project) {
     if ((0, analysis_models_mjs_v_20261022_pv_final_1.isExtendedStudy)(project))
         return validExtendedPacket(data, project);
+    const branchById = new Map();
+    for (const b of project.branches) {
+        let list = branchById.get(b.id);
+        if (!list)
+            branchById.set(b.id, list = []);
+        list.push(b);
+    }
+    const knownBranch = e => (branchById.get(e.id) || []).some(b => b.from === e.from && b.to === e.to), sourceIds = new Set(project.sources.map(s => s.id));
     if (!Array.isArray(data.results) || !Array.isArray(data.issues) || data.results.length !== project.buses.length)
         return false;
     const expected = new Map(project.buses.map(b => [b.id, b])), seen = new Set();
@@ -12623,7 +15641,7 @@ function validPacket(data, project) {
                 return false;
             if ([r.peakA, r.asymA].some(v => v !== null && !nonnegative(v)) || (r.zth !== null && !finiteComplex(r.zth)))
                 return false;
-            if (!Array.isArray(r.branchFlows) || r.branchFlows.some(e => !e || !nonnegative(e.fromA) || !nonnegative(e.toA) || !nonnegative(e.fromBoundA) || !nonnegative(e.toBoundA) || !finiteComplex(e.fromPhasor) || !finiteComplex(e.toPhasor) || !project.branches.some(b => b.id === e.id && b.from === e.from && b.to === e.to)))
+            if (!Array.isArray(r.branchFlows) || r.branchFlows.some(e => !e || !nonnegative(e.fromA) || !nonnegative(e.toA) || !nonnegative(e.fromBoundA) || !nonnegative(e.toBoundA) || !finiteComplex(e.fromPhasor) || !finiteComplex(e.toPhasor) || !knownBranch(e)))
                 return false;
             if (r.sequence != null && (!finiteComplex(r.sequence.z1) || !finiteComplex(r.sequence.z2) || !finiteComplex(r.sequence.referenceVoltage) || (r.sequence.z0 !== null && !finiteComplex(r.sequence.z0))))
                 return false;
@@ -12633,7 +15651,7 @@ function validPacket(data, project) {
                 return false;
             if (project.settings.faultType === 'dlg' && !validDlgResult(r))
                 return false;
-            if (r.details.some(d => !d || !project.sources.some(s => s.id === d.sourceId) || typeof d.name !== 'string' || !nonnegative(d.amps) || !finiteComplex(d.phasor) || !Array.isArray(d.path) || !Array.isArray(d.branchFlows) || d.path.some(e => !e || typeof e.name !== 'string' || !finiteComplex(e.ohms) || !Number.isFinite(e.atVoltage) || e.atVoltage <= 0) || d.branchFlows.some(e => !e || typeof e.name !== 'string' || !nonnegative(e.amps) || !nonnegative(e.toAmps) || !finiteComplex(e.fromPhasor) || !finiteComplex(e.toPhasor) || !project.branches.some(b => b.id === e.id && b.from === e.from && b.to === e.to))))
+            if (r.details.some(d => !d || !sourceIds.has(d.sourceId) || typeof d.name !== 'string' || !nonnegative(d.amps) || !finiteComplex(d.phasor) || !Array.isArray(d.path) || !Array.isArray(d.branchFlows) || d.path.some(e => !e || typeof e.name !== 'string' || !finiteComplex(e.ohms) || !Number.isFinite(e.atVoltage) || e.atVoltage <= 0) || d.branchFlows.some(e => !e || typeof e.name !== 'string' || !nonnegative(e.amps) || !nonnegative(e.toAmps) || !finiteComplex(e.fromPhasor) || !finiteComplex(e.toPhasor) || !knownBranch(e))))
                 return false;
         }
     }
@@ -12641,7 +15659,7 @@ function validPacket(data, project) {
 }
 // The study stays on the visitor's device in both execution paths.
 // A denied/failed worker must never leave a valid study stuck at "Calculating".
-function runCalculation({ project, revision, onResult, WorkerClass = globalThis.Worker, workerUrl = new URL('./network-worker.mjs?v=20261022-pv-final', location.href), startupTimeoutMs = 4000, resultTimeoutMs = 30000, setTimer = setTimeout, clearTimer = clearTimeout, compute = network_engine_mjs_v_20261022_pv_final_1.calculateProject }) {
+function runCalculation({ project, revision, onResult, WorkerClass = globalThis.Worker, workerUrl = new URL('./network-worker.mjs?v=20261108-v32', location.href), startupTimeoutMs = 4000, resultTimeoutMs = 30000, setTimer = setTimeout, clearTimer = clearTimeout, compute = network_engine_mjs_v_20261022_pv_final_1.calculateProject }) {
     let closed = false, worker = null, watchdog = null, started = false;
     const cleanup = () => { if (watchdog !== null) {
         clearTimer(watchdog);
@@ -12704,7 +15722,6 @@ function runCalculation({ project, revision, onResult, WorkerClass = globalThis.
         }
     return () => { closed = true; cleanup(); };
 }
-
 },
 "network-cloud.mjs": function(module,exports,require){
 "use strict";
@@ -12918,5 +15935,7 @@ function require(id){
   try{factories[key](module,module.exports,require);return module.exports;}
   catch(e){delete cache[key];throw e;}
 }
+// V29: read-only handle so additive modules reuse the bundled engine without extra network requests.
+try{Object.defineProperty(globalThis,'__fcsBundleRequire',{value:require,writable:false,configurable:false});}catch(e){}
 require('public-entry.mjs');
 })();
