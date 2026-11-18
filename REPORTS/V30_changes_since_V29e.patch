@@ -1,0 +1,29 @@
+diff --git a/SITE/index.html b/SITE/index.html
+index 9374ef7..31fa6b2 100644
+--- a/SITE/index.html
++++ b/SITE/index.html
+@@ -1,14 +1,15 @@
+ <!doctype html>
+-<html lang="en">
++<html lang="en" class="v30">
+ <head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1">
+-  <meta name="theme-color" content="#171927">
++  <meta name="theme-color" content="#0d1117">
+   <title>Fault Current Studio — Connected Network</title>
+   <meta name="description" content="Build a connected electrical lineup, model transformer voltage changes, and inspect bus and branch fault currents.">
+   <link rel="stylesheet" href="public-style-v21.css">
+   <link rel="stylesheet" href="studio-v26.css?v=20261026-v26">
+   <link rel="stylesheet" href="operations-v27.css?v=20261026-v27">
++  <link rel="stylesheet" href="fcs-theme-v30.css?v=20261108-v30a">
+ </head>
+ <body>
+ <details id="public-preview-status"><summary>PUBLIC PREVIEW <span class="v26-preview-label">· Engineering verification is incomplete</span> <span class="v26-preview-more">Read scope and limitations ⌄</span></summary><p>Core calculations and browser-local study backups work here. Optional encrypted cross-device Cloud Vault, browser-local saves and PDF/XLSX exports are available; engineering verification is not yet complete. This is not the private Site.</p></details>
+@@ -45,5 +46,6 @@
+   <script type="module" src="arcflash-network-ui-v29.mjs?v=20261108-v29e"></script>
+   <script type="module" src="cable-sizing-ui-v29.mjs?v=20261108-v29e"></script>
+   <script type="module" src="power-quality-ui-v29.mjs?v=20261108-v29d"></script>
++  <script type="module" src="shell-v30.mjs?v=20261108-v30a"></script>
+ </body>
+ </html>

@@ -1,0 +1,1 @@
+import {calculateProject} from './network-engine.mjs?v=20261115-b3';self.onmessage=e=>{self.postMessage({revision:e.data.revision,phase:'started'});try{const r=calculateProject(e.data.project);self.postMessage({revision:e.data.revision,issues:r.issues,results:r.results})}catch(error){self.postMessage({revision:e.data.revision,error:error.message})}};

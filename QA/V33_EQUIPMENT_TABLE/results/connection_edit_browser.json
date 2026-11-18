@@ -1,0 +1,38 @@
+{
+ "preview shown before applying": {
+  "pass": true,
+  "info": "Preview \u2014 nothing changed yet: 1 connection change, 0 other values, 0 added, 0 deleted."
+ },
+ "nothing changed by the preview": {
+  "pass": true,
+  "info": ""
+ },
+ "cancel keeps the project": {
+  "pass": true,
+  "info": ""
+ },
+ "apply moves the connection": {
+  "pass": true,
+  "info": "1 rows matched \u00b7 1 values changed \u00b7 0 added \u00b7 0 deleted."
+ },
+ "undo restores the connection": {
+  "pass": true,
+  "info": ""
+ },
+ "cable across voltages explained": {
+  "pass": true,
+  "info": "['Row 2: cable \"Main cable\" would join Main breaker load side (34500 V) and INV0 LV (690 V); a cable cannot change voltage, use a transformer']"
+ },
+ "nothing applied": {
+  "pass": true,
+  "info": ""
+ },
+ "reference-data notice on the database page": {
+  "pass": true,
+  "info": "[\"Reference data notice: this database is a historical audited workbook, not a qualified manufacturer (OEM) catalogue. Check every value against the manufacturer's current datasheet before using it for design or equipment selection.\"]"
+ },
+ "no page errors": {
+  "pass": true,
+  "info": "[]"
+ }
+}

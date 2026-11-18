@@ -1,0 +1,26 @@
+import {networkArcFlashStudy,oneLineProtection} from '../../../SITE/arcflash-network-v29.mjs';
+import {calculateProject} from '../../../SITE/network-engine.mjs';
+import {exampleProject} from '../../../SITE/network-model.mjs';
+import {placeEquipment} from '../../../SITE/studio-workspace.mjs';
+import {clearingTime} from '../../../SITE/clearing-time-v29.mjs';
+let p=0,f=0;const ck=(n,c,d='')=>{c?p++:(f++,console.log('FAIL',n,d))};
+const P=exampleProject();const sec=P.buses.find(b=>/secondary/i.test(b.name));
+const br=placeEquipment(P,'breaker',{x:100,y:100},sec.id);const load=P.buses.find(b=>b.id===br.bus);load.voltage=208;
+const r=calculateProject(P);const at=id=>r.results.find(x=>x.busId===id);
+let ol=oneLineProtection(P,at(br.bus));ck('breaker found for its load bus',ol.status==='FOUND'&&ol.primary.deviceId===br.id&&ol.primary.isolatesAll,JSON.stringify(ol));
+ck('share ~100 % (single source)',Math.abs(ol.primary.sharePercent-100)<1e-6,ol.primary.sharePercent);
+ol=oneLineProtection(P,at(sec.id));ck('no device upstream of the transformer secondary',ol.status!=='FOUND',ol.status);
+const dev={type:'relay',standard:'IEEE',curve:'VI',pickupA:1500,dial:0.5,instPickupA:12000,breakerMode:'cycles',breakerCycles:3,frequencyHz:60};
+const st=networkArcFlashStudy({project:P,calculateProject,busInputs:{},oneLineDevices:{[br.id]:dev}});
+const row=st.rows.find(x=>x.busId===br.bus);ck('linked device used automatically',row.status==='CALCULATED'&&row.device.linkedDevice?.deviceId===br.id&&/Breaker 1/.test(row.clearingSource),row.status+' '+row.clearingSource);
+const rowSec=st.rows.find(x=>x.busId===sec.id);ck('bus without upstream device still asks for times',rowSec.status==='CLEARING TIMES REQUIRED',rowSec.status);
+const typed=networkArcFlashStudy({project:P,calculateProject,busInputs:{[br.bus]:{clearingFullMS:40,clearingReducedMS:40}},oneLineDevices:{[br.id]:dev}}).rows.find(x=>x.busId===br.bus);
+ck('typed times are not overridden by the one-line device',typed.status==='CALCULATED'&&!typed.device,typed.clearingSource);
+const forced=networkArcFlashStudy({project:P,calculateProject,busInputs:{[br.bus]:{clearingFullMS:40,clearingReducedMS:40,deviceSource:'sld'}},oneLineDevices:{[br.id]:dev}}).rows.find(x=>x.busId===br.bus);
+ck('deviceSource sld forces the one-line device',!!forced.device?.linkedDevice);
+// second source (generator) on the load bus: breaker no longer isolates all
+const P2=JSON.parse(JSON.stringify(P));P2.sources.push({id:'g',kind:'generator',name:'Gen',bus:br.bus,voltage:208,power:200e3,xdpp:0.15,xr:10,enabled:true,method:'generator'});
+const r2=calculateProject(P2);const ol2=oneLineProtection(P2,r2.results.find(x=>x.busId===br.bus));
+ck('with local generator: breaker is a partial path, share < 100 %',ol2.primary&&!ol2.primary.isolatesAll&&ol2.primary.sharePercent<100,JSON.stringify(ol2.primary));
+const unchanged=JSON.stringify(P);networkArcFlashStudy({project:P,calculateProject,busInputs:{},oneLineDevices:{[br.id]:dev}});ck('project not modified',JSON.stringify(P)===unchanged);
+console.log(`${p} passed, ${f} failed`);

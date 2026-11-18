@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"voltage-lv":"#10b981","surface-elevated":"#1c2635","surface-obsidian":"#090d13","surface-bright":"#2a3a4f","surface-tint":"#93ccff","surface-variant":"#26364a","background":"#031427","on-tertiary-fixed-variant":"#653e00","grid-axis":"#334155","tertiary-fixed":"#ffddb8","on-surface-variant":"#bfc7d2","text-disabled":"#475569","on-tertiary-container":"#3e2400","primary-container":"#3198dc","inverse-surface":"#d3e4fe","on-secondary-fixed-variant":"#004c69","duty-pass":"#10b981","on-primary-fixed":"#001d31","surface-dim":"#031427","surface":"#031427","surface-container-high":"#1b2b3f","on-primary-fixed-variant":"#004b73","on-secondary-fixed":"#001e2c","primary-fixed":"#cce5ff","duty-fail":"#ef4444","on-tertiary":"#472a00","outline-variant":"#3f4850","on-primary-container":"#002c47","secondary-fixed":"#c4e7ff","inverse-primary":"#006398","on-surface":"#d3e4fe","stroke-structural":"#303e52","on-background":"#d3e4fe","tertiary-container":"#ca8100","duty-warn":"#f59e0b","grid-line":"#1e293b","error":"#ffb4ab","on-error":"#690005","duty-pass-container":"#022c22","on-tertiary-fixed":"#2a1700","surface-container-highest":"#26364a","arc-hazard":"#f97316","primary":"#93ccff","inverse-on-surface":"#213145","outline":"#89929b","surface-container-lowest":"#000f21","duty-fail-container":"#4c0519","on-secondary-container":"#00374d","text-primary":"#e6edf3","secondary":"#7bd0ff","on-secondary":"#00354a","surface-container":"#102034","error-container":"#93000a","surface-container-low":"#0b1c30","voltage-mv":"#0284c7","on-primary":"#003351","secondary-fixed-dim":"#7bd0ff","duty-warn-container":"#422006","stroke-subtle":"#212c3b","secondary-container":"#00a6e0","surface-active":"#243144","surface-workspace":"#0d1117","tertiary":"#ffb95f","on-error-container":"#ffdad6","tertiary-fixed-dim":"#ffb95f","primary-fixed-dim":"#93ccff","voltage-hv":"#a855f7","text-muted":"#8b949e"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{"space-xl":"1.5rem",margin:"1rem","space-xs":"0.25rem","space-lg":"1rem","space-md":"0.75rem",gutter:"0.75rem","space-sm":"0.5rem"},fontFamily:{"display-lg-mobile":["Inter"],"data-mono-sm":["JetBrains Mono"],"data-mono-base":["JetBrains Mono"],"display-lg":["Inter"],"data-mono-lg":["JetBrains Mono"],"body-bold":["Inter"],"label-caps":["JetBrains Mono"],"body-base":["Inter"],"title-sm":["Inter"],"headline-md":["Inter"]},fontSize:{"display-lg-mobile":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"700"}],"data-mono-sm":["11px",{lineHeight:"14px",letterSpacing:"0",fontWeight:"400"}],"data-mono-base":["12px",{lineHeight:"16px",letterSpacing:"0",fontWeight:"500"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"data-mono-lg":["18px",{lineHeight:"24px",letterSpacing:"-0.02em",fontWeight:"600"}],"body-bold":["13px",{lineHeight:"18px",letterSpacing:"0",fontWeight:"600"}],"label-caps":["10px",{lineHeight:"14px",letterSpacing:"0.08em",fontWeight:"700"}],"body-base":["13px",{lineHeight:"18px",letterSpacing:"0",fontWeight:"400"}],"title-sm":["14px",{lineHeight:"20px",letterSpacing:"0",fontWeight:"600"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-base text-body-base text-on-surface antialiased"><aside class="fixed left-0 top-0 bottom-7 w-64 bg-surface-container-low z-50 flex flex-col"><div class="h-11 px-space-md flex items-center justify-between bg-surface-container-lowest"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-[20px]">bolt</span><div class="flex flex-col"><span class="font-title-sm text-title-sm text-text-primary tracking-tight leading-none">FAULT CURRENT</span><span class="font-label-caps text-label-caps text-primary tracking-widest leading-none mt-space-xs">STUDIO v28 CAE</span></div></div><span class="px-space-xs py-[2px] bg-surface-elevated font-label-caps text-label-caps text-secondary-fixed rounded">ANSI</span></div><div class="px-space-md py-space-sm bg-surface-container"><div class="flex items-center justify-between"><span class="font-label-caps text-label-caps text-text-muted">STUDY MODEL</span><span class="font-data-mono-sm text-data-mono-sm text-voltage-lv flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-voltage-lv inline-block animate-pulse"></span>ONLINE</span></div><div class="font-body-bold text-body-bold text-text-primary truncate mt-space-xs">SUBSTATION_ALPHA_480V_13.8kV</div></div><div class="px-space-md pt-space-md pb-space-xs"><span class="font-label-caps text-label-caps text-text-muted tracking-wider">ANALYTICAL WORKBENCH</span></div><nav class="flex-1 px-space-sm space-y-space-xs overflow-y-auto" data-active-classes="bg-primary-container text-on-primary-container font-body-bold rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><a class="flex items-center gap-space-sm px-space-md py-space-sm text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface rounded-lg transition-colors font-body-base text-body-base" data-path="fault-current-calculator" href="#"><span class="material-symbols-outlined text-[18px]">calculate</span>Fault Current Calculator</a><a class="flex items-center gap-space-sm px-space-md py-space-sm text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface rounded-lg transition-colors font-body-base text-body-base" data-path="single-line-cad" href="#"><span class="material-symbols-outlined text-[18px]">schema</span>Single-Line (SLD) CAD</a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm transition-colors bg-primary-container text-on-primary-container font-body-bold rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]" data-path="equipment-duty-and-ratings" href="#"><span class="material-symbols-outlined text-[18px]">shield_with_heart</span>Equipment Duty &amp; Ratings</a><a class="flex items-center gap-space-sm px-space-md py-space-sm text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface rounded-lg transition-colors font-body-base text-body-base" data-path="ieee-qa-benchmark-reports" href="#"><span class="material-symbols-outlined text-[18px]">assessment</span>IEEE QA Benchmark Reports</a></nav><div class="p-space-md bg-surface-container-lowest m-space-sm rounded-lg space-y-space-xs"><div class="flex items-center justify-between text-text-muted"><span class="font-label-caps text-label-caps">STANDARD BASE</span><span class="font-data-mono-sm text-data-mono-sm text-text-primary">IEEE C37.010</span></div><div class="flex items-center justify-between text-text-muted"><span class="font-label-caps text-label-caps">COMPONENTS</span><span class="font-data-mono-sm text-data-mono-sm text-text-primary">I₀ / I₁ / I₂</span></div><div class="flex items-center justify-between text-text-muted"><span class="font-label-caps text-label-caps">GRID BUS COUNT</span><span class="font-data-mono-sm text-data-mono-sm text-secondary">14 NODES</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-11 bg-surface-container-lowest z-40 px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-1 bg-duty-pass-container rounded"><span class="w-2 h-2 rounded-full bg-duty-pass inline-block"></span><span class="font-label-caps text-label-caps text-voltage-lv">ANSI C37.010 CONVERGED</span></div><div class="hidden xl:flex items-center gap-space-sm px-space-sm py-1 bg-surface-elevated rounded"><span class="font-label-caps text-label-caps text-text-muted">MATRIX LATENCY:</span><span class="font-data-mono-sm text-data-mono-sm text-primary">0.428 ms</span><span class="text-text-disabled text-xs">|</span><span class="font-label-caps text-label-caps text-text-muted">PRECISION:</span><span class="font-data-mono-sm text-data-mono-sm text-secondary">FLOAT64</span></div><div class="hidden 2xl:flex items-center gap-space-xs px-space-sm py-1 bg-surface-container rounded"><span class="font-label-caps text-label-caps text-text-muted">FAULT:</span><span class="font-data-mono-sm text-data-mono-sm text-arc-hazard">3Φ BOLTED SYM</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center bg-surface-elevated p-0.5 rounded"><button class="px-space-sm py-1 font-data-mono-sm text-data-mono-sm text-text-muted hover:bg-surface-active hover:text-on-surface rounded transition-colors" title="Export CSV Matrix" type="button">CSV</button><button class="px-space-sm py-1 font-data-mono-sm text-data-mono-sm text-text-muted hover:bg-surface-active hover:text-on-surface rounded transition-colors" title="Export IEEE Topology JSON" type="button">JSON</button><button class="px-space-sm py-1 font-data-mono-sm text-data-mono-sm text-text-muted hover:bg-surface-active hover:text-on-surface rounded transition-colors" title="Generate Professional PDF Report" type="button">PDF</button></div><button class="h-8 px-space-lg bg-voltage-mv hover:bg-primary-container text-text-primary hover:text-on-primary-container font-body-bold text-body-bold rounded flex items-center gap-space-xs shadow-[0_0_10px_rgba(2,132,199,0.35)] transition-all" type="button"><span class="material-symbols-outlined text-[16px]">play_arrow</span><span>RUN SOLVE</span></button><div class="h-5 w-px bg-surface-variant"></div><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-body-bold text-body-bold text-text-primary leading-tight">P. Steinmetz, PE</span><span class="font-label-caps text-label-caps text-text-muted leading-none mt-0.5">LEAD PROTECTION ENG</span></div></div></div></header><main class="relative pt-11 pb-7 bg-surface min-h-[calc(100vh-28px)]"><div class="flex flex-col w-full">
+<!-- Sub-Header Analytical Workspace Toolbar -->
+<div class="w-full bg-surface-container-lowest px-space-xl py-space-sm flex flex-wrap items-center justify-between gap-space-md shadow-sm">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs text-text-primary font-headline-md text-headline-md tracking-tight">
+<span class="material-symbols-outlined text-primary text-[24px]">verified_user</span>
+<span>Fleet Equipment Duty &amp; Interrupting Ratings</span>
+</div>
+<span class="px-space-xs py-[2px] bg-surface-elevated text-secondary font-label-caps text-label-caps rounded">IEEE C37.010-1999 CLAUSE 5.3</span>
+<span class="px-space-xs py-[2px] bg-duty-pass-container text-duty-pass font-label-caps text-label-caps rounded">0 VIOLATIONS</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center bg-surface-elevated px-space-sm py-1 rounded gap-space-xs text-text-muted font-data-mono-sm text-data-mono-sm">
+<span class="material-symbols-outlined text-[15px] text-primary">update</span>
+<span>STUDY RUN: #284-REV3</span>
+<span class="text-text-disabled">|</span>
+<span class="text-voltage-lv">T_PART = 2.0 CYC BASE</span>
+</div>
+<button class="h-8 px-space-md bg-voltage-mv hover:bg-primary-container text-text-primary hover:text-on-primary-container font-body-bold text-body-bold rounded flex items-center gap-space-xs shadow-md transition-all" onclick="window.recalcFleetDuties()" type="button">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>Recalculate NACD Multipliers</span>
+</button>
+</div>
+</div>
+<div class="p-space-xl space-y-space-xl">
+<!-- Top Fleet-Wide Protective Device KPI Banner -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- Total Devices -->
+<div class="bg-surface-container p-space-lg rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-3 -top-3 w-16 h-16 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">TOTAL MAPPED UNITS</span>
+<span class="material-symbols-outlined text-primary text-[20px]">account_tree</span>
+</div>
+<div class="mt-space-md">
+<div class="font-display-lg text-display-lg text-text-primary tracking-tight leading-none">42 <span class="font-title-sm text-title-sm text-text-muted font-normal">Units</span></div>
+<div class="font-data-mono-sm text-data-mono-sm text-secondary mt-space-xs">Across 1,048 Model Buses</div>
+</div>
+<div class="mt-space-md pt-space-xs text-text-muted font-data-mono-sm text-data-mono-sm flex items-center justify-between">
+<span>MV/LV Distribution</span>
+<span class="text-primary font-body-bold text-body-bold">100% Monitored</span>
+</div>
+</div>
+<!-- Adequately Rated -->
+<div class="bg-surface-container p-space-lg rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-3 -top-3 w-16 h-16 bg-duty-pass/10 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-duty-pass">ADEQUATELY RATED (&lt;80%)</span>
+<span class="material-symbols-outlined text-duty-pass text-[20px]">check_circle</span>
+</div>
+<div class="mt-space-md">
+<div class="font-display-lg text-display-lg text-duty-pass tracking-tight leading-none">39 <span class="font-title-sm text-title-sm text-duty-pass font-normal">Pass</span></div>
+<div class="font-data-mono-sm text-data-mono-sm text-text-primary mt-space-xs">92.8% Fleet Compliance</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-space-xs">
+<div class="h-1.5 w-full bg-surface-elevated rounded-full overflow-hidden">
+<div class="h-full bg-duty-pass rounded-full" style="width: 92.8%"></div>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm text-duty-pass">92.8%</span>
+</div>
+</div>
+<!-- Marginally Rated -->
+<div class="bg-surface-container p-space-lg rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-3 -top-3 w-16 h-16 bg-duty-warn/10 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-duty-warn">MARGINAL DUTY (80-100%)</span>
+<span class="material-symbols-outlined text-duty-warn text-[20px]">warning</span>
+</div>
+<div class="mt-space-md">
+<div class="font-display-lg text-display-lg text-duty-warn tracking-tight leading-none">3 <span class="font-title-sm text-title-sm text-duty-warn font-normal">Warn</span></div>
+<div class="font-data-mono-sm text-data-mono-sm text-duty-warn mt-space-xs">7.2% Watchlist Devices</div>
+</div>
+<div class="mt-space-md pt-space-xs text-duty-warn font-data-mono-sm text-data-mono-sm flex items-center justify-between">
+<span>Requires Derating Audit</span>
+<span class="font-body-bold text-body-bold">SWG-13A</span>
+</div>
+</div>
+<!-- Overstressed -->
+<div class="bg-surface-container p-space-lg rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-3 -top-3 w-16 h-16 bg-duty-fail/5 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">OVERSTRESSED (&gt;100%)</span>
+<span class="material-symbols-outlined text-duty-pass text-[20px]">gpp_good</span>
+</div>
+<div class="mt-space-md">
+<div class="font-display-lg text-display-lg text-text-primary tracking-tight leading-none">0 <span class="font-title-sm text-title-sm text-duty-pass font-normal">Violations</span></div>
+<div class="font-data-mono-sm text-data-mono-sm text-duty-pass mt-space-xs">100% Rupture Clearance</div>
+</div>
+<div class="mt-space-md pt-space-xs text-text-muted font-data-mono-sm text-data-mono-sm flex items-center justify-between">
+<span>Zero arc risk violations</span>
+<span class="text-duty-pass font-label-caps text-label-caps">OPTIMAL</span>
+</div>
+</div>
+<!-- Average Margin Headroom -->
+<div class="bg-surface-container p-space-lg rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-3 -top-3 w-16 h-16 bg-primary/10 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-primary">AVG INTERRUPTING MARGIN</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">speed</span>
+</div>
+<div class="mt-space-md">
+<div class="font-display-lg text-display-lg text-secondary tracking-tight leading-none">+14.2 <span class="font-title-sm text-title-sm text-secondary font-normal">kA</span></div>
+<div class="font-data-mono-sm text-data-mono-sm text-text-primary mt-space-xs">Headroom to Symmetric Peak</div>
+</div>
+<div class="mt-space-md pt-space-xs text-text-muted font-data-mono-sm text-data-mono-sm flex items-center justify-between">
+<span>Min margin: +2.1 kA (52-M1)</span>
+<span class="text-primary font-label-caps text-label-caps">STABLE</span>
+</div>
+</div>
+</div>
+<!-- Visualizer & Physical Lineup Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-xl">
+<!-- ANSI C37.010 Contact Parting Derating Visualizer Card -->
+<div class="xl:col-span-7 bg-surface-container rounded-xl p-space-lg shadow-md flex flex-col justify-between">
+<div>
+<div class="flex flex-wrap items-center justify-between pb-space-sm gap-space-sm">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-text-primary">ANSI C37.010 NACD Multiplying Factor Curves</span>
+<span class="px-space-xs py-0.5 bg-surface-elevated text-primary font-label-caps text-label-caps rounded">S-RATIO METHOD</span>
+</div>
+<p class="font-body-base text-body-base text-text-muted mt-space-xs">Breaker Contact Parting Time Derating factor $MF$ vs. System Thevenin $X/R$ ratio at fault locus</p>
+</div>
+<!-- Curve toggles -->
+<div class="flex items-center gap-space-xs bg-surface-obsidian p-1 rounded-lg">
+<span class="flex items-center gap-1 px-space-xs py-0.5 text-secondary font-data-mono-sm text-data-mono-sm">
+<span class="w-2.5 h-0.5 bg-secondary inline-block"></span> 2-Cycle
+              </span>
+<span class="flex items-center gap-1 px-space-xs py-0.5 text-primary font-data-mono-sm text-data-mono-sm">
+<span class="w-2.5 h-0.5 bg-primary inline-block"></span> 3-Cycle
+              </span>
+<span class="flex items-center gap-1 px-space-xs py-0.5 text-voltage-hv font-data-mono-sm text-data-mono-sm">
+<span class="w-2.5 h-0.5 bg-voltage-hv inline-block"></span> 5-Cycle
+              </span>
+</div>
+</div>
+<!-- Dynamic SVG Chart Canvas -->
+<div class="relative w-full h-72 bg-surface-obsidian rounded-lg p-space-md my-space-md overflow-hidden">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 680 260">
+<defs>
+<lineargradient id="curveGlow2C" x1="0" x2="1" y1="0" y2="0">
+<stop offset="0%" stop-color="#7bd0ff" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#38bdf8" stop-opacity="1"></stop>
+</lineargradient>
+<lineargradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#0284c7" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#0284c7" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Grid Horizontal Lines -->
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="45" x2="650" y1="25" y2="25"></line>
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="45" x2="650" y1="75" y2="75"></line>
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="45" x2="650" y1="125" y2="125"></line>
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="45" x2="650" y1="175" y2="175"></line>
+<line stroke="#334155" stroke-width="1.5" x1="45" x2="650" y1="225" y2="225"></line>
+<!-- Grid Vertical Lines -->
+<line stroke="#334155" stroke-width="1.5" x1="45" x2="45" y1="25" y2="225"></line>
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="166" x2="166" y1="25" y2="225"></line>
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="287" x2="287" y1="25" y2="225"></line>
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="408" x2="408" y1="25" y2="225"></line>
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="529" x2="529" y1="25" y2="225"></line>
+<line stroke="#1e293b" stroke-dasharray="3 3" x1="650" x2="650" y1="25" y2="225"></line>
+<!-- Axis Labels -->
+<!-- Y Axis: NACD Factor (1.00 to 1.40) -->
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="38" y="228">1.00</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="38" y="178">1.10</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="38" y="128">1.20</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="38" y="78">1.30</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="38" y="28">1.40</text>
+<!-- X Axis: System X/R (0 to 100) -->
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="45" y="242">0</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="166" y="242">20</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="287" y="242">40</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="408" y="242">60</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="529" y="242">80</text>
+<text fill="#8b949e" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="650" y="242">100 X/R</text>
+<!-- 5-Cycle Breaker Derating Curve (Violet) -->
+<path d="M 45 225 C 150 224, 250 205, 380 185 C 500 168, 580 155, 650 148" fill="none" stroke="#a855f7" stroke-linecap="round" stroke-width="2"></path>
+<!-- 3-Cycle Breaker Derating Curve (Light Blue) -->
+<path d="M 45 225 C 130 220, 220 185, 350 145 C 470 110, 560 90, 650 82" fill="none" stroke="#93ccff" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- 2-Cycle Breaker Derating Curve (Cyan) -->
+<path d="M 45 225 C 110 215, 180 160, 300 110 C 420 62, 540 42, 650 36" fill="none" stroke="url(#curveGlow2C)" stroke-linecap="round" stroke-width="3"></path>
+<!-- Bus-Main Marker calculation: X/R=18.62 -> x pos: 45 + (18.62/20)*121 = 157.6; y pos: NACD=1.042 -> 225 - (0.042/0.1)*50 = 204 -->
+<!-- Guideline vertical -->
+<line stroke="#f97316" stroke-dasharray="4 2" stroke-width="1.5" x1="158" x2="158" y1="25" y2="225"></line>
+<!-- Guideline horizontal -->
+<line stroke="#f97316" stroke-dasharray="4 2" stroke-width="1.5" x1="45" x2="158" y1="204" y2="204"></line>
+<!-- Target Pulse Marker -->
+<circle class="animate-ping" cx="158" cy="204" fill="#f97316" fill-opacity="0.3" r="9"></circle>
+<circle cx="158" cy="204" fill="#f97316" r="5" stroke="#ffffff" stroke-width="1.5"></circle>
+<!-- Floating Indicator Tooltip Box -->
+<rect fill="#090d13" height="48" rx="4" stroke="#f97316" stroke-width="1" width="220" x="170" y="155"></rect>
+<text fill="#e6edf3" font-family="Inter" font-size="11" font-weight="600" x="180" y="172">Bus-Main Oper. Point (52-M1)</text>
+<text fill="#7bd0ff" font-family="JetBrains Mono" font-size="10" x="180" y="191">X/R = 18.62  |  NACD MF = 1.042</text>
+</svg>
+</div>
+<!-- Technical Explanatory Note -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md p-space-md bg-surface-container-lowest rounded-lg">
+<div class="space-y-1">
+<span class="font-label-caps text-label-caps text-primary">S-RATIO METHODOLOGY</span>
+<p class="font-data-mono-sm text-data-mono-sm text-text-muted">Calculates ratio of local source generation feeding fault ($S = I_{gen}/I_{tot}$). Reflects machine subtransient impedance decay.</p>
+</div>
+<div class="space-y-1">
+<span class="font-label-caps text-label-caps text-secondary">AC &amp; DC DECREMENTS</span>
+<p class="font-data-mono-sm text-data-mono-sm text-text-muted">Combined decaying envelope: total asymmetric fault current includes both DC component decay ($e^{-t/T_a}$) and generator AC component demagnetization.</p>
+</div>
+<div class="space-y-1">
+<span class="font-label-caps text-label-caps text-voltage-lv">DERATED INTERRUPTING CAP</span>
+<p class="font-data-mono-sm text-data-mono-sm text-text-muted">$I_{derated} = I_{rated} / MF_{NACD}$. Devices with fast contact parting (2-Cycle) demand higher duty multipliers at high X/R.</p>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-text-muted font-data-mono-sm text-data-mono-sm">
+<span>Formula Engine: ANSI/IEEE Std C37.010-1999 (R2005) Equation 24</span>
+<span class="text-text-primary">Status: Validated against SKM benchmark run 8A</span>
+</div>
+</div>
+<!-- Physical Equipment Lineup Inspector & Contingency Upgrade Advisor -->
+<div class="xl:col-span-5 bg-surface-container rounded-xl p-space-lg shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-voltage-mv text-[22px]">developer_board</span>
+<span class="font-headline-md text-headline-md text-text-primary">Substation 04 Switchgear Lineup (SWG-13A)</span>
+</div>
+<span class="px-space-xs py-0.5 bg-duty-warn-container text-duty-warn font-label-caps text-label-caps rounded">EVAL: MARGINAL WATCH</span>
+</div>
+<p class="font-body-base text-body-base text-text-muted">13.8 kV Metal-Clad Vacuum Switchgear, 1200A Bus, Eaton VacClad-W Type</p>
+<!-- Breaker Cell Duty Gauges inside Switchgear -->
+<div class="space-y-space-md mt-space-md">
+<!-- Cell 1: 52-M1 Main -->
+<div class="p-space-sm bg-surface-container-lowest rounded-lg">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-data-mono-base text-data-mono-base text-text-primary">CELL 01: 52-M1 (Main Breaker)</span>
+<span class="text-text-muted font-data-mono-sm text-data-mono-sm">13.8 kV / 40.0 kA</span>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm text-duty-warn font-body-bold text-body-bold">94.7% DUTY</span>
+</div>
+<div class="h-2 w-full bg-surface-elevated rounded-full overflow-hidden flex">
+<div class="h-full bg-duty-warn rounded-full" style="width: 94.7%"></div>
+</div>
+<div class="flex justify-between items-center text-text-muted font-data-mono-sm text-data-mono-sm mt-1">
+<span>Fault: 36.37 kA | Derated: 38.39 kA</span>
+<span class="text-duty-warn">Margin: +2.02 kA (Critical)</span>
+</div>
+</div>
+<!-- Cell 2: 52-PV1 Infeed -->
+<div class="p-space-sm bg-surface-container-lowest rounded-lg">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-data-mono-base text-data-mono-base text-text-primary">CELL 02: 52-PV1 (PV Solar Tie)</span>
+<span class="text-text-muted font-data-mono-sm text-data-mono-sm">13.8 kV / 40.0 kA</span>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm text-duty-warn font-body-bold text-body-bold">88.5% DUTY</span>
+</div>
+<div class="h-2 w-full bg-surface-elevated rounded-full overflow-hidden flex">
+<div class="h-full bg-duty-warn rounded-full" style="width: 88.5%"></div>
+</div>
+<div class="flex justify-between items-center text-text-muted font-data-mono-sm text-data-mono-sm mt-1">
+<span>Fault: 34.20 kA | Derated: 38.64 kA</span>
+<span class="text-duty-warn">Margin: +4.44 kA</span>
+</div>
+</div>
+<!-- Cell 3: 52-BESS1 -->
+<div class="p-space-sm bg-surface-container-lowest rounded-lg">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-data-mono-base text-data-mono-base text-text-primary">CELL 03: 52-BESS1 (Energy Storage)</span>
+<span class="text-text-muted font-data-mono-sm text-data-mono-sm">13.8 kV / 40.0 kA</span>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm text-duty-pass font-body-bold text-body-bold">81.2% DUTY</span>
+</div>
+<div class="h-2 w-full bg-surface-elevated rounded-full overflow-hidden flex">
+<div class="h-full bg-duty-pass rounded-full" style="width: 81.2%"></div>
+</div>
+<div class="flex justify-between items-center text-text-muted font-data-mono-sm text-data-mono-sm mt-1">
+<span>Fault: 31.42 kA | Derated: 38.68 kA</span>
+<span class="text-duty-pass">Margin: +7.26 kA</span>
+</div>
+</div>
+</div>
+<!-- Expansion Contingency Simulation Tool -->
+<div class="mt-space-md p-space-md bg-surface-container-high rounded-xl">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs text-text-primary font-title-sm text-title-sm">
+<span class="material-symbols-outlined text-tertiary text-[18px]">science</span>
+<span>Contingency Simulation: +10 MVA Solar Infeed</span>
+</div>
+<span class="px-space-xs py-0.5 bg-duty-fail-container text-duty-fail font-label-caps text-label-caps rounded">OVERSTRESS RISK</span>
+</div>
+<p class="font-data-mono-sm text-data-mono-sm text-text-muted mb-space-sm">Projected impact of interconnection at Bus SWG-13A with transformer Z% = 5.75%, X/R = 14.2:</p>
+<div class="grid grid-cols-2 gap-space-sm p-space-sm bg-surface-container-lowest rounded-lg text-text-primary font-data-mono-sm text-data-mono-sm">
+<div>
+<span class="text-text-muted block font-label-caps text-label-caps">PROJECTED 52-M1 FAULT</span>
+<span class="text-duty-fail font-data-mono-lg text-data-mono-lg font-bold">41.82 kA</span>
+<span class="text-duty-fail block text-[10px] mt-0.5">↑ +5.45 kA Increase</span>
+</div>
+<div>
+<span class="text-text-muted block font-label-caps text-label-caps">POST-EXPANSION DUTY</span>
+<span class="text-duty-fail font-data-mono-lg text-data-mono-lg font-bold">108.9%</span>
+<span class="text-duty-fail block text-[10px] mt-0.5">VIOLATION (+3.43 kA Deficit)</span>
+</div>
+</div>
+<div class="mt-space-sm flex items-center justify-between">
+<span class="font-body-base text-body-base text-text-muted text-xs">Mitigation: Retrofit 52-M1 with 50kA rating or series current-limiting reactor.</span>
+<button class="px-space-sm py-1 bg-surface-elevated hover:bg-surface-active text-primary font-body-bold text-body-bold rounded text-xs transition-colors" type="button">Apply Reactor</button>
+</div>
+</div>
+</div>
+<!-- Governance Citation Card -->
+<div class="mt-space-md p-space-sm bg-surface-container-lowest rounded-lg flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px] shrink-0 mt-0.5">menu_book</span>
+<div class="text-text-muted font-data-mono-sm text-data-mono-sm leading-tight">
+<span class="text-text-primary font-body-bold text-body-bold">IEEE C37.010-1999 §5.3 Standard:</span>
+            "For circuit breakers applied at locations where the system X/R ratio exceeds the standard reference value (15 or 17 for MV), interrupting duty must be evaluated using the peak and contact parting derating multipliers."
+          </div>
+</div>
+</div>
+</div>
+<!-- Equipment Duty & Ratings Master Ledger Section -->
+<div class="bg-surface-container rounded-xl p-space-lg shadow-md flex flex-col">
+<!-- Ledger Control Toolbar -->
+<div class="flex flex-wrap items-center justify-between gap-space-md pb-space-md">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">table_rows</span>
+<span class="font-headline-md text-headline-md text-text-primary">Master Device Interrupting Ledger</span>
+</div>
+<span class="px-space-xs py-0.5 bg-surface-elevated text-text-muted font-label-caps text-label-caps rounded">42 RECORDS ACTIVE</span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<!-- Live Search Bar -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2 text-text-muted text-[16px]">search</span>
+<input class="h-8 pl-7 pr-space-md bg-surface-obsidian text-text-primary font-data-mono-base text-data-mono-base rounded focus:outline-none focus:ring-1 focus:ring-secondary placeholder:text-text-disabled" id="deviceSearchInput" placeholder="Search Tag, Substation, Class..." type="text"/>
+</div>
+<!-- Voltage Filter Pill Switcher -->
+<div class="flex bg-surface-obsidian p-0.5 rounded-lg text-text-muted font-data-mono-sm text-data-mono-sm">
+<button class="px-space-sm py-1 bg-surface-elevated text-text-primary font-body-bold text-body-bold rounded shadow-sm" type="button">All Classes</button>
+<button class="px-space-sm py-1 hover:text-text-primary transition-colors" type="button">MV (4.16 - 34.5 kV)</button>
+<button class="px-space-sm py-1 hover:text-text-primary transition-colors" type="button">LV (480V - 600V)</button>
+</div>
+<!-- Export Buttons -->
+<div class="flex items-center bg-surface-elevated p-0.5 rounded">
+<button class="px-space-sm py-1 font-data-mono-sm text-data-mono-sm text-text-muted hover:bg-surface-active hover:text-text-primary rounded transition-colors flex items-center gap-1" title="Export Ledger as CSV" type="button">
+<span class="material-symbols-outlined text-[14px]">download</span>CSV
+            </button>
+<button class="px-space-sm py-1 font-data-mono-sm text-data-mono-sm text-text-muted hover:bg-surface-active hover:text-text-primary rounded transition-colors flex items-center gap-1" title="Export Signed IEEE QA Report" type="button">
+<span class="material-symbols-outlined text-[14px]">print</span>PDF
+            </button>
+</div>
+</div>
+</div>
+<!-- Ledger Table (Strict Monospace Decimal Alignment, High Contrast) -->
+<div class="w-full overflow-x-auto rounded-lg bg-surface-obsidian shadow-inner">
+<table class="w-full text-left font-data-mono-sm text-data-mono-sm whitespace-nowrap">
+<thead class="bg-surface-container-lowest text-text-muted uppercase tracking-wider font-label-caps text-label-caps">
+<tr>
+<th class="py-2.5 px-space-md sticky left-0 bg-surface-container-lowest z-10" scope="col">DEVICE TAG</th>
+<th class="py-2.5 px-space-md" scope="col">SUBSTATION</th>
+<th class="py-2.5 px-space-md" scope="col">MEDIUM / CLASS</th>
+<th class="py-2.5 px-space-md text-right" scope="col">RATED kV</th>
+<th class="py-2.5 px-space-md text-right" scope="col">SYS X/R</th>
+<th class="py-2.5 px-space-md text-right" scope="col">RATED kA</th>
+<th class="py-2.5 px-space-md text-right" scope="col">NACD MF</th>
+<th class="py-2.5 px-space-md text-right" scope="col">DERATED kA</th>
+<th class="py-2.5 px-space-md text-right" scope="col">CALC FAULT kA</th>
+<th class="py-2.5 px-space-md text-right" scope="col">DUTY %</th>
+<th class="py-2.5 px-space-md text-right" scope="col">MARGIN kA</th>
+<th class="py-2.5 px-space-md text-center" scope="col">COMPLIANCE</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low text-text-primary" id="deviceLedgerTbody">
+<!-- Row 1: 52-M1 (Marginal Watch) -->
+<tr class="hover:bg-surface-elevated/70 transition-colors bg-surface-obsidian">
+<td class="py-2.5 px-space-md font-body-bold text-body-bold text-text-primary sticky left-0 bg-surface-obsidian">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-duty-warn"></span>
+                  52-M1
+                </span>
+</td>
+<td class="py-2.5 px-space-md text-text-muted">Substation 04 (SWG-13A)</td>
+<td class="py-2.5 px-space-md">
+<span class="px-1.5 py-0.5 bg-surface-container rounded text-voltage-mv font-data-mono-sm">Vacuum (VC-W)</span>
+</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">13.80</td>
+<td class="py-2.5 px-space-md text-right text-tertiary">18.62</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">40.00</td>
+<td class="py-2.5 px-space-md text-right text-primary">1.042</td>
+<td class="py-2.5 px-space-md text-right text-secondary">38.39</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn font-bold">36.37</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn font-body-bold">94.7%</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn">+2.02</td>
+<td class="py-2.5 px-space-md text-center">
+<span class="px-space-xs py-[2px] bg-duty-warn-container text-duty-warn font-label-caps text-label-caps rounded">WARN</span>
+</td>
+</tr>
+<!-- Row 2: 52-PV1 (Marginal Watch) -->
+<tr class="hover:bg-surface-elevated/70 transition-colors bg-surface-container-lowest/40">
+<td class="py-2.5 px-space-md font-body-bold text-body-bold text-text-primary sticky left-0 bg-surface-container-lowest">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-duty-warn"></span>
+                  52-PV1
+                </span>
+</td>
+<td class="py-2.5 px-space-md text-text-muted">Substation 04 (SWG-13A)</td>
+<td class="py-2.5 px-space-md">
+<span class="px-1.5 py-0.5 bg-surface-container rounded text-voltage-mv font-data-mono-sm">Vacuum (VC-W)</span>
+</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">13.80</td>
+<td class="py-2.5 px-space-md text-right text-tertiary">16.40</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">40.00</td>
+<td class="py-2.5 px-space-md text-right text-primary">1.035</td>
+<td class="py-2.5 px-space-md text-right text-secondary">38.64</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn font-bold">34.20</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn font-body-bold">88.5%</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn">+4.44</td>
+<td class="py-2.5 px-space-md text-center">
+<span class="px-space-xs py-[2px] bg-duty-warn-container text-duty-warn font-label-caps text-label-caps rounded">WARN</span>
+</td>
+</tr>
+<!-- Row 3: 52-BESS1 (Marginal Watch) -->
+<tr class="hover:bg-surface-elevated/70 transition-colors bg-surface-obsidian">
+<td class="py-2.5 px-space-md font-body-bold text-body-bold text-text-primary sticky left-0 bg-surface-obsidian">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-duty-warn"></span>
+                  52-BESS1
+                </span>
+</td>
+<td class="py-2.5 px-space-md text-text-muted">Substation 04 (SWG-13A)</td>
+<td class="py-2.5 px-space-md">
+<span class="px-1.5 py-0.5 bg-surface-container rounded text-voltage-mv font-data-mono-sm">Vacuum (VC-W)</span>
+</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">13.80</td>
+<td class="py-2.5 px-space-md text-right text-tertiary">15.80</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">40.00</td>
+<td class="py-2.5 px-space-md text-right text-primary">1.034</td>
+<td class="py-2.5 px-space-md text-right text-secondary">38.68</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn font-bold">31.42</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn font-body-bold">81.2%</td>
+<td class="py-2.5 px-space-md text-right text-duty-warn">+7.26</td>
+<td class="py-2.5 px-space-md text-center">
+<span class="px-space-xs py-[2px] bg-duty-warn-container text-duty-warn font-label-caps text-label-caps rounded">WARN</span>
+</td>
+</tr>
+<!-- Row 4: 52-AUX1 (Pass) -->
+<tr class="hover:bg-surface-elevated/70 transition-colors bg-surface-container-lowest/40">
+<td class="py-2.5 px-space-md font-body-bold text-body-bold text-text-primary sticky left-0 bg-surface-container-lowest">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-duty-pass"></span>
+                  52-AUX1
+                </span>
+</td>
+<td class="py-2.5 px-space-md text-text-muted">Substation 01 (Aux 4.16k)</td>
+<td class="py-2.5 px-space-md">
+<span class="px-1.5 py-0.5 bg-surface-container rounded text-voltage-mv font-data-mono-sm">Vacuum (5HK)</span>
+</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">4.16</td>
+<td class="py-2.5 px-space-md text-right text-tertiary">11.20</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">29.00</td>
+<td class="py-2.5 px-space-md text-right text-primary">1.000</td>
+<td class="py-2.5 px-space-md text-right text-secondary">29.00</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass font-bold">18.45</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass font-body-bold">63.6%</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass">+10.55</td>
+<td class="py-2.5 px-space-md text-center">
+<span class="px-space-xs py-[2px] bg-duty-pass-container text-duty-pass font-label-caps text-label-caps rounded">PASS</span>
+</td>
+</tr>
+<!-- Row 5: 52-F2 (Pass) -->
+<tr class="hover:bg-surface-elevated/70 transition-colors bg-surface-obsidian">
+<td class="py-2.5 px-space-md font-body-bold text-body-bold text-text-primary sticky left-0 bg-surface-obsidian">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-duty-pass"></span>
+                  52-F2
+                </span>
+</td>
+<td class="py-2.5 px-space-md text-text-muted">Substation 02 (Distribution)</td>
+<td class="py-2.5 px-space-md">
+<span class="px-1.5 py-0.5 bg-surface-container rounded text-voltage-hv font-data-mono-sm">SF6 Gas (H-GIS)</span>
+</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">34.50</td>
+<td class="py-2.5 px-space-md text-right text-tertiary">14.10</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">25.00</td>
+<td class="py-2.5 px-space-md text-right text-primary">1.000</td>
+<td class="py-2.5 px-space-md text-right text-secondary">25.00</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass font-bold">14.30</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass font-body-bold">57.2%</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass">+10.70</td>
+<td class="py-2.5 px-space-md text-center">
+<span class="px-space-xs py-[2px] bg-duty-pass-container text-duty-pass font-label-caps text-label-caps rounded">PASS</span>
+</td>
+</tr>
+<!-- Row 6: 52-GEN2 (Pass) -->
+<tr class="hover:bg-surface-elevated/70 transition-colors bg-surface-container-lowest/40">
+<td class="py-2.5 px-space-md font-body-bold text-body-bold text-text-primary sticky left-0 bg-surface-container-lowest">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-duty-pass"></span>
+                  52-GEN2
+                </span>
+</td>
+<td class="py-2.5 px-space-md text-text-muted">Thermal Plant Unit 2</td>
+<td class="py-2.5 px-space-md">
+<span class="px-1.5 py-0.5 bg-surface-container rounded text-voltage-lv font-data-mono-sm">Air-Magnetic</span>
+</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">13.80</td>
+<td class="py-2.5 px-space-md text-right text-tertiary">24.50</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">63.00</td>
+<td class="py-2.5 px-space-md text-right text-primary">1.085</td>
+<td class="py-2.5 px-space-md text-right text-secondary">58.06</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass font-bold">44.90</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass font-body-bold">77.3%</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass">+13.16</td>
+<td class="py-2.5 px-space-md text-center">
+<span class="px-space-xs py-[2px] bg-duty-pass-container text-duty-pass font-label-caps text-label-caps rounded">PASS</span>
+</td>
+</tr>
+<!-- Row 7: 52-T1-SEC (Pass) -->
+<tr class="hover:bg-surface-elevated/70 transition-colors bg-surface-obsidian">
+<td class="py-2.5 px-space-md font-body-bold text-body-bold text-text-primary sticky left-0 bg-surface-obsidian">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-duty-pass"></span>
+                  52-T1-SEC
+                </span>
+</td>
+<td class="py-2.5 px-space-md text-text-muted">Substation 01 (XFMR 1 Sec)</td>
+<td class="py-2.5 px-space-md">
+<span class="px-1.5 py-0.5 bg-surface-container rounded text-voltage-lv font-data-mono-sm">LV Power Air (Masterpact)</span>
+</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">0.48</td>
+<td class="py-2.5 px-space-md text-right text-tertiary">8.30</td>
+<td class="py-2.5 px-space-md text-right text-text-muted">65.00</td>
+<td class="py-2.5 px-space-md text-right text-primary">1.000</td>
+<td class="py-2.5 px-space-md text-right text-secondary">65.00</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass font-bold">39.80</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass font-body-bold">61.2%</td>
+<td class="py-2.5 px-space-md text-right text-duty-pass">+25.20</td>
+<td class="py-2.5 px-space-md text-center">
+<span class="px-space-xs py-[2px] bg-duty-pass-container text-duty-pass font-label-caps text-label-caps rounded">PASS</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Ledger Pagination & Quick Stats Footer -->
+<div class="pt-space-md flex flex-wrap items-center justify-between text-text-muted font-data-mono-sm text-data-mono-sm gap-space-sm">
+<div class="flex items-center gap-space-md">
+<span>Showing 7 of 42 Mapped Protective Devices</span>
+<span class="text-text-disabled">|</span>
+<span>Derating Standard: <strong class="text-text-primary">ANSI/IEEE C37.010-1999 (R2005)</strong></span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 bg-surface-elevated text-text-disabled rounded hover:bg-surface-active cursor-not-allowed" type="button">Previous</button>
+<span class="px-space-sm py-1 bg-primary-container text-on-primary-container font-body-bold text-body-bold rounded">1</span>
+<button class="px-space-sm py-1 bg-surface-elevated text-text-primary rounded hover:bg-surface-active" type="button">2</button>
+<button class="px-space-sm py-1 bg-surface-elevated text-text-primary rounded hover:bg-surface-active" type="button">3</button>
+<button class="px-space-sm py-1 bg-surface-elevated text-text-primary rounded hover:bg-surface-active" type="button">Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  window.recalcFleetDuties = function() {
+    const notifyBtn = document.querySelector('button[onclick="window.recalcFleetDuties()"]');
+    if (!notifyBtn) return;
+    const originalText = notifyBtn.innerHTML;
+    notifyBtn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span><span>Solving Matrix...</span>';
+    setTimeout(() => {
+      notifyBtn.innerHTML = originalText;
+    }, 600);
+  };
+
+  // Real-time table filter search
+  const searchInput = document.getElementById('deviceSearchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll('#deviceLedgerTbody tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  }
+</script></main></div><footer class="fixed bottom-0 left-0 right-0 h-7 bg-surface-container-lowest z-50 px-space-md flex items-center justify-between"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-xs"><span class="w-1.5 h-1.5 rounded-full bg-voltage-lv"></span><span class="font-data-mono-sm text-data-mono-sm text-text-primary">64-BIT SPARSE LU SOLVER ENGINE READY</span></div><div class="hidden md:flex items-center gap-space-xs text-text-muted"><span class="font-label-caps text-label-caps">COMPLIANCE:</span><span class="font-data-mono-sm text-data-mono-sm text-text-primary">IEEE 141 / 242 / 399 / 1584 &amp; NFPA 70E</span></div></div><div class="flex items-center gap-space-md"><span class="font-data-mono-sm text-data-mono-sm text-text-muted">MEMORY: <span class="text-primary">118.4 MB</span></span><span class="text-text-disabled text-xs">|</span><span class="font-data-mono-sm text-data-mono-sm text-text-muted">TOLERANCE: <span class="text-secondary">10⁻⁶ PU</span></span><span class="text-text-disabled text-xs">|</span><span class="font-label-caps text-label-caps text-text-muted">ACTIVE STUDY SESSION</span></div></footer></body></html>

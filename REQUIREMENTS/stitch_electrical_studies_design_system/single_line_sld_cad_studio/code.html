@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"voltage-lv":"#10b981","surface-elevated":"#1c2635","surface-obsidian":"#090d13","surface-bright":"#2a3a4f","surface-tint":"#93ccff","surface-variant":"#26364a","background":"#031427","on-tertiary-fixed-variant":"#653e00","grid-axis":"#334155","tertiary-fixed":"#ffddb8","on-surface-variant":"#bfc7d2","text-disabled":"#475569","on-tertiary-container":"#3e2400","primary-container":"#3198dc","inverse-surface":"#d3e4fe","on-secondary-fixed-variant":"#004c69","duty-pass":"#10b981","on-primary-fixed":"#001d31","surface-dim":"#031427","surface":"#031427","surface-container-high":"#1b2b3f","on-primary-fixed-variant":"#004b73","on-secondary-fixed":"#001e2c","primary-fixed":"#cce5ff","duty-fail":"#ef4444","on-tertiary":"#472a00","outline-variant":"#3f4850","on-primary-container":"#002c47","secondary-fixed":"#c4e7ff","inverse-primary":"#006398","on-surface":"#d3e4fe","stroke-structural":"#303e52","on-background":"#d3e4fe","tertiary-container":"#ca8100","duty-warn":"#f59e0b","grid-line":"#1e293b","error":"#ffb4ab","on-error":"#690005","duty-pass-container":"#022c22","on-tertiary-fixed":"#2a1700","surface-container-highest":"#26364a","arc-hazard":"#f97316","primary":"#93ccff","inverse-on-surface":"#213145","outline":"#89929b","surface-container-lowest":"#000f21","duty-fail-container":"#4c0519","on-secondary-container":"#00374d","text-primary":"#e6edf3","secondary":"#7bd0ff","on-secondary":"#00354a","surface-container":"#102034","error-container":"#93000a","surface-container-low":"#0b1c30","voltage-mv":"#0284c7","on-primary":"#003351","secondary-fixed-dim":"#7bd0ff","duty-warn-container":"#422006","stroke-subtle":"#212c3b","secondary-container":"#00a6e0","surface-active":"#243144","surface-workspace":"#0d1117","tertiary":"#ffb95f","on-error-container":"#ffdad6","tertiary-fixed-dim":"#ffb95f","primary-fixed-dim":"#93ccff","voltage-hv":"#a855f7","text-muted":"#8b949e"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{"space-xl":"1.5rem",margin:"1rem","space-xs":"0.25rem","space-lg":"1rem","space-md":"0.75rem",gutter:"0.75rem","space-sm":"0.5rem"},fontFamily:{"display-lg-mobile":["Inter"],"data-mono-sm":["JetBrains Mono"],"data-mono-base":["JetBrains Mono"],"display-lg":["Inter"],"data-mono-lg":["JetBrains Mono"],"body-bold":["Inter"],"label-caps":["JetBrains Mono"],"body-base":["Inter"],"title-sm":["Inter"],"headline-md":["Inter"]},fontSize:{"display-lg-mobile":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"700"}],"data-mono-sm":["11px",{lineHeight:"14px",letterSpacing:"0",fontWeight:"400"}],"data-mono-base":["12px",{lineHeight:"16px",letterSpacing:"0",fontWeight:"500"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"data-mono-lg":["18px",{lineHeight:"24px",letterSpacing:"-0.02em",fontWeight:"600"}],"body-bold":["13px",{lineHeight:"18px",letterSpacing:"0",fontWeight:"600"}],"label-caps":["10px",{lineHeight:"14px",letterSpacing:"0.08em",fontWeight:"700"}],"body-base":["13px",{lineHeight:"18px",letterSpacing:"0",fontWeight:"400"}],"title-sm":["14px",{lineHeight:"20px",letterSpacing:"0",fontWeight:"600"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-base text-body-base text-on-surface antialiased"><aside class="fixed left-0 top-0 bottom-7 w-64 bg-surface-container-low z-50 flex flex-col"><div class="h-11 px-space-md flex items-center justify-between bg-surface-container-lowest"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-[20px]">bolt</span><div class="flex flex-col"><span class="font-title-sm text-title-sm text-text-primary tracking-tight leading-none">FAULT CURRENT</span><span class="font-label-caps text-label-caps text-primary tracking-widest leading-none mt-space-xs">STUDIO v28 CAE</span></div></div><span class="px-space-xs py-[2px] bg-surface-elevated font-label-caps text-label-caps text-secondary-fixed rounded">ANSI</span></div><div class="px-space-md py-space-sm bg-surface-container"><div class="flex items-center justify-between"><span class="font-label-caps text-label-caps text-text-muted">STUDY MODEL</span><span class="font-data-mono-sm text-data-mono-sm text-voltage-lv flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-voltage-lv inline-block animate-pulse"></span>ONLINE</span></div><div class="font-body-bold text-body-bold text-text-primary truncate mt-space-xs">SUBSTATION_ALPHA_480V_13.8kV</div></div><div class="px-space-md pt-space-md pb-space-xs"><span class="font-label-caps text-label-caps text-text-muted tracking-wider">ANALYTICAL WORKBENCH</span></div><nav class="flex-1 px-space-sm space-y-space-xs overflow-y-auto" data-active-classes="bg-primary-container text-on-primary-container font-body-bold rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><a class="flex items-center gap-space-sm px-space-md py-space-sm text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface rounded-lg transition-colors font-body-base text-body-base" data-path="fault-current-calculator" href="#"><span class="material-symbols-outlined text-[18px]">calculate</span>Fault Current Calculator</a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm transition-colors bg-primary-container text-on-primary-container font-body-bold rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]" data-path="single-line-cad" href="#"><span class="material-symbols-outlined text-[18px]">schema</span>Single-Line (SLD) CAD</a><a class="flex items-center gap-space-sm px-space-md py-space-sm text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface rounded-lg transition-colors font-body-base text-body-base" data-path="equipment-duty-and-ratings" href="#"><span class="material-symbols-outlined text-[18px]">shield_with_heart</span>Equipment Duty &amp; Ratings</a><a class="flex items-center gap-space-sm px-space-md py-space-sm text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface rounded-lg transition-colors font-body-base text-body-base" data-path="ieee-qa-benchmark-reports" href="#"><span class="material-symbols-outlined text-[18px]">assessment</span>IEEE QA Benchmark Reports</a></nav><div class="p-space-md bg-surface-container-lowest m-space-sm rounded-lg space-y-space-xs"><div class="flex items-center justify-between text-text-muted"><span class="font-label-caps text-label-caps">STANDARD BASE</span><span class="font-data-mono-sm text-data-mono-sm text-text-primary">IEEE C37.010</span></div><div class="flex items-center justify-between text-text-muted"><span class="font-label-caps text-label-caps">COMPONENTS</span><span class="font-data-mono-sm text-data-mono-sm text-text-primary">I₀ / I₁ / I₂</span></div><div class="flex items-center justify-between text-text-muted"><span class="font-label-caps text-label-caps">GRID BUS COUNT</span><span class="font-data-mono-sm text-data-mono-sm text-secondary">14 NODES</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-11 bg-surface-container-lowest z-40 px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-1 bg-duty-pass-container rounded"><span class="w-2 h-2 rounded-full bg-duty-pass inline-block"></span><span class="font-label-caps text-label-caps text-voltage-lv">ANSI C37.010 CONVERGED</span></div><div class="hidden xl:flex items-center gap-space-sm px-space-sm py-1 bg-surface-elevated rounded"><span class="font-label-caps text-label-caps text-text-muted">MATRIX LATENCY:</span><span class="font-data-mono-sm text-data-mono-sm text-primary">0.428 ms</span><span class="text-text-disabled text-xs">|</span><span class="font-label-caps text-label-caps text-text-muted">PRECISION:</span><span class="font-data-mono-sm text-data-mono-sm text-secondary">FLOAT64</span></div><div class="hidden 2xl:flex items-center gap-space-xs px-space-sm py-1 bg-surface-container rounded"><span class="font-label-caps text-label-caps text-text-muted">FAULT:</span><span class="font-data-mono-sm text-data-mono-sm text-arc-hazard">3Φ BOLTED SYM</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center bg-surface-elevated p-0.5 rounded"><button class="px-space-sm py-1 font-data-mono-sm text-data-mono-sm text-text-muted hover:bg-surface-active hover:text-on-surface rounded transition-colors" title="Export CSV Matrix" type="button">CSV</button><button class="px-space-sm py-1 font-data-mono-sm text-data-mono-sm text-text-muted hover:bg-surface-active hover:text-on-surface rounded transition-colors" title="Export IEEE Topology JSON" type="button">JSON</button><button class="px-space-sm py-1 font-data-mono-sm text-data-mono-sm text-text-muted hover:bg-surface-active hover:text-on-surface rounded transition-colors" title="Generate Professional PDF Report" type="button">PDF</button></div><button class="h-8 px-space-lg bg-voltage-mv hover:bg-primary-container text-text-primary hover:text-on-primary-container font-body-bold text-body-bold rounded flex items-center gap-space-xs shadow-[0_0_10px_rgba(2,132,199,0.35)] transition-all" type="button"><span class="material-symbols-outlined text-[16px]">play_arrow</span><span>RUN SOLVE</span></button><div class="h-5 w-px bg-surface-variant"></div><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-body-bold text-body-bold text-text-primary leading-tight">P. Steinmetz, PE</span><span class="font-label-caps text-label-caps text-text-muted leading-none mt-0.5">LEAD PROTECTION ENG</span></div></div></div></header><main class="relative pt-11 pb-7 bg-surface min-h-[calc(100vh-28px)]"><div class="flex flex-col w-full">
+<!-- CAD Ribbon & Multi-Tier Control Deck -->
+<div class="bg-surface-container-lowest px-space-md py-space-xs flex flex-wrap items-center justify-between gap-space-sm shadow-md">
+<div class="flex items-center gap-space-sm flex-wrap">
+<!-- Breadcrumb Hierarchical Addressing -->
+<nav aria-label="LOD Breadcrumb" class="flex items-center gap-1.5 bg-surface-container-low px-space-sm py-1 rounded-lg">
+<span class="material-symbols-outlined text-primary text-[15px]">account_tree</span>
+<button class="font-data-mono-sm text-data-mono-sm text-text-muted hover:text-primary transition-colors" type="button">GRID-ENT (1,048B)</button>
+<span class="text-text-disabled text-xs">/</span>
+<button class="font-data-mono-sm text-data-mono-sm text-text-muted hover:text-primary transition-colors" type="button">SUB-04</button>
+<span class="text-text-disabled text-xs">/</span>
+<button class="font-data-mono-sm text-data-mono-sm text-text-muted hover:text-primary transition-colors" type="button">BAY-3B</button>
+<span class="text-text-disabled text-xs">/</span>
+<span class="font-data-mono-base text-data-mono-base text-voltage-mv bg-surface-elevated px-1.5 py-0.5 rounded">BUS-MAIN (B-481) 13.8kV</span>
+</nav>
+<!-- LOD Level Switchers -->
+<div class="flex items-center bg-surface-container-low p-0.5 rounded-lg">
+<button class="px-2 py-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-all" id="lod-grid" onclick="setLOD('grid')" type="button">LOD-0 [GRID]</button>
+<button class="px-2 py-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-all" id="lod-sub" onclick="setLOD('sub')" type="button">LOD-1 [SUB-04]</button>
+<button class="px-2 py-1 font-label-caps text-label-caps bg-primary-container text-on-primary-container rounded transition-all" id="lod-bay" onclick="setLOD('bay')" type="button">LOD-2 [BAY-3B]</button>
+<button class="px-2 py-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-all" id="lod-dev" onclick="setLOD('dev')" type="button">LOD-3 [ELEMENT]</button>
+</div>
+<!-- Quick Bus Search Pill -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2 text-[14px] text-text-muted pointer-events-none">search</span>
+<input class="h-7 w-48 pl-7 pr-2 bg-surface-obsidian text-text-primary font-data-mono-sm text-data-mono-sm rounded-lg placeholder-text-disabled focus:outline-none focus:ring-1 focus:ring-secondary transition-all" id="busSearchInput" placeholder="Jump Node [Ctrl+K] / B-481..." type="text" value="BUS-MAIN (B-481)"/>
+</div>
+</div>
+<!-- Right Ribbon: Mode Switches & Viewport Controls -->
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center bg-surface-container-low p-0.5 rounded-lg">
+<button class="px-2.5 py-1 flex items-center gap-1 font-label-caps text-label-caps bg-surface-elevated text-primary rounded transition-colors" id="btn-mode-cad" onclick="toggleLayoutMode('cad')" title="Full CAD Engine View" type="button">
+<span class="material-symbols-outlined text-[14px]">fullscreen</span>
+<span>FULL CAD (100%)</span>
+</button>
+<button class="px-2.5 py-1 flex items-center gap-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-colors" id="btn-mode-split" onclick="toggleLayoutMode('split')" title="Split Matrix Workbench" type="button">
+<span class="material-symbols-outlined text-[14px]">vertical_split</span>
+<span>SPLIT MATRIX</span>
+</button>
+</div>
+<button class="h-7 px-2.5 bg-surface-elevated hover:bg-surface-active text-text-primary font-data-mono-sm text-data-mono-sm rounded-lg flex items-center gap-1 shadow-sm transition-colors" id="btn-toggle-inspector" onclick="toggleInspector()" type="button">
+<span class="material-symbols-outlined text-[15px] text-secondary">view_sidebar</span>
+<span id="inspector-toggle-label">COLLAPSE DOCK</span>
+</button>
+</div>
+</div>
+<!-- Voltage Tier Telemetry Bar -->
+<div class="bg-surface-container px-space-md py-1 flex items-center justify-between overflow-x-auto text-nowrap gap-space-md">
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-text-muted">VOLTAGE TIERS:</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-obsidian font-data-mono-sm text-data-mono-sm text-voltage-hv">
+<span class="w-1.5 h-1.5 rounded-full bg-voltage-hv"></span>500kV <span class="text-text-muted">(24)</span>
+</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-obsidian font-data-mono-sm text-data-mono-sm text-voltage-hv opacity-90">
+<span class="w-1.5 h-1.5 rounded-full bg-voltage-hv"></span>230kV <span class="text-text-muted">(142)</span>
+</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-obsidian font-data-mono-sm text-data-mono-sm text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>115kV <span class="text-text-muted">(210)</span>
+</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-obsidian font-data-mono-sm text-voltage-mv">
+<span class="w-1.5 h-1.5 rounded-full bg-voltage-mv"></span>69kV <span class="text-text-muted">(184)</span>
+</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-primary-container font-data-mono-sm text-data-mono-sm text-on-primary-container shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>13.8kV <span class="font-body-bold">(328 ACTIVE)</span>
+</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-obsidian font-data-mono-sm text-data-mono-sm text-voltage-lv">
+<span class="w-1.5 h-1.5 rounded-full bg-voltage-lv"></span>480V <span class="text-text-muted">(160)</span>
+</span>
+</div>
+<div class="flex items-center gap-space-md text-text-muted font-data-mono-sm text-data-mono-sm">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-duty-pass"></span>SOLVER: SPAN CONVERGED</span>
+<span class="hidden lg:inline text-text-disabled">|</span>
+<span class="hidden lg:inline">COORDINATES: <span class="text-primary font-data-mono-base" id="cursorCoord">X: 142.0 Y: 284.5</span></span>
+<span class="hidden lg:inline text-text-disabled">|</span>
+<span>ZOOM: <span class="text-secondary" id="zoomLevel">125%</span></span>
+</div>
+</div>
+<!-- Master Interactive CAD Viewport + Right Inspector Dock -->
+<div class="flex-1 flex flex-col lg:flex-row relative bg-surface-obsidian overflow-hidden min-h-[640px]">
+<!-- Vector CAD Drawing Workspace -->
+<div class="flex-1 relative bg-surface-obsidian flex flex-col overflow-hidden min-h-[580px]" id="cad-canvas-container">
+<!-- CAD Canvas Floating Toolbar Overlay -->
+<div class="absolute top-space-sm left-space-sm z-20 flex items-center gap-1 bg-surface-container-low/90 backdrop-blur px-space-xs py-1 rounded-lg shadow-xl">
+<button class="w-7 h-7 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-elevated rounded transition-colors" onclick="adjustZoom(0.1)" title="Zoom In" type="button">
+<span class="material-symbols-outlined text-[16px]">zoom_in</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-elevated rounded transition-colors" onclick="adjustZoom(-0.1)" title="Zoom Out" type="button">
+<span class="material-symbols-outlined text-[16px]">zoom_out</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-elevated rounded transition-colors" onclick="resetZoom()" title="Fit Bay Canvas" type="button">
+<span class="material-symbols-outlined text-[16px]">fit_screen</span>
+</button>
+<div class="h-4 w-px bg-surface-bright"></div>
+<button class="w-7 h-7 flex items-center justify-center text-primary hover:bg-surface-elevated rounded transition-colors" id="toggleGridDot" onclick="toggleDotGrid()" title="Toggle Dot Grid Matrix" type="button">
+<span class="material-symbols-outlined text-[16px]">grid_4x4</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center text-secondary hover:bg-surface-elevated rounded transition-colors" id="toggleFlowVectors" onclick="toggleFlowArrows()" title="Toggle Power &amp; Fault Flow Vectors" type="button">
+<span class="material-symbols-outlined text-[16px]">alt_route</span>
+</button>
+<button class="px-2 h-7 flex items-center gap-1 bg-duty-fail-container text-duty-fail hover:bg-duty-fail/20 rounded font-data-mono-sm text-data-mono-sm transition-colors" onclick="centerFaultNode()" title="Focus Simulated Fault Pin" type="button">
+<span class="material-symbols-outlined text-[14px]">crisis_alert</span>
+<span>FAULT LOCUS</span>
+</button>
+</div>
+<!-- High-Density Interactive SVG Canvas Engine -->
+<div class="w-full h-full relative cursor-crosshair select-none overflow-hidden" id="svg-viewport" onmousemove="updateCoords(event)">
+<svg class="w-full h-full min-h-[600px]" id="cad-svg" viewbox="0 0 1200 680" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- 16px Dot Matrix Grid Pattern -->
+<pattern height="16" id="cadGridDots" patternunits="userSpaceOnUse" width="16">
+<circle cx="8" cy="8" fill="#1e293b" r="0.85"></circle>
+</pattern>
+<!-- Major Axis Grid Lines -->
+<pattern height="160" id="cadMajorGrid" patternunits="userSpaceOnUse" width="160">
+<path d="M 160 0 L 0 0 0 160" fill="none" stroke="#162234" stroke-width="0.75"></path>
+</pattern>
+<!-- Glow Filters for Fault and High Voltages -->
+<filter height="140%" id="glowFault" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="3"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+<filter height="140%" id="glowBus" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="2.5"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+<!-- Marker Arrowhead for Short Circuit Infeed Streams -->
+<marker id="arrowFaultFlow" markerheight="6" markerwidth="6" orient="auto" refx="4" refy="3">
+<polygon fill="#ef4444" points="0 0, 6 3, 0 6"></polygon>
+</marker>
+<marker id="arrowNormalFlow" markerheight="6" markerwidth="6" orient="auto" refx="4" refy="3">
+<polygon fill="#38bdf8" points="0 0, 6 3, 0 6"></polygon>
+</marker>
+</defs>
+<!-- Dynamic Grid Layers -->
+<rect fill="url(#cadGridDots)" height="100%" id="gridRect" width="100%"></rect>
+<rect fill="url(#cadMajorGrid)" height="100%" width="100%"></rect>
+<!-- ================= LEVEL 0: FEEDER CONNECTION ROUTING TRACES ================= -->
+<!-- 69kV Overhead Transmission Infeed Line -->
+<line stroke="#0284c7" stroke-width="3" x1="600" x2="600" y1="40" y2="120"></line>
+<line stroke="#0284c7" stroke-width="3" x1="600" x2="600" y1="150" y2="210"></line>
+<!-- 13.8kV Transformer Secondary to Main Incomer Breaker 52-M1 -->
+<line stroke="#7bd0ff" stroke-width="3" x1="600" x2="600" y1="290" y2="350"></line>
+<line marker-end="url(#arrowFaultFlow)" stroke="#7bd0ff" stroke-width="3.5" x1="600" x2="600" y1="380" y2="440"></line>
+<!-- MAIN 13.8kV BUSBAR B-481 (Hero Horizontal Node) -->
+<!-- Drop Lines to Branch Outlets -->
+<!-- Branch 1: Station Aux Transformer (480V) -->
+<line stroke="#10b981" stroke-width="2.5" x1="240" x2="240" y1="440" y2="520"></line>
+<line stroke="#10b981" stroke-width="2.5" x1="240" x2="240" y1="540" y2="590"></line>
+<!-- Branch 2: 5.0 MVA PV Solar Inverter Array -->
+<line stroke="#7bd0ff" stroke-width="2.5" x1="420" x2="420" y1="440" y2="510"></line>
+<line marker-start="url(#arrowFaultFlow)" stroke="#7bd0ff" stroke-width="2.5" x1="420" x2="420" y1="530" y2="590"></line>
+<!-- Branch 3: BESS 10.0 MWh Energy Storage Yard (Critical Warning Branch) -->
+<line stroke="#f59e0b" stroke-width="2.5" x1="780" x2="780" y1="440" y2="510"></line>
+<line marker-start="url(#arrowFaultFlow)" stroke="#f59e0b" stroke-width="2.5" x1="780" x2="780" y1="530" y2="590"></line>
+<!-- Branch 4: Industrial Feeder 52-F2 (Mining & Induction Drives) -->
+<line stroke="#7bd0ff" stroke-width="2.5" x1="960" x2="960" y1="440" y2="510"></line>
+<line marker-start="url(#arrowFaultFlow)" stroke="#7bd0ff" stroke-width="2.5" x1="960" x2="960" y1="530" y2="590"></line>
+<!-- ================= LEVEL 1: APPARATUS SYMBOLOGY ================= -->
+<!-- 1. Utility Infeed Head (69kV) -->
+<g class="cursor-pointer" onclick="inspectElement('UTIL-GRID')" transform="translate(600, 36)">
+<circle cx="0" cy="0" fill="#090d13" r="16" stroke="#0284c7" stroke-width="2"></circle>
+<path d="M-9 0 L9 0 M0 -9 L0 9" stroke="#0284c7" stroke-width="1.5"></path>
+<rect fill="#141c28" height="38" rx="4" width="168" x="24" y="-18"></rect>
+<text fill="#d3e4fe" font-family="Inter" font-size="11" font-weight="600" x="32" y="-2">PJM 69kV BULK INFEED</text>
+<text fill="#0284c7" font-family="JetBrains Mono" font-size="10" font-weight="500" x="32" y="13">Isc: 18.20 kA | X/R: 24.1</text>
+</g>
+<!-- 2. High Voltage Vacuum Breaker 52-G1 -->
+<g class="cursor-pointer" onclick="inspectElement('BRK-52G1')" transform="translate(600, 135)">
+<rect fill="#141c28" height="28" rx="2" stroke="#0284c7" stroke-width="1.5" width="20" x="-10" y="-14"></rect>
+<path d="M-6 8 L6 -8" stroke="#10b981" stroke-width="2.5"></path>
+<rect fill="#0b1c30" height="22" rx="3" width="90" x="18" y="-12"></rect>
+<text fill="#d3e4fe" font-family="JetBrains Mono" font-size="10" font-weight="600" x="24" y="3">52-G1 [CLOSED]</text>
+</g>
+<!-- 3. Substation Main Power Transformer (XFMR-T1) -->
+<g class="cursor-pointer" onclick="inspectElement('XFMR-T1')" transform="translate(600, 250)">
+<!-- Intersecting Primary and Secondary Coils -->
+<circle cx="0" cy="-20" fill="none" r="26" stroke="#0284c7" stroke-width="2.5"></circle>
+<circle cx="0" cy="20" fill="none" r="26" stroke="#7bd0ff" stroke-width="2.5"></circle>
+<text fill="#0284c7" font-family="JetBrains Mono" font-size="10" font-weight="700" x="-4" y="-17">Δ</text>
+<text fill="#7bd0ff" font-family="JetBrains Mono" font-size="10" font-weight="700" x="-4" y="24">Yg</text>
+<!-- Transformer Spec Tag -->
+<rect fill="#141c28" height="66" rx="4" width="220" x="42" y="-34"></rect>
+<text fill="#d3e4fe" font-family="Inter" font-size="12" font-weight="600" x="52" y="-16">XFMR-T1 (DELTA-WYE GND)</text>
+<text fill="#7bd0ff" font-family="JetBrains Mono" font-size="10" x="52" y="2">69.0 kV : 13.8 kV | 30 MVA ONAN</text>
+<text fill="#ffb95f" font-family="JetBrains Mono" font-size="10" x="52" y="19">Z: 8.25% | X/R: 19.4 | Gnd: 5.0Ω</text>
+</g>
+<!-- 4. Incomer Medium Voltage Circuit Breaker 52-M1 -->
+<g class="cursor-pointer" onclick="inspectElement('BRK-52M1')" transform="translate(600, 365)">
+<rect fill="#141c28" height="30" id="breaker-52m1-box" rx="3" stroke="#7bd0ff" stroke-width="1.5" width="24" x="-12" y="-15"></rect>
+<path d="M-7 9 L7 -9" id="breaker-52m1-stem" stroke="#10b981" stroke-width="3"></path>
+<rect fill="#0b1c30" height="28" rx="3" width="138" x="22" y="-14"></rect>
+<text fill="#d3e4fe" font-family="Inter" font-size="11" font-weight="600" x="30" y="-1">52-M1 INCOMER</text>
+<text fill="#10b981" font-family="JetBrains Mono" font-size="9" x="30" y="11">RELAY: SEL-751 (50/51/51N)</text>
+</g>
+<!-- ================= LEVEL 2: 13.8 kV BUSBAR (THE CURRENT COLLECTOR) ================= -->
+<g class="cursor-pointer" id="hero-busbar" onclick="inspectElement('BUS-B481')" transform="translate(0, 440)">
+<!-- Glow Underlay -->
+<line filter="url(#glowBus)" opacity="0.25" stroke="#0284c7" stroke-width="14" x1="160" x2="1040" y1="0" y2="0"></line>
+<!-- Solid Physical Heavy Busbar Line -->
+<line stroke="#7bd0ff" stroke-linecap="round" stroke-width="7" x1="160" x2="1040" y1="0" y2="0"></line>
+<!-- Bus Node Identification Banner -->
+<rect fill="#102034" height="22" rx="3" width="190" x="170" y="-28"></rect>
+<text fill="#7bd0ff" font-family="JetBrains Mono" font-size="11" font-weight="700" x="178" y="-13">BUS-MAIN [B-481] 13.8kV</text>
+<!-- Fault Telemetry Annotation Tag on Bus -->
+<rect fill="#4c0519" height="28" rx="4" width="190" x="670" y="-34"></rect>
+<circle class="animate-ping" cx="682" cy="-20" fill="#ef4444" r="4"></circle>
+<text fill="#fecdd3" font-family="JetBrains Mono" font-size="11" font-weight="700" x="694" y="-21">Ik" SYM = 28.45 kA</text>
+<text fill="#fca5a5" font-family="JetBrains Mono" font-size="9" x="694" y="-10">DUTY: 71.1% | PASS (+11.55kA)</text>
+</g>
+<!-- ================= LEVEL 3: DYNAMIC SIMULATED BOLTED FAULT TARGET ================= -->
+<g class="cursor-pointer" id="fault-locus-group" onclick="triggerContingency('3PH')" transform="translate(600, 440)">
+<!-- Concentric Shockwave Rings -->
+<circle class="animate-pulse" cx="0" cy="0" fill="none" opacity="0.3" r="32" stroke="#ef4444" stroke-width="1"></circle>
+<circle cx="0" cy="0" fill="none" opacity="0.6" r="22" stroke="#ef4444" stroke-dasharray="4 2" stroke-width="1.5"></circle>
+<circle cx="0" cy="0" fill="#ef4444" opacity="0.3" r="12"></circle>
+<circle cx="0" cy="0" fill="#ef4444" r="5"></circle>
+<!-- Lightning Glyph for Bolted Fault Point -->
+<path d="M-4 -14 L3 -4 L-1 -2 L4 8 L-5 -1 L-1 -3 Z" fill="#fef08a" stroke="#ef4444" stroke-width="0.75"></path>
+<!-- Flag Label -->
+<rect fill="#4c0519" height="22" rx="3" width="130" x="-65" y="16"></rect>
+<text fill="#fecdd3" font-family="JetBrains Mono" font-size="10" font-weight="700" text-anchor="middle" x="0" y="31">3Φ BOLTED FAULT (0.0Ω)</text>
+</g>
+<!-- ================= LEVEL 4: DOWNSTREAM FEEDER BAYS ================= -->
+<!-- Feeder 1: Station Aux Transformer 480V -->
+<g class="cursor-pointer" onclick="inspectElement('FDR-AUX')" transform="translate(240, 520)">
+<rect fill="#141c28" height="20" rx="2" stroke="#10b981" stroke-width="1.5" width="16" x="-8" y="-10"></rect>
+<path d="M-5 6 L5 -6" stroke="#10b981" stroke-width="2"></path>
+<!-- Aux Transformer Symbol -->
+<circle cx="0" cy="40" fill="none" r="14" stroke="#10b981" stroke-width="2"></circle>
+<circle cx="0" cy="62" fill="none" r="14" stroke="#10b981" stroke-width="2"></circle>
+<text fill="#d3e4fe" font-family="Inter" font-size="10" font-weight="600" x="18" y="44">XFMR-AUX 480V</text>
+<text fill="#10b981" font-family="JetBrains Mono" font-size="9" x="18" y="58">1.5 MVA | MCC-1A</text>
+</g>
+<!-- Feeder 2: 5.0 MVA PV Solar Inverter Park -->
+<g class="cursor-pointer" onclick="inspectElement('FDR-PV')" transform="translate(420, 520)">
+<rect fill="#141c28" height="20" rx="2" stroke="#7bd0ff" stroke-width="1.5" width="16" x="-8" y="-10"></rect>
+<path d="M-5 6 L5 -6" stroke="#10b981" stroke-width="2"></path>
+<!-- Inverter Bridge Symbol (Square with diagonal line) -->
+<rect fill="#141c28" height="32" rx="2" stroke="#7bd0ff" stroke-width="1.5" width="32" x="-16" y="34"></rect>
+<line stroke="#7bd0ff" stroke-width="1.5" x1="-16" x2="16" y1="66" y2="34"></line>
+<text fill="#7bd0ff" font-family="JetBrains Mono" font-size="8" x="-10" y="48">DC</text>
+<text fill="#7bd0ff" font-family="JetBrains Mono" font-size="8" x="2" y="62">AC</text>
+<text fill="#d3e4fe" font-family="Inter" font-size="10" font-weight="600" x="22" y="45">PV ARRAY (5.0 MVA)</text>
+<text fill="#93ccff" font-family="JetBrains Mono" font-size="9" x="22" y="59">If: 1.25 kA (1.20 pu)</text>
+</g>
+<!-- Feeder 3: BESS 10.0 MWh Energy Storage Yard (Duty Warning 84.4%) -->
+<g class="cursor-pointer" onclick="inspectElement('FDR-BESS')" transform="translate(780, 520)">
+<rect fill="#141c28" height="20" rx="2" stroke="#f59e0b" stroke-width="1.5" width="16" x="-8" y="-10"></rect>
+<path d="M-5 6 L5 -6" stroke="#10b981" stroke-width="2"></path>
+<!-- Battery Cell Symbology -->
+<rect fill="#422006" height="32" rx="2" stroke="#f59e0b" stroke-width="1.5" width="36" x="-18" y="34"></rect>
+<line stroke="#f59e0b" stroke-width="2" x1="-10" x2="10" y1="44" y2="44"></line>
+<line stroke="#f59e0b" stroke-width="2" x1="-5" x2="5" y1="50" y2="50"></line>
+<line stroke="#f59e0b" stroke-width="2" x1="-10" x2="10" y1="56" y2="56"></line>
+<text fill="#d3e4fe" font-family="Inter" font-size="10" font-weight="600" x="24" y="44">BESS YARD 10 MWh</text>
+<text fill="#f59e0b" font-family="JetBrains Mono" font-size="9" x="24" y="58">DUTY 84.4% (WARN)</text>
+</g>
+<!-- Feeder 4: Industrial Plant Feeder (52-F2) with Induction Motors -->
+<g class="cursor-pointer" onclick="inspectElement('FDR-IND')" transform="translate(960, 520)">
+<rect fill="#141c28" height="20" rx="2" stroke="#7bd0ff" stroke-width="1.5" width="16" x="-8" y="-10"></rect>
+<path d="M-5 6 L5 -6" stroke="#10b981" stroke-width="2"></path>
+<!-- Induction Motor Symbol (Circle with M) -->
+<circle cx="0" cy="50" fill="#141c28" r="16" stroke="#7bd0ff" stroke-width="1.5"></circle>
+<text fill="#7bd0ff" font-family="JetBrains Mono" font-size="11" font-weight="700" x="-4" y="54">M</text>
+<text fill="#d3e4fe" font-family="Inter" font-size="10" font-weight="600" x="22" y="44">52-F2 INDUSTRIAL</text>
+<text fill="#7bd0ff" font-family="JetBrains Mono" font-size="9" x="22" y="58">4x 2,500 HP MOTORS</text>
+</g>
+</svg>
+</div>
+<!-- Integrated Mini-Radar CAD Navigator (Bottom-Left) -->
+<div class="absolute bottom-3 left-3 bg-surface-container-lowest/90 backdrop-blur p-2 rounded-lg shadow-xl pointer-events-auto flex flex-col gap-1 w-44">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">GRID RADAR (1,048B)</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary">BAY-3B</span>
+</div>
+<div class="relative w-40 h-24 bg-surface-obsidian rounded overflow-hidden">
+<!-- Mini Representation of Substation Mesh -->
+<svg class="w-full h-full" viewbox="0 0 160 96">
+<!-- Grid Interconnect Trace Lines -->
+<line stroke="#1e293b" stroke-width="1" x1="20" x2="80" y1="20" y2="40"></line>
+<line stroke="#1e293b" stroke-width="1" x1="80" x2="140" y1="40" y2="30"></line>
+<line stroke="#1e293b" stroke-width="1" x1="80" x2="80" y1="40" y2="80"></line>
+<line stroke="#1e293b" stroke-width="1" x1="30" x2="80" y1="70" y2="80"></line>
+<line stroke="#1e293b" stroke-width="1" x1="80" x2="130" y1="80" y2="75"></line>
+<!-- Node clusters -->
+<circle cx="20" cy="20" fill="#a855f7" r="1.5"></circle>
+<circle cx="140" cy="30" fill="#0284c7" r="1.5"></circle>
+<circle cx="30" cy="70" fill="#10b981" r="1.5"></circle>
+<circle cx="130" cy="75" fill="#0284c7" r="1.5"></circle>
+<circle cx="80" cy="40" fill="#7bd0ff" r="2"></circle>
+<circle cx="80" cy="80" fill="#7bd0ff" r="2"></circle>
+<!-- Active Substation 04 Viewport Reticle Box -->
+<rect fill="rgba(2, 132, 199, 0.2)" height="26" stroke="#38bdf8" stroke-dasharray="2 1" stroke-width="1" width="28" x="68" y="32"></rect>
+<circle class="animate-ping" cx="80" cy="48" fill="#ef4444" r="2"></circle>
+</svg>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm text-text-muted truncate">SUB-04 LOCUS: 39.75°N, 104.98°W</span>
+</div>
+<!-- Quick Legend Pill in Canvas Bottom Center -->
+<div class="absolute bottom-3 right-3 lg:right-auto lg:left-52 bg-surface-container-low/85 backdrop-blur px-space-sm py-1 rounded-lg flex items-center gap-3 text-text-muted font-data-mono-sm text-data-mono-sm shadow">
+<span class="flex items-center gap-1"><span class="w-2.5 h-1 bg-voltage-mv rounded"></span>69kV MV</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-1 bg-secondary rounded"></span>13.8kV DIST</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-1 bg-voltage-lv rounded"></span>480V LV</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-duty-fail animate-pulse"></span>FAULT LOCUS</span>
+</div>
+</div>
+<!-- Right-Dock: Engineering Duty Inspector & Symmetrical Matrix Deck -->
+<div class="w-full lg:w-80 bg-surface-container-low flex flex-col transition-all duration-300 shadow-xl overflow-y-auto" id="inspector-dock">
+<!-- Dock Header: Element Badge & Tabs -->
+<div class="bg-surface-container-lowest p-space-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">ACTIVE INSPECTION ELEMENT</span>
+<span class="px-2 py-0.5 rounded bg-duty-pass-container text-duty-pass font-data-mono-sm text-data-mono-sm font-body-bold">DUTY 71.1% PASS</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-text-primary" id="inspectElementTitle">BUS-MAIN (B-481)</span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary bg-surface-elevated px-1.5 py-0.5 rounded">13.80 kV L-L</span>
+</div>
+<!-- 3 Inspector Nav Tabs -->
+<div class="grid grid-cols-3 gap-1 bg-surface-obsidian p-1 rounded-lg mt-1">
+<button class="py-1 font-label-caps text-label-caps bg-surface-elevated text-primary rounded transition-all text-center" id="tab-btn-telemetry" onclick="setInspectorTab('telemetry')" type="button">TELEMETRY</button>
+<button class="py-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-all text-center" id="tab-btn-branches" onclick="setInspectorTab('branches')" type="button">BRANCHES</button>
+<button class="py-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-all text-center" id="tab-btn-sequence" onclick="setInspectorTab('sequence')" type="button">SEQ Z MATRIX</button>
+</div>
+</div>
+<!-- TAB 1: Tabular Telemetry & Breaker Duty Readouts -->
+<div class="p-space-sm space-y-space-sm flex-1" id="inspector-tab-telemetry">
+<!-- Hero Duty Card -->
+<div class="bg-surface-container p-space-sm rounded-lg shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">INTERRUPTING DUTY RATIO</span>
+<span class="font-label-caps text-label-caps text-duty-pass">MARGIN: +11.55 kA</span>
+</div>
+<div class="mt-1 flex items-baseline justify-between">
+<span class="font-data-mono-lg text-data-mono-lg text-text-primary" id="val-fault-curr">28.45 <span class="font-data-mono-sm text-data-mono-sm text-text-muted">kA rms</span></span>
+<span class="font-data-mono-base text-data-mono-base text-text-muted">RATED: 40.00 kA</span>
+</div>
+<!-- Visual Gauge Progress Strip -->
+<div class="w-full bg-surface-obsidian h-2 rounded-full mt-2 overflow-hidden flex">
+<div class="bg-duty-pass h-full rounded-full transition-all duration-500" id="val-gauge-fill" style="width: 71.1%;"></div>
+</div>
+</div>
+<!-- 4-Grid ANSI IEEE C37.010 Parameter Readouts -->
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="bg-surface-container p-space-xs rounded-lg">
+<span class="font-label-caps text-label-caps text-text-muted">PEAK ASYM (1/2 CYC)</span>
+<div class="font-data-mono-base text-data-mono-base text-text-primary mt-0.5" id="val-peak-asym">76.81 <span class="text-text-muted text-[10px]">kA pk</span></div>
+<span class="font-data-mono-sm text-data-mono-sm text-text-disabled">C37 Crest Mult: 2.70</span>
+</div>
+<div class="bg-surface-container p-space-xs rounded-lg">
+<span class="font-label-caps text-label-caps text-text-muted">THEVENIN X/R RATIO</span>
+<div class="font-data-mono-base text-data-mono-base text-secondary mt-0.5" id="val-xr-ratio">18.62</div>
+<span class="font-data-mono-sm text-data-mono-sm text-text-disabled">Tau Decay: 49.4 ms</span>
+</div>
+<div class="bg-surface-container p-space-xs rounded-lg">
+<span class="font-label-caps text-label-caps text-text-muted">MOMENTARY LATCHING</span>
+<div class="font-data-mono-base text-data-mono-base text-text-primary mt-0.5" id="val-momentary">34.22 <span class="text-text-muted text-[10px]">kA rms</span></div>
+<span class="font-data-mono-sm text-data-mono-sm text-text-disabled">Rated: 65.00 kA</span>
+</div>
+<div class="bg-surface-container p-space-xs rounded-lg">
+<span class="font-label-caps text-label-caps text-text-muted">3-CYCLE CONTACT PART</span>
+<div class="font-data-mono-base text-data-mono-base text-text-primary mt-0.5" id="val-contact-part">29.14 <span class="text-text-muted text-[10px]">kA rms</span></div>
+<span class="font-data-mono-sm text-data-mono-sm text-text-disabled">ANSI NACD: 1.024</span>
+</div>
+</div>
+<!-- Protection Relay Setting Summary -->
+<div class="bg-surface-container p-space-sm rounded-lg space-y-1.5 shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">PROTECTION DEVICE</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary">SEL-751 (BAY-3B)</span>
+</div>
+<div class="flex items-center justify-between text-text-primary font-data-mono-sm text-data-mono-sm">
+<span class="text-text-muted">Phase Instantaneous 50P:</span>
+<span>2,400 A (10.0 kA Sec)</span>
+</div>
+<div class="flex items-center justify-between text-text-primary font-data-mono-sm text-data-mono-sm">
+<span class="text-text-muted">Time-Overcurrent 51P:</span>
+<span>U3 Very Inv (TD=2.50)</span>
+</div>
+<div class="flex items-center justify-between text-text-primary font-data-mono-sm text-data-mono-sm">
+<span class="text-text-muted">Trip Delay Clearing:</span>
+<span class="text-voltage-lv">48.0 ms (2.88 cycles)</span>
+</div>
+</div>
+</div>
+<!-- TAB 2: Branch Infeed Ledger (Contributions to Bus-Main Fault) -->
+<div class="p-space-sm space-y-2 hidden" id="inspector-tab-branches">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">INFEED SOURCES (4 ACTIVE)</span>
+<span class="font-label-caps text-label-caps text-primary">TOTAL: 28.45 kA</span>
+</div>
+<!-- Ledger Items -->
+<div class="bg-surface-container p-2 rounded-lg flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-body-bold text-body-bold text-text-primary">1. PJM 69kV Grid Infeed</span>
+<span class="font-data-mono-base text-data-mono-base text-primary">22.80 kA</span>
+</div>
+<div class="flex items-center justify-between font-data-mono-sm text-data-mono-sm text-text-muted">
+<span>Via XFMR-T1 (30 MVA)</span>
+<span class="text-primary font-bold">80.1% SHARE</span>
+</div>
+<div class="w-full bg-surface-obsidian h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 80.1%;"></div>
+</div>
+</div>
+<div class="bg-surface-container p-2 rounded-lg flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-body-bold text-body-bold text-text-primary">2. BESS 10.0 MWh Storage</span>
+<span class="font-data-mono-base text-data-mono-base text-duty-warn">2.40 kA</span>
+</div>
+<div class="flex items-center justify-between font-data-mono-sm text-data-mono-sm text-text-muted">
+<span>Grid-Forming Inverter (3.0 pu peak)</span>
+<span class="text-duty-warn font-bold">8.4% SHARE</span>
+</div>
+<div class="w-full bg-surface-obsidian h-1.5 rounded-full overflow-hidden">
+<div class="bg-duty-warn h-full" style="width: 8.4%;"></div>
+</div>
+</div>
+<div class="bg-surface-container p-2 rounded-lg flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-body-bold text-body-bold text-text-primary">3. Induction Motor Infeed</span>
+<span class="font-data-mono-base text-data-mono-base text-text-primary">2.00 kA</span>
+</div>
+<div class="flex items-center justify-between font-data-mono-sm text-data-mono-sm text-text-muted">
+<span>4x 2500HP Subtransient X''d</span>
+<span>7.0% SHARE</span>
+</div>
+<div class="w-full bg-surface-obsidian h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 7.0%;"></div>
+</div>
+</div>
+<div class="bg-surface-container p-2 rounded-lg flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-body-bold text-body-bold text-text-primary">4. PV Solar Inverter Yard</span>
+<span class="font-data-mono-base text-data-mono-base text-voltage-lv">1.25 kA</span>
+</div>
+<div class="flex items-center justify-between font-data-mono-sm text-data-mono-sm text-text-muted">
+<span>Fast Current-Limit Clamped (1.2 pu)</span>
+<span>4.4% SHARE</span>
+</div>
+<div class="w-full bg-surface-obsidian h-1.5 rounded-full overflow-hidden">
+<div class="bg-voltage-lv h-full" style="width: 4.4%;"></div>
+</div>
+</div>
+</div>
+<!-- TAB 3: Symmetrical Sequence Z Matrix (Pos/Neg/Zero) -->
+<div class="p-space-sm space-y-2 hidden font-data-mono-sm text-data-mono-sm" id="inspector-tab-sequence">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">THEVENIN PU IMPEDANCE (100 MVA BASE)</span>
+<span class="font-data-mono-sm text-data-mono-sm text-secondary">Z_BASE: 1.904 Ω</span>
+</div>
+<!-- Sequence Component Table -->
+<table class="w-full text-left bg-surface-container rounded-lg overflow-hidden">
+<thead class="bg-surface-container-highest text-text-muted font-label-caps text-label-caps">
+<tr>
+<th class="p-1.5">SEQ</th>
+<th class="p-1.5">R (pu)</th>
+<th class="p-1.5">X (pu)</th>
+<th class="p-1.5">|Z| (pu)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-obsidian text-text-primary">
+<tr>
+<td class="p-1.5 text-primary font-bold">Z1 (+)</td>
+<td class="p-1.5">0.0142</td>
+<td class="p-1.5">0.2645</td>
+<td class="p-1.5">0.2649</td>
+</tr>
+<tr>
+<td class="p-1.5 text-secondary font-bold">Z2 (-)</td>
+<td class="p-1.5">0.0142</td>
+<td class="p-1.5">0.2645</td>
+<td class="p-1.5">0.2649</td>
+</tr>
+<tr>
+<td class="p-1.5 text-tertiary font-bold">Z0 (0)</td>
+<td class="p-1.5">0.0210</td>
+<td class="p-1.5">0.3120</td>
+<td class="p-1.5">0.3127</td>
+</tr>
+</tbody>
+</table>
+<!-- Complex Voltage & Symmetrical Currents at Fault -->
+<div class="bg-surface-container p-2 rounded-lg space-y-1">
+<span class="font-label-caps text-label-caps text-text-muted">SYMMETRICAL FAULT CURRENT VECTOR</span>
+<div class="flex items-center justify-between"><span class="text-text-muted">Positive Seq I1:</span><span class="text-primary">28.45 kA ∠ -86.9°</span></div>
+<div class="flex items-center justify-between"><span class="text-text-muted">Negative Seq I2:</span><span class="text-secondary">0.00 kA ∠ 0.0°</span></div>
+<div class="flex items-center justify-between"><span class="text-text-muted">Zero Seq I0:</span><span class="text-tertiary">0.00 kA ∠ 0.0°</span></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Deck: Transient Simulation & Dynamic Contingency Injection Cards -->
+<div class="bg-surface-container-lowest px-space-md py-space-sm shadow-2xl">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-xs mb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-arc-hazard text-[18px]">bolt</span>
+<span class="font-body-bold text-body-bold text-text-primary tracking-wide">DYNAMIC CONTINGENCY INJECTION DECK</span>
+<span class="font-data-mono-sm text-data-mono-sm text-text-muted bg-surface-elevated px-2 py-0.5 rounded">SELECT STUDY CONTINGENCY TO OBSERVE TRANSIENT BUS RESPONSE</span>
+</div>
+<div class="flex items-center gap-space-sm font-data-mono-sm text-data-mono-sm">
+<span class="text-text-muted">CONVERGENCE TOL: <span class="text-primary">0.00010 pu</span></span>
+<span class="text-text-disabled">|</span>
+<span class="text-text-muted">SOLVER CYCLES: <span class="text-secondary">4 (66.7 ms)</span></span>
+</div>
+</div>
+<!-- 4 High-Contrast Contingency Trigger Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-sm">
+<!-- Card 1: 3-Phase Bolted Fault (Active) -->
+<button class="text-left bg-surface-container hover:bg-surface-elevated transition-all p-space-sm rounded-lg ring-1 ring-primary flex flex-col justify-between shadow-sm" id="card-contingency-3ph" onclick="triggerContingency('3PH')" type="button">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-primary">CONTINGENCY 01</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-label-caps text-label-caps font-body-bold">ACTIVE</span>
+</div>
+<div class="mt-1 font-body-bold text-body-bold text-text-primary">3-PHASE BOLTED FAULT</div>
+<div class="mt-2 flex items-baseline justify-between font-data-mono-sm text-data-mono-sm">
+<span class="font-data-mono-base text-data-mono-base text-duty-fail font-bold">28.45 kA</span>
+<span class="text-duty-pass font-bold">DUTY: 71.1% (PASS)</span>
+</div>
+<div class="mt-1 text-text-muted text-[11px] truncate">Worst-case symmetric 3Φ bolted connection at B-481</div>
+</button>
+<!-- Card 2: Single Line-to-Ground (SLG) -->
+<button class="text-left bg-surface-container hover:bg-surface-elevated transition-all p-space-sm rounded-lg flex flex-col justify-between shadow-sm" id="card-contingency-slg" onclick="triggerContingency('SLG')" type="button">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">CONTINGENCY 02</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted font-label-caps text-label-caps">STANDBY</span>
+</div>
+<div class="mt-1 font-body-bold text-body-bold text-text-primary">LINE-TO-GROUND (SLG)</div>
+<div class="mt-2 flex items-baseline justify-between font-data-mono-sm text-data-mono-sm">
+<span class="font-data-mono-base text-data-mono-base text-voltage-mv font-bold">22.18 kA</span>
+<span class="text-duty-pass font-bold">DUTY: 55.4% (PASS)</span>
+</div>
+<div class="mt-1 text-text-muted text-[11px] truncate">Phase A to Ground flashover with solid transformer ground</div>
+</button>
+<!-- Card 3: Line-to-Line (L-L) -->
+<button class="text-left bg-surface-container hover:bg-surface-elevated transition-all p-space-sm rounded-lg flex flex-col justify-between shadow-sm" id="card-contingency-ll" onclick="triggerContingency('LL')" type="button">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">CONTINGENCY 03</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted font-label-caps text-label-caps">STANDBY</span>
+</div>
+<div class="mt-1 font-body-bold text-body-bold text-text-primary">LINE-TO-LINE (L-L UNGROUNDED)</div>
+<div class="mt-2 flex items-baseline justify-between font-data-mono-sm text-data-mono-sm">
+<span class="font-data-mono-base text-data-mono-base text-voltage-mv font-bold">24.64 kA</span>
+<span class="text-duty-pass font-bold">DUTY: 61.6% (PASS)</span>
+</div>
+<div class="mt-1 text-text-muted text-[11px] truncate">Phase B to Phase C short (86.6% of 3-Phase magnitude)</div>
+</button>
+<!-- Card 4: Breaker 52-M1 Tripped / Isolate Bus -->
+<button class="text-left bg-surface-container hover:bg-surface-elevated transition-all p-space-sm rounded-lg flex flex-col justify-between shadow-sm" id="card-contingency-trip" onclick="triggerContingency('TRIP')" type="button">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-muted">CONTINGENCY 04</span>
+<span class="px-1.5 py-0.5 rounded bg-duty-fail-container text-duty-fail font-label-caps text-label-caps">ISOLATE</span>
+</div>
+<div class="mt-1 font-body-bold text-body-bold text-text-primary">TRIP 52-M1 MAIN BREAKER</div>
+<div class="mt-2 flex items-baseline justify-between font-data-mono-sm text-data-mono-sm">
+<span class="font-data-mono-base text-data-mono-base text-voltage-lv font-bold">0.00 kA</span>
+<span class="text-voltage-lv font-bold">DE-ENERGIZED</span>
+</div>
+<div class="mt-1 text-text-muted text-[11px] truncate">Isolates 69kV grid. BESS island mode islanding logic evaluates</div>
+</button>
+</div>
+</div>
+</div>
+<script>
+  let currentZoom = 1.0;
+  let inspectorCollapsed = false;
+  let gridVisible = true;
+  let flowArrowsVisible = true;
+
+  // Track Coordinate movements in real-time
+  function updateCoords(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) * (1200 / rect.width)).toFixed(1);
+    const y = ((event.clientY - rect.top) * (680 / rect.height)).toFixed(1);
+    const coordEl = document.getElementById('cursorCoord');
+    if (coordEl) coordEl.innerText = 'X: ' + x + ' Y: ' + y;
+  }
+
+  // Zoom controls
+  function adjustZoom(delta) {
+    currentZoom = Math.min(Math.max(0.6, currentZoom + delta), 2.2);
+    applyZoom();
+  }
+
+  function resetZoom() {
+    currentZoom = 1.0;
+    applyZoom();
+  }
+
+  function applyZoom() {
+    const svg = document.getElementById('cad-svg');
+    const zoomLabel = document.getElementById('zoomLevel');
+    if (svg) {
+      svg.style.transform = 'scale(' + currentZoom + ')';
+      svg.style.transformOrigin = 'center center';
+      svg.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+    }
+    if (zoomLabel) {
+      zoomLabel.innerText = Math.round(currentZoom * 125) + '%';
+    }
+  }
+
+  // Toggle Inspector Dock (Collapse for ultra wide CAD view)
+  function toggleInspector() {
+    const dock = document.getElementById('inspector-dock');
+    const label = document.getElementById('inspector-toggle-label');
+    inspectorCollapsed = !inspectorCollapsed;
+    
+    if (inspectorCollapsed) {
+      dock.classList.add('hidden');
+      label.innerText = 'EXPAND DOCK';
+    } else {
+      dock.classList.remove('hidden');
+      label.innerText = 'COLLAPSE DOCK';
+    }
+  }
+
+  // Toggle Layout Mode between full CAD and split view
+  function toggleLayoutMode(mode) {
+    const btnCad = document.getElementById('btn-mode-cad');
+    const btnSplit = document.getElementById('btn-mode-split');
+    const dock = document.getElementById('inspector-dock');
+
+    if (mode === 'cad') {
+      btnCad.className = 'px-2.5 py-1 flex items-center gap-1 font-label-caps text-label-caps bg-surface-elevated text-primary rounded transition-colors';
+      btnSplit.className = 'px-2.5 py-1 flex items-center gap-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-colors';
+      dock.classList.add('hidden');
+      inspectorCollapsed = true;
+      document.getElementById('inspector-toggle-label').innerText = 'EXPAND DOCK';
+    } else {
+      btnSplit.className = 'px-2.5 py-1 flex items-center gap-1 font-label-caps text-label-caps bg-surface-elevated text-primary rounded transition-colors';
+      btnCad.className = 'px-2.5 py-1 flex items-center gap-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-colors';
+      dock.classList.remove('hidden');
+      inspectorCollapsed = false;
+      document.getElementById('inspector-toggle-label').innerText = 'COLLAPSE DOCK';
+    }
+  }
+
+  // Inspector Nav Tabs
+  function setInspectorTab(tabName) {
+    const tabs = ['telemetry', 'branches', 'sequence'];
+    tabs.forEach(t => {
+      const content = document.getElementById('inspector-tab-' + t);
+      const btn = document.getElementById('tab-btn-' + t);
+      if (t === tabName) {
+        content.classList.remove('hidden');
+        btn.className = 'py-1 font-label-caps text-label-caps bg-surface-elevated text-primary rounded transition-all text-center';
+      } else {
+        content.classList.add('hidden');
+        btn.className = 'py-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-all text-center';
+      }
+    });
+  }
+
+  // LOD Level Switching
+  function setLOD(lod) {
+    const lods = ['grid', 'sub', 'bay', 'dev'];
+    lods.forEach(l => {
+      const btn = document.getElementById('lod-' + l);
+      if (l === lod) {
+        btn.className = 'px-2 py-1 font-label-caps text-label-caps bg-primary-container text-on-primary-container rounded transition-all';
+      } else {
+        btn.className = 'px-2 py-1 font-label-caps text-label-caps text-text-muted hover:text-text-primary rounded transition-all';
+      }
+    });
+  }
+
+  // Toggle Grid Dot Layer
+  function toggleDotGrid() {
+    const grid = document.getElementById('gridRect');
+    const btn = document.getElementById('toggleGridDot');
+    gridVisible = !gridVisible;
+    if (gridVisible) {
+      grid.setAttribute('fill', 'url(#cadGridDots)');
+      btn.classList.add('text-primary');
+      btn.classList.remove('text-text-muted');
+    } else {
+      grid.setAttribute('fill', 'none');
+      btn.classList.remove('text-primary');
+      btn.classList.add('text-text-muted');
+    }
+  }
+
+  // Toggle Current Direction Markers
+  function toggleFlowArrows() {
+    flowArrowsVisible = !flowArrowsVisible;
+    const btn = document.getElementById('toggleFlowVectors');
+    const svg = document.getElementById('cad-svg');
+    const lines = svg.querySelectorAll('line[marker-end], line[marker-start]');
+    lines.forEach(l => {
+      if (!flowArrowsVisible) {
+        l.dataset.savedMarkerEnd = l.getAttribute('marker-end') || '';
+        l.dataset.savedMarkerStart = l.getAttribute('marker-start') || '';
+        l.removeAttribute('marker-end');
+        l.removeAttribute('marker-start');
+      } else {
+        if (l.dataset.savedMarkerEnd) l.setAttribute('marker-end', l.dataset.savedMarkerEnd);
+        if (l.dataset.savedMarkerStart) l.setAttribute('marker-start', l.dataset.savedMarkerStart);
+      }
+    });
+    if (flowArrowsVisible) {
+      btn.classList.add('text-secondary');
+      btn.classList.remove('text-text-muted');
+    } else {
+      btn.classList.remove('text-secondary');
+      btn.classList.add('text-text-muted');
+    }
+  }
+
+  // Focus and Pulse Fault Center
+  function centerFaultNode() {
+    const locus = document.getElementById('fault-locus-group');
+    if (locus) {
+      locus.classList.remove('animate-bounce');
+      void locus.offsetWidth;
+      locus.classList.add('animate-bounce');
+      setTimeout(() => locus.classList.remove('animate-bounce'), 1200);
+    }
+  }
+
+  // Inspect Element Action when clicking CAD symbols
+  function inspectElement(elemId) {
+    const title = document.getElementById('inspectElementTitle');
+    if (!title) return;
+    if (inspectorCollapsed) toggleInspector();
+
+    if (elemId === 'UTIL-GRID') {
+      title.innerText = 'PJM 69kV UTILITY SOURCE';
+    } else if (elemId === 'XFMR-T1') {
+      title.innerText = 'XFMR-T1 (30 MVA 69:13.8kV)';
+    } else if (elemId === 'BRK-52M1') {
+      title.innerText = 'BREAKER 52-M1 (SEL-751)';
+    } else if (elemId === 'BUS-B481') {
+      title.innerText = 'BUS-MAIN (B-481) 13.8kV';
+    } else if (elemId === 'FDR-BESS') {
+      title.innerText = 'BESS 10.0 MWh STORAGE YARD';
+    } else if (elemId === 'FDR-PV') {
+      title.innerText = 'PV ARRAY 5.0 MVA INVERTER';
+    } else {
+      title.innerText = elemId;
+    }
+  }
+
+  // Interactive Contingency Simulation Switcher
+  function triggerContingency(type) {
+    const cards = ['3ph', 'slg', 'll', 'trip'];
+    cards.forEach(c => {
+      const el = document.getElementById('card-contingency-' + c);
+      if (el) {
+        el.classList.remove('ring-1', 'ring-primary');
+        const badge = el.querySelector('span:nth-child(2)');
+        if (badge) {
+          badge.className = 'px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted font-label-caps text-label-caps';
+          badge.innerText = 'STANDBY';
+        }
+      }
+    });
+
+    const activeCard = document.getElementById('card-contingency-' + type.toLowerCase());
+    if (activeCard) {
+      activeCard.classList.add('ring-1', 'ring-primary');
+      const badge = activeCard.querySelector('span:nth-child(2)');
+      if (badge) {
+        badge.className = 'px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-label-caps text-label-caps font-body-bold';
+        badge.innerText = 'ACTIVE';
+      }
+    }
+
+    const faultCurr = document.getElementById('val-fault-curr');
+    const peakAsym = document.getElementById('val-peak-asym');
+    const momentary = document.getElementById('val-momentary');
+    const contactPart = document.getElementById('val-contact-part');
+    const xrRatio = document.getElementById('val-xr-ratio');
+    const gaugeFill = document.getElementById('val-gauge-fill');
+    const brkBox = document.getElementById('breaker-52m1-box');
+    const brkStem = document.getElementById('breaker-52m1-stem');
+
+    if (type === '3PH') {
+      faultCurr.innerHTML = '28.45 <span class="font-data-mono-sm text-data-mono-sm text-text-muted">kA rms</span>';
+      peakAsym.innerHTML = '76.81 <span class="text-text-muted text-[10px]">kA pk</span>';
+      momentary.innerHTML = '34.22 <span class="text-text-muted text-[10px]">kA rms</span>';
+      contactPart.innerHTML = '29.14 <span class="text-text-muted text-[10px]">kA rms</span>';
+      xrRatio.innerText = '18.62';
+      gaugeFill.style.width = '71.1%';
+      gaugeFill.className = 'bg-duty-pass h-full rounded-full transition-all duration-500';
+      if (brkStem) brkStem.setAttribute('stroke', '#10b981');
+    } else if (type === 'SLG') {
+      faultCurr.innerHTML = '22.18 <span class="font-data-mono-sm text-data-mono-sm text-text-muted">kA rms</span>';
+      peakAsym.innerHTML = '59.88 <span class="text-text-muted text-[10px]">kA pk</span>';
+      momentary.innerHTML = '26.62 <span class="text-text-muted text-[10px]">kA rms</span>';
+      contactPart.innerHTML = '22.75 <span class="text-text-muted text-[10px]">kA rms</span>';
+      xrRatio.innerText = '16.40';
+      gaugeFill.style.width = '55.4%';
+      gaugeFill.className = 'bg-duty-pass h-full rounded-full transition-all duration-500';
+      if (brkStem) brkStem.setAttribute('stroke', '#10b981');
+    } else if (type === 'LL') {
+      faultCurr.innerHTML = '24.64 <span class="font-data-mono-sm text-data-mono-sm text-text-muted">kA rms</span>';
+      peakAsym.innerHTML = '66.52 <span class="text-text-muted text-[10px]">kA pk</span>';
+      momentary.innerHTML = '29.57 <span class="text-text-muted text-[10px]">kA rms</span>';
+      contactPart.innerHTML = '25.20 <span class="text-text-muted text-[10px]">kA rms</span>';
+      xrRatio.innerText = '18.62';
+      gaugeFill.style.width = '61.6%';
+      gaugeFill.className = 'bg-duty-pass h-full rounded-full transition-all duration-500';
+      if (brkStem) brkStem.setAttribute('stroke', '#10b981');
+    } else if (type === 'TRIP') {
+      faultCurr.innerHTML = '0.00 <span class="font-data-mono-sm text-data-mono-sm text-text-muted">kA rms</span>';
+      peakAsym.innerHTML = '0.00 <span class="text-text-muted text-[10px]">kA pk</span>';
+      momentary.innerHTML = '0.00 <span class="text-text-muted text-[10px]">kA rms</span>';
+      contactPart.innerHTML = '0.00 <span class="text-text-muted text-[10px]">kA rms</span>';
+      xrRatio.innerText = '0.00';
+      gaugeFill.style.width = '0%';
+      // Breaker Trip visual feedback
+      if (brkStem) brkStem.setAttribute('stroke', '#ef4444');
+    }
+  }
+</script></main></div><footer class="fixed bottom-0 left-0 right-0 h-7 bg-surface-container-lowest z-50 px-space-md flex items-center justify-between"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-xs"><span class="w-1.5 h-1.5 rounded-full bg-voltage-lv"></span><span class="font-data-mono-sm text-data-mono-sm text-text-primary">64-BIT SPARSE LU SOLVER ENGINE READY</span></div><div class="hidden md:flex items-center gap-space-xs text-text-muted"><span class="font-label-caps text-label-caps">COMPLIANCE:</span><span class="font-data-mono-sm text-data-mono-sm text-text-primary">IEEE 141 / 242 / 399 / 1584 &amp; NFPA 70E</span></div></div><div class="flex items-center gap-space-md"><span class="font-data-mono-sm text-data-mono-sm text-text-muted">MEMORY: <span class="text-primary">118.4 MB</span></span><span class="text-text-disabled text-xs">|</span><span class="font-data-mono-sm text-data-mono-sm text-text-muted">TOLERANCE: <span class="text-secondary">10⁻⁶ PU</span></span><span class="text-text-disabled text-xs">|</span><span class="font-label-caps text-label-caps text-text-muted">ACTIVE STUDY SESSION</span></div></footer></body></html>

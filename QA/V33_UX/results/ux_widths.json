@@ -1,0 +1,2564 @@
+{
+ "widths": {
+  "360": {
+   "tabs": [
+    {
+     "tab": "Main studio",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 IEEE 1584",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2211 IEC study methods (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u223f Harmonic network (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "\u2601 Cloud Vault",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "fcs-original-backup"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "Operations study lab \u00b7 time-series load flow",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Fault label & Z tolerance",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 all buses",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "v29af-bracket"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "Conductor sizing",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 7,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "Harmonics & PF correction",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "Conductor I\u00b2t duty",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "\u2726 Study guide",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "Study setup",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 4,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-settings-assumeZ2",
+       "field-settings-auto"
+      ],
+      "textUnder12px": 28
+     }
+    },
+    {
+     "tab": "Equipment table",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 21
+     }
+    },
+    {
+     "tab": "Build plant",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 15,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "kind",
+       "mainBreaker",
+       "feederBreakers"
+      ],
+      "textUnder12px": 21
+     }
+    }
+   ]
+  },
+  "768": {
+   "tabs": [
+    {
+     "tab": "Main studio",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 IEEE 1584",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "\u2211 IEC study methods (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "\u223f Harmonic network (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2601 Cloud Vault",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "fcs-original-backup"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Operations study lab \u00b7 time-series load flow",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "Fault label & Z tolerance",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 all buses",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "v29af-bracket"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Conductor sizing",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 7,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Harmonics & PF correction",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Conductor I\u00b2t duty",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2726 Study guide",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 24
+     }
+    },
+    {
+     "tab": "Study setup",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 4,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-settings-assumeZ2",
+       "field-settings-auto"
+      ],
+      "textUnder12px": 29
+     }
+    },
+    {
+     "tab": "Equipment table",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Build plant",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 15,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "kind",
+       "mainBreaker",
+       "feederBreakers"
+      ],
+      "textUnder12px": 22
+     }
+    }
+   ]
+  },
+  "1280": {
+   "tabs": [
+    {
+     "tab": "Main studio",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 IEEE 1584",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "\u2211 IEC study methods (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "\u223f Harmonic network (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2601 Cloud Vault",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "fcs-original-backup"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Operations study lab \u00b7 time-series load flow",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "Fault label & Z tolerance",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 all buses",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "v29af-bracket"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Conductor sizing",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 7,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Harmonics & PF correction",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Conductor I\u00b2t duty",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2726 Study guide",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 24
+     }
+    },
+    {
+     "tab": "Study setup",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 4,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-settings-assumeZ2",
+       "field-settings-auto"
+      ],
+      "textUnder12px": 29
+     }
+    },
+    {
+     "tab": "Equipment table",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Build plant",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 15,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "kind",
+       "mainBreaker",
+       "feederBreakers"
+      ],
+      "textUnder12px": 22
+     }
+    }
+   ]
+  },
+  "1440": {
+   "tabs": [
+    {
+     "tab": "Main studio",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 IEEE 1584",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "\u2211 IEC study methods (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "\u223f Harmonic network (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2601 Cloud Vault",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "fcs-original-backup"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Operations study lab \u00b7 time-series load flow",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "Fault label & Z tolerance",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 all buses",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "v29af-bracket"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Conductor sizing",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 7,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Harmonics & PF correction",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Conductor I\u00b2t duty",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2726 Study guide",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 24
+     }
+    },
+    {
+     "tab": "Study setup",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 4,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-settings-assumeZ2",
+       "field-settings-auto"
+      ],
+      "textUnder12px": 29
+     }
+    },
+    {
+     "tab": "Equipment table",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Build plant",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 15,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "kind",
+       "mainBreaker",
+       "feederBreakers"
+      ],
+      "textUnder12px": 22
+     }
+    }
+   ]
+  },
+  "1920": {
+   "tabs": [
+    {
+     "tab": "Main studio",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 IEEE 1584",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "\u2211 IEC study methods (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "\u223f Harmonic network (beta)",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2601 Cloud Vault",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "fcs-original-backup"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Operations study lab \u00b7 time-series load flow",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 23
+     }
+    },
+    {
+     "tab": "Fault label & Z tolerance",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Arc flash \u00b7 all buses",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "v29af-bracket"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Conductor sizing",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 7,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Harmonics & PF correction",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 6,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "INPUT"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Conductor I\u00b2t duty",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "\u2726 Study guide",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 24
+     }
+    },
+    {
+     "tab": "Study setup",
+     "axe": [
+      {
+       "id": "label-content-name-mismatch",
+       "impact": "serious",
+       "nodes": 7,
+       "sample": [
+        ".transformer",
+        ".cable"
+       ]
+      },
+      {
+       "id": "nested-interactive",
+       "impact": "serious",
+       "nodes": 3,
+       "sample": [
+        ".v30-mv",
+        "g[transform=\"translate(100 460)\"]"
+       ]
+      }
+     ],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 4,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-settings-assumeZ2",
+       "field-settings-auto"
+      ],
+      "textUnder12px": 29
+     }
+    },
+    {
+     "tab": "Equipment table",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 5,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude"
+      ],
+      "textUnder12px": 22
+     }
+    },
+    {
+     "tab": "Build plant",
+     "axe": [],
+     "layout": {
+      "pageOverflowPx": 0,
+      "clippedElements": 0,
+      "targetsUnder24px": 15,
+      "targetSamples": [
+       "repeat-placement",
+       "edit-after-place",
+       "field-example-utility-enabled",
+       "field-example-utility-maxInclude",
+       "field-example-utility-minInclude",
+       "kind",
+       "mainBreaker",
+       "feederBreakers"
+      ],
+      "textUnder12px": 22
+     }
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "transformers": 70,
+ "C2 add breaker page free s": 1.27,
+ "C2 add breaker result s": 5.49,
+ "C1 undo page free s": 1.72,
+ "C1 undo result s": 5.4,
+ "C1 redo page free s": 1.47,
+ "C1 redo result s": 4.92,
+ "C5 envelope open s": 0.07,
+ "C5 envelope run s": 6.52,
+ "C5 status": "Envelope calculated from the open Studio project.",
+ "C6 dialog open s": 0.07,
+ "C6 run s": 5.13,
+ "C6 device types": [
+  "manual",
+  "iec",
+  "ieee",
+  "dt",
+  "lsi",
+  "curve"
+ ],
+ "C6 picker open s": 3.87,
+ "C6 picker save s": 3.7,
+ "C6 saved text": "IEC Standard Inverse (C1) \u00b7 pickup 400 A \u00b7 dial 0.2",
+ "C3 dc summary": "1152 strings \u00b7 48 combiner boxes \u00b7 2404 buses \u00b7 1200 protective devices",
+ "C3 dc build+calc s": 4.82,
+ "C3 dc buses": 2404,
+ "C3 dc recalculate s": 3.18,
+ "page errors": []
+}

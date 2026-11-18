@@ -1,0 +1,128 @@
+{
+  "method": "transformer-z-tolerance-envelope-v29",
+  "createdAt": "2026-11-08T09:48:04.721Z",
+  "inputs": {
+    "projectName": "12 kV → 208 V · Worked example",
+    "tolerancePercent": 7.5,
+    "buses": 3,
+    "transformers": 1,
+    "faultType": "3phase",
+    "scenario": "base"
+  },
+  "outputs": {
+    "status": "CALCULATED",
+    "method": "transformer-z-tolerance-envelope-v29",
+    "version": "29.0.0",
+    "tolerancePercent": 7.5,
+    "transformerCount": 1,
+    "searchedCases": "all 2 +/- tolerance combinations",
+    "scope": "Selected-fault results from the existing Studio network engine, repeated with each enabled transformer nameplate %Z scaled by (1 - tolerance) or (1 + tolerance); X/R is kept. Per bus, the largest and smallest results over the nameplate case and the searched combinations are reported with the governing combination. Lower %Z does not always raise every bus current: with generator or motor contributions, a stiffer transformer can divert their current, so the extremes are searched rather than assumed.",
+    "limitations": [
+      "Applies one common tolerance magnitude; tested impedance from a certified test report supersedes this envelope.",
+      "Extremes are searched at tolerance corners only; with mixed sources a true extreme can occasionally lie between corners (difference is typically well below the tolerance effect).",
+      "Does not change utility maximum/minimum strength settings; use Study setup scenarios for source variation.",
+      "Not an ANSI C37 or IEC 60909 equipment-duty certification and not a PPE or arc-flash determination."
+    ],
+    "reference": [
+      "IEEE C57.12.00: two-winding transformer impedance tolerance of +/-7.5 % of nameplate (user-selectable here).",
+      "Eaton Bussmann point-to-point method: multiply transformer %Z by 0.9 for a worst-case available fault current.",
+      "NFPA 70 (NEC) 110.24(A): field-marked maximum available fault current with the date the calculation was performed."
+    ],
+    "issues": [],
+    "buses": [
+      {
+        "busId": "bus-89130f2a-1441-4718-b103-979b825bc91f",
+        "busName": "Utility / POI",
+        "voltageV": 12000,
+        "nominal": {
+          "status": "CALCULATED",
+          "totalA": 3400.0000000000005,
+          "xr": 8.000000000000002,
+          "peakA": 8143.109400350162
+        },
+        "maximumWithTolerance": {
+          "status": "CALCULATED",
+          "totalA": 3400.0000000000014,
+          "xr": 8,
+          "peakA": 8143.109400350164,
+          "governingCase": "12 kV / 208 V transformer: -7.5 %"
+        },
+        "minimumWithTolerance": {
+          "status": "CALCULATED",
+          "totalA": 3400.0000000000005,
+          "xr": 8.000000000000002,
+          "peakA": 8143.109400350162,
+          "governingCase": "nameplate"
+        },
+        "maximumIncreasePercent": 2.220446049250313e-14,
+        "minimumDecreasePercent": 0
+      },
+      {
+        "busId": "bus-596d2a69-f8c4-4d66-abed-82b480094d1b",
+        "busName": "208 V transformer secondary",
+        "voltageV": 208,
+        "nominal": {
+          "status": "CALCULATED",
+          "totalA": 32725.85775961685,
+          "xr": 8.000000000000014,
+          "peakA": 78379.48234025245
+        },
+        "maximumWithTolerance": {
+          "status": "CALCULATED",
+          "totalA": 34907.10397060491,
+          "xr": 7.999999999999999,
+          "peakA": 83603.63720059802,
+          "governingCase": "12 kV / 208 V transformer: -7.5 %"
+        },
+        "minimumWithTolerance": {
+          "status": "CALCULATED",
+          "totalA": 30801.17917752866,
+          "xr": 8.000000000000018,
+          "peakA": 73769.81520658922,
+          "governingCase": "12 kV / 208 V transformer: +7.5 %"
+        },
+        "maximumIncreasePercent": 6.665207149068775,
+        "minimumDecreasePercent": 5.881216609280793
+      },
+      {
+        "busId": "bus-3ad7d67a-0262-48b2-9aa0-c608ac9a9a37",
+        "busName": "Main panel",
+        "voltageV": 208,
+        "nominal": {
+          "status": "CALCULATED",
+          "totalA": 16706.17335282207,
+          "xr": 1.266220695569668,
+          "peakA": 26264.644475141395
+        },
+        "maximumWithTolerance": {
+          "status": "CALCULATED",
+          "totalA": 17172.445067428267,
+          "xr": 1.2229569887423921,
+          "peakA": 26818.687532828295,
+          "governingCase": "12 kV / 208 V transformer: -7.5 %"
+        },
+        "minimumWithTolerance": {
+          "status": "CALCULATED",
+          "totalA": 16260.23367548939,
+          "xr": 1.3089355272786227,
+          "peakA": 25733.025633135745,
+          "governingCase": "12 kV / 208 V transformer: +7.5 %"
+        },
+        "maximumIncreasePercent": 2.7910144636888568,
+        "minimumDecreasePercent": 2.669310726728147
+      }
+    ],
+    "nec11024Label": {
+      "title": "MAXIMUM AVAILABLE FAULT CURRENT",
+      "equipment": "MDP-1",
+      "voltage": 208,
+      "availableFaultA": 17172.445067428267,
+      "availableFaultText": "17.17 kA",
+      "xr": 1.2229569887423921,
+      "basis": "Transformer impedance reduced by 7.5 % (worst case)",
+      "dateOfCalculation": "2026-11-08",
+      "calculatedBy": "",
+      "reference": "NEC 110.24(A) field marking. Re-calculate and re-mark when modifications change the available fault current (NEC 110.24(B))."
+    }
+  }
+}

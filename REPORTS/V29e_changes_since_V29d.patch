@@ -1,0 +1,647 @@
+diff --git a/SITE/arcflash-network-ui-v29.mjs b/SITE/arcflash-network-ui-v29.mjs
+index 8a727e5..d1cdfe3 100644
+--- a/SITE/arcflash-network-ui-v29.mjs
++++ b/SITE/arcflash-network-ui-v29.mjs
+@@ -1,15 +1,16 @@
+ /** V29 incremental UI: IEEE 1584-2018 arc flash at every bus. Reads the Studio draft read-only; stores only its own per-bus inputs. */
+-import {networkArcFlashStudy,arcFlashLabel,EQUIPMENT_CLASSES,AF_NETWORK_V29} from './arcflash-network-v29.mjs';
++import {networkArcFlashStudy,arcFlashLabel,EQUIPMENT_CLASSES,AF_NETWORK_V29} from './arcflash-network-v29.mjs?v=20261108-v29e';
+ import {advancedStudyReportBlob} from './advanced-study-report.mjs';
+-import {IEC_CURVES,IEEE_CURVES,BREAKER_CYCLES,describeDevice,clearingTime} from './clearing-time-v29.mjs';
++import {IEC_CURVES,IEEE_CURVES,BREAKER_CYCLES,describeDevice,clearingTime} from './clearing-time-v29.mjs?v=20261108-v29e';
++import {TCC_CURVES,TCC_LIBRARY_V29,curveCsv} from './tcc-library-v29.mjs?v=20261108-v29e';
+ const DRAFT='fault-network-draft-v2',KEY='fault-studio-arcflash-network-v29';
+ const ECS=['VCB','VCBB','HCB','VOA','HOA'];
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const n=(x,d=2)=>Number.isFinite(x)?x.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+ const volts=v=>Number.isFinite(v)?(v>=1000?n(v/1000,3).replace(/\.?0+$/,'')+' kV':v+' V'):'—';
+-let state={project:null,study:null,devices:{}};
+-const DEVICE_TYPES=[['manual','Type clearing times'],['iec','Relay – IEC curve'],['ieee','Relay – IEEE curve'],['dt','Relay – definite time / instantaneous'],['curve','Fuse / breaker – manufacturer curve']];
+-const devType=d=>!d||d.type==='manual'?'manual':d.type==='curve'?'curve':d.standard==='IEC'?'iec':d.standard==='IEEE'?'ieee':'dt';
++let state={project:null,study:null,devices:{},oneLine:{},src:{}};
++const DEVICE_TYPES=[['manual','Type clearing times'],['iec','Relay – IEC curve'],['ieee','Relay – IEEE curve'],['dt','Relay – definite time / instantaneous'],['lsi','LV breaker – electronic trip (LSI settings)'],['curve','Fuse / breaker – manufacturer curve']];
++const devType=d=>!d||d.type==='manual'?'manual':d.type==='curve'?'curve':d.type==='lsi'?'lsi':d.standard==='IEC'?'iec':d.standard==='IEEE'?'ieee':'dt';
+ 
+ export function dockLauncher(btn){
+  const tryDock=()=>{const h=document.getElementById('v26-launcher-holder');if(h&&btn.parentElement!==h){h.append(btn);btn.style.position='static';btn.style.margin='4px';return true}return !!h};
+@@ -37,7 +38,8 @@ function mount(){
+  $('#v29af-date').value=new Date().toISOString().slice(0,10);
+  let lastFocus=null;const open=()=>{lastFocus=document.activeElement;ov.hidden=false;$('[data-af=run]').focus()};const close=()=>{ov.hidden=true;lastFocus?.focus?.()};
+  btn.addEventListener('click',open);ov.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();close()}});ov.addEventListener('click',e=>{if(e.target===ov)close()});
+- const collect=()=>{const inp={};ov.querySelectorAll('tr[data-bus]').forEach(tr=>{const id=tr.dataset.bus,v=k=>tr.querySelector(`[data-k="${k}"]`);const num=k=>{const x=v(k)?.value;return x===''||x==null?undefined:Number(x)};inp[id]={include:v('include').checked,equipmentClass:v('equipmentClass').value,electrodeConfiguration:v('electrodeConfiguration').value,clearingFullMS:num('clearingFullMS'),clearingReducedMS:num('clearingReducedMS'),clearingSource:v('clearingSource').value,gapMM:num('gapMM'),workingDistanceMM:num('workingDistanceMM'),device:state.devices[id]&&state.devices[id].type!=='manual'?state.devices[id]:undefined}});return inp};
++ const collect=()=>{const inp={};ov.querySelectorAll('tr[data-bus]').forEach(tr=>{const id=tr.dataset.bus,v=k=>tr.querySelector(`[data-k="${k}"]`);const num=k=>{const x=v(k)?.value;return x===''||x==null?undefined:Number(x)};inp[id]={include:v('include').checked,equipmentClass:v('equipmentClass').value,electrodeConfiguration:v('electrodeConfiguration').value,clearingFullMS:num('clearingFullMS'),clearingReducedMS:num('clearingReducedMS'),clearingSource:v('clearingSource').value,gapMM:num('gapMM'),workingDistanceMM:num('workingDistanceMM'),device:state.src[id]!=='sld'&&state.devices[id]&&state.devices[id].type!=='manual'?state.devices[id]:undefined,deviceSource:state.src[id]}});return inp};
++ const rowType=(r,i={})=>{const ol=r.oneLine?.primary;const s=state.src[r.busId];if(s==='sld'&&ol)return 'sld';if(s==null&&ol&&!state.devices[r.busId]&&!(Number.isFinite(i.clearingFullMS)&&Number.isFinite(i.clearingReducedMS)))return 'sld';return devType(state.devices[r.busId])};
+  const render=(study,inputs)=>{
+   const cls=Object.keys(EQUIPMENT_CLASSES);
+   const rows=study.rows.map(r=>{const i=inputs[r.busId]||{},g=r.geometry||{};const stCls=r.status==='CALCULATED'?'ok':'bad';
+@@ -45,8 +47,8 @@ function mount(){
+    <td><select data-k="equipmentClass" aria-label="Equipment class">${cls.map(c=>`<option ${c===(g.equipmentClass||i.equipmentClass)?'selected':''}>${esc(c)}</option>`).join('')}</select><br><select data-k="electrodeConfiguration" aria-label="Electrode configuration">${ECS.map(c=>`<option ${c===(g.electrodeConfiguration||i.electrodeConfiguration||'VCB')?'selected':''}>${c}</option>`).join('')}</select></td>
+    <td><input type="number" data-k="gapMM" step="any" placeholder="${esc(g.gapMM??'')}" value="${esc(i.gapMM??'')}" aria-label="Gap mm"> mm gap<br><input type="number" data-k="workingDistanceMM" step="any" placeholder="${esc(g.workingDistanceMM??'')}" value="${esc(i.workingDistanceMM??'')}" aria-label="Working distance mm"> mm WD</td>
+    <td>Full ${n(r.cases?.[0]?.arcingCurrentKA??r.arcingCurrentFullKA,2)} kA<br>Reduced ${n(r.cases?.[1]?.arcingCurrentKA??r.arcingCurrentReducedKA,2)} kA</td>
+-   <td>${(()=>{const d=state.devices[r.busId],t=devType(d);return `<select data-dev-type="${esc(r.busId)}" aria-label="Protective device for ${esc(r.busName)}">${DEVICE_TYPES.map(([v,l])=>`<option value="${v}" ${v===t?'selected':''}>${l}</option>`).join('')}</select>${t!=='manual'?`<br><button type="button" data-dev-edit="${esc(r.busId)}">Settings…</button><br><small>${esc(describeDevice(d))}</small>`:''}`})()}</td>
+-   <td>${devType(state.devices[r.busId])!=='manual'?(r.device?`${n(r.device.full?.ms,0)} ms full<br>${n(r.device.reduced?.ms,0)} ms reduced<br><small>from device</small>`:'<small>from device after Run</small>'):`<input type="number" data-k="clearingFullMS" min="1" max="2000" step="any" value="${esc(i.clearingFullMS??'')}" aria-label="Clearing time at full arcing current ms"> ms full<br><input type="number" data-k="clearingReducedMS" min="1" max="2000" step="any" value="${esc(i.clearingReducedMS??'')}" aria-label="Clearing time at reduced arcing current ms"> ms reduced`}</td>
++   <td>${(()=>{const ol=r.oneLine?.primary,t=rowType(r,i),d=t==='sld'?state.oneLine[ol.deviceId]:state.devices[r.busId];const opts=(ol?[['sld',`One-line: ${ol.name}${Number.isFinite(ol.sharePercent)?` (${n(ol.sharePercent,0)} % of fault)`:''}`]]:[]).concat(DEVICE_TYPES);return `<select data-dev-type="${esc(r.busId)}" aria-label="Protective device for ${esc(r.busName)}">${opts.map(([v,l])=>`<option value="${v}" ${v===t?'selected':''}>${esc(l)}</option>`).join('')}</select>${t!=='manual'?`<br><button type="button" data-dev-edit="${esc(r.busId)}">Settings…</button><br><small>${d?esc(describeDevice(d)):'<span class="bad">settings not entered</span>'}${t==='sld'?' · shared by every bus this device protects':''}</small>`:''}${!ol&&r.oneLine?`<br><small>${esc(r.oneLine.status==='FOUND'?'':'No breaker/fuse upstream on the one-line')}</small>`:''}`})()}</td>
++   <td>${rowType(r,i)!=='manual'?(r.device?`${n(r.device.full?.ms,0)} ms full<br>${n(r.device.reduced?.ms,0)} ms reduced<br><small>from device</small>`:'<small>from device after Run</small>'):`<input type="number" data-k="clearingFullMS" min="1" max="2000" step="any" value="${esc(i.clearingFullMS??'')}" aria-label="Clearing time at full arcing current ms"> ms full<br><input type="number" data-k="clearingReducedMS" min="1" max="2000" step="any" value="${esc(i.clearingReducedMS??'')}" aria-label="Clearing time at reduced arcing current ms"> ms reduced`}</td>
+    <td><input data-k="clearingSource" maxlength="200" placeholder="Device + curve / setting" value="${esc(i.clearingSource??'')}" aria-label="Clearing time source"></td>
+    <td>${r.status==='CALCULATED'?`<strong>${n(r.incidentEnergyCalPerCm2,2)}</strong> cal/cm²<br>AFB ${n(r.arcFlashBoundaryMM,0)} mm<br><small>${esc(r.governingCase)} case governs</small>`:'—'}</td><td class="${stCls}">${esc(r.status)}${r.note?`<br><small style="font-weight:400">${esc(r.note)}</small>`:''}</td></tr>`}).join('');
+   $('#v29af-table').innerHTML=`<table class="grid"><thead><tr><th>Use</th><th>Bus</th><th>Bolted</th><th>Equipment / electrodes</th><th>Override</th><th>Arcing current</th><th>Protective device</th><th>Clearing times</th><th>Source of times</th><th>Result</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>`;
+@@ -56,49 +58,56 @@ function mount(){
+  devDlg.style.cssText='position:fixed;inset:0;z-index:4900;display:flex;align-items:center;justify-content:center;background:#0009;padding:8px';
+  ov.append(devDlg);let devBus=null;
+  const fld=(k,l,v,extra='')=>`<label style="display:flex;flex-direction:column;font-size:12px;gap:2px">${l}<input data-dv="${k}" type="number" step="any" value="${esc(v??'')}" ${extra}></label>`;
+- const openDev=(bus,type)=>{devBus=bus;const d={...(state.devices[bus]||{})};const t=type||devType(d);const name=state.study?.rows.find(r=>r.busId===bus)?.busName||bus;
++ let devTarget=null;
++ const openDev=(bus,type)=>{devBus=bus;const row=state.study?.rows.find(r=>r.busId===bus),ol=row?.oneLine?.primary,sld=rowType(row||{busId:bus})==='sld'&&ol;devTarget=sld?ol.deviceId:null;
++  const d={...((sld?state.oneLine[ol.deviceId]:state.devices[bus])||{})};const t=type||(Object.keys(d).length?devType(d):'ieee');const name=sld?`${ol.name} (on the one-line; used for every bus it protects)`:(row?.busName||bus);
+   const curves=t==='iec'?IEC_CURVES:t==='ieee'?IEEE_CURVES:null;
+   devDlg.innerHTML=`<section style="background:#fff;color:#14283a;border-radius:12px;padding:16px;width:min(620px,100%);max-height:92dvh;overflow:auto"><h3 id="v29af-dev-title" style="margin:0 0 6px">Protective device for ${esc(name)}</h3>
+   <p style="font-size:12px;margin:0 0 8px">Pick the device that clears a fault at this bus and enter its settings from the protection study or the device nameplate. The clearing time is calculated at the full and reduced arcing currents.</p>
+-  <input type="hidden" data-dv-type value="${t}"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px">
++  ${sld?`<label style="display:flex;flex-direction:column;font-size:12px;gap:2px;max-width:320px">Device type<select data-dv-kind>${DEVICE_TYPES.filter(x=>x[0]!=='manual').map(([v,l])=>`<option value="${v}" ${v===t?'selected':''}>${esc(l)}</option>`).join('')}</select></label>`:''}<input type="hidden" data-dv-type value="${t}"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px">
+   ${curves?`<label style="display:flex;flex-direction:column;font-size:12px;gap:2px">Curve<select data-dv="curve">${Object.entries(curves).map(([k,c])=>`<option value="${k}" ${d.curve===k?'selected':''}>${esc(c.label)}</option>`).join('')}</select></label>${fld('pickupA','Pickup, primary A (CT ratio × secondary pickup)',d.pickupA)}${fld('dial',t==='iec'?'TMS':'Time dial (TD)',d.dial)}`:''}
+-  ${t==='curve'?`<label style="display:flex;flex-direction:column;font-size:12px;gap:2px;grid-column:1/-1">Device model (exact)<input data-dvs="model" value="${esc(d.model||'')}" maxlength="120"></label><label style="display:flex;flex-direction:column;font-size:12px;gap:2px;grid-column:1/-1">Total-clearing curve from the datasheet: one row per point — current A, minimum s, maximum s<textarea data-dvs="csv" rows="6" placeholder="1000, 0.8, 1.2&#10;2000, 0.12, 0.2&#10;5000, 0.012, 0.02">${esc(d.csv||'')}</textarea></label>`:''}
+-  ${t!=='curve'?`${fld('instPickupA','Instantaneous (50) pickup, primary A — blank if none',d.instPickupA)}${fld('instDelayS','Instantaneous delay, s',d.instDelayS)}${fld('dtPickupA','Definite-time pickup, primary A — blank if none',d.dtPickupA)}${fld('dtDelayS','Definite-time delay, s',d.dtDelayS)}`:''}
+-  <label style="display:flex;flex-direction:column;font-size:12px;gap:2px">Breaker time<select data-dvs="breakerMode"><option value="cycles" ${(d.breakerMode||(t==='curve'?'none':'cycles'))==='cycles'?'selected':''}>Rated interrupting time (cycles)</option><option value="ms" ${d.breakerMode==='ms'?'selected':''}>Typed in ms</option><option value="none" ${(d.breakerMode||(t==='curve'?'none':''))==='none'?'selected':''}>None — curve is total clearing</option></select></label>
++  ${t==='lsi'?`${fld('inA','Trip unit / sensor rating In, A',d.inA)}${fld('irMult','Long-time pickup Ir, × In',d.irMult)}${fld('ltDelayS','Long-time delay at 6 × Ir, s',d.ltDelayS)}${fld('sdMult','Short-time pickup Isd, × Ir (blank if off)',d.sdMult)}${fld('sdDelayS','Short-time delay, s',d.sdDelayS)}${fld('iiMult','Instantaneous pickup Ii, × In (blank if off)',d.iiMult)}${fld('instClearMs','Total clearing time at instantaneous, ms (manufacturer)',d.instClearMs)}${fld('clearAddMs','Extra clearing time added to long/short-time bands, ms',d.clearAddMs)}`:''}
++  ${t==='curve'?`<label style="display:flex;flex-direction:column;font-size:12px;gap:2px;grid-column:1/-1">Published plot points (optional)<select data-dv-lib><option value="">— type the curve below —</option>${TCC_CURVES.map(c=>`<option value="${esc(c.id)}">${esc(c.manufacturer+' · '+c.family+' · '+c.rating+' · '+c.curve)}</option>`).join('')}</select></label><label style="display:flex;flex-direction:column;font-size:12px;gap:2px;grid-column:1/-1">Device model (exact)<input data-dvs="model" value="${esc(d.model||'')}" maxlength="120"></label><label style="display:flex;flex-direction:column;font-size:12px;gap:2px;grid-column:1/-1">Total-clearing curve from the datasheet: one row per point — current A, minimum s, maximum s (or current A, maximum clearing s)<textarea data-dvs="csv" rows="6" placeholder="1000, 0.8, 1.2&#10;2000, 0.12, 0.2&#10;5000, 0.012, 0.02">${esc(d.csv||'')}</textarea></label>`:''}
++  ${!['curve','lsi'].includes(t)?`${fld('instPickupA','Instantaneous (50) pickup, primary A — blank if none',d.instPickupA)}${fld('instDelayS','Instantaneous delay, s',d.instDelayS)}${fld('dtPickupA','Definite-time pickup, primary A — blank if none',d.dtPickupA)}${fld('dtDelayS','Definite-time delay, s',d.dtDelayS)}`:''}
++  ${t!=='lsi'?`<label style="display:flex;flex-direction:column;font-size:12px;gap:2px">Breaker time<select data-dvs="breakerMode"><option value="cycles" ${(d.breakerMode||(t==='curve'?'none':'cycles'))==='cycles'?'selected':''}>Rated interrupting time (cycles)</option><option value="ms" ${d.breakerMode==='ms'?'selected':''}>Typed in ms</option><option value="none" ${(d.breakerMode||(t==='curve'?'none':''))==='none'?'selected':''}>None — curve is total clearing</option></select></label>
+   <label style="display:flex;flex-direction:column;font-size:12px;gap:2px">Rated cycles<select data-dv="breakerCycles">${BREAKER_CYCLES.map(c=>`<option ${Number(d.breakerCycles)===c?'selected':''}>${c}</option>`).join('')}</select></label>
+   <label style="display:flex;flex-direction:column;font-size:12px;gap:2px">Frequency<select data-dv="frequencyHz"><option ${Number(d.frequencyHz||60)===60?'selected':''}>60</option><option ${Number(d.frequencyHz)===50?'selected':''}>50</option></select></label>
+-  ${fld('breakerMs','Breaker time, ms (if typed)',d.breakerMs)}${fld('sharePercent','Share of bus arcing current through this device, %',d.sharePercent??100,'min="1" max="100"')}
++  ${fld('breakerMs','Breaker time, ms (if typed)',d.breakerMs)}`:''}${fld('sharePercent',sld?'Share of arcing current through this device, % (blank = from the fault study)':'Share of bus arcing current through this device, %',sld?d.sharePercent:(d.sharePercent??100),'min="1" max="100"')}
++  ${t!=='curve'?`${fld('tolPickupPercent','Tolerance: pickup ± % (relay manual)',d.tolPickupPercent)}${fld('tolTimePercent','Tolerance: operate time ± %',d.tolTimePercent)}${fld('tolTimeMs','Tolerance: operate time ± ms (larger of % or ms used)',d.tolTimeMs)}`:''}
+   <label style="font-size:12px;display:flex;gap:6px;align-items:center;grid-column:1/-1"><input type="checkbox" data-dvc="capAt2s" ${d.capAt2s?'checked':''}> Limit arc duration to 2 s (only if a person could move away; IEEE 1584-2018 guidance)</label>
+   </div><p data-dv-preview style="font-size:12px;min-height:16px"></p><div><button type="button" data-dv-act="test">Check at a current…</button><button type="button" data-dv-act="save">Save</button><button type="button" data-dv-act="cancel">Cancel</button></div></section>`;
+   devDlg.hidden=false;devDlg.querySelector('select,input:not([type=hidden]),textarea')?.focus()};
+  const readDev=()=>{const t=devDlg.querySelector('[data-dv-type]').value,d={};
+   devDlg.querySelectorAll('[data-dv]').forEach(e=>{const k=e.dataset.dv,v=e.value;if(v==='')return;d[k]=e.tagName==='SELECT'&&k==='curve'?v:Number(v)});
+   devDlg.querySelectorAll('[data-dvs]').forEach(e=>{if(e.value!=='')d[e.dataset.dvs]=e.value});devDlg.querySelectorAll('[data-dvc]').forEach(e=>{d[e.dataset.dvc]=e.checked});
+-  if(t==='curve')d.type='curve';else{d.type='relay';if(t==='iec')d.standard='IEC';else if(t==='ieee')d.standard='IEEE';else{delete d.curve;delete d.pickupA;delete d.dial}}
++  if(t==='curve')d.type='curve';else if(t==='lsi'){d.type='lsi';delete d.breakerMode;delete d.breakerCycles;delete d.frequencyHz}else{d.type='relay';if(t==='iec')d.standard='IEC';else if(t==='ieee')d.standard='IEEE';else{delete d.curve;delete d.pickupA;delete d.dial}}
+   if(d.breakerMode!=='ms')delete d.breakerMs;return d};
++ devDlg.addEventListener('change',e=>{if(e.target.matches('[data-dv-kind]'))openDev(devBus,e.target.value);if(e.target.matches('[data-dv-lib]')&&e.target.value){const c=TCC_CURVES.find(x=>x.id===e.target.value),src=TCC_LIBRARY_V29.sources[c.source];devDlg.querySelector('[data-dvs=csv]').value=curveCsv(c.id);devDlg.querySelector('[data-dvs=model]').value=`${c.manufacturer} ${c.family} ${c.rating} (${src.title}, ${src.date})`.slice(0,120);devDlg.querySelector('[data-dv-preview]').textContent='Filled from published plot points — check against '+src.url}});
+  devDlg.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();devDlg.hidden=true}});
+  devDlg.addEventListener('click',e=>{const a=e.target.dataset?.dvAct;if(!a)return;const pv=devDlg.querySelector('[data-dv-preview]');
+   try{if(a==='cancel'){devDlg.hidden=true;return}const d=readDev();
+-   const row=state.study?.rows.find(r=>r.busId===devBus);const I=(row?.arcingCurrentFullKA??row?.cases?.[0]?.arcingCurrentKA)*1000*((d.sharePercent??100)/100);
++   const row=state.study?.rows.find(r=>r.busId===devBus);const sh=Number.isFinite(d.sharePercent)?d.sharePercent:(devTarget&&Number.isFinite(row?.oneLine?.primary?.sharePercent)?row.oneLine.primary.sharePercent:100);const I=(row?.arcingCurrentFullKA??row?.cases?.[0]?.arcingCurrentKA)*1000*(sh/100);
+    if(a==='test'){if(!Number.isFinite(I))throw Error('Press Run / update first so the arcing current is known.');const cur=I;const r=clearingTime(d,cur);pv.textContent=`At ${Math.round(cur)} A: ${r.status==='OK'?r.ms.toFixed(0)+' ms — '+r.text:r.status+' — '+r.text}`;pv.className=r.status==='OK'?'ok':'bad';return}
+-   if(a==='save'){if(Number.isFinite(I))clearingTime(d,I);state.devices[devBus]=d;devDlg.hidden=true;render(state.study,collect());status('Device saved. Press Run / update to recalculate.');}
++   if(a==='save'){if(Number.isFinite(I))clearingTime(d,I);if(devTarget){state.oneLine[devTarget]=d;state.src[devBus]='sld'}else{state.devices[devBus]=d;state.src[devBus]='own'}devDlg.hidden=true;render(state.study,collect());status('Device saved. Press Run / update to recalculate.');}
+   }catch(err){pv.textContent=err.message;pv.className='bad'}});
+  ov.addEventListener('change',e=>{const b=e.target.dataset?.devType;if(!b)return;const v=e.target.value;
++  if(v==='sld'){state.src[b]='sld';render(state.study,collect());const row=state.study.rows.find(r=>r.busId===b);if(!state.oneLine[row.oneLine.primary.deviceId])openDev(b);return}
++  state.src[b]='own';
+   if(v==='manual'){delete state.devices[b];render(state.study,collect());return}
+-  const prev=state.devices[b];openDev(b,v);if(prev&&devType(prev)!==v)state.devices[b]=prev});
++  render(state.study,collect());const prev=state.devices[b];openDev(b,v);if(prev&&devType(prev)!==v)state.devices[b]=prev});
+  const calcRows=()=>state.study.rows.filter(r=>r.status==='CALCULATED');
+  const labels=()=>calcRows().map(r=>arcFlashLabel(r,{date:$('#v29af-date').value,preparedBy:$('#v29af-by').value}));
+- const report=()=>({method:AF_NETWORK_V29.id,createdAt:new Date().toISOString(),inputs:{projectName:state.project?.name,scenario:state.study.scenario,busInputs:collect()},outputs:{...state.study,labels:(()=>{try{return labels()}catch{return []}})()}});
++ const report=()=>({method:AF_NETWORK_V29.id,createdAt:new Date().toISOString(),inputs:{projectName:state.project?.name,scenario:state.study.scenario,busInputs:collect(),oneLineDevices:state.oneLine},outputs:{...state.study,labels:(()=>{try{return labels()}catch{return []}})()}});
+  ov.addEventListener('click',async e=>{const de=e.target.closest('[data-dev-edit]');if(de){openDev(de.dataset.devEdit);return}
+   const act=e.target.closest('[data-af]')?.dataset.af;if(!act)return;
+   try{
+    if(act==='close')return close();
+    if(act==='run'){
+     status('Calculating…');const calc=await engine();state.project=readDraft();const pid=state.project.id||'project';
+-    const saved=loadInputs(pid);if(!$('#v29af-table').querySelector('tr[data-bus]')){state.devices={};for(const [id,v] of Object.entries(saved))if(v?.device)state.devices[id]=v.device}
++    const saved=loadInputs(pid);if(!$('#v29af-table').querySelector('tr[data-bus]')){state.devices={};state.src={};state.oneLine=saved.__oneLine&&typeof saved.__oneLine==='object'?saved.__oneLine:{};for(const [id,v] of Object.entries(saved)){if(id==='__oneLine')continue;if(v?.device)state.devices[id]=v.device;if(v?.deviceSource)state.src[id]=v.deviceSource}}
+     const inputs=$('#v29af-table').querySelector('tr[data-bus]')?{...saved,...collect()}:saved;
+-    state.study=networkArcFlashStudy({project:state.project,calculateProject:calc,busInputs:inputs});
+-    saveInputs(pid,inputs);render(state.study,inputs);
++    delete inputs.__oneLine;state.study=networkArcFlashStudy({project:state.project,calculateProject:calc,busInputs:inputs,oneLineDevices:state.oneLine});
++    saveInputs(pid,{...inputs,__oneLine:state.oneLine});render(state.study,inputs);
+     const done=calcRows().length,tot=state.study.rows.filter(r=>r.status!=='EXCLUDED').length;
+     ov.querySelectorAll('[data-af=labels],[data-af=print]').forEach(b=>b.disabled=!done);ov.querySelectorAll('[data-af=pdf],[data-af=xlsx],[data-af=json]').forEach(b=>b.disabled=false);
+     status(`${done} of ${tot} buses calculated (${state.study.scenario} scenario). Inputs saved in this browser.`);return;
+diff --git a/SITE/arcflash-network-v29.mjs b/SITE/arcflash-network-v29.mjs
+index 7a31833..83c23ec 100644
+--- a/SITE/arcflash-network-v29.mjs
++++ b/SITE/arcflash-network-v29.mjs
+@@ -11,7 +11,7 @@
+  * - Pure function: the caller's project is never modified.
+  */
+ import {ieee1584Calculate} from './ieee1584-2018.mjs';
+-import {arcFlashClearingTimes,describeDevice} from './clearing-time-v29.mjs';
++import {arcFlashClearingTimes,describeDevice} from './clearing-time-v29.mjs?v=20261108-v29e';
+ export const AF_NETWORK_V29={id:'ieee1584-network-arcflash-v29',version:'29.0.0'};
+ 
+ // IEEE 1584-2018 Table 8 (typical gaps) and Table 10 (typical enclosure size, working distance)
+@@ -29,6 +29,27 @@ export const EQUIPMENT_CLASSES={
+  'Cable Junction Box (Shallow)':{gapMM:13,heightMM:355.6,widthMM:304.8,depthMM:100,workingDistanceMM:457.2},
+  'Cable Junction Box':{gapMM:13,heightMM:355.6,widthMM:304.8,depthMM:250,workingDistanceMM:457.2}
+ };
++/**
++ * Protective devices drawn on the one-line (breaker, fuse, recloser) that interrupt the fault at a bus.
++ * A device qualifies when opening its internal link cuts the bus off from at least one enabled source.
++ * The nearest device that cuts off every source is preferred; otherwise the one carrying the largest share.
++ * Share of the bolted fault current through the device comes from the Studio branch flows.
++ */
++export function oneLineProtection(project,result){
++ const devs=(project.devices||[]).filter(d=>d.kind==='switchgear'&&['breaker','fuse','recloser'].includes(d.equipmentType)&&d.enabled!==false&&d.linkId);
++ const live=(project.branches||[]).filter(e=>e.enabled!==false&&(!e.deviceId||(project.devices||[]).find(d=>d.id===e.deviceId)?.enabled!==false));
++ const srcBuses=new Set((project.sources||[]).filter(x=>x.enabled!==false).map(x=>x.bus));
++ const reach=(start,skip)=>{const adj=new Map();for(const e of live){if(e.id===skip)continue;(adj.get(e.from)||adj.set(e.from,[]).get(e.from)).push(e.to);(adj.get(e.to)||adj.set(e.to,[]).get(e.to)).push(e.from)}
++  const dist=new Map([[start,0]]),q=[start];for(let i=0;i<q.length;i++)for(const n of adj.get(q[i])||[])if(!dist.has(n)){dist.set(n,dist.get(q[i])+1);q.push(n)}return dist};
++ const bus=result?.busId;if(!bus)return null;
++ const d0=reach(bus,null),s0=[...srcBuses].filter(b=>d0.has(b));if(!s0.length)return {status:'NO SOURCE',candidates:[]};
++ const flows=new Map((result.branchFlows||[]).map(f=>[f.id,Math.max(Math.abs(f.fromA||0),Math.abs(f.toA||0))]));
++ const cands=[];for(const d of devs){const link=live.find(e=>e.id===d.linkId);if(!link)continue;const d1=reach(bus,link.id),s1=s0.filter(b=>d1.has(b));if(s1.length===s0.length)continue;
++  const hops=Math.min(d0.get(link.from)??1e9,d0.get(link.to)??1e9),share=result.totalA>0&&flows.has(link.id)?Math.min(100,100*flows.get(link.id)/result.totalA):null;
++  cands.push({deviceId:d.id,name:d.name,equipmentType:d.equipmentType,hops,isolatesAll:s1.length===0,sharePercent:share})}
++ cands.sort((a,b)=>(b.isolatesAll-a.isolatesAll)||(a.hops-b.hops)||((b.sharePercent??0)-(a.sharePercent??0)));
++ return {status:cands.length?'FOUND':'NO PROTECTIVE DEVICE ON THE ONE-LINE',primary:cands[0]||null,candidates:cands};
++}
+ export function defaultClassForVoltage(v){return v>5000?'15kV Switchgear':v>600?'5kV Switchgear':'LV Switchgear'}
+ 
+ const fin=x=>typeof x==='number'&&Number.isFinite(x);
+@@ -36,7 +57,7 @@ const clone=x=>JSON.parse(JSON.stringify(x));
+ const fail=m=>{throw Error('Network arc flash: '+m)};
+ 
+ /** busInputs: { [busId]: {include, equipmentClass, electrodeConfiguration, gapMM?, workingDistanceMM?, heightMM?, widthMM?, depthMM?, clearingFullMS, clearingReducedMS, clearingSource} } */
+-export function networkArcFlashStudy({project,calculateProject,busInputs={}}){
++export function networkArcFlashStudy({project,calculateProject,busInputs={},oneLineDevices={}}){
+  if(typeof calculateProject!=='function')fail('Studio engine is not available.');
+  if(!project||!Array.isArray(project.buses)||!project.buses.length)fail('open a Studio network with at least one bus.');
+  if(project.settings?.faultType==='dc')fail('DC networks are outside IEEE 1584-2018.');
+@@ -44,7 +65,7 @@ export function networkArcFlashStudy({project,calculateProject,busInputs={}}){
+  const out=calculateProject(p),byBus=new Map((out.results||[]).map(r=>[r.busId,r]));
+  const errors=(out.issues||[]).filter(i=>i.severity==='error');
+  const rows=project.buses.map(b=>{
+-  const inp=busInputs[b.id]||{},r=byBus.get(b.id),base={busId:b.id,busName:b.name,voltageV:b.voltage};
++  let inp=busInputs[b.id]||{};const r=byBus.get(b.id),base={busId:b.id,busName:b.name,voltageV:b.voltage};
+   if(inp.include===false)return {...base,status:'EXCLUDED'};
+   if(!fin(b.voltage)||b.voltage<208||b.voltage>15000)return {...base,status:'OUTSIDE IEEE 1584-2018 VOLTAGE RANGE',note:'Model covers 208 V to 15 kV three-phase AC.'};
+   if(!r||!fin(r.totalA)||r.totalA<=0)return {...base,status:'NO BOLTED FAULT CURRENT',note:r?.status||'Bus not solved'};
+@@ -52,7 +73,12 @@ export function networkArcFlashStudy({project,calculateProject,busInputs={}}){
+   const cls=EQUIPMENT_CLASSES[inp.equipmentClass]?inp.equipmentClass:defaultClassForVoltage(b.voltage),d=EQUIPMENT_CLASSES[cls];
+   const pick=(k,def)=>fin(inp[k])?inp[k]:def;
+   const geometry={equipmentClass:cls,electrodeConfiguration:inp.electrodeConfiguration||'VCB',gapMM:pick('gapMM',d.gapMM),workingDistanceMM:pick('workingDistanceMM',d.workingDistanceMM),enclosureHeightMM:pick('heightMM',d.heightMM),enclosureWidthMM:pick('widthMM',d.widthMM),enclosureDepthMM:pick('depthMM',d.depthMM)};
+-  const withCurrent={...base,boltedFaultA:r.totalA,xr:fin(r.xr)?r.xr:null,geometry};
++  const ol=oneLineProtection(project,r);
++  const withCurrent={...base,boltedFaultA:r.totalA,xr:fin(r.xr)?r.xr:null,geometry,oneLine:ol?{status:ol.status,primary:ol.primary,candidates:(ol.candidates||[]).slice(0,5)}:null};
++  const useLinked=inp.deviceSource==='sld'||(inp.deviceSource==null&&!inp.device&&!(fin(inp.clearingFullMS)&&fin(inp.clearingReducedMS)));
++  if(useLinked&&ol?.primary&&oneLineDevices[ol.primary.deviceId]){
++   const set=oneLineDevices[ol.primary.deviceId];inp={...inp,device:{...set,sharePercent:fin(set.sharePercent)?set.sharePercent:(fin(ol.primary.sharePercent)?Math.max(1,Math.round(ol.primary.sharePercent*10)/10):100)},linkedDevice:ol.primary};
++  }
+   const ieeeIn=(full,red)=>({voltageKV:b.voltage/1000,boltedFaultKA:r.totalA/1000,electrodeConfiguration:geometry.electrodeConfiguration,gapMM:geometry.gapMM,workingDistanceMM:geometry.workingDistanceMM,enclosureHeightMM:geometry.enclosureHeightMM,enclosureWidthMM:geometry.enclosureWidthMM,enclosureDepthMM:geometry.enclosureDepthMM,clearingFullMS:full,clearingReducedMS:red});
+   let fullMS=inp.clearingFullMS,redMS=inp.clearingReducedMS,device=null,source=String(inp.clearingSource||'').slice(0,200);
+   if(inp.device&&inp.device.type&&inp.device.type!=='manual'){
+@@ -65,13 +91,14 @@ export function networkArcFlashStudy({project,calculateProject,busInputs={}}){
+    const over=Math.max(fullMS,redMS)>2000;
+    if(over&&inp.device.capAt2s!==true)return {...withCurrent,arcingCurrentFullKA:fullKA,arcingCurrentReducedKA:redKA,device:{description:describeDevice(inp.device),full:device.full,reduced:device.reduced},status:'CLEARING TIME OVER 2 s',note:`Device clears in ${Math.round(Math.max(fullMS,redMS))} ms. Improve protection, or tick "limit to 2 s" only if a person could move away within 2 s (IEEE 1584-2018 guidance).`};
+    if(over){fullMS=Math.min(fullMS,2000);redMS=Math.min(redMS,2000)}
+-   source=describeDevice(inp.device)+(over?' (arc duration limited to 2 s by user choice)':'');
++   source=(inp.linkedDevice?`${inp.linkedDevice.name} (one-line, ${inp.device.sharePercent} % of fault current) — `:'')+describeDevice(inp.device)+(over?' (arc duration limited to 2 s by user choice)':'');
+   }
+   if(!fin(fullMS)||!fin(redMS))return {...withCurrent,status:'CLEARING TIMES REQUIRED',note:'Choose the protective device and its settings, or type documented total clearing times at the full and reduced arcing currents.'};
+   try{
+    const a=ieee1584Calculate(ieeeIn(fullMS,redMS));
+    const g=a.cases.find(c=>c.case===a.governingCase);
+-   return {...withCurrent,status:'CALCULATED',clearingSource:source,device:device?{description:describeDevice(inp.device),full:device.full,reduced:device.reduced,sharePercent:device.sharePercent}:null,cases:a.cases.map(c=>({case:c.case,arcingCurrentKA:c.arcingCurrentKA,clearingTimeMS:c.clearingTimeMS,incidentEnergyCalPerCm2:c.incidentEnergyCalPerCm2,arcFlashBoundaryMM:c.arcFlashBoundaryMM})),governingCase:a.governingCase,incidentEnergyCalPerCm2:g.incidentEnergyCalPerCm2,arcFlashBoundaryMM:Math.max(...a.cases.map(c=>c.arcFlashBoundaryMM)),enclosure:a.enclosure,warnings:a.warnings};
++   const partial=inp.linkedDevice&&!inp.linkedDevice.isolatesAll?`${inp.linkedDevice.name} interrupts only ${inp.device.sharePercent} % of the fault current; other sources keep feeding the arc until their own devices open. Check those devices, or type the clearing time of the slowest one.`:null;
++   return {...withCurrent,status:'CALCULATED',note:partial||undefined,clearingSource:source,device:device?{description:describeDevice(inp.device),full:device.full,reduced:device.reduced,sharePercent:device.sharePercent,linkedDevice:inp.linkedDevice||null}:null,cases:a.cases.map(c=>({case:c.case,arcingCurrentKA:c.arcingCurrentKA,clearingTimeMS:c.clearingTimeMS,incidentEnergyCalPerCm2:c.incidentEnergyCalPerCm2,arcFlashBoundaryMM:c.arcFlashBoundaryMM})),governingCase:a.governingCase,incidentEnergyCalPerCm2:g.incidentEnergyCalPerCm2,arcFlashBoundaryMM:Math.max(...a.cases.map(c=>c.arcFlashBoundaryMM)),enclosure:a.enclosure,warnings:a.warnings};
+   }catch(e){
+    // still report arcing currents so the user can read clearing times from the curve
+    return {...withCurrent,status:'INPUT OUTSIDE IEEE 1584-2018 RANGE',note:e.message};
+diff --git a/SITE/cable-sizing-ui-v29.mjs b/SITE/cable-sizing-ui-v29.mjs
+index 43c292d..3b99077 100644
+--- a/SITE/cable-sizing-ui-v29.mjs
++++ b/SITE/cable-sizing-ui-v29.mjs
+@@ -1,7 +1,7 @@
+ /** V29 incremental UI: combined conductor sizing (NEC 310.16 ampacity + voltage drop + adiabatic short-circuit). Stand-alone; does not change the Studio project. */
+-import {sizeConductor,CABLE_SIZING_V29,CABLE_SIZING_DATA,SIZES} from './cable-sizing-v29.mjs';
++import {sizeConductor,CABLE_SIZING_V29,CABLE_SIZING_DATA,SIZES} from './cable-sizing-v29.mjs?v=20261108-v29e';
+ import {advancedStudyReportBlob} from './advanced-study-report.mjs';
+-import {clearingTime,IEC_CURVES,IEEE_CURVES} from './clearing-time-v29.mjs';
++import {clearingTime,IEC_CURVES,IEEE_CURVES} from './clearing-time-v29.mjs?v=20261108-v29e';
+ const CURVE_OPTS=['',...Object.keys(IEC_CURVES).map(k=>'IEC '+k),...Object.keys(IEEE_CURVES).map(k=>'IEEE '+k)];
+ const KEY='fault-studio-cable-sizing-v29';
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+@@ -23,6 +23,9 @@ const FIELDS=[
+  ['voltageV','Voltage, line-line or 1-phase (V)','number',null,'480'],
+  ['powerFactor','Power factor','number',null,'0.85'],
+  ['lengthFt','One-way length (ft)','number',null,'100'],
++ ['ocpdMode','Overcurrent device (NEC 240.4)','select',['auto','given','none'],'auto'],
++ ['ocpdA','OCPD rating, A (if given)','number',null,''],
++ ['multioutletReceptacles','Multioutlet branch circuit with receptacles (no 240.4(B) round-up)','check',null,false],
+  ['maxVoltageDropPercent','Max voltage drop (%) — blank to skip','number',null,'3'],
+  ['faultCurrentA','Fault current at load end (A) — blank to skip','number',null,''],
+  ['clearingTimeS','Clearing time (s) — type it, or pick the relay below','number',null,''],
+@@ -43,9 +46,10 @@ function mount(){
+  document.head.append(css);
+  const btn=document.createElement('button');btn.id='fcs-v29cs-open';btn.type='button';btn.textContent='Conductor sizing';btn.setAttribute('aria-haspopup','dialog');document.body.append(btn);dockLauncher(btn);
+  const ov=document.createElement('div');ov.id='fcs-v29cs-ov';ov.hidden=true;
+- const fieldHtml=([k,l,t,opts,d])=>t==='select'?`<label>${esc(l)}<select data-k="${k}">${opts.map(o=>`<option value="${esc(o)}">${esc(o||'— none —')}</option>`).join('')}</select></label>`:t==='check'?`<label class="ck"><input type="checkbox" data-k="${k}"> ${esc(l)}</label>`:`<label>${esc(l)}<input type="number" step="any" data-k="${k}" value="${esc(d)}"></label>`;
++ const OPT_LABEL={auto:'Pick next standard rating',given:'I have a rating',none:'Do not check'};
++ const fieldHtml=([k,l,t,opts,d])=>t==='select'?`<label>${esc(l)}<select data-k="${k}">${opts.map(o=>`<option value="${esc(o)}">${esc(k==='ocpdMode'?OPT_LABEL[o]:(o||'— none —'))}</option>`).join('')}</select></label>`:t==='check'?`<label class="ck"><input type="checkbox" data-k="${k}"> ${esc(l)}</label>`:`<label>${esc(l)}<input type="number" step="any" data-k="${k}" value="${esc(d)}"></label>`;
+  ov.innerHTML=`<section id="fcs-v29cs-panel" role="dialog" aria-modal="true" aria-labelledby="fcs-v29cs-title"><div style="display:flex;justify-content:space-between;align-items:center"><h2 id="fcs-v29cs-title">Conductor sizing — ampacity, voltage drop, short-circuit</h2><button type="button" data-cs="close">Close</button></div>
+- <p class="warn">Checks every size from 14 AWG to 2000 kcmil and picks the smallest that passes all selected checks. Ampacity uses NEC Table 310.16 (30 °C base) with 310.15(B)(1)(1) ambient and 310.15(C)(1) bundling factors, limited by the termination rating. <strong>Table values are from this site's database and are marked "not re-verified"; confirm against your licensed NEC.</strong> Voltage drop uses typical 75 °C R and X (8 AWG–750 kcmil); your cable data sheet governs. Short-circuit check needs a clearing time from the real protective device — none is assumed. OCPD selection and raceway fill are not checked.</p>
++ <p class="warn">Checks every size from 14 AWG to 2000 kcmil and picks the smallest that passes all selected checks. Ampacity uses NEC Table 310.16 (30 °C base) with 310.15(B)(1)(1) ambient and 310.15(C)(1) bundling factors, limited by the termination rating. <strong>Table values are from this site's database and are marked "not re-verified"; confirm against your licensed NEC.</strong> Voltage drop uses typical 75 °C R and X (8 AWG–750 kcmil); your cable data sheet governs. Short-circuit check needs a clearing time from the real protective device — none is assumed. OCPD (NEC 240.4) and EGC (250.122) are checked; raceway fill is not.</p>
+  <div class="grid">${FIELDS.map(fieldHtml).join('')}</div>
+  <div><button type="button" data-cs="run">Size conductor</button><button type="button" data-cs="pdf" disabled>PDF</button><button type="button" data-cs="xlsx" disabled>Excel</button><button type="button" data-cs="json" disabled>JSON</button></div>
+  <p role="status" id="v29cs-status" aria-live="polite"></p><div id="v29cs-result"></div><div id="v29cs-table" style="overflow:auto"></div>
+@@ -63,12 +67,13 @@ function mount(){
+   if(x.rxSize||Number.isFinite(x.rxR)||Number.isFinite(x.rxX)){if(!x.rxSize||!(x.rxR>0)||!(x.rxX>=0))throw Error('For your own cable R/X, choose the size and enter both R and X (Ω/1000 ft).');x.customRX={size:x.rxSize,rOhmPerKft:x.rxR,xOhmPerKft:x.rxX}}
+   for(const k of ['rxSize','rxR','rxX'])delete x[k];
+   for(const k of ['tccCurve','tccPickupA','tccDial','tccInstA','tccBreakerCycles','tccFrequency'])delete x[k];x.__tcc=tcc;
++  if(x.ocpdMode!=='given')delete x.ocpdA;
+   x.phases=Number(x.phases);if(x.maxVoltageDropPercent===undefined)x.maxVoltageDropPercent=null;if(!x.insulationClass)delete x.insulationClass;
+   try{localStorage.setItem(KEY,JSON.stringify(raw))}catch{}return x};
+  const render=r=>{
+-  $('#v29cs-result').innerHTML=r.recommendedSize?`<span class="ok">Recommended: ${r.recommendedSets>1?r.recommendedSets+' × ':''}${esc(r.recommendedSize)} ${esc(r.inputs.material)}</span> <span style="font-weight:400;font-size:13px">(${esc(r.governedBy)}; required ampacity ${n(r.inputs.requiredAmpacityA)} A; ambient factor ${r.factors.ambient.factor}, bundling factor ${r.factors.ccc.factor}${r.clearingTimeFromRelay?`; clearing time ${n(r.clearingTimeFromRelay.ms,0)} ms from ${esc(r.clearingTimeFromRelay.text)}`:''})</span>${r.skippedForMissingRX.length?`<div class="bad" style="font-size:13px">Smaller size(s) ${esc(r.skippedForMissingRX.join(', '))} pass ampacity but have no R/X data, so voltage drop could not be checked — check them with your cable data sheet.</div>`:''}`:`<span class="bad">No size in the table passes all checks — add parallel sets or change the inputs.</span>`;
++  $('#v29cs-result').innerHTML=r.recommendedSize?`<span class="ok">Recommended: ${r.recommendedSets>1?r.recommendedSets+' × ':''}${esc(r.recommendedSize)} ${esc(r.inputs.material)}</span> <span style="font-weight:400;font-size:13px">(${esc(r.governedBy)}; required ampacity ${n(r.inputs.requiredAmpacityA)} A; ambient factor ${r.factors.ambient.factor}, bundling factor ${r.factors.ccc.factor}${r.clearingTimeFromRelay?`; clearing time ${n(r.clearingTimeFromRelay.ms,0)} ms from ${esc(r.clearingTimeFromRelay.text)}`:''})</span>${r.ocpd?`<div style="font-size:13px;font-weight:400">OCPD ${r.ocpd.ratingA} A${r.ocpd.mode==='auto'?' (next standard rating, NEC 240.6(A))':''}${r.ocpd.belowLoad?' <span class="bad">below the load</span>':''}${r.egc?` · EGC ${esc(r.egc.increasedFor25122B?r.egc.increasedFor25122B.size:r.egc.size)} ${esc(r.inputs.material)} (NEC 250.122${r.egc.increasedFor25122B?'(B), increased with the conductors':''})${r.egc.parallelNote?' — '+esc(r.egc.parallelNote):''}`:''}</div>`:''}${r.skippedForMissingRX.length?`<div class="bad" style="font-size:13px">Smaller size(s) ${esc(r.skippedForMissingRX.join(', '))} pass ampacity but have no R/X data, so voltage drop could not be checked — check them with your cable data sheet.</div>`:''}`:`<span class="bad">No size in the table passes all checks — add parallel sets or change the inputs.</span>`;
+   const hasVd=r.inputs.maxVoltageDropPercent!==null,hasSc=!!r.inputs.shortCircuit;
+-  $('#v29cs-table').innerHTML=`<table><thead><tr><th>Size</th><th>310.16 at ${r.inputs.insulationTempC} °C (A)</th><th>Termination ${r.inputs.terminationTempC} °C (A)</th><th>Allowable (A)</th><th>Ampacity</th>${hasVd?'<th>R / X (Ω/kft)</th><th>VD (%)</th><th>VD</th>':''}${hasSc?'<th>Withstand per conductor (kA)</th><th>Short-circuit</th>':''}<th>Note</th></tr></thead><tbody>${r.rows.map(w=>w.status?`<tr><td>${esc(w.size)}</td><td colspan="${4+(hasVd?3:0)+(hasSc?2:0)}" style="text-align:left">${esc(w.status)}</td><td></td></tr>`:`<tr class="${w.size===r.recommendedSize?'pick':''}"><td>${esc(w.size)}</td><td>${w.tableAmpacityA}</td><td>${w.terminationAmpacityA}</td><td>${n(w.allowableA)}</td><td>${yn(w.ampacityOk)}</td>${hasVd?`<td>${w.voltageDrop?n(w.voltageDrop.rOhmPerKft,4)+' / '+n(w.voltageDrop.xOhmPerKft,4):'—'}</td><td>${w.voltageDrop?n(w.voltageDrop.percent,2):'—'}</td><td>${yn(w.voltageDropOk)}</td>`:''}${hasSc?`<td>${n(w.shortCircuit.withstandA/1000,2)}</td><td>${yn(w.shortCircuitOk)}</td>`:''}<td style="text-align:left">${esc(w.notes.join(' '))}</td></tr>`).join('')}</tbody></table><p style="font-size:12px">${esc(r.dataStatus)}</p><ul style="font-size:12px">${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul>`;
++  $('#v29cs-table').innerHTML=`<table><thead><tr><th>Size</th><th>310.16 at ${r.inputs.insulationTempC} °C (A)</th><th>Termination ${r.inputs.terminationTempC} °C (A)</th><th>Allowable (A)</th><th>Ampacity</th>${hasVd?'<th>R / X (Ω/kft)</th><th>VD (%)</th><th>VD</th>':''}${hasSc?'<th>Withstand per conductor (kA)</th><th>Short-circuit</th>':''}${r.ocpd?'<th>OCPD rule</th><th>OCPD</th>':''}<th>Note</th></tr></thead><tbody>${r.rows.map(w=>w.status?`<tr><td>${esc(w.size)}</td><td colspan="${4+(hasVd?3:0)+(hasSc?2:0)+(r.ocpd?2:0)}" style="text-align:left">${esc(w.status)}</td><td></td></tr>`:`<tr class="${w.size===r.recommendedSize?'pick':''}"><td>${esc(w.size)}</td><td>${w.tableAmpacityA}</td><td>${w.terminationAmpacityA}</td><td>${n(w.allowableA)}</td><td>${yn(w.ampacityOk)}</td>${hasVd?`<td>${w.voltageDrop?n(w.voltageDrop.rOhmPerKft,4)+' / '+n(w.voltageDrop.xOhmPerKft,4):'—'}</td><td>${w.voltageDrop?n(w.voltageDrop.percent,2):'—'}</td><td>${yn(w.voltageDropOk)}</td>`:''}${hasSc?`<td>${n(w.shortCircuit.withstandA/1000,2)}</td><td>${yn(w.shortCircuitOk)}</td>`:''}${r.ocpd?`<td style="text-align:left;white-space:normal">${esc(w.ocpd.rule)}${w.ocpd.reasons.length?'; '+esc(w.ocpd.reasons.join('; ')):''}</td><td>${yn(w.ocpdOk)}</td>`:''}<td style="text-align:left">${esc(w.notes.join(' '))}</td></tr>`).join('')}</tbody></table><p style="font-size:12px">${esc(r.dataStatus)}</p><ul style="font-size:12px">${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul>`;
+  };
+  const report=()=>({method:CABLE_SIZING_V29.id,createdAt:new Date().toISOString(),inputs:last.inputs,outputs:JSON.parse(JSON.stringify(last))});
+  ov.addEventListener('click',e=>{const act=e.target?.dataset?.cs;if(!act)return;
+diff --git a/SITE/cable-sizing-v29.mjs b/SITE/cable-sizing-v29.mjs
+index 078d0e7..73fad64 100644
+--- a/SITE/cable-sizing-v29.mjs
++++ b/SITE/cable-sizing-v29.mjs
+@@ -22,6 +22,15 @@
+ export const CABLE_SIZING_V29={id:'combined-conductor-sizing-v29',version:'29.0.0'};
+ const D={"amp":{"2020":{"Copper":{"18 AWG":{"90":[14,"N20-000001"]},"16 AWG":{"90":[18,"N20-000002"]},"14 AWG":{"60":[15,"N20-000003"],"75":[20,"N20-000004"],"90":[25,"N20-000005"]},"12 AWG":{"60":[20,"N20-000006"],"75":[25,"N20-000007"],"90":[30,"N20-000008"]},"10 AWG":{"60":[30,"N20-000009"],"75":[35,"N20-000010"],"90":[40,"N20-000011"]},"8 AWG":{"60":[40,"N20-000012"],"75":[50,"N20-000013"],"90":[55,"N20-000014"]},"6 AWG":{"60":[55,"N20-000015"],"75":[65,"N20-000016"],"90":[75,"N20-000017"]},"4 AWG":{"60":[70,"N20-000018"],"75":[85,"N20-000019"],"90":[95,"N20-000020"]},"3 AWG":{"60":[85,"N20-000021"],"75":[100,"N20-000022"],"90":[115,"N20-000023"]},"2 AWG":{"60":[95,"N20-000024"],"75":[115,"N20-000025"],"90":[130,"N20-000026"]},"1 AWG":{"60":[110,"N20-000027"],"75":[130,"N20-000028"],"90":[145,"N20-000029"]},"1/0 AWG":{"60":[125,"N20-000030"],"75":[150,"N20-000031"],"90":[170,"N20-000032"]},"2/0 AWG":{"60":[145,"N20-000033"],"75":[175,"N20-000034"],"90":[195,"N20-000035"]},"3/0 AWG":{"60":[165,"N20-000036"],"75":[200,"N20-000037"],"90":[225,"N20-000038"]},"4/0 AWG":{"60":[195,"N20-000039"],"75":[230,"N20-000040"],"90":[260,"N20-000041"]},"250 kcmil":{"60":[215,"N20-000042"],"75":[255,"N20-000043"],"90":[290,"N20-000044"]},"300 kcmil":{"60":[240,"N20-000045"],"75":[285,"N20-000046"],"90":[320,"N20-000047"]},"350 kcmil":{"60":[260,"N20-000048"],"75":[310,"N20-000049"],"90":[350,"N20-000050"]},"400 kcmil":{"60":[280,"N20-000051"],"75":[335,"N20-000052"],"90":[380,"N20-000053"]},"500 kcmil":{"60":[320,"N20-000054"],"75":[380,"N20-000055"],"90":[430,"N20-000056"]},"600 kcmil":{"60":[350,"N20-000057"],"75":[420,"N20-000058"],"90":[475,"N20-000059"]},"700 kcmil":{"60":[385,"N20-000060"],"75":[460,"N20-000061"],"90":[520,"N20-000062"]},"750 kcmil":{"60":[400,"N20-000063"],"75":[475,"N20-000064"],"90":[535,"N20-000065"]},"800 kcmil":{"60":[410,"N20-000066"],"75":[490,"N20-000067"],"90":[555,"N20-000068"]},"900 kcmil":{"60":[435,"N20-000069"],"75":[520,"N20-000070"],"90":[585,"N20-000071"]},"1000 kcmil":{"60":[455,"N20-000072"],"75":[545,"N20-000073"],"90":[615,"N20-000074"]},"1250 kcmil":{"60":[495,"N20-000075"],"75":[590,"N20-000076"],"90":[665,"N20-000077"]},"1500 kcmil":{"60":[525,"N20-000078"],"75":[625,"N20-000079"],"90":[705,"N20-000080"]},"1750 kcmil":{"60":[545,"N20-000081"],"75":[650,"N20-000082"],"90":[735,"N20-000083"]},"2000 kcmil":{"60":[555,"N20-000084"],"75":[665,"N20-000085"],"90":[750,"N20-000086"]}},"Aluminum":{"12 AWG":{"60":[15,"N20-000087"],"75":[20,"N20-000088"],"90":[25,"N20-000089"]},"10 AWG":{"60":[25,"N20-000090"],"75":[30,"N20-000091"],"90":[35,"N20-000092"]},"8 AWG":{"60":[35,"N20-000093"],"75":[40,"N20-000094"],"90":[45,"N20-000095"]},"6 AWG":{"60":[40,"N20-000096"],"75":[50,"N20-000097"],"90":[55,"N20-000098"]},"4 AWG":{"60":[55,"N20-000099"],"75":[65,"N20-000100"],"90":[75,"N20-000101"]},"3 AWG":{"60":[65,"N20-000102"],"75":[75,"N20-000103"],"90":[85,"N20-000104"]},"2 AWG":{"60":[75,"N20-000105"],"75":[90,"N20-000106"],"90":[100,"N20-000107"]},"1 AWG":{"60":[85,"N20-000108"],"75":[100,"N20-000109"],"90":[115,"N20-000110"]},"1/0 AWG":{"60":[100,"N20-000111"],"75":[120,"N20-000112"],"90":[135,"N20-000113"]},"2/0 AWG":{"60":[115,"N20-000114"],"75":[135,"N20-000115"],"90":[150,"N20-000116"]},"3/0 AWG":{"60":[130,"N20-000117"],"75":[155,"N20-000118"],"90":[175,"N20-000119"]},"4/0 AWG":{"60":[150,"N20-000120"],"75":[180,"N20-000121"],"90":[205,"N20-000122"]},"250 kcmil":{"60":[170,"N20-000123"],"75":[205,"N20-000124"],"90":[230,"N20-000125"]},"300 kcmil":{"60":[195,"N20-000126"],"75":[230,"N20-000127"],"90":[260,"N20-000128"]},"350 kcmil":{"60":[210,"N20-000129"],"75":[250,"N20-000130"],"90":[280,"N20-000131"]},"400 kcmil":{"60":[225,"N20-000132"],"75":[270,"N20-000133"],"90":[305,"N20-000134"]},"500 kcmil":{"60":[260,"N20-000135"],"75":[310,"N20-000136"],"90":[350,"N20-000137"]},"600 kcmil":{"60":[285,"N20-000138"],"75":[340,"N20-000139"],"90":[385,"N20-000140"]},"700 kcmil":{"60":[315,"N20-000141"],"75":[375,"N20-000142"],"90":[425,"N20-000143"]},"750 kcmil":{"60":[320,"N20-000144"],"75":[385,"N20-000145"],"90":[435,"N20-000146"]},"800 kcmil":{"60":[330,"N20-000147"],"75":[395,"N20-000148"],"90":[445,"N20-000149"]},"900 kcmil":{"60":[355,"N20-000150"],"75":[425,"N20-000151"],"90":[480,"N20-000152"]},"1000 kcmil":{"60":[375,"N20-000153"],"75":[445,"N20-000154"],"90":[500,"N20-000155"]},"1250 kcmil":{"60":[405,"N20-000156"],"75":[485,"N20-000157"],"90":[545,"N20-000158"]},"1500 kcmil":{"60":[435,"N20-000159"],"75":[520,"N20-000160"],"90":[585,"N20-000161"]},"1750 kcmil":{"60":[455,"N20-000162"],"75":[545,"N20-000163"],"90":[615,"N20-000164"]},"2000 kcmil":{"60":[470,"N20-000165"],"75":[560,"N20-000166"],"90":[630,"N20-000167"]}}},"2023":{"Copper":{"18 AWG":{"90":[14,"N23-000001"]},"16 AWG":{"90":[18,"N23-000002"]},"14 AWG":{"60":[15,"N23-000003"],"75":[20,"N23-000004"],"90":[25,"N23-000005"]},"12 AWG":{"60":[20,"N23-000006"],"75":[25,"N23-000007"],"90":[30,"N23-000008"]},"10 AWG":{"60":[30,"N23-000009"],"75":[35,"N23-000010"],"90":[40,"N23-000011"]},"8 AWG":{"60":[40,"N23-000012"],"75":[50,"N23-000013"],"90":[55,"N23-000014"]},"6 AWG":{"60":[55,"N23-000015"],"75":[65,"N23-000016"],"90":[75,"N23-000017"]},"4 AWG":{"60":[70,"N23-000018"],"75":[85,"N23-000019"],"90":[95,"N23-000020"]},"3 AWG":{"60":[85,"N23-000021"],"75":[100,"N23-000022"],"90":[115,"N23-000023"]},"2 AWG":{"60":[95,"N23-000024"],"75":[115,"N23-000025"],"90":[130,"N23-000026"]},"1 AWG":{"60":[110,"N23-000027"],"75":[130,"N23-000028"],"90":[145,"N23-000029"]},"1/0 AWG":{"60":[125,"N23-000030"],"75":[150,"N23-000031"],"90":[170,"N23-000032"]},"2/0 AWG":{"60":[145,"N23-000033"],"75":[175,"N23-000034"],"90":[195,"N23-000035"]},"3/0 AWG":{"60":[165,"N23-000036"],"75":[200,"N23-000037"],"90":[225,"N23-000038"]},"4/0 AWG":{"60":[195,"N23-000039"],"75":[230,"N23-000040"],"90":[260,"N23-000041"]},"250 kcmil":{"60":[215,"N23-000042"],"75":[255,"N23-000043"],"90":[290,"N23-000044"]},"300 kcmil":{"60":[240,"N23-000045"],"75":[285,"N23-000046"],"90":[320,"N23-000047"]},"350 kcmil":{"60":[260,"N23-000048"],"75":[310,"N23-000049"],"90":[350,"N23-000050"]},"400 kcmil":{"60":[280,"N23-000051"],"75":[335,"N23-000052"],"90":[380,"N23-000053"]},"500 kcmil":{"60":[320,"N23-000054"],"75":[380,"N23-000055"],"90":[430,"N23-000056"]},"600 kcmil":{"60":[350,"N23-000057"],"75":[420,"N23-000058"],"90":[475,"N23-000059"]},"700 kcmil":{"60":[385,"N23-000060"],"75":[460,"N23-000061"],"90":[520,"N23-000062"]},"750 kcmil":{"60":[400,"N23-000063"],"75":[475,"N23-000064"],"90":[535,"N23-000065"]},"800 kcmil":{"60":[410,"N23-000066"],"75":[490,"N23-000067"],"90":[555,"N23-000068"]},"900 kcmil":{"60":[435,"N23-000069"],"75":[520,"N23-000070"],"90":[585,"N23-000071"]},"1000 kcmil":{"60":[455,"N23-000072"],"75":[545,"N23-000073"],"90":[615,"N23-000074"]},"1250 kcmil":{"60":[495,"N23-000075"],"75":[590,"N23-000076"],"90":[665,"N23-000077"]},"1500 kcmil":{"60":[525,"N23-000078"],"75":[625,"N23-000079"],"90":[705,"N23-000080"]},"1750 kcmil":{"60":[545,"N23-000081"],"75":[650,"N23-000082"],"90":[735,"N23-000083"]},"2000 kcmil":{"60":[555,"N23-000084"],"75":[665,"N23-000085"],"90":[750,"N23-000086"]}},"Aluminum":{"12 AWG":{"60":[15,"N23-000087"],"75":[20,"N23-000088"],"90":[25,"N23-000089"]},"10 AWG":{"60":[25,"N23-000090"],"75":[30,"N23-000091"],"90":[35,"N23-000092"]},"8 AWG":{"60":[35,"N23-000093"],"75":[40,"N23-000094"],"90":[45,"N23-000095"]},"6 AWG":{"60":[40,"N23-000096"],"75":[50,"N23-000097"],"90":[55,"N23-000098"]},"4 AWG":{"60":[55,"N23-000099"],"75":[65,"N23-000100"],"90":[75,"N23-000101"]},"3 AWG":{"60":[65,"N23-000102"],"75":[75,"N23-000103"],"90":[85,"N23-000104"]},"2 AWG":{"60":[75,"N23-000105"],"75":[90,"N23-000106"],"90":[100,"N23-000107"]},"1 AWG":{"60":[85,"N23-000108"],"75":[100,"N23-000109"],"90":[115,"N23-000110"]},"1/0 AWG":{"60":[100,"N23-000111"],"75":[120,"N23-000112"],"90":[135,"N23-000113"]},"2/0 AWG":{"60":[115,"N23-000114"],"75":[135,"N23-000115"],"90":[150,"N23-000116"]},"3/0 AWG":{"60":[130,"N23-000117"],"75":[155,"N23-000118"],"90":[175,"N23-000119"]},"4/0 AWG":{"60":[150,"N23-000120"],"75":[180,"N23-000121"],"90":[205,"N23-000122"]},"250 kcmil":{"60":[170,"N23-000123"],"75":[205,"N23-000124"],"90":[230,"N23-000125"]},"300 kcmil":{"60":[195,"N23-000126"],"75":[230,"N23-000127"],"90":[260,"N23-000128"]},"350 kcmil":{"60":[210,"N23-000129"],"75":[250,"N23-000130"],"90":[280,"N23-000131"]},"400 kcmil":{"60":[225,"N23-000132"],"75":[270,"N23-000133"],"90":[305,"N23-000134"]},"500 kcmil":{"60":[260,"N23-000135"],"75":[310,"N23-000136"],"90":[350,"N23-000137"]},"600 kcmil":{"60":[285,"N23-000138"],"75":[340,"N23-000139"],"90":[385,"N23-000140"]},"700 kcmil":{"60":[315,"N23-000141"],"75":[375,"N23-000142"],"90":[425,"N23-000143"]},"750 kcmil":{"60":[320,"N23-000144"],"75":[385,"N23-000145"],"90":[435,"N23-000146"]},"800 kcmil":{"60":[330,"N23-000147"],"75":[395,"N23-000148"],"90":[445,"N23-000149"]},"900 kcmil":{"60":[355,"N23-000150"],"75":[425,"N23-000151"],"90":[480,"N23-000152"]},"1000 kcmil":{"60":[375,"N23-000153"],"75":[445,"N23-000154"],"90":[500,"N23-000155"]},"1250 kcmil":{"60":[405,"N23-000156"],"75":[485,"N23-000157"],"90":[545,"N23-000158"]},"1500 kcmil":{"60":[435,"N23-000159"],"75":[520,"N23-000160"],"90":[585,"N23-000161"]},"1750 kcmil":{"60":[455,"N23-000162"],"75":[545,"N23-000163"],"90":[615,"N23-000164"]},"2000 kcmil":{"60":[470,"N23-000165"],"75":[560,"N23-000166"],"90":[630,"N23-000167"]}}}},"ambient":[[-100,1.29,1.2,1.15,"AMB-000001"],[11,1.22,1.15,1.12,"AMB-000002"],[16,1.15,1.11,1.08,"AMB-000003"],[21,1.08,1.05,1.04,"AMB-000004"],[26,1,1,1,"AMB-000005"],[31,0.91,0.94,0.96,"AMB-000006"],[36,0.82,0.88,0.91,"AMB-000007"],[41,0.71,0.82,0.87,"AMB-000008"],[46,0.58,0.75,0.82,"AMB-000009"],[51,0.41,0.67,0.76,"AMB-000010"],[56,null,0.58,0.71,"AMB-000011"],[61,null,0.47,0.65,"AMB-000012"],[66,null,0.33,0.58,"AMB-000013"],[71,null,null,0.5,"AMB-000014"],[76,null,null,0.41,"AMB-000015"]],"ccc":[[1,1,"CCC-000001"],[4,0.8,"CCC-000002"],[7,0.7,"CCC-000003"],[10,0.5,"CCC-000004"],[21,0.45,"CCC-000005"],[31,0.4,"CCC-000006"],[41,0.35,"CCC-000007"]],"k":{"PVC <=300 mm2|Copper":[115,70,"KFA-000001"],"PVC <=300 mm2|Aluminum":[76,70,"KFA-000002"],"PVC >300 mm2|Copper":[103,70,"KFA-000003"],"PVC >300 mm2|Aluminum":[68,70,"KFA-000004"],"EPR/XLPE|Copper":[143,90,"KFA-000005"],"EPR/XLPE|Aluminum":[94,90,"KFA-000006"],"Rubber|Copper":[141,60,"KFA-000007"],"Rubber|Aluminum":[93,60,"KFA-000008"]},"kcmil":{"18 AWG":1.62,"16 AWG":2.58,"14 AWG":4.11,"12 AWG":6.53,"10 AWG":10.38,"8 AWG":16.51,"6 AWG":26.24,"4 AWG":41.74,"3 AWG":52.62,"2 AWG":66.36,"1 AWG":83.69,"1/0 AWG":105.6,"2/0 AWG":133.1,"3/0 AWG":167.8,"4/0 AWG":211.6,"250 kcmil":250,"300 kcmil":300,"350 kcmil":350,"400 kcmil":400,"500 kcmil":500,"600 kcmil":600,"700 kcmil":700,"750 kcmil":750,"800 kcmil":800,"900 kcmil":900,"1000 kcmil":1000,"1250 kcmil":1250,"1500 kcmil":1500,"1750 kcmil":1750,"2000 kcmil":2000},"rx":{"Copper|250 kcmil":[0.05465,0.0379,12],"Copper|3/0 AWG":[0.07855,0.0397,12],"Copper|500 kcmil":[0.0285,0.0349,12],"Copper|600 kcmil":[0.0247,0.0343,12],"Copper|750 kcmil":[0.02065,0.0326,12],"Copper|8 AWG":[0.811,0.0577,12],"Copper|6 AWG":[0.51,0.0525,12],"Copper|400 kcmil":[0.0349,0.0371,12],"Copper|4/0 AWG":[0.06365,0.0381,12],"Copper|4 AWG":[0.321,0.0483,12],"Copper|300 kcmil":[0.04575,0.0377,12],"Copper|350 kcmil":[0.0373,0.0373,12],"Copper|2/0 AWG":[0.1015,0.0407,12],"Copper|1/0 AWG":[0.1275,0.0414,12],"Copper|2 AWG":[0.202,0.0448,12],"Copper|1 AWG":[0.16,0.0436,12],"Aluminum|250 kcmil":[0.08963,0.0379,12],"Aluminum|3/0 AWG":[0.12882,0.0397,12],"Aluminum|500 kcmil":[0.04674,0.0349,12],"Aluminum|600 kcmil":[0.04051,0.0343,12],"Aluminum|750 kcmil":[0.03386,0.0326,12],"Aluminum|8 AWG":[1.33004,0.0577,12],"Aluminum|6 AWG":[0.8364,0.0525,12],"Aluminum|400 kcmil":[0.05724,0.0371,12],"Aluminum|4/0 AWG":[0.10439,0.0381,12],"Aluminum|4 AWG":[0.52644,0.0483,12],"Aluminum|300 kcmil":[0.07503,0.0377,12],"Aluminum|350 kcmil":[0.06117,0.0373,12],"Aluminum|2/0 AWG":[0.16646,0.0407,12],"Aluminum|1/0 AWG":[0.2091,0.0414,12],"Aluminum|2 AWG":[0.33128,0.0448,12],"Aluminum|1 AWG":[0.2624,0.0436,12]}};
+ export const CABLE_SIZING_DATA=D;
++// NEC 240.6(A) standard ampere ratings for fuses and inverse-time breakers (10 A added in the 2023 edition; 1, 3, 6, 601 A fuse-only ratings omitted)
++export const STANDARD_OCPD={'2020':[15,20,25,30,35,40,45,50,60,70,80,90,100,110,125,150,175,200,225,250,300,350,400,450,500,600,700,800,1000,1200,1600,2000,2500,3000,4000,5000,6000]};
++STANDARD_OCPD['2023']=[10,...STANDARD_OCPD['2020']];
++// NEC 240.4(D) small-conductor maximum OCPD (after correction/adjustment factors)
++export const SMALL_CONDUCTOR_MAX={Copper:{'14 AWG':15,'12 AWG':20,'10 AWG':30},Aluminum:{'12 AWG':15,'10 AWG':25}};
++// NEC Table 250.122 equipment grounding conductor by OCPD rating (site master database EGC_SIZE_BY_OCPD, record IDs kept)
++export const EGC_TABLE=[[15, "14 AWG", "12 AWG", "EGC-0001"], [20, "12 AWG", "10 AWG", "EGC-0002"], [30, "10 AWG", "8 AWG", "EGC-0003"], [40, "10 AWG", "8 AWG", "EGC-0004"], [60, "10 AWG", "8 AWG", "EGC-0005"], [100, "8 AWG", "6 AWG", "EGC-0006"], [200, "6 AWG", "4 AWG", "EGC-0007"], [300, "4 AWG", "2 AWG", "EGC-0008"], [400, "3 AWG", "1 AWG", "EGC-0009"], [500, "2 AWG", "1/0 AWG", "EGC-0010"], [600, "1 AWG", "2/0 AWG", "EGC-0011"], [800, "1/0 AWG", "3/0 AWG", "EGC-0012"], [1000, "2/0 AWG", "4/0 AWG", "EGC-0013"], [1200, "3/0 AWG", "250 kcmil", "EGC-0014"], [1600, "4/0 AWG", "350 kcmil", "EGC-0015"], [2000, "250 kcmil", "400 kcmil", "EGC-0016"], [2500, "350 kcmil", "600 kcmil", "EGC-0017"], [3000, "400 kcmil", "600 kcmil", "EGC-0018"], [4000, "500 kcmil", "750 kcmil", "EGC-0019"], [5000, "700 kcmil", "1200 kcmil", "EGC-0020"], [6000, "800 kcmil", "1200 kcmil", "EGC-0021"]];
++const nextStandard=(ed,a)=>STANDARD_OCPD[ed].find(r=>r>=a-1e-9)??null;
++function egcFor(ocpd,mat){const row=EGC_TABLE.find(r=>ocpd<=r[0]);return row?{size:mat==='Copper'?row[1]:row[2],recordId:row[3],ocpdRowA:row[0]}:null}
+ const fin=x=>typeof x==='number'&&Number.isFinite(x);
+ const fail=m=>{throw Error('Conductor sizing: '+m)};
+ const ORDER=Object.keys(D.amp['2023'].Copper).filter(s=>!['18 AWG','16 AWG'].includes(s));
+@@ -46,6 +55,11 @@ export function sizeConductor(x){
+  let sc=null;if(fin(x.faultCurrentA)||fin(x.clearingTimeS)){const fa=need('faultCurrentA',1,1e6),ts=need('clearingTimeS',0.001,5);const kk=D.k[(x.insulationClass||'')+'|'+mat];if(!kk)fail('choose an insulation class for the short-circuit k factor.');sc={faultA:fa,timeS:ts,k:kk[0],kRecordId:kk[2],insulationClass:x.insulationClass}}
+  const ambF=ambientFactor(amb,ins),cccF=cccFactor(ccc);
+  if(ambF.factor===null)fail(`ambient ${amb} C is beyond the ${ins} C conductor rating (no correction factor in NEC 310.15(B)(1)(1)).`);
++ let ocpd=null;const om=x.ocpdMode||'none';
++ if(!['none','auto','given'].includes(om))fail('OCPD mode must be none, auto or given.');
++ if(om==='given'){const a=need('ocpdA',1,6000);ocpd={mode:'given',ratingA:a,standard:STANDARD_OCPD[ed].includes(a)}}
++ if(om==='auto'){const a=nextStandard(ed,required);if(a===null)fail('design current is above the largest standard OCPD rating (6000 A).');ocpd={mode:'auto',ratingA:a,standard:true}}
++ if(ocpd){ocpd.minimumA=required;ocpd.belowLoad=ocpd.ratingA<required-1e-9;ocpd.multioutlet=x.multioutletReceptacles===true}
+  const custom=x.customRX&&typeof x.customRX.size==='string'&&fin(x.customRX.rOhmPerKft)&&fin(x.customRX.xOhmPerKft)?x.customRX:null;
+  const kv=phases===3?Math.sqrt(3):2,sinphi=Math.sqrt(Math.max(0,1-pf*pf));
+  const rows=ORDER.map(size=>{
+@@ -61,17 +75,31 @@ export function sizeConductor(x){
+   if(vdLimit!==null){if(rx){const volts=kv*I*(L/1000)*(rx.r*pf+rx.x*sinphi)/sets;vd={volts,percent:100*volts/V,rOhmPerKft:rx.r,xOhmPerKft:rx.x,source:rx.source};vdOk=vd.percent<=vdLimit+1e-12}else{vdOk=false;vdMissing=true;notes.push('No R/X in database for this size; voltage drop not checked, so this size is skipped. Enter custom R/X for it if you want it considered.')}}
+   let scr=null,scOk=null;
+   if(sc){const S=kcmilToMm2(D.kcmil[size]),perCond=sc.faultA/sets,withstandA=sc.k*S/Math.sqrt(sc.timeS);scr={areaMm2:S,currentPerConductorA:perCond,withstandA,i2tA2s:perCond*perCond*sc.timeS,limitA2s:(sc.k*S)**2};scOk=perCond<=withstandA+1e-9}
+-  const ok=ampOk&&vdOk!==false&&scOk!==false;
+-  const governing=!ampOk?'ampacity':vdMissing?'voltage drop not checkable (no R/X data)':vdOk===false?'voltage drop':scOk===false?'short-circuit withstand':null;
+-  return {size,tableAmpacityA:base,tableRecordId:t[ins][1],terminationAmpacityA:termA,terminationRecordId:t[term][1],deratedPerSetA:derated,allowableA:allowable,ampacityOk:ampOk,voltageDrop:vd,voltageDropOk:vdOk,shortCircuit:scr,shortCircuitOk:scOk,pass:ok,failedCheck:governing,notes};
++  let oc=null,ocOk=null;
++  if(ocpd){const lim=SMALL_CONDUCTOR_MAX[mat]?.[size],O=ocpd.ratingA,amp=allowable,why=[];let pass=!ocpd.belowLoad;
++   if(ocpd.belowLoad)why.push(`OCPD ${O} A is below the ${continuous?'125 % continuous ':''}load ${Math.round(required*10)/10} A (210.20(A)/215.3)`);
++   if(lim&&O>lim){pass=false;why.push(`240.4(D): ${size} ${mat} limited to ${lim} A`)}
++   let rule;
++   if(amp>=O-1e-9)rule='ampacity ≥ OCPD';
++   else if(O<=800&&!ocpd.multioutlet&&!STANDARD_OCPD[ed].includes(Math.floor(amp))&&nextStandard(ed,amp)===O)rule='240.4(B) next higher standard rating';
++   else{pass=false;rule=O>800?'240.4(C): above 800 A the ampacity must be ≥ OCPD':'ampacity below OCPD and 240.4(B) does not apply'+(ocpd.multioutlet?' (multioutlet receptacle branch circuit)':'')}
++   oc={ocpdA:O,rule,reasons:why};ocOk=pass&&!/does not apply|240\.4\(C\)/.test(rule)}
++  const ok=ampOk&&vdOk!==false&&scOk!==false&&ocOk!==false;
++  const governing=!ampOk?'ampacity':ocOk===false?'overcurrent protection (NEC 240.4)':vdMissing?'voltage drop not checkable (no R/X data)':vdOk===false?'voltage drop':scOk===false?'short-circuit withstand':null;
++  return {size,tableAmpacityA:base,tableRecordId:t[ins][1],terminationAmpacityA:termA,terminationRecordId:t[term][1],deratedPerSetA:derated,allowableA:allowable,ampacityOk:ampOk,voltageDrop:vd,voltageDropOk:vdOk,shortCircuit:scr,shortCircuitOk:scOk,ocpd:oc,ocpdOk:ocOk,pass:ok,failedCheck:governing,notes};
+  }).filter(Boolean);
+  const pick=rows.find(r=>r.pass);
+  const why=pick?(()=>{const i=rows.indexOf(pick);const fails=[...new Set(rows.slice(0,i).map(r=>r.failedCheck||(r.status?'not permitted':null)).filter(Boolean))];return fails.length?'smaller sizes fail: '+fails.join('; '):'smallest size in the table'})():null;
++ let egc=null;
++ if(ocpd&&pick){const base=egcFor(ocpd.ratingA,mat);if(base){egc={...base,parallelNote:sets>1?'NEC 250.122(F): run a full-size EGC in each parallel raceway or cable.':null};
++  const minRow=rows.find(r=>!r.status&&r.ampacityOk&&r.ocpdOk!==false);
++  if(minRow&&minRow.size!==pick.size){const ratio=D.kcmil[pick.size]/D.kcmil[minRow.size],need=D.kcmil[base.size]*ratio;const up=ORDER.find(z=>D.kcmil[z]>=need-1e-9);
++   egc.increasedFor25122B={ratio,minimumUngroundedSize:minRow.size,size:up&&D.kcmil[up]<=D.kcmil[pick.size]?up:pick.size,note:'NEC 250.122(B): ungrounded conductors upsized (e.g. for voltage drop), so the EGC is increased in proportion to the circular-mil area, not larger than the ungrounded conductors.'}}}}
+  const skippedNoData=pick?rows.slice(0,rows.indexOf(pick)).filter(r=>r.failedCheck==='voltage drop not checkable (no R/X data)'&&r.ampacityOk&&r.shortCircuitOk!==false).map(r=>r.size):[];
+  return {status:pick?'SIZE FOUND':'NO SIZE PASSES',method:CABLE_SIZING_V29.id,version:CABLE_SIZING_V29.version,necEdition:ed,
+-  recommendedSize:pick?.size??null,recommendedSets:sets,governedBy:why,skippedForMissingRX:skippedNoData,
+-  inputs:{material:mat,insulationTempC:Number(ins),terminationTempC:Number(term),designCurrentA:I,continuous,requiredAmpacityA:required,ambientC:amb,currentCarryingConductors:ccc,parallelSets:sets,phases,voltageV:V,powerFactor:pf,lengthFt:L,maxVoltageDropPercent:vdLimit,shortCircuit:sc},
++  recommendedSize:pick?.size??null,recommendedSets:sets,ocpd,egc,governedBy:why,skippedForMissingRX:skippedNoData,
++  inputs:{ocpdMode:om,ocpdA:ocpd?.ratingA??null,multioutletReceptacles:x.multioutletReceptacles===true,material:mat,insulationTempC:Number(ins),terminationTempC:Number(term),designCurrentA:I,continuous,requiredAmpacityA:required,ambientC:amb,currentCarryingConductors:ccc,parallelSets:sets,phases,voltageV:V,powerFactor:pf,lengthFt:L,maxVoltageDropPercent:vdLimit,shortCircuit:sc},
+   factors:{ambient:ambF,ccc:cccF},rows,
+   dataStatus:'NEC 310.16 values from the site database (status SOURCE_REGISTERED_CONTENT_NOT_REVERIFIED); 165/165 Cu/Al values matched published Table 310.16 in V29 QA. Confirm against your licensed NEC.',
+-  limitations:['OCPD selection (NEC 240.4) and small-conductor limits (240.4(D)) are not applied.','Raceway fill, conduit material, harmonic and neutral loading are not considered.','Voltage drop uses typical 75 C R and X from manufacturer data; your cable data sheet governs.','Short-circuit check is adiabatic per conductor with equal sharing between parallel sets.']};
++  limitations:[ocpd?'OCPD check covers NEC 240.4(B), (C), (D) and 210.20(A)/215.3 with fuses or inverse-time breakers; tap rules (240.21), motor circuits (Art. 430) and adjustable-trip breakers (240.6(C)) are not covered.':'OCPD not checked (choose an OCPD option to apply NEC 240.4).','Raceway fill, conduit material, harmonic and neutral loading are not considered.','Voltage drop uses typical 75 C R and X from manufacturer data; your cable data sheet governs.','Short-circuit check is adiabatic per conductor with equal sharing between parallel sets.']};
+ }
+diff --git a/SITE/clearing-time-v29.mjs b/SITE/clearing-time-v29.mjs
+index d397d18..f05164a 100644
+--- a/SITE/clearing-time-v29.mjs
++++ b/SITE/clearing-time-v29.mjs
+@@ -7,12 +7,16 @@
+  *              IEEE C37.112-2018     t = TD * (A / (M^p - 1) + B)
+  *  - curve   : manufacturer total-clearing curve points (current A, minimum s, maximum s) typed from the datasheet;
+  *              the MAXIMUM total-clearing time is used (conservative for arc flash), log-log interpolation.
++ *  - lsi     : LV breaker electronic trip unit, from its settings: long time Ir with delay tLT at 6 x Ir (I^2 t law),
++ *              short time Isd / tsd (flat), instantaneous Ii with the manufacturer's total clearing time.
+  *  - manual  : time typed by the user (from a protection study).
+  * Breaker interrupting time comes from the breaker nameplate (rated cycles) or is typed in ms.
+- * Not modelled: CT saturation, relay/breaker tolerance bands, reset, directional supervision, zone interlocking,
++ * Tolerance band (relay only, values typed from the relay manual): pickup ±%, operate time ±% or ±ms (whichever is larger,
++ * as IEC 60255-151 states accuracy). The slow edge of the band is used for arc flash and conductor withstand.
++ * Not modelled: CT saturation, breaker opening-time spread, reset, directional supervision, zone interlocking,
+  * current-limiting let-through of fuses below 0.01 s (the curve range is enforced).
+  */
+-export const CLEARING_TIME_V29={id:'protective-device-clearing-time-v29',version:'29.1.0'};
++export const CLEARING_TIME_V29={id:'protective-device-clearing-time-v29',version:'29.3.0'};
+ export const IEC_CURVES=Object.freeze({
+  SI:{label:'IEC Standard Inverse (C1)',k:0.14,a:0.02},
+  VI:{label:'IEC Very Inverse (C2)',k:13.5,a:1},
+@@ -59,16 +63,17 @@ function interp(points,I){
+  for(let i=1;i<points.length;i++){const p=points[i-1],q=points[i];if(I<=q.a){
+   const f=(Math.log(I)-Math.log(p.a))/(Math.log(q.a)-Math.log(p.a));
+   const g=(lo,hi)=>Math.exp(Math.log(lo)+f*(Math.log(hi)-Math.log(lo)));
+-  return {min:g(p.min,q.min),max:g(p.max,q.max)}}}
++  return {min:p.min===null?null:g(p.min,q.min),max:g(p.max,q.max)}}}
+  return null;
+ }
+ export function parseCurvePoints(csv){
+  if(typeof csv!=='string'||!csv.trim()||csv.length>12000)bad('paste the datasheet curve as rows: current A, minimum s, maximum s.');
+  const rows=csv.trim().split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  if(rows.length<2||rows.length>160)bad('2 to 160 curve points are needed.');
+- const pts=rows.map((r,i)=>{const c=r.split(/[,;\t]/).map(s=>s.trim());if(c.length!==3)bad(`row ${i+1}: need current A, minimum s, maximum s.`);
+-  const v=c.map(Number);if(v.some(x=>!fin(x)||x<=0))bad(`row ${i+1}: values must be positive numbers.`);if(v[1]>v[2])bad(`row ${i+1}: minimum time is above maximum time.`);return {a:v[0],min:v[1],max:v[2]}});
+- for(let i=1;i<pts.length;i++){if(pts[i].a<=pts[i-1].a)bad('current must increase from row to row.');if(pts[i].max>pts[i-1].max*(1+1e-9)||pts[i].min>pts[i-1].min*(1+1e-9))bad('time must not increase as current increases.')}
++ const pts=rows.map((r,i)=>{const c=r.split(/[,;\t]/).map(s=>s.trim());if(c.length!==3&&c.length!==2)bad(`row ${i+1}: need current A, minimum s, maximum s (or current A, maximum clearing s).`);
++  const v=c.map(Number);if(v.some(x=>!fin(x)||x<=0))bad(`row ${i+1}: values must be positive numbers.`);if(c.length===2)return {a:v[0],min:null,max:v[1]};if(v[1]>v[2])bad(`row ${i+1}: minimum time is above maximum time.`);return {a:v[0],min:v[1],max:v[2]}});
++ if(new Set(pts.map(q=>q.min===null)).size>1)bad('use the same number of columns on every row.');
++ for(let i=1;i<pts.length;i++){if(pts[i].a<=pts[i-1].a)bad('current must increase from row to row.');if(pts[i].max>pts[i-1].max*(1+1e-9)||(pts[i].min!==null&&pts[i].min>pts[i-1].min*(1+1e-9)))bad('time must not increase as current increases.')}
+  return pts;
+ }
+ 
+@@ -85,21 +90,55 @@ export function clearingTime(device,currentA){
+   const t=v.max+br.seconds;
+   return {status:'OK',seconds:t,ms:ms(t),minCurveS:v.min,maxCurveS:v.max,text:`${String(device.model).slice(0,80)} maximum total-clearing curve ${ms(v.max)} ms`+(br.seconds?` + ${br.text}`:''),currentA:I};
+  }
++ if(device.type==='lsi')return lsiTime(device,I);
+  if(device.type==='relay'){
+-  const br=breakerTimeS(device),parts=[];
+-  const inv=device.pickupA!==undefined&&device.pickupA!==null&&device.pickupA!==''?inverseElement(device,I):null;
+-  if(inv?.pickedUp)parts.push({element:'51 inverse time',seconds:inv.seconds,text:inv.text});
+-  if(fin(device.dtPickupA)){pos(device.dtPickupA,'Definite-time pickup');const d=device.dtDelayS;if(!fin(d)||d<0||d>60)bad('definite-time delay must be 0–60 s.');if(I>device.dtPickupA)parts.push({element:'51 definite time',seconds:d,text:`definite time ${d} s above ${device.dtPickupA} A`})}
+-  if(fin(device.instPickupA)){pos(device.instPickupA,'Instantaneous pickup');const d=fin(device.instDelayS)?device.instDelayS:0;if(d<0||d>1)bad('instantaneous delay must be 0–1 s.');if(I>device.instPickupA)parts.push({element:'50 instantaneous',seconds:d,text:`instantaneous above ${device.instPickupA} A`+(d?` + ${d} s`:'')})}
+-  if(!inv&&!fin(device.dtPickupA)&&!fin(device.instPickupA))bad('enter at least one relay element (inverse-time, definite-time or instantaneous).');
+-  if(!parts.length)return {status:'DOES NOT TRIP',seconds:null,text:`no element picks up at ${Math.round(I)} A`,currentA:I};
+-  const g=parts.reduce((a,b)=>b.seconds<a.seconds?b:a);
+-  const t=g.seconds+br.seconds;
+-  return {status:'OK',seconds:t,ms:ms(t),relayS:g.seconds,breakerS:br.seconds,governingElement:g.element,text:`${g.text} → relay ${ms(g.seconds)} ms + ${br.text}`,elements:parts,currentA:I,curveSource:device.standard?CURVE_SOURCES[device.standard]:null};
++  const br=breakerTimeS(device);
++  const evalRelay=(pk,timeAdj)=>{const parts=[];
++   const inv=device.pickupA!==undefined&&device.pickupA!==null&&device.pickupA!==''?inverseElement({...device,pickupA:pos(device.pickupA,'Inverse-time pickup (primary A)')*pk},I):null;
++   if(inv?.pickedUp)parts.push({element:'51 inverse time',seconds:timeAdj(inv.seconds),text:inv.text});
++   if(fin(device.dtPickupA)){pos(device.dtPickupA,'Definite-time pickup');const d=device.dtDelayS;if(!fin(d)||d<0||d>60)bad('definite-time delay must be 0–60 s.');if(I>device.dtPickupA*pk)parts.push({element:'51 definite time',seconds:timeAdj(d),text:`definite time ${d} s above ${device.dtPickupA} A`})}
++   if(fin(device.instPickupA)){pos(device.instPickupA,'Instantaneous pickup');const d=fin(device.instDelayS)?device.instDelayS:0;if(d<0||d>1)bad('instantaneous delay must be 0–1 s.');if(I>device.instPickupA*pk)parts.push({element:'50 instantaneous',seconds:timeAdj(d),text:`instantaneous above ${device.instPickupA} A`+(d?` + ${d} s`:'')})}
++   if(!inv&&!fin(device.dtPickupA)&&!fin(device.instPickupA))bad('enter at least one relay element (inverse-time, definite-time or instantaneous).');
++   return parts.length?parts.reduce((a,b)=>b.seconds<a.seconds?b:a):null};
++  const nom=evalRelay(1,t=>t);
++  const tol=['tolPickupPercent','tolTimePercent','tolTimeMs'].some(k=>fin(device[k]));
++  let band=null;
++  if(tol){const pp=fin(device.tolPickupPercent)?device.tolPickupPercent:0,tp=fin(device.tolTimePercent)?device.tolTimePercent:0,tm=fin(device.tolTimeMs)?device.tolTimeMs:0;
++   if(pp<0||pp>20||tp<0||tp>30||tm<0||tm>200)bad('tolerance limits: pickup 0–20 %, time 0–30 %, time 0–200 ms.');
++   const dev=t=>Math.max(t*tp/100,tm/1000);
++   const slow=evalRelay(1+pp/100,t=>t+dev(t)),fast=evalRelay(1-pp/100,t=>Math.max(0,t-dev(t)));
++   band={pickupPercent:pp,timePercent:tp,timeMs:tm,slowS:slow?slow.seconds+br.seconds:null,fastS:fast?fast.seconds+br.seconds:null,slowElement:slow?.element??null,slowTrips:!!slow}}
++  if(!nom&&!(band&&band.fastS!==null))return {status:'DOES NOT TRIP',seconds:null,text:`no element picks up at ${Math.round(I)} A`,currentA:I};
++  if(band&&!band.slowTrips)return {status:'MAY NOT TRIP (TOLERANCE)',seconds:null,text:`at ${Math.round(I)} A the relay may not pick up at the upper edge of its pickup tolerance`,band,currentA:I};
++  const nominalS=nom.seconds+br.seconds,useS=band?band.slowS:nominalS;
++  return {status:'OK',seconds:useS,ms:ms(useS),nominalS,nominalMs:ms(nominalS),band,usedEdge:band?'slow edge of tolerance band':'nominal curve (no tolerance entered)',relayS:nom.seconds,breakerS:br.seconds,governingElement:band?band.slowElement:nom.element,
++   text:`${nom.text} → relay ${ms(nom.seconds)} ms + ${br.text}`+(band?`; tolerance band ${ms(band.fastS)}–${ms(band.slowS)} ms, ${ms(band.slowS)} ms used`:''),currentA:I,curveSource:device.standard?CURVE_SOURCES[device.standard]:null};
+  }
+  bad('unknown device type.');
+ }
+ 
++function lsiTime(d,I){
++ const In=pos(d.inA,'Trip unit rating In (A)',10000),Ir=In*pos(d.irMult,'Long-time pickup Ir (× In)',1.2);
++ const tLT=pos(d.ltDelayS,'Long-time delay at 6 × Ir (s)',100);
++ const add=fin(d.clearAddMs)?d.clearAddMs/1000:0;if(add<0||add>0.5)bad('extra clearing time for long/short-time zones must be 0–500 ms.');
++ const isd=fin(d.sdMult)?d.sdMult*Ir:null,tsd=fin(d.sdDelayS)?d.sdDelayS:null;if((isd===null)!==(tsd===null))bad('enter both short-time pickup (× Ir) and delay (s), or neither.');if(tsd!==null&&(tsd<0||tsd>1))bad('short-time delay must be 0–1 s.');
++ const ii=fin(d.iiMult)?d.iiMult*In:null,tii=fin(d.instClearMs)?d.instClearMs/1000:null;if((ii===null)!==(tii===null))bad('enter both instantaneous pickup (× In) and its total clearing time (ms, from the manufacturer), or neither.');if(tii!==null&&(tii<=0||tii>0.2))bad('instantaneous clearing time must be 1–200 ms.');
++ const pp=fin(d.tolPickupPercent)?d.tolPickupPercent:0,tp=fin(d.tolTimePercent)?d.tolTimePercent:0,tm=fin(d.tolTimeMs)?d.tolTimeMs:0;
++ if(pp<0||pp>20||tp<0||tp>30||tm<0||tm>200)bad('tolerance limits: pickup 0–20 %, time 0–30 %, time 0–200 ms.');
++ const run=(k,adj)=>{const parts=[];
++  if(I>Ir*k)parts.push({element:'long time',seconds:adj(tLT*(6*Ir/I)**2)+add});
++  if(isd!==null&&I>isd*k)parts.push({element:'short time',seconds:adj(tsd)+add});
++  if(ii!==null&&I>ii*k)parts.push({element:'instantaneous',seconds:tii});
++  return parts.length?parts.reduce((a,b)=>b.seconds<a.seconds?b:a):null};
++ const dev=t=>Math.max(t*tp/100,tm/1000),tol=pp||tp||tm;
++ const nom=run(1,t=>t),slow=tol?run(1+pp/100,t=>t+dev(t)):nom,fast=tol?run(1-pp/100,t=>Math.max(0,t-dev(t))):nom;
++ if(!nom&&!fast)return {status:'DOES NOT TRIP',seconds:null,text:`below long-time pickup ${Math.round(Ir)} A`,currentA:I};
++ if(!slow)return {status:'MAY NOT TRIP (TOLERANCE)',seconds:null,text:`near long-time pickup ${Math.round(Ir)} A`,currentA:I};
++ const band=tol?{pickupPercent:pp,timePercent:tp,timeMs:tm,slowS:slow.seconds,fastS:fast?.seconds??null,slowElement:slow.element,slowTrips:true}:null;
++ return {status:'OK',seconds:slow.seconds,ms:ms(slow.seconds),nominalS:nom?.seconds??null,nominalMs:nom?ms(nom.seconds):null,band,usedEdge:tol?'slow edge of tolerance band':'nominal settings (no tolerance entered)',governingElement:slow.element,
++  text:`electronic trip Ir ${Math.round(Ir)} A, tLT ${tLT} s at 6×Ir${isd!==null?`, Isd ${Math.round(isd)} A / ${tsd} s`:''}${ii!==null?`, Ii ${Math.round(ii)} A / ${ms(tii)} ms clearing`:''} → ${slow.element} ${ms(slow.seconds)} ms`+(band?` (band ${band.fastS!==null?ms(band.fastS):'—'}–${ms(band.slowS)} ms)`:''),currentA:I};
++}
++
+ /** clearing times at the full and reduced arcing currents (kA); share = fraction of bus arcing current seen by the device. */
+ export function arcFlashClearingTimes(device,fullKA,reducedKA){
+  const share=fin(device?.sharePercent)?device.sharePercent:100;
+@@ -111,6 +150,7 @@ export function describeDevice(d){
+  if(!d)return '';
+  if(d.type==='manual')return 'Typed clearing times';
+  if(d.type==='curve')return 'Manufacturer curve: '+String(d.model||'').slice(0,60);
+- if(d.type==='relay'){const fam=d.standard==='IEC'?IEC_CURVES[d.curve]?.label:IEEE_CURVES[d.curve]?.label;return (fam||'Relay')+(d.pickupA?` · pickup ${d.pickupA} A`:'')+(d.dial?` · dial ${d.dial}`:'')+(d.instPickupA?` · inst ${d.instPickupA} A`:'')}
++ if(d.type==='lsi')return `Electronic trip · In ${d.inA} A · Ir ${d.irMult}×`+(fin(d.sdMult)?` · Isd ${d.sdMult}× / ${d.sdDelayS} s`:'')+(fin(d.iiMult)?` · Ii ${d.iiMult}×`:'');
++ if(d.type==='relay'){const fam=d.standard==='IEC'?IEC_CURVES[d.curve]?.label:IEEE_CURVES[d.curve]?.label;return (fam||'Relay')+(d.pickupA?` · pickup ${d.pickupA} A`:'')+(d.dial?` · dial ${d.dial}`:'')+(d.instPickupA?` · inst ${d.instPickupA} A`:'')+(fin(d.tolTimePercent)||fin(d.tolTimeMs)||fin(d.tolPickupPercent)?' · with tolerance band':'')}
+  return '';
+ }
+diff --git a/SITE/index.html b/SITE/index.html
+index 2a19936..9374ef7 100644
+--- a/SITE/index.html
++++ b/SITE/index.html
+@@ -36,14 +36,14 @@
+     },25000);
+   })();
+   </script>
+-  <script defer src="public-bundle-v21.js?v=20261026-v25-capability-atlas"></script>
++  <script defer src="public-bundle-v21.js?v=20261108-v29e"></script>
+   <script defer src="interface-v25.js?v=20261026-v25"></script>
+   <script defer src="interface-v26.js?v=20261026-v26"></script>
+   <script type="module" src="operations-v27-ui.mjs?v=20261026-v27"></script>
+   <script type="module" src="conductor-duty-ui-v28.mjs?v=20261026-v28"></script>
+   <script type="module" src="fault-envelope-ui-v29.mjs?v=20261107-v29b"></script>
+-  <script type="module" src="arcflash-network-ui-v29.mjs?v=20261108-v29d"></script>
+-  <script type="module" src="cable-sizing-ui-v29.mjs?v=20261108-v29d"></script>
++  <script type="module" src="arcflash-network-ui-v29.mjs?v=20261108-v29e"></script>
++  <script type="module" src="cable-sizing-ui-v29.mjs?v=20261108-v29e"></script>
+   <script type="module" src="power-quality-ui-v29.mjs?v=20261108-v29d"></script>
+ </body>
+ </html>
+diff --git a/SITE/network-app.mjs b/SITE/network-app.mjs
+index 20c9035..8d0afdf 100644
+--- a/SITE/network-app.mjs
++++ b/SITE/network-app.mjs
+@@ -260,7 +260,7 @@ function databaseScreensView(){
+ 
+ function sourceForm(s){const custom=analysisSourceFields(project,s,modelInput,busSelect);if(custom!==null)return custom;if(isSinglePhase(project))return singlePhaseSourceFields(s,input,busSelect);let html=(['other','otherSource','motor'].includes(s.kind)?input(s,'model','Source behavior',{options:[['voltage','Voltage source with impedance'],['current','Regulated current injection']],help:'Choose current injection only for documented current-controlled behavior. A motor normally uses its documented impedance or fault-current data.'}):'')+busSelect(s,'bus','Connected bus')+input(s,'voltage','Source voltage',{units:voltageUnits,required:true,help:'Editing this voltage sets its connected bus voltage. Reconnecting or selecting database equipment preserves existing bus voltages; a transformer belongs between voltage levels.'});if(['pv','bess'].includes(s.kind)||s.model==='current'){html+=`<div class="model-note">Current-limited Norton model · manufacturer values required. Cable/transformer current division is solved; an ideal regulated current is not arbitrarily reduced by series impedance.</div>`+input(s,'faultA','Manufacturer RMS fault current',{units:currentUnits})+input(s,'power','Rated apparent power',{units:powerUnits})+input(s,'multiplier','Fault-current multiplier (pu)',{help:'Used only when a direct manufacturer current is not entered.'})+input(s,'angle','Fault current phase angle (degrees)',{help:'Blank = unknown; total is a magnitude-sum bound. Known angle is relative to the common study phase reference.'})+input(s,'duration','Contribution duration (seconds)',{help:'If known, this contribution is removed after its duration at the selected study time.'})+input(s,'peakA','Manufacturer peak fault current',{units:currentUnits})}else{if(s.kind==='generator')html+=input(s,'method','Generator source model',{options:[['ka','Generator rating + reactance'],['impedance','Documented resistance + reactance']]});if(s.kind!=='generator')html+=input(s,'method','Available source data',{options:[['ka','Three-phase fault current'],['mva','Short-circuit MVA'],['impedance','Resistance + reactance']]});if(s.kind==='generator'&&s.method!=='impedance')html+=input(s,'power','Generator rating',{units:powerUnits,required:true})+input(s,'xdpp','Subtransient Xd″ (pu)',{required:project.settings.generatorStage==='initial'})+input(s,'xdp','Transient Xd′ (pu)',{required:project.settings.generatorStage==='transient'})+input(s,'xd','Steady-state Xd (pu)',{required:project.settings.generatorStage==='steady'});else if(s.method==='mva')html+=input(s,'faultMVA','Available short-circuit MVA',{required:true});else if(s.method==='impedance')html+=input(s,'r','Source resistance (Ω)',{required:true})+input(s,'x','Source reactance (Ω)',{required:true});else html+=input(s,'faultA','Available three-phase RMS fault current',{units:currentUnits,required:true,help:'Enter the utility three-phase short-circuit level at this source voltage. The selected study fault type determines bus results. For line-to-line with Z2 = Z1 and zero fault impedance, 65 kA three-phase gives 56.3 kA line-to-line.'});if(s.method!=='impedance')html+=input(s,'xr','Source X/R ratio',{help:s.kind==='generator'?'Xd defines reactance; resistance = reactance ÷ X/R. Leave unknown for a declared R = 0 screen.':'Unknown = purely reactive magnitude screening, explicitly identified in results.'});html+=input(s,'angle','Internal source-voltage angle (degrees)',{help:'Blank assumes 0° in the common study phase reference.'})}
+ return html+input(s,'frequency','Source-data frequency (Hz)',{help:'Use the frequency at which the supplied fault/impedance data applies.'})+`<h4>Operating scenarios</h4>`+input(s,'maxInclude','Include in maximum case',{type:'checkbox'})+input(s,'maxStrength','Maximum strength multiplier',{help:'Blank uses 1.0: the supplied source strength.'})+input(s,'minInclude','Include in minimum case',{type:'checkbox'})+input(s,'minStrength','Minimum strength multiplier',{help:'Blank uses 1.0: the supplied source strength.'})}
+-function transformerForm(t){const custom=analysisTransformerFields(project,t,modelInput,busSelect);if(custom!==null)return custom;if(isSinglePhase(project))return singlePhaseTransformerFields(t,input,busSelect);return busSelect(t,'from','Primary bus')+busSelect(t,'to','Secondary bus')+`<div class="voltage-bridge">PRIMARY <span>→</span> SECONDARY</div>`+input(t,'v1','Primary winding voltage',{units:voltageUnits,required:true})+input(t,'v2','Secondary winding voltage',{units:voltageUnits,required:true,help:'This explicitly sets the downstream bus voltage; use 208 V or 0.208 kV.'})+input(t,'power','Nameplate rating',{units:powerUnits,required:true})+input(t,'zPercent','Nameplate impedance (%)',{required:true})+input(t,'xr','Transformer X/R ratio',{help:'Leave unknown only for declared reactive-impedance screening.'})+input(t,'tapPercent','Off-nominal primary tap (%)',{help:'Tap changer setting as % of nameplate primary voltage, e.g. +2.5 or -5. Blank or 0 = nominal. Applied to fault studies; load flow and split-phase studies ask for 0 %.'})+input(t,'shift','Phase shift: primary to secondary (degrees)',{help:'Enter the actual vector-group phase shift. Blank assumes aligned phases for balanced screening.'})+input(t,'primaryConnection','Primary winding',{options:['Unknown','Delta','Wye Grounded','Wye Ungrounded','Zigzag Grounded']})+input(t,'secondaryConnection','Secondary winding',{options:['Unknown','Delta','Wye Grounded','Wye Ungrounded','Zigzag Grounded']})+input(t,'grounding','Grounding configuration',{options:['Unknown','Solidly grounded','Resistance grounded','Reactance grounded','Ungrounded']})+input(t,'neutralR','Neutral grounding resistance (Ω)')+input(t,'neutralX','Neutral grounding reactance (Ω)')+input(t,'frequency','Transformer nameplate frequency (Hz)')+input(t,'allowOneToOne','Intentional 1:1 transformer',{type:'checkbox'})+input(t,'allowIdeal','Intentional ideal transformer (0% Z)',{type:'checkbox'})}
++function transformerForm(t){const custom=analysisTransformerFields(project,t,modelInput,busSelect);if(custom!==null)return custom;if(isSinglePhase(project))return singlePhaseTransformerFields(t,input,busSelect);return busSelect(t,'from','Primary bus')+busSelect(t,'to','Secondary bus')+`<div class="voltage-bridge">PRIMARY <span>→</span> SECONDARY</div>`+input(t,'v1','Primary winding voltage',{units:voltageUnits,required:true})+input(t,'v2','Secondary winding voltage',{units:voltageUnits,required:true,help:'This explicitly sets the downstream bus voltage; use 208 V or 0.208 kV.'})+input(t,'power','Nameplate rating',{units:powerUnits,required:true})+input(t,'zPercent','Nameplate impedance (%)',{required:true})+input(t,'xr','Transformer X/R ratio',{help:'Leave unknown only for declared reactive-impedance screening.'})+input(t,'tapPercent','Off-nominal primary tap (%)',{help:'Tap changer setting as % of nameplate primary voltage, e.g. +2.5 or -5. Blank or 0 = nominal. Applied to fault studies and load flow; the split-phase study asks for 0 %.'})+input(t,'shift','Phase shift: primary to secondary (degrees)',{help:'Enter the actual vector-group phase shift. Blank assumes aligned phases for balanced screening.'})+input(t,'primaryConnection','Primary winding',{options:['Unknown','Delta','Wye Grounded','Wye Ungrounded','Zigzag Grounded']})+input(t,'secondaryConnection','Secondary winding',{options:['Unknown','Delta','Wye Grounded','Wye Ungrounded','Zigzag Grounded']})+input(t,'grounding','Grounding configuration',{options:['Unknown','Solidly grounded','Resistance grounded','Reactance grounded','Ungrounded']})+input(t,'neutralR','Neutral grounding resistance (Ω)')+input(t,'neutralX','Neutral grounding reactance (Ω)')+input(t,'frequency','Transformer nameplate frequency (Hz)')+input(t,'allowOneToOne','Intentional 1:1 transformer',{type:'checkbox'})+input(t,'allowIdeal','Intentional ideal transformer (0% Z)',{type:'checkbox'})}
+ function cableVoltageContent(c){
+  const check=cableVoltageDetails(project,c);
+  let state='neutral',label='Not checked',message='Enter the cable’s documented insulation rating, or choose cable data from the master database.';
+diff --git a/SITE/operating-studies.mjs b/SITE/operating-studies.mjs
+index e39b69c..42ce1e7 100644
+--- a/SITE/operating-studies.mjs
++++ b/SITE/operating-studies.mjs
+@@ -31,14 +31,14 @@ function validatePowerNetwork(net){if(!net||!Array.isArray(net.buses)||!Array.is
+  if((b.type==='PV'||b.type==='SLACK')&&(!finite(b.vSetPu)||b.vSetPu<0.5||b.vSetPu>1.5))fail(b.id+': fixed voltage setpoint required');
+  if(b.type==='PV'&&(b.qMinMvar!=null||b.qMaxMvar!=null)&&(!finite(b.qMinMvar)||!finite(b.qMaxMvar)||b.qMinMvar>b.qMaxMvar))fail(b.id+': both finite minimum and maximum reactive limits required');}
+  if(net.buses.filter(b=>b.type==='SLACK').length!==1)fail('exactly one documented slack/reference bus required');
+- for(const branch of net.branches){if(!ids.has(branch.from)||!ids.has(branch.to)||branch.from===branch.to)fail('branch with invalid terminals');if(!finite(branch.rPu)||!finite(branch.xPu)||Math.hypot(branch.rPu,branch.xPu)<1e-8||Math.hypot(branch.rPu,branch.xPu)>10000)fail('documented nonzero R/X per-unit impedance required');}
++ for(const branch of net.branches){if(!ids.has(branch.from)||!ids.has(branch.to)||branch.from===branch.to)fail('branch with invalid terminals');if(branch.tap!=null&&(!finite(branch.tap)||branch.tap<0.85||branch.tap>1.15))fail('transformer off-nominal tap ratio must be 0.85–1.15');if(!finite(branch.rPu)||!finite(branch.xPu)||Math.hypot(branch.rPu,branch.xPu)<1e-8||Math.hypot(branch.rPu,branch.xPu)>10000)fail('documented nonzero R/X per-unit impedance required');}
+  const adjacency=new Map(net.buses.map(b=>[b.id,[]]));for(const e of net.branches){adjacency.get(e.from).push(e.to);adjacency.get(e.to).push(e.from)}
+  const found=new Set([net.buses.find(b=>b.type==='SLACK').id]),todo=[...found];for(let i=0;i<todo.length;i++)for(const next of adjacency.get(todo[i]))if(!found.has(next)){found.add(next);todo.push(next)}
+  if(found.size!==ids.size)fail('disconnected island; every active bus must have a path to reference source');
+ }
+ function solveBalancedPowerFlowCore(net){validatePowerNetwork(net);
+  const n=net.buses.length,base=net.baseMVA,at=new Map(net.buses.map((b,i)=>[b.id,i]));const Y=Array.from({length:n},()=>Array.from({length:n},()=>complex()));
+- for(const e of net.branches){const i=at.get(e.from),j=at.get(e.to),y=divide(complex(1),complex(e.rPu,e.xPu));Y[i][i]=add(Y[i][i],y);Y[j][j]=add(Y[j][j],y);Y[i][j]=sub(Y[i][j],y);Y[j][i]=sub(Y[j][i],y)}
++ for(const e of net.branches){const i=at.get(e.from),j=at.get(e.to),y=divide(complex(1),complex(e.rPu,e.xPu)),t=e.tap??1;Y[i][i]=add(Y[i][i],divide(y,complex(t*t)));Y[j][j]=add(Y[j][j],y);Y[i][j]=sub(Y[i][j],divide(y,complex(t)));Y[j][i]=sub(Y[j][i],divide(y,complex(t)))}
+  const slack=net.buses.findIndex(b=>b.type==='SLACK'),others=net.buses.map((b,i)=>b.type!=='SLACK'?i:null).filter(i=>i!==null),pq=others.filter(i=>net.buses[i].type==='PQ');
+  const angN=others.length,m=angN+pq.length,angles=Array(n).fill(0),vm=net.buses.map(b=>b.type==='SLACK'||b.type==='PV'?b.vSetPu:1);
+  const init=[...others.map(i=>angles[i]),...pq.map(i=>vm[i])];
+@@ -58,12 +58,12 @@ function solveBalancedPowerFlowCore(net){validatePowerNetwork(net);
+  }
+  if(solution.norm>STUDY_LIMITS.tolerance)fail('Newton power flow did not reach the specified mismatch tolerance');
+  const buses=net.buses.map((b,i)=>({id:b.id,type:b.type,voltagePu:solution.mag[i],angleDegrees:solution.phi[i]*180/Math.PI,pMW:solution.powers[i].re*base,qMvar:solution.powers[i].im*base}));
+- const branches=net.branches.map(e=>{const i=at.get(e.from),j=at.get(e.to),y=divide(complex(1),complex(e.rPu,e.xPu)),current=multiply(y,sub(solution.V[i],solution.V[j]));const from=multiply(solution.V[i],conjugate(current)),to=multiply(solution.V[j],conjugate(complex(-current.re,-current.im)));
+- return {id:e.id??null,from:e.from,to:e.to,currentPu:abs(current),fromMW:from.re*base,fromMvar:from.im*base,toMW:to.re*base,toMvar:to.im*base,lossMW:(from.re+to.re)*base,lossMvar:(from.im+to.im)*base};});
++ const branches=net.branches.map(e=>{const i=at.get(e.from),j=at.get(e.to),y=divide(complex(1),complex(e.rPu,e.xPu)),t=e.tap??1,current=multiply(y,sub(divide(solution.V[i],complex(t)),solution.V[j])),fromI=divide(current,complex(t));const from=multiply(solution.V[i],conjugate(fromI)),to=multiply(solution.V[j],conjugate(complex(-current.re,-current.im)));
++ return {id:e.id??null,from:e.from,to:e.to,currentPu:abs(current),fromCurrentPu:abs(fromI),tap:t,fromMW:from.re*base,fromMvar:from.im*base,toMW:to.re*base,toMvar:to.im*base,lossMW:(from.re+to.re)*base,lossMvar:(from.im+to.im)*base};});
+  const totalLossMW=branches.reduce((sum,r)=>sum+r.lossMW,0),sumBusP=buses.reduce((sum,r)=>sum+r.pMW,0);
+  for(const [i,b] of net.buses.entries())if(b.type==='PV'&&b.qMinMvar!=null&&b.qMaxMvar!=null){const computed=buses[i].qMvar;if(computed<b.qMinMvar-1e-6||computed>b.qMaxMvar+1e-6)fail(b.id+': computed PV reactive dispatch '+computed.toFixed(5)+' Mvar exceeds documented Q limits; reactive-power-limited bus switching not yet modeled');}
+  if(!Number.isFinite(totalLossMW)||Math.abs(sumBusP-totalLossMW)>base*3e-7)fail('network real-power balance did not close');
+- return {status:'BALANCED_AC_SCREENING',converged:true,iterations,mismatchPu:solution.norm,baseMVA:base,buses,branches,totalLossMW,totalLossMvar:branches.reduce((sum,r)=>sum+r.lossMvar,0),source:'Steady-state balanced Ybus Newton-Raphson; constant P/Q; no voltage-dependent loads, device control, taps, shunts or Q limits'};
++ return {status:'BALANCED_AC_SCREENING',converged:true,iterations,mismatchPu:solution.norm,baseMVA:base,buses,branches,totalLossMW,totalLossMvar:branches.reduce((sum,r)=>sum+r.lossMvar,0),source:'Steady-state balanced Ybus Newton-Raphson; constant P/Q; no voltage-dependent loads, device control, automatic tap changing, shunts or Q limits; fixed off-nominal transformer taps included'};
+ }
+ /**
+  * Optional finite active-set PV Q-limit preview. The legacy/default mode stays
+@@ -129,17 +129,17 @@ export function operatingNetworkFromStudio(p){const cfg=p.operatingStudy||{};
+  for(const e of p.branches.filter(e=>e.enabled!==false&&(!e.deviceId||p.devices.find(d=>d.id===e.deviceId)?.enabled!==false))){
+    if(!voltage.has(e.from)||!voltage.has(e.to))fail(e.name+': invalid connected endpoints');
+    if(e.kind==='link')fail(e.name+': ideal links require an explicit bus merger before operating-study calculation');
+-   let rPu,xPu;
++   let rPu,xPu,tap=1;
+    if(e.kind==='cable'){
+      if(!finite(e.rPerM)||!finite(e.xPerM)||!finite(e.length)||e.length<=0||!Number.isSafeInteger(e.runs)||e.runs<=0)fail(e.name+': actual R/X Ω/m, length m and parallel runs required');
+      if(Math.abs(voltage.get(e.from)-voltage.get(e.to))>1e-6*Math.max(voltage.get(e.from),voltage.get(e.to)))fail(e.name+': cable crosses incompatible voltage bases');
+      const baseOhm=voltage.get(e.from)**2/(base*1e6);rPu=e.rPerM*e.length/e.runs/baseOhm;xPu=e.xPerM*e.length/e.runs/baseOhm;
+    }else if(e.kind==='transformer'){
+      if(!finite(e.power)||e.power<=0||!finite(e.zPercent)||e.zPercent<=0||!finite(e.xr)||e.xr<0||!finite(e.v1)||!finite(e.v2))fail(e.name+': rating VA, %Z, X/R and winding voltages required');
+-     if(Math.abs(voltage.get(e.from)-e.v1)>1e-4*e.v1||Math.abs(voltage.get(e.to)-e.v2)>1e-4*e.v2)fail(e.name+': transformer nominal ratios do not match actual connected voltage bases (tap modeling pending)');if(e.tapPercent)fail(e.name+': off-nominal transformer tap is applied in fault studies but not yet in load flow; set the tap to 0 % for this operating study.');
++     if(Math.abs(voltage.get(e.from)-e.v1)>1e-4*e.v1||Math.abs(voltage.get(e.to)-e.v2)>1e-4*e.v2)fail(e.name+': transformer nominal ratios do not match actual connected voltage bases (tap modeling pending)');if(e.tapPercent!=null&&e.tapPercent!==''&&(!finite(e.tapPercent)||Math.abs(e.tapPercent)>10))fail(e.name+': off-nominal tap must be between -10 % and +10 %');tap=1+(e.tapPercent||0)/100;
+      const z=e.zPercent/100*base*1e6/e.power;rPu=z/Math.hypot(1,e.xr);xPu=rPu*e.xr;
+    }else fail(e.name+': unsupported operating-network branch kind');
+-   branches.push({id:e.id,from:e.from,to:e.to,rPu,xPu});
++   branches.push(tap!==1?{id:e.id,from:e.from,to:e.to,rPu,xPu,tap}:{id:e.id,from:e.from,to:e.to,rPu,xPu});
+  }
+  return {baseMVA:base,buses,branches,qLimitMode:cfg.qLimitMode??'block'};
+ }
+diff --git a/SITE/public-bundle-v21.js b/SITE/public-bundle-v21.js
+index 339ed2c..6476b4a 100644
+--- a/SITE/public-bundle-v21.js
++++ b/SITE/public-bundle-v21.js
+@@ -4855,6 +4855,8 @@ function validatePowerNetwork(net) {
+     for (const branch of net.branches) {
+         if (!ids.has(branch.from) || !ids.has(branch.to) || branch.from === branch.to)
+             fail('branch with invalid terminals');
++        if (branch.tap != null && (!finite(branch.tap) || branch.tap < 0.85 || branch.tap > 1.15))
++            fail('transformer off-nominal tap ratio must be 0.85–1.15');
+         if (!finite(branch.rPu) || !finite(branch.xPu) || Math.hypot(branch.rPu, branch.xPu) < 1e-8 || Math.hypot(branch.rPu, branch.xPu) > 10000)
+             fail('documented nonzero R/X per-unit impedance required');
+     }
+@@ -4878,11 +4880,11 @@ function solveBalancedPowerFlowCore(net) {
+     const n = net.buses.length, base = net.baseMVA, at = new Map(net.buses.map((b, i) => [b.id, i]));
+     const Y = Array.from({ length: n }, () => Array.from({ length: n }, () => complex()));
+     for (const e of net.branches) {
+-        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu));
+-        Y[i][i] = add(Y[i][i], y);
++        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu)), t = e.tap ?? 1;
++        Y[i][i] = add(Y[i][i], divide(y, complex(t * t)));
+         Y[j][j] = add(Y[j][j], y);
+-        Y[i][j] = sub(Y[i][j], y);
+-        Y[j][i] = sub(Y[j][i], y);
++        Y[i][j] = sub(Y[i][j], divide(y, complex(t)));
++        Y[j][i] = sub(Y[j][i], divide(y, complex(t)));
+     }
+     const slack = net.buses.findIndex(b => b.type === 'SLACK'), others = net.buses.map((b, i) => b.type !== 'SLACK' ? i : null).filter(i => i !== null), pq = others.filter(i => net.buses[i].type === 'PQ');
+     const angN = others.length, m = angN + pq.length, angles = Array(n).fill(0), vm = net.buses.map(b => b.type === 'SLACK' || b.type === 'PV' ? b.vSetPu : 1);
+@@ -4934,9 +4936,9 @@ function solveBalancedPowerFlowCore(net) {
+         fail('Newton power flow did not reach the specified mismatch tolerance');
+     const buses = net.buses.map((b, i) => ({ id: b.id, type: b.type, voltagePu: solution.mag[i], angleDegrees: solution.phi[i] * 180 / Math.PI, pMW: solution.powers[i].re * base, qMvar: solution.powers[i].im * base }));
+     const branches = net.branches.map(e => {
+-        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu)), current = multiply(y, sub(solution.V[i], solution.V[j]));
+-        const from = multiply(solution.V[i], conjugate(current)), to = multiply(solution.V[j], conjugate(complex(-current.re, -current.im)));
+-        return { id: e.id ?? null, from: e.from, to: e.to, currentPu: abs(current), fromMW: from.re * base, fromMvar: from.im * base, toMW: to.re * base, toMvar: to.im * base, lossMW: (from.re + to.re) * base, lossMvar: (from.im + to.im) * base };
++        const i = at.get(e.from), j = at.get(e.to), y = divide(complex(1), complex(e.rPu, e.xPu)), t = e.tap ?? 1, current = multiply(y, sub(divide(solution.V[i], complex(t)), solution.V[j])), fromI = divide(current, complex(t));
++        const from = multiply(solution.V[i], conjugate(fromI)), to = multiply(solution.V[j], conjugate(complex(-current.re, -current.im)));
++        return { id: e.id ?? null, from: e.from, to: e.to, currentPu: abs(current), fromCurrentPu: abs(fromI), tap: t, fromMW: from.re * base, fromMvar: from.im * base, toMW: to.re * base, toMvar: to.im * base, lossMW: (from.re + to.re) * base, lossMvar: (from.im + to.im) * base };
+     });
+     const totalLossMW = branches.reduce((sum, r) => sum + r.lossMW, 0), sumBusP = buses.reduce((sum, r) => sum + r.pMW, 0);
+     for (const [i, b] of net.buses.entries())
+@@ -4947,7 +4949,7 @@ function solveBalancedPowerFlowCore(net) {
+         }
+     if (!Number.isFinite(totalLossMW) || Math.abs(sumBusP - totalLossMW) > base * 3e-7)
+         fail('network real-power balance did not close');
+-    return { status: 'BALANCED_AC_SCREENING', converged: true, iterations, mismatchPu: solution.norm, baseMVA: base, buses, branches, totalLossMW, totalLossMvar: branches.reduce((sum, r) => sum + r.lossMvar, 0), source: 'Steady-state balanced Ybus Newton-Raphson; constant P/Q; no voltage-dependent loads, device control, taps, shunts or Q limits' };
++    return { status: 'BALANCED_AC_SCREENING', converged: true, iterations, mismatchPu: solution.norm, baseMVA: base, buses, branches, totalLossMW, totalLossMvar: branches.reduce((sum, r) => sum + r.lossMvar, 0), source: 'Steady-state balanced Ybus Newton-Raphson; constant P/Q; no voltage-dependent loads, device control, automatic tap changing, shunts or Q limits; fixed off-nominal transformer taps included' };
+ }
+ /**
+  * Optional finite active-set PV Q-limit preview. The legacy/default mode stays
+@@ -5062,7 +5064,7 @@ function operatingNetworkFromStudio(p) {
+             fail(e.name + ': invalid connected endpoints');
+         if (e.kind === 'link')
+             fail(e.name + ': ideal links require an explicit bus merger before operating-study calculation');
+-        let rPu, xPu;
++        let rPu, xPu, tap = 1;
+         if (e.kind === 'cable') {
+             if (!finite(e.rPerM) || !finite(e.xPerM) || !finite(e.length) || e.length <= 0 || !Number.isSafeInteger(e.runs) || e.runs <= 0)
+                 fail(e.name + ': actual R/X Ω/m, length m and parallel runs required');
+@@ -5077,14 +5079,14 @@ function operatingNetworkFromStudio(p) {
+                 fail(e.name + ': rating VA, %Z, X/R and winding voltages required');
+             if (Math.abs(voltage.get(e.from) - e.v1) > 1e-4 * e.v1 || Math.abs(voltage.get(e.to) - e.v2) > 1e-4 * e.v2)
+                 fail(e.name + ': transformer nominal ratios do not match actual connected voltage bases (tap modeling pending)');
+-            if(e.tapPercent)fail(e.name+': off-nominal transformer tap is applied in fault studies but not yet in load flow; set the tap to 0 % for this operating study.');
++            if(e.tapPercent!=null&&e.tapPercent!==''&&(!finite(e.tapPercent)||Math.abs(e.tapPercent)>10))fail(e.name+': off-nominal tap must be between -10 % and +10 %');tap=1+(e.tapPercent||0)/100;
+             const z = e.zPercent / 100 * base * 1e6 / e.power;
+             rPu = z / Math.hypot(1, e.xr);
+             xPu = rPu * e.xr;
+         }
+         else
+             fail(e.name + ': unsupported operating-network branch kind');
+-        branches.push({ id: e.id, from: e.from, to: e.to, rPu, xPu });
++        branches.push(tap !== 1 ? { id: e.id, from: e.from, to: e.to, rPu, xPu, tap } : { id: e.id, from: e.from, to: e.to, rPu, xPu });
+     }
+     return { baseMVA: base, buses, branches, qLimitMode: cfg.qLimitMode ?? 'block' };
+ }
+@@ -8931,7 +8933,7 @@ function sourceForm(s) {
+ }
+ function transformerForm(t) { const custom = (0, analysis_fields_mjs_v_20261022_pv_final_1.analysisTransformerFields)(project, t, modelInput, busSelect); if (custom !== null)
+     return custom; if ((0, single_phase_mjs_v_20261022_pv_final_1.isSinglePhase)(project))
+-    return (0, single_phase_form_mjs_v_20261022_pv_final_1.singlePhaseTransformerFields)(t, input, busSelect); return busSelect(t, 'from', 'Primary bus') + busSelect(t, 'to', 'Secondary bus') + `<div class="voltage-bridge">PRIMARY <span>→</span> SECONDARY</div>` + input(t, 'v1', 'Primary winding voltage', { units: voltageUnits, required: true }) + input(t, 'v2', 'Secondary winding voltage', { units: voltageUnits, required: true, help: 'This explicitly sets the downstream bus voltage; use 208 V or 0.208 kV.' }) + input(t, 'power', 'Nameplate rating', { units: powerUnits, required: true }) + input(t, 'zPercent', 'Nameplate impedance (%)', { required: true }) + input(t, 'xr', 'Transformer X/R ratio', { help: 'Leave unknown only for declared reactive-impedance screening.' }) + input(t, 'tapPercent', 'Off-nominal primary tap (%)', { help: 'Tap changer setting as % of nameplate primary voltage, e.g. +2.5 or -5. Blank or 0 = nominal. Applied to fault studies; load flow and split-phase studies ask for 0 %.' }) + input(t, 'shift', 'Phase shift: primary to secondary (degrees)', { help: 'Enter the actual vector-group phase shift. Blank assumes aligned phases for balanced screening.' }) + input(t, 'primaryConnection', 'Primary winding', { options: ['Unknown', 'Delta', 'Wye Grounded', 'Wye Ungrounded', 'Zigzag Grounded'] }) + input(t, 'secondaryConnection', 'Secondary winding', { options: ['Unknown', 'Delta', 'Wye Grounded', 'Wye Ungrounded', 'Zigzag Grounded'] }) + input(t, 'grounding', 'Grounding configuration', { options: ['Unknown', 'Solidly grounded', 'Resistance grounded', 'Reactance grounded', 'Ungrounded'] }) + input(t, 'neutralR', 'Neutral grounding resistance (Ω)') + input(t, 'neutralX', 'Neutral grounding reactance (Ω)') + input(t, 'frequency', 'Transformer nameplate frequency (Hz)') + input(t, 'allowOneToOne', 'Intentional 1:1 transformer', { type: 'checkbox' }) + input(t, 'allowIdeal', 'Intentional ideal transformer (0% Z)', { type: 'checkbox' }); }
++    return (0, single_phase_form_mjs_v_20261022_pv_final_1.singlePhaseTransformerFields)(t, input, busSelect); return busSelect(t, 'from', 'Primary bus') + busSelect(t, 'to', 'Secondary bus') + `<div class="voltage-bridge">PRIMARY <span>→</span> SECONDARY</div>` + input(t, 'v1', 'Primary winding voltage', { units: voltageUnits, required: true }) + input(t, 'v2', 'Secondary winding voltage', { units: voltageUnits, required: true, help: 'This explicitly sets the downstream bus voltage; use 208 V or 0.208 kV.' }) + input(t, 'power', 'Nameplate rating', { units: powerUnits, required: true }) + input(t, 'zPercent', 'Nameplate impedance (%)', { required: true }) + input(t, 'xr', 'Transformer X/R ratio', { help: 'Leave unknown only for declared reactive-impedance screening.' }) + input(t, 'tapPercent', 'Off-nominal primary tap (%)', { help: 'Tap changer setting as % of nameplate primary voltage, e.g. +2.5 or -5. Blank or 0 = nominal. Applied to fault studies and load flow; the split-phase study asks for 0 %.' }) + input(t, 'shift', 'Phase shift: primary to secondary (degrees)', { help: 'Enter the actual vector-group phase shift. Blank assumes aligned phases for balanced screening.' }) + input(t, 'primaryConnection', 'Primary winding', { options: ['Unknown', 'Delta', 'Wye Grounded', 'Wye Ungrounded', 'Zigzag Grounded'] }) + input(t, 'secondaryConnection', 'Secondary winding', { options: ['Unknown', 'Delta', 'Wye Grounded', 'Wye Ungrounded', 'Zigzag Grounded'] }) + input(t, 'grounding', 'Grounding configuration', { options: ['Unknown', 'Solidly grounded', 'Resistance grounded', 'Reactance grounded', 'Ungrounded'] }) + input(t, 'neutralR', 'Neutral grounding resistance (Ω)') + input(t, 'neutralX', 'Neutral grounding reactance (Ω)') + input(t, 'frequency', 'Transformer nameplate frequency (Hz)') + input(t, 'allowOneToOne', 'Intentional 1:1 transformer', { type: 'checkbox' }) + input(t, 'allowIdeal', 'Intentional ideal transformer (0% Z)', { type: 'checkbox' }); }
+ function cableVoltageContent(c) {
+     const check = (0, network_voltage_mjs_v_20261022_pv_final_1.cableVoltageDetails)(project, c);
+     let state = 'neutral', label = 'Not checked', message = 'Enter the cable’s documented insulation rating, or choose cable data from the master database.';
+diff --git a/SITE/tcc-library-v29.mjs b/SITE/tcc-library-v29.mjs
+new file mode 100644
+index 0000000..cf3b10c
+--- /dev/null
++++ b/SITE/tcc-library-v29.mjs
+@@ -0,0 +1,11 @@
++/**
++ * V29e: published TCC plot points that the manufacturer issues as numbers (not read off a graph).
++ * Each entry keeps its source document. Values were transcribed from the PDF text twice, independently,
++ * and both readings agreed; still compare with the source document before relying on them.
++ * Most LV breaker and fuse curves are published only as graphs: for those use the "manufacturer curve"
++ * input (type the points from the datasheet) or the electronic-trip (LSI) settings model.
++ */
++export const TCC_LIBRARY_V29={id:'published-tcc-plot-points-v29',version:'29.0.0',
++ sources:{ermco9f54dfc:{title:'Dual Element Fuse Model 9F54DFC TCC Plot Points',publisher:'ERMCO Components Inc.',date:'2006-08-24',url:'https://ermco-eci.com/wp-content/uploads/2021/11/11-19-21-Expulsion-Fuse-Dual-Element-Plot-Points.pdf',note:'Max Clear columns used; the 0.01 s row is ambiguous in the PDF text and is left out. Current unit not printed in the table (amperes assumed, as is standard for these curves).'}}};
++export const TCC_CURVES=[{"id": "ermco-9f54dfc-c030", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C030", "curve": "maximum clearing", "points": [[13, 300], [14, 100], [15, 40], [19, 10], [21, 4], [29, 1], [36, 0.4], [62, 0.1], [100, 0.04], [200, 0.015]], "source": "ermco9f54dfc"}, {"id": "ermco-9f54dfc-c040", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C040", "curve": "maximum clearing", "points": [[16, 300], [17, 100], [19, 40], [24, 10], [27, 4], [40, 1], [52, 0.4], [86, 0.1], [140, 0.04], [310, 0.015]], "source": "ermco9f54dfc"}, {"id": "ermco-9f54dfc-c050", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C050", "curve": "maximum clearing", "points": [[21.5, 300], [24, 100], [25, 40], [31, 10], [37, 4], [54, 1], [70, 0.4], [120, 0.1], [200, 0.04], [440, 0.015]], "source": "ermco9f54dfc"}, {"id": "ermco-9f54dfc-c060", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C060", "curve": "maximum clearing", "points": [[30, 300], [31, 100], [35, 40], [42, 10], [53, 4], [70, 1], [95, 0.4], [180, 0.1], [310, 0.04], [680, 0.015]], "source": "ermco9f54dfc"}, {"id": "ermco-9f54dfc-c070", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C070", "curve": "maximum clearing", "points": [[35, 300], [37, 100], [40, 40], [55, 10], [75, 4], [110, 1], [160, 0.4], [310, 0.1], [520, 0.04], [1100, 0.015]], "source": "ermco9f54dfc"}, {"id": "ermco-9f54dfc-c090", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C090", "curve": "maximum clearing", "points": [[61, 300], [65, 100], [75, 40], [110, 10], [140, 4], [200, 1], [260, 0.4], [500, 0.1], [800, 0.04], [1800, 0.015]], "source": "ermco9f54dfc"}, {"id": "ermco-9f54dfc-c110", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C110", "curve": "maximum clearing", "points": [[93, 300], [100, 100], [110, 40], [150, 10], [190, 4], [260, 1], [340, 0.4], [610, 0.1], [1050, 0.04], [2200, 0.015]], "source": "ermco9f54dfc"}, {"id": "ermco-9f54dfc-c120", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C120", "curve": "maximum clearing", "points": [[115, 300], [120, 100], [130, 40], [170, 10], [230, 4], [320, 1], [420, 0.4], [750, 0.1], [1400, 0.04], [2800, 0.015]], "source": "ermco9f54dfc"}, {"id": "ermco-9f54dfc-c140", "manufacturer": "ERMCO Components Inc.", "family": "Dual Element Fuse Model 9F54DFC (expulsion, transformer)", "rating": "C140", "curve": "maximum clearing", "points": [[140, 300], [150, 100], [170, 40], [210, 10], [290, 4], [400, 1], [510, 0.4], [950, 0.1], [1600, 0.04], [3600, 0.015]], "source": "ermco9f54dfc"}];
++export function curveCsv(id){const c=TCC_CURVES.find(x=>x.id===id);if(!c)throw Error('Unknown library curve.');return c.points.map(([a,t])=>a+', '+t).join('\n')}

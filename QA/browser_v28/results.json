@@ -1,0 +1,133 @@
+{
+  "status": "PASS",
+  "modules": 30,
+  "downloads": 18,
+  "cases": [
+    {
+      "viewport": "desktop",
+      "method": "constant-rms",
+      "format": "pdf",
+      "size": 9918,
+      "sha256": "d7a2ac0ff957219253f40badc143f93c0b0dadbd1908be0b842be7b40a9e6a1d"
+    },
+    {
+      "viewport": "desktop",
+      "method": "constant-rms",
+      "format": "xlsx",
+      "size": 16969,
+      "sha256": "cda2bf079a9e6aa3d260c6e461d9e2a225fb040d1a6f45db0e0db897bc8246c3"
+    },
+    {
+      "viewport": "desktop",
+      "method": "constant-rms",
+      "format": "json",
+      "size": 2846,
+      "sha256": "7898af3aa1a62b9e9c5cc20666ec86a3b6221b0081eb3bbe62556acb9e80a048"
+    },
+    {
+      "viewport": "desktop",
+      "method": "linear-rms-trace",
+      "format": "pdf",
+      "size": 10414,
+      "sha256": "2e3cc5c382318af3df8756488bbb610b12fefb420a18b8a80be24e7671d38716"
+    },
+    {
+      "viewport": "desktop",
+      "method": "linear-rms-trace",
+      "format": "xlsx",
+      "size": 17689,
+      "sha256": "8aabc3ce61b13fb02b7f4c2055f1c1f32e53a6c4b98352adffa68e51adeddaf3"
+    },
+    {
+      "viewport": "desktop",
+      "method": "linear-rms-trace",
+      "format": "json",
+      "size": 3111,
+      "sha256": "be93db7a5035a6b0edbd7d0494797a56ca93db4e85f91ab9fedca5d0c31931c5"
+    },
+    {
+      "viewport": "desktop",
+      "method": "documented-i2t",
+      "format": "pdf",
+      "size": 9975,
+      "sha256": "ed42ae55a55292a7b8c8f5ed12eee5b4254edb36f114fe88e051a034e1e3a87b"
+    },
+    {
+      "viewport": "desktop",
+      "method": "documented-i2t",
+      "format": "xlsx",
+      "size": 17070,
+      "sha256": "3d2eb888318a99f2060d2ff2bccc2fda1748a325d9cbebb56c608877f4f9588e"
+    },
+    {
+      "viewport": "desktop",
+      "method": "documented-i2t",
+      "format": "json",
+      "size": 2903,
+      "sha256": "62600b8fb23e9a502237742512456034182a02760788fdef90fa822f817ef921"
+    },
+    {
+      "viewport": "mobile",
+      "method": "constant-rms",
+      "format": "pdf",
+      "size": 9918,
+      "sha256": "44257e305003f1d8775f936078a0191908cde9eecec9a9e99ff83ec888720fd7"
+    },
+    {
+      "viewport": "mobile",
+      "method": "constant-rms",
+      "format": "xlsx",
+      "size": 16969,
+      "sha256": "0f99d78b470f75fcbb778cd8ac9e5f59846c85f3c090168bc9cc7ce13a3ac7b7"
+    },
+    {
+      "viewport": "mobile",
+      "method": "constant-rms",
+      "format": "json",
+      "size": 2846,
+      "sha256": "48a0a58bcfcc8f22eedb8d6fc14dc8f76493bd6c78aecbf1232d7b815b5e7862"
+    },
+    {
+      "viewport": "mobile",
+      "method": "linear-rms-trace",
+      "format": "pdf",
+      "size": 10414,
+      "sha256": "bce2a8e39761bac771bb3232d521cbf6657f4582126d1fae37eb1dfe74dfe092"
+    },
+    {
+      "viewport": "mobile",
+      "method": "linear-rms-trace",
+      "format": "xlsx",
+      "size": 17689,
+      "sha256": "34333ffc7d98a476288ba63e3233dc1491d01b134c78d90f71dfbc7de9fc58cf"
+    },
+    {
+      "viewport": "mobile",
+      "method": "linear-rms-trace",
+      "format": "json",
+      "size": 3111,
+      "sha256": "072f46fa8eadc6d4c84c333837f819e310eb7c8e654290be5a8ccb68022f5daf"
+    },
+    {
+      "viewport": "mobile",
+      "method": "documented-i2t",
+      "format": "pdf",
+      "size": 9975,
+      "sha256": "96321a8d6396d736d682c60d608e5c5b5dd15fb3e34ff0fc0cdd0852312dbd8d"
+    },
+    {
+      "viewport": "mobile",
+      "method": "documented-i2t",
+      "format": "xlsx",
+      "size": 17070,
+      "sha256": "86b448fa1937a94c81d3683687d6e675230355dee9e64a8e21a56953a5076d6d"
+    },
+    {
+      "viewport": "mobile",
+      "method": "documented-i2t",
+      "format": "json",
+      "size": 2903,
+      "sha256": "c5f5f88500ba6aeeb4a0b2b670cf66e32fac1952faf1c18cf1e7377d4d92ec50"
+    }
+  ]
+}

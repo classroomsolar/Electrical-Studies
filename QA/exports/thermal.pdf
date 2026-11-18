@@ -1,0 +1,104 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5013 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: thermal) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_IEC_60287_CORE_EQUATION) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: ambientC | Entered value: 40) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: conductorLimitC | Entered value: 90) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: racOhmPerM | Entered value: 0.00013) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: loadedConductors | Entered value: 3) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: t1KmPerW | Entered value: 0.23) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: t2KmPerW | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: t3KmPerW | Entered value: 0.06) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: t4KmPerW | Entered value: 0.76) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: dielectricLossWPerM | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: sheathLossFactor | Entered value: 0.17) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: armourLossFactor | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: loadCurrentA | Entered value: 225) Tj ET
+BT /F1 8 Tf 32 441 Td () Tj ET
+BT /F1 8 Tf 32 428 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: status | Value: BOUNDED_IEC_60287_CORE_EQUATION) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: method | Value: IEC 60287-1-1 steady-state AC core rating equation using) Tj ET
+BT /F1 8 Tf 32 389 Td (explicitly precomputed Rac, T1...T4, dielectric Wd and lambda loss factors. NOT a complete IEC 60287) Tj ET
+BT /F1 8 Tf 32 376 Td (design: no self-calculated thermal environment, thermal resistivity, AC skin/proximity, sheath) Tj ET
+BT /F1 8 Tf 32 363 Td (circulating losses, trefoil grouping, solar drying, soil moisture, cable construction corrections) Tj ET
+BT /F1 8 Tf 32 350 Td (or 60853 cyclic rating.) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: ratedCurrentA | Value: 336.1222803507795) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: continuousPerConductorA | Value: 336.1222803507795) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: conductorTemperatureRiseAllowanceC | Value: 50) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: dielectricTemperatureRiseC | Value: 0.22520000000000004) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: conductorHeatingCoefficient | Value: 0.00044056999999999994) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: enteredLoadCurrentA | Value: 225) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: approxConductorCAtFixedRatedR | Value: 62.52905625) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: loadingPercent | Value: 66.93992429338171) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: withinEnteredCoreRating | Value: true) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: missingForFullStandard[0] | Value: Temperature-adjusted AC resistance) Tj ET
+BT /F1 8 Tf 32 207 Td (including skin/proximity) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: missingForFullStandard[1] | Value: IEC 60287-2 installation thermal) Tj ET
+BT /F1 8 Tf 32 181 Td (resistances) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: missingForFullStandard[2] | Value: Metal sheath and armour loss factors) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: missingForFullStandard[3] | Value: Parallel cable/grouping and mutual) Tj ET
+BT /F1 8 Tf 32 142 Td (heating) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: missingForFullStandard[4] | Value: Solar radiation and soil moisture) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: missingForFullStandard[5] | Value: Manufacturer cable) Tj ET
+BT /F1 8 Tf 32 103 Td (temperature/dielectric loss parameters) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: missingForFullStandard[6] | Value: Validated operating power-flow current) Tj ET
+BT /F1 8 Tf 32 77 Td () Tj ET
+BT /F1 8 Tf 32 64 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 51 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 38 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 342 >>
+stream
+BT /F1 8 Tf 32 792 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 779 Td (use.) Tj ET
+BT /F1 8 Tf 32 766 Td (Evidence / limitation: Study method | Value: thermal) Tj ET
+BT /F1 8 Tf 32 753 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T00:00:00.000Z) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000005254 00000 n 
+0000005380 00000 n 
+0000005773 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+5899
+%%EOF

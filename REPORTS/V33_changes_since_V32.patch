@@ -1,0 +1,1010 @@
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/advanced-study-report.mjs /home/claude/repo/Electrical-Studies/SITE/advanced-study-report.mjs
+--- V32_SITE/advanced-study-report.mjs	2026-11-13 15:22:11.348461846 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/advanced-study-report.mjs	2026-11-13 22:46:55.575496213 -0800
+@@ -4,7 +4,7 @@
+  * sheets; the shared public-report-engine supplies established ZIP/PDF writers.
+  * Never turn an illustrative or bounded result into an equipment approval.
+  */
+-import {workbookBlob,pdfBlob} from './public-report-engine.mjs?v=20261108-v32';
++import {workbookBlob,pdfBlob} from './public-report-engine.mjs?v=20261113-v33';
+ // Row budget for the flattened (path, value) listing. Large per-bus result lists are written as their own tables
+ // (one row per bus) instead, so plant-scale studies export; long sheets continue on numbered sheets.
+ const maxRows=400000,maxDepth=24,TABLE_MIN=50;
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/analysis-models.mjs /home/claude/repo/Electrical-Studies/SITE/analysis-models.mjs
+--- V32_SITE/analysis-models.mjs	2026-11-13 15:22:11.348529597 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/analysis-models.mjs	2026-11-13 22:46:55.578028459 -0800
+@@ -1,6 +1,6 @@
+-import {isDcStudy,calculateDcProject,validateDcProject,dcScope} from './dc-network.mjs?v=20261108-v32';
+-import {calculateConnectedProject,validateConnectedSequences} from './connected-sequences.mjs?v=20261108-v32';
+-import {isSplitPhaseFault,calculateSplitPhaseProject,splitPhaseIssues,splitPhaseScope} from './split-phase-network.mjs?v=20261108-v32';
++import {isDcStudy,calculateDcProject,validateDcProject,dcScope} from './dc-network.mjs?v=20261113-v33';
++import {calculateConnectedProject,validateConnectedSequences} from './connected-sequences.mjs?v=20261113-v33';
++import {isSplitPhaseFault,calculateSplitPhaseProject,splitPhaseIssues,splitPhaseScope} from './split-phase-network.mjs?v=20261113-v33';
+ 
+ export const analysisFaultTypes=[['single-ll','Single/split-phase · L1–L2 full winding'],['split-l1-n','Split-phase · L1–neutral'],['split-l2-n','Split-phase · L2–neutral'],['split-l1-g','Split-phase · L1–ground'],['split-l2-g','Split-phase · L2–ground'],['3phase','3-phase fault'],['3phase-ground','3-phase-to-ground fault'],['ll','Line-to-line'],['slg','Single-line-to-ground'],['dlg','Double-line-to-ground · B–C–ground'],['dc','DC pole-to-pole · documented resistive loop']];
+ export const usesConnectedSequences=p=>p?.settings?.faultType==='3phase-ground'||(['3phase','ll','slg','dlg'].includes(p?.settings?.faultType)&&p?.settings?.sequenceModel==='connected');
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/arcflash-network-ui-v29.mjs /home/claude/repo/Electrical-Studies/SITE/arcflash-network-ui-v29.mjs
+--- V32_SITE/arcflash-network-ui-v29.mjs	2026-11-13 15:22:11.348622235 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/arcflash-network-ui-v29.mjs	2026-11-14 12:24:03.379262476 -0800
+@@ -1,6 +1,6 @@
+ /** V29 incremental UI: IEEE 1584-2018 arc flash at every bus. Reads the Studio draft read-only; stores only its own per-bus inputs. */
+-import {networkArcFlashStudy,arcFlashLabel,EQUIPMENT_CLASSES,AF_NETWORK_V29} from './arcflash-network-v29.mjs?v=20261108-v32';
+-import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261108-v32';
++import {networkArcFlashStudy,arcFlashLabel,EQUIPMENT_CLASSES,AF_NETWORK_V29} from './arcflash-network-v29.mjs?v=20261113-v33';
++import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261113-v33';
+ import {IEC_CURVES,IEEE_CURVES,BREAKER_CYCLES,describeDevice,clearingTime} from './clearing-time-v29.mjs?v=20261108-v29e';
+ import {TCC_CURVES,TCC_LIBRARY_V29,curveCsv} from './tcc-library-v29.mjs?v=20261108-v29e';
+ const __fcsReportStudy=(key,label,get)=>{try{(globalThis.__fcsReportStudies??=new Map()).set(key,{label,projectId:globalThis.__fcsStudio?.projectId?.()??null,at:Date.now(),get});globalThis.dispatchEvent?.(new Event('fcs-report-studies'))}catch{}};
+@@ -17,7 +17,7 @@
+  const tryDock=()=>{const h=document.getElementById('v26-launcher-holder');if(h&&btn.parentElement!==h){h.append(btn);btn.style.position='static';btn.style.margin='4px';return true}return !!h};
+  if(tryDock())return;let tries=0;const t=setInterval(()=>{if(tryDock()||++tries>40)clearInterval(t)},250);
+ }
+-async function engine(){const req=globalThis.__fcsBundleRequire;if(typeof req==='function')return req('network-engine.mjs').calculateProject;return (await import('./network-engine.mjs?v=20261108-v31')).calculateProject}
++async function engine(){const req=globalThis.__fcsBundleRequire;if(typeof req==='function')return req('network-engine.mjs').calculateProject;return (await import('./network-engine.mjs?v=20261113-v33')).calculateProject}
+ function readDraft(){const raw=localStorage.getItem(DRAFT);if(!raw)throw Error('No Studio project is open yet.');if(raw.length>5e6)throw Error('Studio draft is too large.');let p;try{p=JSON.parse(raw)}catch{throw Error('Studio draft could not be read; it has not been changed.')}if(p?.format!=='fault-current-network')throw Error('Open a Studio network project first.');return p}
+ function loadInputs(pid){try{const all=JSON.parse(localStorage.getItem(KEY)||'{}');return all&&typeof all==='object'&&all[pid]&&typeof all[pid]==='object'?all[pid]:{}}catch{return {}}}
+ function saveInputs(pid,inp){let all={};try{all=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{all={}}all[pid]=inp;const s=JSON.stringify(all);if(s.length>2e6)throw Error('Saved arc-flash inputs exceed 2 MB');localStorage.setItem(KEY,s)}
+@@ -39,11 +39,12 @@
+  $('#v29af-date').value=new Date().toISOString().slice(0,10);
+  let lastFocus=null;const open=()=>{lastFocus=document.activeElement;ov.hidden=false;$('[data-af=run]').focus()};const close=()=>{ov.hidden=true;lastFocus?.focus?.()};
+  btn.addEventListener('click',open);ov.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();close()}});ov.addEventListener('click',e=>{if(e.target===ov)close()});
+- const collect=()=>{const inp={};ov.querySelectorAll('tr[data-bus]').forEach(tr=>{const id=tr.dataset.bus,v=k=>tr.querySelector(`[data-k="${k}"]`);const num=k=>{const x=v(k)?.value;return x===''||x==null?undefined:Number(x)};inp[id]={include:v('include').checked,equipmentClass:v('equipmentClass').value,electrodeConfiguration:v('electrodeConfiguration').value,clearingFullMS:num('clearingFullMS'),clearingReducedMS:num('clearingReducedMS'),clearingSource:v('clearingSource').value,gapMM:num('gapMM'),workingDistanceMM:num('workingDistanceMM'),device:state.src[id]!=='sld'&&state.devices[id]&&state.devices[id].type!=='manual'?state.devices[id]:undefined,deviceSource:state.src[id]}});return inp};
++ const collect=(ids)=>{const inp={};ov.querySelectorAll('tr[data-bus]').forEach(tr=>{if(ids&&!ids.has(tr.dataset.bus))return;const id=tr.dataset.bus,v=k=>tr.querySelector(`[data-k="${k}"]`);const num=k=>{const x=v(k)?.value;return x===''||x==null?undefined:Number(x)};inp[id]={include:v('include').checked,equipmentClass:v('equipmentClass').value,electrodeConfiguration:v('electrodeConfiguration').value,clearingFullMS:num('clearingFullMS'),clearingReducedMS:num('clearingReducedMS'),clearingSource:v('clearingSource').value,gapMM:num('gapMM'),workingDistanceMM:num('workingDistanceMM'),device:state.src[id]!=='sld'&&state.devices[id]&&state.devices[id].type!=='manual'?state.devices[id]:undefined,deviceSource:state.src[id]}});return inp};
+  const rowType=(r,i={})=>{const ol=r.oneLine?.primary;const s=state.src[r.busId];if(s==='sld'&&ol)return 'sld';if(s==null&&ol&&!state.devices[r.busId]&&!(Number.isFinite(i.clearingFullMS)&&Number.isFinite(i.clearingReducedMS)))return 'sld';return devType(state.devices[r.busId])};
+- const render=(study,inputs)=>{
++ // V33: `only` (a set of bus ids) redraws just those rows. Changing one bus's protective device no longer redraws all rows.
++ const render=(study,inputs,only)=>{
+   const cls=Object.keys(EQUIPMENT_CLASSES);
+-  const rows=study.rows.map(r=>{const i=inputs[r.busId]||{},g=r.geometry||{};const stCls=r.status==='CALCULATED'?'ok':'bad';
++  const rows=(only?study.rows.filter(r=>only.has(r.busId)):study.rows).map(r=>{const i=inputs[r.busId]||{},g=r.geometry||{};const stCls=r.status==='CALCULATED'?'ok':'bad';
+    return `<tr data-bus="${esc(r.busId)}"><td><input type="checkbox" data-k="include" ${i.include===false?'':'checked'} aria-label="Include ${esc(r.busName)}"></td><td><strong>${esc(r.busName)}</strong><br>${esc(volts(r.voltageV))}</td><td>${n((r.boltedFaultA||NaN)/1000,2)} kA</td>
+    <td><select data-k="equipmentClass" aria-label="Equipment class">${cls.map(c=>`<option ${c===(g.equipmentClass||i.equipmentClass)?'selected':''}>${esc(c)}</option>`).join('')}</select><br><select data-k="electrodeConfiguration" aria-label="Electrode configuration">${ECS.map(c=>`<option ${c===(g.electrodeConfiguration||i.electrodeConfiguration||'VCB')?'selected':''}>${c}</option>`).join('')}</select></td>
+    <td><input type="number" data-k="gapMM" step="any" placeholder="${esc(g.gapMM??'')}" value="${esc(i.gapMM??'')}" aria-label="Gap mm"> mm gap<br><input type="number" data-k="workingDistanceMM" step="any" placeholder="${esc(g.workingDistanceMM??'')}" value="${esc(i.workingDistanceMM??'')}" aria-label="Working distance mm"> mm WD</td>
+@@ -52,6 +53,7 @@
+    <td>${rowType(r,i)!=='manual'?(r.device?`${n(r.device.full?.ms,0)} ms full<br>${n(r.device.reduced?.ms,0)} ms reduced<br><small>from device</small>`:'<small>from device after Run</small>'):`<input type="number" data-k="clearingFullMS" min="1" max="2000" step="any" value="${esc(i.clearingFullMS??'')}" aria-label="Clearing time at full arcing current ms"> ms full<br><input type="number" data-k="clearingReducedMS" min="1" max="2000" step="any" value="${esc(i.clearingReducedMS??'')}" aria-label="Clearing time at reduced arcing current ms"> ms reduced`}</td>
+    <td><input data-k="clearingSource" maxlength="200" placeholder="Device + curve / setting" value="${esc(i.clearingSource??'')}" aria-label="Clearing time source"></td>
+    <td>${r.status==='CALCULATED'?`<strong>${n(r.incidentEnergyCalPerCm2,2)}</strong> cal/cm²<br>AFB ${n(r.arcFlashBoundaryMM,0)} mm<br><small>${esc(r.governingCase)} case governs</small>`:'—'}</td><td class="${stCls}">${esc(r.status)}${r.note?`<br><small style="font-weight:400">${esc(r.note)}</small>`:''}</td></tr>`}).join('');
++  if(only){const tb=document.createElement('tbody');tb.innerHTML=rows;for(const tr of [...tb.children]){const old=ov.querySelector(`tr[data-bus="${CSS.escape(tr.dataset.bus)}"]`);if(old)old.replaceWith(tr)}return}
+   $('#v29af-table').innerHTML=`<table class="grid"><thead><tr><th>Use</th><th>Bus</th><th>Bolted</th><th>Equipment / electrodes</th><th>Override</th><th>Arcing current</th><th>Protective device</th><th>Clearing times</th><th>Source of times</th><th>Result</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>`;
+  };
+ 
+@@ -89,13 +91,14 @@
+   try{if(a==='cancel'){devDlg.hidden=true;return}const d=readDev();
+    const row=state.study?.rows.find(r=>r.busId===devBus);const sh=Number.isFinite(d.sharePercent)?d.sharePercent:(devTarget&&Number.isFinite(row?.oneLine?.primary?.sharePercent)?row.oneLine.primary.sharePercent:100);const I=(row?.arcingCurrentFullKA??row?.cases?.[0]?.arcingCurrentKA)*1000*(sh/100);
+    if(a==='test'){if(!Number.isFinite(I))throw Error('Press Run / update first so the arcing current is known.');const cur=I;const r=clearingTime(d,cur);pv.textContent=`At ${Math.round(cur)} A: ${r.status==='OK'?r.ms.toFixed(0)+' ms — '+r.text:r.status+' — '+r.text}`;pv.className=r.status==='OK'?'ok':'bad';return}
+-   if(a==='save'){if(Number.isFinite(I))clearingTime(d,I);if(devTarget){state.oneLine[devTarget]=d;state.src[devBus]='sld'}else{state.devices[devBus]=d;state.src[devBus]='own'}devDlg.hidden=true;render(state.study,collect());status('Device saved. Press Run / update to recalculate.');}
++   if(a==='save'){if(Number.isFinite(I))clearingTime(d,I);if(devTarget){state.oneLine[devTarget]=d;state.src[devBus]='sld'}else{state.devices[devBus]=d;state.src[devBus]='own'}devDlg.hidden=true;const aff=new Set([devBus]);if(devTarget)for(const r of state.study?.rows||[])if(r.oneLine?.primary?.deviceId===devTarget)aff.add(r.busId);render(state.study,collect(aff),aff);status('Device saved. Press Run / update to recalculate.');}
+   }catch(err){pv.textContent=err.message;pv.className='bad'}});
+  ov.addEventListener('change',e=>{const b=e.target.dataset?.devType;if(!b)return;const v=e.target.value;
+-  if(v==='sld'){state.src[b]='sld';render(state.study,collect());const row=state.study.rows.find(r=>r.busId===b);if(!state.oneLine[row.oneLine.primary.deviceId])openDev(b);return}
++  const one=new Set([b]);
++  if(v==='sld'){state.src[b]='sld';render(state.study,collect(one),one);const row=state.study.rows.find(r=>r.busId===b);if(!state.oneLine[row.oneLine.primary.deviceId])openDev(b);return}
+   state.src[b]='own';
+-  if(v==='manual'){delete state.devices[b];render(state.study,collect());return}
+-  render(state.study,collect());const prev=state.devices[b];openDev(b,v);if(prev&&devType(prev)!==v)state.devices[b]=prev});
++  if(v==='manual'){delete state.devices[b];render(state.study,collect(one),one);return}
++  render(state.study,collect(one),one);const prev=state.devices[b];openDev(b,v);if(prev&&devType(prev)!==v)state.devices[b]=prev});
+  const calcRows=()=>state.study.rows.filter(r=>r.status==='CALCULATED');
+  const labels=()=>calcRows().map(r=>arcFlashLabel(r,{date:$('#v29af-date').value,preparedBy:$('#v29af-by').value}));
+  const report=()=>({method:AF_NETWORK_V29.id,createdAt:new Date().toISOString(),inputs:{projectName:state.project?.name,scenario:state.study.scenario,busInputs:collect(),oneLineDevices:state.oneLine},outputs:{...state.study,labels:(()=>{try{return labels()}catch{return []}})()}});
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/cable-sizing-ui-v29.mjs /home/claude/repo/Electrical-Studies/SITE/cable-sizing-ui-v29.mjs
+--- V32_SITE/cable-sizing-ui-v29.mjs	2026-11-13 15:22:11.348700297 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/cable-sizing-ui-v29.mjs	2026-11-13 22:46:55.576349062 -0800
+@@ -1,6 +1,6 @@
+ /** V29 incremental UI: combined conductor sizing (NEC 310.16 ampacity + voltage drop + adiabatic short-circuit). Stand-alone; does not change the Studio project. */
+ import {sizeConductor,CABLE_SIZING_V29,CABLE_SIZING_DATA,SIZES} from './cable-sizing-v29.mjs?v=20261108-v29e';
+-import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261108-v32';
++import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261113-v33';
+ import {clearingTime,IEC_CURVES,IEEE_CURVES} from './clearing-time-v29.mjs?v=20261108-v29e';
+ const __fcsReportStudy=(key,label,get)=>{try{(globalThis.__fcsReportStudies??=new Map()).set(key,{label,projectId:globalThis.__fcsStudio?.projectId?.()??null,at:Date.now(),get});globalThis.dispatchEvent?.(new Event('fcs-report-studies'))}catch{}};
+ const CURVE_OPTS=['',...Object.keys(IEC_CURVES).map(k=>'IEC '+k),...Object.keys(IEEE_CURVES).map(k=>'IEEE '+k)];
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/conductor-duty-ui-v28.mjs /home/claude/repo/Electrical-Studies/SITE/conductor-duty-ui-v28.mjs
+--- V32_SITE/conductor-duty-ui-v28.mjs	2026-11-13 15:22:11.348805524 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/conductor-duty-ui-v28.mjs	2026-11-13 22:46:55.579953756 -0800
+@@ -1,6 +1,6 @@
+ /** V28 incremental UI. Never reads/writes original Studio project/draft/cloud keys. */
+ import {screenConductorThermalDuty} from './conductor-duty-v28.mjs';
+-import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261108-v32';
++import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261113-v33';
+ const __fcsReportStudy=(key,label,get)=>{try{(globalThis.__fcsReportStudies??=new Map()).set(key,{label,projectId:globalThis.__fcsStudio?.projectId?.()??null,at:Date.now(),get});globalThis.dispatchEvent?.(new Event('fcs-report-studies'))}catch{}};
+ const KEY='fault-studio-conductor-duty-cases-v28';
+ const sample={method:'constant-rms',studyReference:'ILLUSTRATIVE conductor duty screening example only',conductor:{areaMm2:120,kASqrtSPerMm2:100,kSourceReference:'ILLUSTRATIVE k coefficient; NOT OEM qualified; replace before project use',material:'copper',initialTempC:90,maximumFaultTempC:250},fault:{sourceReference:'ILLUSTRATIVE 10 kA RMS and 0.2 s; replace with verified clearing envelope',clearingTimeS:0.2,rmsA:10000},marginFactor:1.1};
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/connected-sequences.mjs /home/claude/repo/Electrical-Studies/SITE/connected-sequences.mjs
+--- V32_SITE/connected-sequences.mjs	2026-11-13 15:22:11.348830464 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/connected-sequences.mjs	2026-11-13 22:46:55.574309594 -0800
+@@ -1,5 +1,5 @@
+ // Opt-in connected symmetrical-component screening. No dependency on the legacy engine.
+-import {sparseFactorC} from './sparse-complex-lu.mjs?v=20261108-v32';
++import {sparseFactorC} from './sparse-complex-lu.mjs?v=20261113-v33';
+ const C=(r=0,i=0)=>{if(!Number.isFinite(r)||!Number.isFinite(i))throw Error('Connected sequence calculation exceeds numerical range. Check units and input magnitude.');return {r,i}},add=(a,b)=>C(a.r+b.r,a.i+b.i),sub=(a,b)=>C(a.r-b.r,a.i-b.i),mul=(a,b)=>C(a.r*b.r-a.i*b.i,a.r*b.i+a.i*b.r),scale=(a,k)=>C(a.r*k,a.i*k),conj=a=>C(a.r,-a.i),abs=a=>Math.hypot(a.r,a.i),polar=(v,d)=>C(v*Math.cos(d*Math.PI/180),v*Math.sin(d*Math.PI/180));
+ function requireFiniteOutput(value){if(typeof value==='number'&&!Number.isFinite(value))throw Error('Connected sequence result exceeds numerical range.');if(value&&typeof value==='object')for(const entry of Object.values(value))requireFiniteOutput(entry);return value}
+ const finite=n=>typeof n==='number'&&Number.isFinite(n),nonnegative=n=>finite(n)&&n>=0,positive=n=>finite(n)&&n>0;
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/dc-network.mjs /home/claude/repo/Electrical-Studies/SITE/dc-network.mjs
+--- V32_SITE/dc-network.mjs	2026-11-13 15:22:11.432973157 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/dc-network.mjs	2026-11-14 12:19:27.960563340 -0800
+@@ -140,12 +140,14 @@
+   return {...base,status:'CALCULATED',totalA:Math.abs(amps),signedA:amps,conventionalA:Math.abs(amps),details,branchFlows:flows,zth:real(z),groups:details.reduce((o,d)=>(o[d.kind]=(o[d.kind]||0)+d.amps,o),{}),busVoltagesV:Object.fromEntries(net.buses.filter(b=>comp.includes(net.nodeAt[net.at[b.id]])).map(b=>[b.id,v[net.nodeAt[net.at[b.id]]]])),sourceTerminalCurrents:terminal,idealBranchCurrentsAvailable:!net.branches.some(e=>e.resistanceOhm===0&&comp.includes(e.a))};
+  }catch(e){return {...base,status:'NETWORK ERROR',faultNote:e.message+' '+dcScope()};}
+ }
+-export function calculateDcProject(p,options={}){const net=buildDcNetwork(p);if(!net.errors.length){const work=net.buses.length*Math.max(1,net.branches.length)*Math.max(1,net.sources.length);net.compact=options.compact??work>DC_COMPACT_WORK;net.selectedBus=p.selectedBus}const results=net.buses.map(b=>calculateDcBus(net,p,b.id,options));if(net.compact)addDcEnvelope(net,results);return {issues:net.issues,results,net};}
++export function calculateDcProject(p,options={}){const net=buildDcNetwork(p);if(!net.errors.length){const work=net.buses.length*Math.max(1,net.branches.length)*Math.max(1,net.sources.length);net.compact=options.compact??work>DC_COMPACT_WORK;net.selectedBus=p.selectedBus;
++ // V33: very large arrays keep per-source rows for the selected fault bus only; totals, source-type totals and branch currents stay complete.
++ net.lean=net.compact&&!options.full&&net.buses.length*net.sources.length>DC_LEAN_ROWS}const results=net.buses.map(b=>calculateDcBus(net,p,b.id,options));if(net.compact)addDcEnvelope(net,results);return {issues:net.issues,results,net};}
+ // ===================== V31 plant-scale DC path =====================
+ // Same resistive superposition as above, but each connected array is factorized once (sparse, minimum-degree
+ // ordering) and every bus fault reuses it: V = P − Z(:,f)·I with I = P(f)/(Z(f,f)+Rf). Components of up to
+ // DC_FACTOR_MIN nodes keep the original per-fault elimination unchanged.
+-export const DC_FACTOR_MIN=40,DC_SPARSE_NODES=400,DC_COMPACT_WORK=4e5;
++export const DC_FACTOR_MIN=40,DC_SPARSE_NODES=400,DC_COMPACT_WORK=4e5,DC_LEAN_ROWS=2e5;
+ function components(net){if(net.compOf)return net.compOf;const n=net.adj.length,c=new Int32Array(n).fill(-1);let id=0;for(let s=0;s<n;s++){if(c[s]>=0)continue;const q=[s];c[s]=id;for(let h=0;h<q.length;h++)for(const j of net.adj[q[h]])if(c[j]<0){c[j]=id;q.push(j)}id++}net.compOf=c;return c}
+ function componentSize(net,f){const c=components(net);net.compSize??=(()=>{const m=new Map();for(const x of c)m.set(x,(m.get(x)||0)+1);return m})();return net.compSize.get(c[f])}
+ const yRow=(net,a)=>net.sparseY?net.Y[a]:new Map(net.Y[a].map((g,j)=>[j,g]).filter(([,g])=>g!==0));
+@@ -198,9 +200,13 @@
+   const all=branchIdx.map(k=>flowOf(k,v));
+   const meshed=branchIdx.length>=N;
+   const perSourceFlows=full&&sources.length*branchIdx.length<=4e5;
+-  const details=sources.map(s=>{const x=Ps.get(s.id),node=loc.get(s.node),one=perSourceFlows?respond(x):(()=>{const I=x[lf]/(z+Rf);if(!finite(I))throw Error('DC fault current exceeds numerical range.');return {I}})();return {sourceId:s.id,name:s.name,kind:s.kind,current:false,expired:false,unknownAngle:false,amps:Math.abs(one.I),signedA:one.I,phasor:real(one.I),sourceImpedance:s.impedance,sourceImpedanceAtFault:s.impedance,pathSeriesZ:null,path:[],meshed,terminalA:Math.abs((s.voltage-v[node])/s.dcResistanceOhm),terminalVoltagePu:v[node]/s.voltage,branchFlows:perSourceFlows?branchIdx.map(k=>flowOf(k,one.v)):[]}});
++  const lean=net.lean&&!full;
++  const details=lean?null:sources.map(s=>{const x=Ps.get(s.id),node=loc.get(s.node),one=perSourceFlows?respond(x):(()=>{const I=x[lf]/(z+Rf);if(!finite(I))throw Error('DC fault current exceeds numerical range.');return {I}})();return {sourceId:s.id,name:s.name,kind:s.kind,current:false,expired:false,unknownAngle:false,amps:Math.abs(one.I),signedA:one.I,phasor:real(one.I),sourceImpedance:s.impedance,sourceImpedanceAtFault:s.impedance,pathSeriesZ:null,path:[],meshed,terminalA:Math.abs((s.voltage-v[node])/s.dcResistanceOhm),terminalVoltagePu:v[node]/s.voltage,branchFlows:perSourceFlows?branchIdx.map(k=>flowOf(k,one.v)):[]}});
+   const terminal=sources.map(s=>({sourceId:s.id,signedA:(s.voltage-v[loc.get(s.node)])/s.dcResistanceOhm,amps:Math.abs((s.voltage-v[loc.get(s.node)])/s.dcResistanceOhm)}));
+-  if(terminal.some(s=>!finite(s.signedA))||details.some(d=>!finite(d.terminalA)||!finite(d.terminalVoltagePu)))throw Error('DC source terminal current exceeds numerical range.');
++  let groups;
++  if(lean){groups={};for(const s of sources){const I=Ps.get(s.id)[lf]/(z+Rf),node=loc.get(s.node);if(!finite(I)||!finite((s.voltage-v[node])/s.dcResistanceOhm)||!finite(v[node]/s.voltage))throw Error('DC source terminal current exceeds numerical range.');groups[s.kind]=(groups[s.kind]||0)+Math.abs(I)}}
++  else groups=details.reduce((o,d)=>(o[d.kind]=(o[d.kind]||0)+d.amps,o),{});
++  if(terminal.some(s=>!finite(s.signedA))||!lean&&details.some(d=>!finite(d.terminalA)||!finite(d.terminalVoltagePu)))throw Error('DC source terminal current exceeds numerical range.');
+   // Physical KCL at every node of the array, with the same tolerance as the per-fault path.
+   const inj=new Float64Array(N),out=new Float64Array(N),sc=new Float64Array(N);
+   terminal.forEach((t,k)=>{const a=loc.get(sources[k].node);inj[a]+=t.signedA;sc[a]+=Math.abs(t.signedA)});
+@@ -211,7 +217,7 @@
+    net.dcEnvelope??=new Map();for(const [q,k] of branchIdx.entries()){const fl=all[q],cur=net.dcEnvelope.get(k);if(!cur||fl.toA>cur.flow.toA)net.dcEnvelope.set(k,{busId:base.busId,flow:fl})}}
+   else if(net.compact){net.dcEnvelope??=new Map();for(const [q,k] of branchIdx.entries()){const fl=all[q],cur=net.dcEnvelope.get(k);if(!cur||fl.toA>cur.flow.toA)net.dcEnvelope.set(k,{busId:base.busId,flow:fl})}}
+   const busVoltagesV=full?Object.fromEntries(net.buses.filter(b=>loc.has(net.nodeAt[net.at[b.id]])).map(b=>[b.id,v[loc.get(net.nodeAt[net.at[b.id]])]])):undefined;
+-  return {...base,status:'CALCULATED',totalA:Math.abs(amps),signedA:amps,conventionalA:Math.abs(amps),details,branchFlows:flows,zth:real(z),groups:details.reduce((o,d)=>(o[d.kind]=(o[d.kind]||0)+d.amps,o),{}),...(busVoltagesV?{busVoltagesV}:{}),sourceTerminalCurrents:terminal,idealBranchCurrentsAvailable:!net.branches.some(e=>e.resistanceOhm===0&&components(net)[e.a]===components(net)[f]),solver:'factored',...(net.compact?{outputScope:'compact',detailScope:full?'full':'summary'}:{})};
++  return {...base,status:'CALCULATED',totalA:Math.abs(amps),signedA:amps,conventionalA:Math.abs(amps),details:lean?[]:details,branchFlows:flows,zth:real(z),groups,...(busVoltagesV?{busVoltagesV}:{}),sourceTerminalCurrents:lean?[]:terminal,...(lean?{sourceCount:sources.length}:{}),idealBranchCurrentsAvailable:!net.branches.some(e=>e.resistanceOhm===0&&components(net)[e.a]===components(net)[f]),solver:'factored',...(net.compact?{outputScope:'compact',detailScope:full?'full':lean?'totals':'summary'}:{})};
+  }catch(e){return {...base,status:'NETWORK ERROR',faultNote:e.message+' '+dcScope()};}
+ }
+ // Each branch's worst bus fault is kept in that bus's table, so cable duty screens see the true maximum.
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/engineering-core-ui.mjs /home/claude/repo/Electrical-Studies/SITE/engineering-core-ui.mjs
+--- V32_SITE/engineering-core-ui.mjs	2026-11-13 15:22:11.433031809 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/engineering-core-ui.mjs	2026-11-13 22:46:55.577770011 -0800
+@@ -1,4 +1,4 @@
+-import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261108-v32';
++import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261113-v33';
+ import {radialSourceFault,thermalSteadyCore} from './engineering-core-methods.mjs';
+ import {sweepProtectionCoordination} from './protection-full-range.mjs';
+ import {timeVaryingSymmetricalFaultDuty} from './time-varying-current-duty.mjs';
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/fault-envelope-ui-v29.mjs /home/claude/repo/Electrical-Studies/SITE/fault-envelope-ui-v29.mjs
+--- V32_SITE/fault-envelope-ui-v29.mjs	2026-11-13 15:22:11.433065227 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/fault-envelope-ui-v29.mjs	2026-11-13 22:46:55.576192909 -0800
+@@ -1,6 +1,6 @@
+ /** V29 incremental UI. Reads the current Studio draft read-only; never writes Studio project, draft, study or cloud keys. */
+ import {transformerToleranceEnvelope,nec11024Label,ENVELOPE_V29} from './fault-envelope-v29.mjs';
+-import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261108-v32';
++import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261113-v33';
+ const __fcsReportStudy=(key,label,get)=>{try{(globalThis.__fcsReportStudies??=new Map()).set(key,{label,projectId:globalThis.__fcsStudio?.projectId?.()??null,at:Date.now(),get});globalThis.dispatchEvent?.(new Event('fcs-report-studies'))}catch{}};
+ const DRAFT='fault-network-draft-v2';
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+@@ -11,7 +11,7 @@
+ async function engine(){
+  const req=globalThis.__fcsBundleRequire;
+  if(typeof req==='function')return req('network-engine.mjs').calculateProject;
+- return (await import('./network-engine.mjs?v=20261108-v31')).calculateProject; // local/offline fallback
++ return (await import('./network-engine.mjs?v=20261113-v33')).calculateProject; // local/offline fallback
+ }
+ function readDraft(){
+  const raw=localStorage.getItem(DRAFT);if(!raw)throw Error('No Studio project is open yet. Build or open a network first.');
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/fonts/DMSans-OFL.txt /home/claude/repo/Electrical-Studies/SITE/fonts/DMSans-OFL.txt
+--- V32_SITE/fonts/DMSans-OFL.txt	1969-12-31 16:00:00.000000000 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/fonts/DMSans-OFL.txt	2026-11-13 22:47:32.296339763 -0800
+@@ -0,0 +1,93 @@
++Copyright 2014 The DM Sans Project Authors (https://github.com/googlefonts/dm-fonts) DMSans-Italic[opsz,wght].ttf: Copyright 2014 The DM Sans Project Authors (https://github.com/googlefonts/dm-fonts)
++
++This Font Software is licensed under the SIL Open Font License, Version 1.1.
++This license is copied below, and is also available with a FAQ at:
++http://scripts.sil.org/OFL
++
++
++-----------------------------------------------------------
++SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
++-----------------------------------------------------------
++
++PREAMBLE
++The goals of the Open Font License (OFL) are to stimulate worldwide
++development of collaborative font projects, to support the font creation
++efforts of academic and linguistic communities, and to provide a free and
++open framework in which fonts may be shared and improved in partnership
++with others.
++
++The OFL allows the licensed fonts to be used, studied, modified and
++redistributed freely as long as they are not sold by themselves. The
++fonts, including any derivative works, can be bundled, embedded,
++redistributed and/or sold with any software provided that any reserved
++names are not used by derivative works. The fonts and derivatives,
++however, cannot be released under any other type of license. The
++requirement for fonts to remain under this license does not apply
++to any document created using the fonts or their derivatives.
++
++DEFINITIONS
++"Font Software" refers to the set of files released by the Copyright
++Holder(s) under this license and clearly marked as such. This may
++include source files, build scripts and documentation.
++
++"Reserved Font Name" refers to any names specified as such after the
++copyright statement(s).
++
++"Original Version" refers to the collection of Font Software components as
++distributed by the Copyright Holder(s).
++
++"Modified Version" refers to any derivative made by adding to, deleting,
++or substituting -- in part or in whole -- any of the components of the
++Original Version, by changing formats or by porting the Font Software to a
++new environment.
++
++"Author" refers to any designer, engineer, programmer, technical
++writer or other person who contributed to the Font Software.
++
++PERMISSION & CONDITIONS
++Permission is hereby granted, free of charge, to any person obtaining
++a copy of the Font Software, to use, study, copy, merge, embed, modify,
++redistribute, and sell modified and unmodified copies of the Font
++Software, subject to the following conditions:
++
++1) Neither the Font Software nor any of its individual components,
++in Original or Modified Versions, may be sold by itself.
++
++2) Original or Modified Versions of the Font Software may be bundled,
++redistributed and/or sold with any software, provided that each copy
++contains the above copyright notice and this license. These can be
++included either as stand-alone text files, human-readable headers or
++in the appropriate machine-readable metadata fields within text or
++binary files as long as those fields can be easily viewed by the user.
++
++3) No Modified Version of the Font Software may use the Reserved Font
++Name(s) unless explicit written permission is granted by the corresponding
++Copyright Holder. This restriction only applies to the primary font name as
++presented to the users.
++
++4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
++Software shall not be used to promote, endorse or advertise any
++Modified Version, except to acknowledge the contribution(s) of the
++Copyright Holder(s) and the Author(s) or with their explicit written
++permission.
++
++5) The Font Software, modified or unmodified, in part or in whole,
++must be distributed entirely under this license, and must not be
++distributed under any other license. The requirement for fonts to
++remain under this license does not apply to any document created
++using the Font Software.
++
++TERMINATION
++This license becomes null and void if any of the above conditions are
++not met.
++
++DISCLAIMER
++THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
++OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
++COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
++DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
++FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
++OTHER DEALINGS IN THE FONT SOFTWARE.
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/fonts/SpaceGrotesk-OFL.txt /home/claude/repo/Electrical-Studies/SITE/fonts/SpaceGrotesk-OFL.txt
+--- V32_SITE/fonts/SpaceGrotesk-OFL.txt	1969-12-31 16:00:00.000000000 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/fonts/SpaceGrotesk-OFL.txt	2026-11-13 22:47:32.298016409 -0800
+@@ -0,0 +1,93 @@
++Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk)
++
++This Font Software is licensed under the SIL Open Font License, Version 1.1.
++This license is copied below, and is also available with a FAQ at:
++http://scripts.sil.org/OFL
++
++
++-----------------------------------------------------------
++SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
++-----------------------------------------------------------
++
++PREAMBLE
++The goals of the Open Font License (OFL) are to stimulate worldwide
++development of collaborative font projects, to support the font creation
++efforts of academic and linguistic communities, and to provide a free and
++open framework in which fonts may be shared and improved in partnership
++with others.
++
++The OFL allows the licensed fonts to be used, studied, modified and
++redistributed freely as long as they are not sold by themselves. The
++fonts, including any derivative works, can be bundled, embedded,
++redistributed and/or sold with any software provided that any reserved
++names are not used by derivative works. The fonts and derivatives,
++however, cannot be released under any other type of license. The
++requirement for fonts to remain under this license does not apply
++to any document created using the fonts or their derivatives.
++
++DEFINITIONS
++"Font Software" refers to the set of files released by the Copyright
++Holder(s) under this license and clearly marked as such. This may
++include source files, build scripts and documentation.
++
++"Reserved Font Name" refers to any names specified as such after the
++copyright statement(s).
++
++"Original Version" refers to the collection of Font Software components as
++distributed by the Copyright Holder(s).
++
++"Modified Version" refers to any derivative made by adding to, deleting,
++or substituting -- in part or in whole -- any of the components of the
++Original Version, by changing formats or by porting the Font Software to a
++new environment.
++
++"Author" refers to any designer, engineer, programmer, technical
++writer or other person who contributed to the Font Software.
++
++PERMISSION & CONDITIONS
++Permission is hereby granted, free of charge, to any person obtaining
++a copy of the Font Software, to use, study, copy, merge, embed, modify,
++redistribute, and sell modified and unmodified copies of the Font
++Software, subject to the following conditions:
++
++1) Neither the Font Software nor any of its individual components,
++in Original or Modified Versions, may be sold by itself.
++
++2) Original or Modified Versions of the Font Software may be bundled,
++redistributed and/or sold with any software, provided that each copy
++contains the above copyright notice and this license. These can be
++included either as stand-alone text files, human-readable headers or
++in the appropriate machine-readable metadata fields within text or
++binary files as long as those fields can be easily viewed by the user.
++
++3) No Modified Version of the Font Software may use the Reserved Font
++Name(s) unless explicit written permission is granted by the corresponding
++Copyright Holder. This restriction only applies to the primary font name as
++presented to the users.
++
++4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
++Software shall not be used to promote, endorse or advertise any
++Modified Version, except to acknowledge the contribution(s) of the
++Copyright Holder(s) and the Author(s) or with their explicit written
++permission.
++
++5) The Font Software, modified or unmodified, in part or in whole,
++must be distributed entirely under this license, and must not be
++distributed under any other license. The requirement for fonts to
++remain under this license does not apply to any document created
++using the Font Software.
++
++TERMINATION
++This license becomes null and void if any of the above conditions are
++not met.
++
++DISCLAIMER
++THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
++OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
++COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
++DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
++FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
++OTHER DEALINGS IN THE FONT SOFTWARE.
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/fonts/local-fonts-v33.css /home/claude/repo/Electrical-Studies/SITE/fonts/local-fonts-v33.css
+--- V32_SITE/fonts/local-fonts-v33.css	1969-12-31 16:00:00.000000000 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/fonts/local-fonts-v33.css	2026-11-13 22:47:32.328684384 -0800
+@@ -0,0 +1,6 @@
++/* V33: DM Sans and Space Grotesk served from this site (SIL Open Font License 1.1, see DMSans-OFL.txt and SpaceGrotesk-OFL.txt).
++   Replaces the Google Fonts request so the Studio works offline. Same families, weights 400-700. */
++@font-face{font-family:'DM Sans';font-style:normal;font-display:swap;font-weight:100 1000;src:url('./dm-sans-v33-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
++@font-face{font-family:'DM Sans';font-style:normal;font-display:swap;font-weight:100 1000;src:url('./dm-sans-v33-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
++@font-face{font-family:'Space Grotesk';font-style:normal;font-display:swap;font-weight:300 700;src:url('./space-grotesk-v33-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
++@font-face{font-family:'Space Grotesk';font-style:normal;font-display:swap;font-weight:300 700;src:url('./space-grotesk-v33-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/index.html /home/claude/repo/Electrical-Studies/SITE/index.html
+--- V32_SITE/index.html	2026-11-13 15:22:11.433531167 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/index.html	2026-11-14 12:26:59.936760150 -0800
+@@ -6,12 +6,13 @@
+   <meta name="theme-color" content="#0d1117">
+   <title>Fault Current Studio — Connected Network</title>
+   <meta name="description" content="Build a connected electrical lineup, model transformer voltage changes, and inspect bus and branch fault currents.">
+-  <link rel="stylesheet" href="public-style-v21.css">
++  <link rel="icon" href="favicon.ico" sizes="any">
++  <link rel="stylesheet" href="public-style-v21.css?v=20261113-v33">
+   <link rel="stylesheet" href="studio-v26.css?v=20261026-v26">
+   <link rel="stylesheet" href="operations-v27.css?v=20261026-v27">
+   <link rel="stylesheet" href="fcs-theme-v30.css?v=20261108-v31">
+   <link rel="stylesheet" href="fcs-v31.css?v=20261108-v31">
+-  <link rel="stylesheet" href="fcs-v32.css?v=20261108-v32">
++  <link rel="stylesheet" href="fcs-v32.css?v=20261113-v33">
+ </head>
+ <body>
+ <details id="public-preview-status"><summary>PUBLIC PREVIEW <span class="v26-preview-label">· Engineering verification is incomplete</span> <span class="v26-preview-more">Read scope and limitations ⌄</span></summary><p>Core calculations and browser-local study backups work here. Optional encrypted cross-device Cloud Vault, browser-local saves and PDF/XLSX exports are available; engineering verification is not yet complete. This is not the private Site.</p></details>
+@@ -39,16 +40,17 @@
+     },25000);
+   })();
+   </script>
+-  <script defer src="public-bundle-v21.js?v=20261108-v32"></script>
++  <script defer src="public-bundle-v21.js?v=20261113-v33"></script>
+   <script defer src="interface-v25.js?v=20261026-v25"></script>
+   <script defer src="interface-v26.js?v=20261026-v26"></script>
+-  <script type="module" src="operations-v27-ui.mjs?v=20261108-v32"></script>
+-  <script type="module" src="conductor-duty-ui-v28.mjs?v=20261108-v32"></script>
+-  <script type="module" src="fault-envelope-ui-v29.mjs?v=20261108-v32"></script>
+-  <script type="module" src="arcflash-network-ui-v29.mjs?v=20261108-v32"></script>
+-  <script type="module" src="cable-sizing-ui-v29.mjs?v=20261108-v32"></script>
+-  <script type="module" src="power-quality-ui-v29.mjs?v=20261108-v32"></script>
+-  <script type="module" src="shell-v30.mjs?v=20261108-v32"></script>
+-  <script type="module" src="plant-builder-ui-v31.mjs?v=20261108-v32"></script>
++  <script type="module" src="operations-v27-ui.mjs?v=20261113-v33"></script>
++  <script type="module" src="conductor-duty-ui-v28.mjs?v=20261113-v33"></script>
++  <script type="module" src="fault-envelope-ui-v29.mjs?v=20261113-v33"></script>
++  <script type="module" src="arcflash-network-ui-v29.mjs?v=20261114-v33c6"></script>
++  <script type="module" src="cable-sizing-ui-v29.mjs?v=20261113-v33"></script>
++  <script type="module" src="power-quality-ui-v29.mjs?v=20261113-v33"></script>
++  <script type="module" src="shell-v30.mjs?v=20261113-v33"></script>
++  <script type="module" src="plant-builder-ui-v31.mjs?v=20261114-v33d2"></script>
++  <script type="module" src="operating-table-ui-v33.mjs?v=20261114-v33c4"></script>
+ </body>
+ </html>
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/manufacturer-library.mjs /home/claude/repo/Electrical-Studies/SITE/manufacturer-library.mjs
+--- V32_SITE/manufacturer-library.mjs	2026-11-13 15:22:11.433627165 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/manufacturer-library.mjs	2026-11-14 12:25:34.196787892 -0800
+@@ -84,7 +84,7 @@
+ export function manufacturerContextMarkup(item){
+  const record=manufacturerRecord(item.db?.id);if(!record)return '<p>Manufacturer reference unavailable. Review the entered values and source.</p>';
+  const b=item.db.dutyBasis;
+- return `<section class="database-context"><h4>Manufacturer data & applicability</h4><p>${esc(record.manufacturer)} · ${esc(record.model)} · Checked ${esc(record.checkedAt)}</p>${catalogueConflictMarkup(record)}${b?`<p>${b.manualOverride?'Interrupting rating manually overridden. ':''}${b.interruptA!=null?'Published AC rating: '+b.interruptA/1000+' kA at '+b.ratingVoltage+' V; connected voltage '+b.operatingVoltage+' V.':'A connected operating voltage within the published AC rating range is required.'}</p>`:''}<p>${esc(record.notes.join(' '))}</p><p><strong>Missing / verify:</strong> ${esc(record.missing.join(', '))}</p><small>${esc(record.page)} · ${esc(record.sourceRevision)}</small><p><a href="${esc(record.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open manufacturer source ↗</a></p></section>`;
++ return `<section class="database-context"><h4>Manufacturer data & applicability</h4><p class="model-note" role="note" data-reference-notice>Reference data notice: this database is a historical audited workbook, not a qualified manufacturer (OEM) catalogue. Check every value against the manufacturer's current datasheet before using it for design or equipment selection.</p><p>${esc(record.manufacturer)} · ${esc(record.model)} · Checked ${esc(record.checkedAt)}</p>${catalogueConflictMarkup(record)}${b?`<p>${b.manualOverride?'Interrupting rating manually overridden. ':''}${b.interruptA!=null?'Published AC rating: '+b.interruptA/1000+' kA at '+b.ratingVoltage+' V; connected voltage '+b.operatingVoltage+' V.':'A connected operating voltage within the published AC rating range is required.'}</p>`:''}<p>${esc(record.notes.join(' '))}</p><p><strong>Missing / verify:</strong> ${esc(record.missing.join(', '))}</p><small>${esc(record.page)} · ${esc(record.sourceRevision)}</small><p><a href="${esc(record.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open manufacturer source ↗</a></p></section>`;
+ }
+ export function manufacturerLibraryMarkup({search='',type='all'}={}){
+  const q=search.trim().toLowerCase(),records=manufacturerRecords.filter(r=>(type==='all'||(r.equipmentType||r.kind)===type)&&(!q||JSON.stringify(r).toLowerCase().includes(q)));
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/master-database.mjs /home/claude/repo/Electrical-Studies/SITE/master-database.mjs
+--- V32_SITE/master-database.mjs	2026-11-13 15:22:11.433654610 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/master-database.mjs	2026-11-14 12:25:34.196446331 -0800
+@@ -54,5 +54,5 @@
+  if(!manifest?.workbookSheets)return '<section class="panel"><h2>Master database</h2><p>Loading workbook index…</p></section>';
+  const metas=Object.entries(manifest.workbookSheets).filter(([,m])=>!state.group||m.usage===state.group),meta=manifest.workbookSheets[state.sheet],terms=state.search.toLowerCase().split(/\s+/).filter(Boolean);
+  const filtered=(state.data?.records||[]).filter(row=>!terms.length||terms.every(t=>Object.values(row).join(' ').toLowerCase().includes(t))),page=filtered.slice(state.page*25,(state.page+1)*25),targets=libraryTargets(project,state.sheet),target=targets.find(t=>t.id===state.target);
+- return `<section class="panel master-library"><div class="panel-heading"><div><span class="eyebrow">YOUR COMPLETE ENGINEERING WORKBOOK</span><h2>Master database</h2><p>${esc(manifest.workbook.name)} · ${manifest.workbook.sheets} sheets · ${manifest.workbook.records.toLocaleString()} source records</p></div><span class="db-chip">Original values retained</span></div><p class="master-download" role="note">The original master workbook is preserved in the cumulative recovery package. This static public preview serves its verified sheet records, but does not host the full XLSX download.</p><p><a href="v10-review.html" target="_blank" rel="noopener noreferrer">Review audited v10 non-curated records (reference only) ↗</a> · Existing equipment selections are unchanged.</p><p>Choose a sheet, search its records, then inspect the source fields or apply compatible equipment data. Other engineering references stay here without adding inputs to the fault study.</p><div class="master-controls"><label>Show sheets<select id="master-group"><option value="">All workbook sheets</option>${workbookGroups.map(g=>`<option value="${g}" ${state.group===g?'selected':''}>${g}</option>`).join('')}</select></label><label>Workbook sheet<select id="master-sheet">${metas.map(([s,m])=>`<option value="${s}" ${s===state.sheet?'selected':''}>${esc(s.replaceAll('_',' '))} · ${m.count.toLocaleString()}</option>`).join('')}</select></label><label>Search this sheet<input id="master-search" type="search" value="${esc(state.search)}" placeholder="Model, manufacturer, record ID or value"></label>${targets.length?`<label>Apply data to<select id="master-target"><option value="">Choose existing equipment</option>${targets.map(t=>`<option value="${esc(t.id)}" ${t.id===state.target?'selected':''}>${esc(t.name)}</option>`).join('')}</select></label>`:''}</div><div class="master-scope"><strong>${esc(meta?.usage||'Workbook reference')}</strong><p>${esc(meta?.description||'')}</p>${meta?.usage==='Calculation inputs'?'<p>Incomplete models remain selectable. Available fields fill the item; missing fault data stays required. X/R, assembly SCCR and protected manufacturer parameters are never invented.</p>':''}</div>${state.error?`<div class="inline-issue" role="alert">${esc(state.error)} <button data-master-action="retry">Retry</button></div>`:''}<div class="db-count" role="status">${state.loading?'Loading selected sheet…':state.data?filtered.length.toLocaleString()+' matches · page '+(state.page+1):'Select a sheet to load its records.'}</div>${state.inspect?sourceFieldsMarkup(state.inspect,{sheet:state.sheet}):''}<div class="table-scroll"><table><thead><tr><th>Source record</th><th>Use in Studio</th><th>Workbook row</th><th>Action</th></tr></thead><tbody>${page.map(row=>{const readiness=recordReadiness(state.sheet,row),reasons=target?recordCompatibility(state.sheet,row,target,project):[],blocked=!readiness.direct||reasons.length;return `<tr><td><strong>${esc(workbookRowLabel(row))}</strong><small>${esc(mapRecord(state.sheet,row).db.status||'Verification not supplied')}</small></td><td>${esc(readiness.label)}${reasons.length?`<small class="text-warning">${esc(reasons.join('. '))}</small>`:''}</td><td>${row._row}</td><td><button data-master-inspect="${row._row}">View fields</button>${targets.length?`<button data-master-use="${row._row}" class="primary" ${!target||blocked?'disabled':''}>Use with equipment</button>`:''}</td></tr>`}).join('')||'<tr><td colspan="4">'+(state.loading?'Loading records…':state.error?'Records could not be loaded. Retry above.':'No matches. Adjust the search or sheet.')+'</td></tr>'}</tbody></table></div><div class="actions"><button data-master-action="previous" ${state.page===0?'disabled':''}>← Previous</button><button data-master-action="next" ${(state.page+1)*25>=filtered.length?'disabled':''}>Next →</button><button data-master-action="download" ${!state.data?'disabled':''}>Download selected sheet JSON</button></div></section>`;
++ return `<section class="panel master-library"><div class="panel-heading"><div><span class="eyebrow">YOUR COMPLETE ENGINEERING WORKBOOK</span><h2>Master database</h2><p>${esc(manifest.workbook.name)} · ${manifest.workbook.sheets} sheets · ${manifest.workbook.records.toLocaleString()} source records</p></div><span class="db-chip">Original values retained</span></div><p class="model-note" role="note" data-reference-notice>Reference data notice: this database is a historical audited workbook, not a qualified manufacturer (OEM) catalogue. Check every value against the manufacturer's current datasheet before using it for design or equipment selection.</p><p class="master-download" role="note">The original master workbook is preserved in the cumulative recovery package. This static public preview serves its verified sheet records, but does not host the full XLSX download.</p><p><a href="v10-review.html" target="_blank" rel="noopener noreferrer">Review audited v10 non-curated records (reference only) ↗</a> · Existing equipment selections are unchanged.</p><p>Choose a sheet, search its records, then inspect the source fields or apply compatible equipment data. Other engineering references stay here without adding inputs to the fault study.</p><div class="master-controls"><label>Show sheets<select id="master-group"><option value="">All workbook sheets</option>${workbookGroups.map(g=>`<option value="${g}" ${state.group===g?'selected':''}>${g}</option>`).join('')}</select></label><label>Workbook sheet<select id="master-sheet">${metas.map(([s,m])=>`<option value="${s}" ${s===state.sheet?'selected':''}>${esc(s.replaceAll('_',' '))} · ${m.count.toLocaleString()}</option>`).join('')}</select></label><label>Search this sheet<input id="master-search" type="search" value="${esc(state.search)}" placeholder="Model, manufacturer, record ID or value"></label>${targets.length?`<label>Apply data to<select id="master-target"><option value="">Choose existing equipment</option>${targets.map(t=>`<option value="${esc(t.id)}" ${t.id===state.target?'selected':''}>${esc(t.name)}</option>`).join('')}</select></label>`:''}</div><div class="master-scope"><strong>${esc(meta?.usage||'Workbook reference')}</strong><p>${esc(meta?.description||'')}</p>${meta?.usage==='Calculation inputs'?'<p>Incomplete models remain selectable. Available fields fill the item; missing fault data stays required. X/R, assembly SCCR and protected manufacturer parameters are never invented.</p>':''}</div>${state.error?`<div class="inline-issue" role="alert">${esc(state.error)} <button data-master-action="retry">Retry</button></div>`:''}<div class="db-count" role="status">${state.loading?'Loading selected sheet…':state.data?filtered.length.toLocaleString()+' matches · page '+(state.page+1):'Select a sheet to load its records.'}</div>${state.inspect?sourceFieldsMarkup(state.inspect,{sheet:state.sheet}):''}<div class="table-scroll"><table><thead><tr><th>Source record</th><th>Use in Studio</th><th>Workbook row</th><th>Action</th></tr></thead><tbody>${page.map(row=>{const readiness=recordReadiness(state.sheet,row),reasons=target?recordCompatibility(state.sheet,row,target,project):[],blocked=!readiness.direct||reasons.length;return `<tr><td><strong>${esc(workbookRowLabel(row))}</strong><small>${esc(mapRecord(state.sheet,row).db.status||'Verification not supplied')}</small></td><td>${esc(readiness.label)}${reasons.length?`<small class="text-warning">${esc(reasons.join('. '))}</small>`:''}</td><td>${row._row}</td><td><button data-master-inspect="${row._row}">View fields</button>${targets.length?`<button data-master-use="${row._row}" class="primary" ${!target||blocked?'disabled':''}>Use with equipment</button>`:''}</td></tr>`}).join('')||'<tr><td colspan="4">'+(state.loading?'Loading records…':state.error?'Records could not be loaded. Retry above.':'No matches. Adjust the search or sheet.')+'</td></tr>'}</tbody></table></div><div class="actions"><button data-master-action="previous" ${state.page===0?'disabled':''}>← Previous</button><button data-master-action="next" ${(state.page+1)*25>=filtered.length?'disabled':''}>Next →</button><button data-master-action="download" ${!state.data?'disabled':''}>Download selected sheet JSON</button></div></section>`;
+ }
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/network-app.mjs /home/claude/repo/Electrical-Studies/SITE/network-app.mjs
+--- V32_SITE/network-app.mjs	2026-11-13 15:22:11.433712184 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/network-app.mjs	2026-11-14 12:22:17.188573399 -0800
+@@ -11,7 +11,7 @@
+ import {customChoice,propertyValueSource,setPropertyValueSource,referenceFieldValue,restoreReferenceField} from './property-values.mjs?v=20261022-pv-final';
+ import {isSinglePhase,hasBranchCurrents,singlePhaseScope,singlePhaseInputLabel} from './single-phase.mjs?v=20261022-pv-final';
+ import {singlePhaseSourceFields,singlePhaseTransformerFields,singlePhaseCableFields} from './single-phase-form.mjs?v=20261022-pv-final';
+-import {validateReportBlob,reportDownloadMarkup,browserHandoffMarkup} from './report-download.mjs?v=20261108-v32';
++import {validateReportBlob,reportDownloadMarkup,browserHandoffMarkup} from './report-download.mjs?v=20261113-v33';
+ import {createProjectHistory} from './project-history.mjs?v=20261022-pv-final';
+ import {manufacturerChoices,manufacturerPickerMarkup,manufacturerContextMarkup,manufacturerLibraryMarkup,applyManufacturerRecord,synchronizeManufacturerData} from './manufacturer-library.mjs?v=20261022-pv-final';
+ import {equipmentClickIntent,equipmentDialogMarkup} from './equipment-dialog.mjs?v=20261022-pv-final';
+@@ -30,7 +30,7 @@
+ import {cableVoltageDetails,cableVoltageMessage,voltageLabel} from './network-voltage.mjs?v=20261022-pv-final';
+ import {canonicalStudy,createCloudStudies} from './network-cloud.mjs?v=20261022-pv-final';
+ import {browserReport} from './public-report-engine.mjs';
+-import {REPORT_SECTIONS,SECTION_KEYS,loadReportChoice,saveReportChoice,reportStudyEntries,reportChoiceMarkup,sheetTableMarkup} from './report-contents.mjs?v=20261108-v32';
++import {REPORT_SECTIONS,SECTION_KEYS,loadReportChoice,saveReportChoice,reportStudyEntries,reportChoiceMarkup,sheetTableMarkup} from './report-contents.mjs?v=20261113-v33';
+ import {assembleCloudBackup,inspectCloudBackup} from './cloud-backup.mjs?v=20261025-batch11';
+ import {decodeWorkbookSheet,validateWorkbookMeta,masterLibraryMarkup,sourceFieldsMarkup,recordReadiness,motorFaultEquivalent,motorStages} from './master-database.mjs?v=20261022-pv-final';
+ import {cableThermalScreen,conductorArea,shortTimeScreen} from './database-checks.mjs?v=20261022-pv-final';
+@@ -84,9 +84,14 @@
+  synchronizeManufacturerData(project);
+  if(drag){clearTimeout(timer);timer=setTimeout(calculate,180);return}if(!commitFocusedField())return;
+  clearTimeout(timer);cancelCalculation?.();revision++;const req=revision;pending=true;running=true;
++ // V33: the results of the last few project states are kept. Undo or redo back to a state that was already calculated
++ // shows its result at once. A state is matched by its complete saved text, so any change of any value is a new state.
++ const text=JSON.stringify(project),hit=resultCache.find(e=>e.text===text);
++ if(hit){resultCache.splice(resultCache.indexOf(hit),1);resultCache.unshift(hit);cancelCalculation=null;pending=false;running=false;calculation=hit.data;if(view==='network')renderCalculationState();else render();return}
+  if(view==='network')renderCalculationState();else render();
+- cancelCalculation=runCalculation({project:clone(project),revision:req,onResult:data=>{if(req!==revision)return;pending=false;running=false;calculation=data.error?{results:[],issues:[{severity:'error',message:data.error,id:'engine'}]}:data;if(view==='network')renderCalculationState();else render()}})
++ cancelCalculation=runCalculation({project:JSON.parse(text),revision:req,onResult:data=>{if(req!==revision)return;pending=false;running=false;calculation=data.error?{results:[],issues:[{severity:'error',message:data.error,id:'engine'}]}:data;if(!data.error&&text.length<2e7){resultCache.unshift({text,data});resultCache.length=Math.min(resultCache.length,RESULT_CACHE_SIZE)}if(view==='network')renderCalculationState();else render()}})
+ }
++const resultCache=[],RESULT_CACHE_SIZE=4;
+ function changed({renderNow=true,schedule=true,historyGroup=null}={}){synchronizeManufacturerData(project);if(equipmentEdit)schedule=false;undo=null;persist({historyGroup});revision++;cancelCalculation?.();cancelCalculation=null;running=false;pending=true;clearTimeout(timer);if(project.settings.auto&&schedule)timer=setTimeout(calculate,140);if(renderNow)render();else renderCalculationState()}
+ function fieldValue(t){const item=t.dataset.item==='settings'?project.settings:t.dataset.item==='project'?project:itemById(t.dataset.item),key=t.dataset.key;if(t.type==='checkbox')return t.checked;if(t.type!=='number'){if(t.type==='text'&&t.value.length>1000)throw Error('Use 1,000 characters or fewer.');return t.value}if(t.validity?.badInput)throw Error('Enter a complete number, for example 3.4.');const value=t.value===''?null:Number(t.value);if(value!==null&&!Number.isFinite(value))throw Error('Enter a finite number.');const scaled=value===null?null:value*Number(t.dataset.scale||unitFactors[item?.units?.[key]]||1);if(scaled!==null&&!Number.isFinite(scaled))throw Error('Value is too large in the chosen units.');if(item?.kind==='pv-array')validatePvField(key,scaled);return scaled}
+ function commitFocusedField(){const t=document.activeElement;if(!t?.dataset?.item)return true;try{update(t.dataset.item,t.dataset.key,fieldValue(t),false,{renderNow:false,schedule:false,clearInputError:false});return true}catch(error){blockField(t,error,{renderNow:false,schedule:false,historyGroup:t.dataset.item+':'+t.dataset.key});if(itemById(t.dataset.item)?.kind==='pv-array'){render();return true;}pending=false;running=false;calculation={results:[],issues:(project.inputErrors||[]).map(i=>({...i,severity:'error'}))};render();return false}}
+@@ -316,7 +321,12 @@
+  return `<div class="math-grid"><div>Phase A RMS<strong>${ka(r.phaseRMSA.a)}</strong></div><div>Phase B RMS<strong>${ka(r.phaseRMSA.b)}</strong></div><div>Phase C RMS<strong>${ka(r.phaseRMSA.c)}</strong></div><div>Maximum phase RMS<strong>${ka(r.totalA)}</strong></div><div>Ground return RMS<strong>${ka(r.groundA)}</strong></div></div><p class="micro">B–C–ground, ABC phase rotation. B and C are joined through one common impedance to ground. Equipment RMS checks use the largest phase current; ground return is |Ib + Ic| = |3I0|. Z2 and Z0 must be equivalent sequence data for this bus and operating case.</p>`;
+ }
+ function contributionView(r){if(isExtendedStudy(project))return analysisCurrentMarkup(project,r);if(project.settings.faultType==='dlg')return dlgCurrentView(r);if(!hasBranchCurrents(project))return '<p>Per-source and branch-current details are available for three-phase studies. Unbalanced results use equivalent sequence data at each bus.</p>';if(!r||r.totalA===null)return `<div class="result-empty">${esc(r?.faultNote||(r?.status?.startsWith('DISCONNECTED')?'No active source reaches this bus. Check the Connected bus and From/To assignments.':'Complete the network inputs to calculate this location.'))}</div>`;const max=Math.max(...(r.details||[]).map(d=>d.amps),1);return `<div class="category-totals">${[['utility','Utility'],['pv','PV'],['bess','BESS'],['generator','Generator'],['other','Other / motor']].map(([k,l])=>`<div><span>${l}</span><strong>${ka((r.groups?.[k]||0)+(k==='other'?(r.groups?.motor||0)+(r.groups?.otherSource||0):0))}</strong></div>`).join('')}</div><p class="micro">Category values are sums of source magnitudes. The total uses source phasors, with unknown inverter phases added as a screening bound.</p><div class="contributions">${(r.details||[]).map(d=>`<div class="contribution"><div><strong>${esc(d.name)}</strong><span>${esc(names[d.kind])}${d.expired?' · duration elapsed':''}</span></div><div class="track"><i style="width:${Math.min(100,d.amps/max*100)}%"></i></div><b>${ka(d.amps)}</b></div>`).join('')}</div>`}
+-function mathView(r){if(isExtendedStudy(project))return analysisResultsMarkup(project,calculation.results);return `<section class="panel"><div class="panel-heading"><div><span class="eyebrow">CALCULATION DETAILS</span><h2>${esc(r?.busName||'Select a fault bus')}</h2></div></div>${!r||r.totalA===null?`<p>${esc(r?.faultNote||'Complete the input review first.')}</p>`:`<div class="math-intro">${isSinglePhase(project)?`Full-voltage two-wire nodal solution. Current base = S / V; transformer leakage = V² / full nameplate VA × %Z. Cable impedance includes the complete outgoing and return loop. Fault current = |Eloop / (Zloop + Zfault)|.`:project.settings.faultType==='3phase'?`Balanced nodal admittance solution on ${n(project.settings.baseMVA)} MVA with each bus’s nominal voltage base. Voltage sources are Norton equivalents; transformers use ratio, phase shift and leakage impedance. Contributions use the same passive network.`:`Equivalent sequence calculation at this bus. Z1 comes from the positive-sequence nodal model; Z2 and Z0 use the entered bus equivalents${project.settings.assumeZ2?' or the explicitly selected Z2 = Z1 screen':''}. ${project.settings.faultType==='ll'?'Line current = √3 × |E| / |Z1 + Z2 + Zfault|.':project.settings.faultType==='dlg'?'I1 = E / [Z1 + Z2 × (Z0 + 3Zfault) / (Z2 + Z0 + 3Zfault)]. I2 = −I1 × (Z0 + 3Zfault) / (Z2 + Z0 + 3Zfault); I0 = −I1 × Z2 / (Z2 + Z0 + 3Zfault). Transform sequence currents to ABC phases; reported RMS is max(|Ib|, |Ic|).':'Line current = 3 × |E| / |Z1 + Z2 + Z0 + 3 × Zfault|.'}`}</div><div class="math-grid"><div>Bus voltage<strong>${voltage(r.voltage)}</strong></div><div>Thevenin impedance<strong>${z(r.zth)}</strong></div><div>${project.settings.faultType==='dlg'?'Maximum phase RMS':'Total '+(r.bound?'magnitude bound':'phasor RMS')}<strong>${ka(r.totalA)}</strong></div><div>Effective X/R<strong>${r.xr===Infinity?'∞':n(r.xr)}</strong></div><div>Asymmetrical RMS screening at study time<strong>${ka(r.asymA)}</strong></div><div>Peak screening<strong>${ka(r.peakA)}</strong></div></div>${r.sequence?`<div class="math-grid"><div>Positive sequence Z1<strong>${z(r.sequence.z1)}</strong></div><div>Negative sequence Z2<strong>${z(r.sequence.z2)}</strong></div><div>Zero sequence Z0<strong>${project.settings.faultType==='ll'?'Not used for LL':z(r.sequence.z0)}</strong></div><div>Prefault phase voltage |E|<strong>${n(abs(r.sequence.referenceVoltage))} V</strong></div></div>`:''}${(hasBranchCurrents(project)?r.details:[]).map(d=>`<details class="math-source" open><summary>${esc(d.name)} <strong>${ka(d.amps)}</strong></summary><div class="math-grid"><div>Source terminal fault level<strong>${ka(d.terminalA)}</strong></div><div>Source impedance at terminal<strong>${z(d.sourceImpedance)}</strong></div><div>Source impedance referred to fault voltage<strong>${z(d.sourceImpedanceAtFault)}</strong></div><div>Calculated fault contribution<strong>${ka(d.amps)}</strong></div><div>Diagnostic series-path impedance at fault voltage<strong>${z(d.pathSeriesZ)}</strong></div></div>${d.current?`<div class="model-note">Manufacturer-limited current injection. ${d.unknownAngle?'Phase unknown: added as a magnitude bound.':'Known current phase used.'} ${d.expired?'Contribution removed after supplied duration.':''} Transformer/cable impedances are in the network; current divides among the fault path and suppressed conventional source admittances. Pure series impedance does not reduce an ideal regulated current.</div>`:''}<table><thead><tr><th>Path element</th><th>Impedance at element's To side</th><th>Voltage base</th><th>Referred to fault voltage</th></tr></thead><tbody>${d.path.map(e=>`<tr><td>${esc(e.name)} · ${esc(e.kind)}</td><td>${z(e.ohms)}</td><td>${voltage(e.atVoltage)}</td><td>${z({r:e.ohms.r*(r.voltage/e.atVoltage)**2,i:e.ohms.i*(r.voltage/e.atVoltage)**2})}</td></tr>`).join('')||'<tr><td colspan="3">Source is at the fault bus.</td></tr>'}</tbody></table>${d.meshed?'<p class="micro">This is one diagnostic path through a meshed network. The solver uses every connected branch; the table is not an independent series-path sum.</p>':''}<details><summary>Branch current from this source during the fault</summary><table><tbody>${d.branchFlows.map(e=>`<tr><td>${esc(e.name)}</td><td>From: ${ka(e.amps)}</td><td>To: ${ka(e.toAmps)}</td></tr>`).join('')}</tbody></table></details></details>`).join('')}`}</section>`}
++// V33: a bus fed by hundreds of inverters would add two tables per source to the page (275,000 page elements for 1,681 sources).
++// The step-by-step tables are drawn for the largest contributions; the contribution table and every total still include all sources.
++const MATH_SOURCE_LIMIT=40;
++function mathSources(r){const all=hasBranchCurrents(project)?(r?.details||[]):[];return all.length>MATH_SOURCE_LIMIT?[...all].sort((x,y)=>y.amps-x.amps).slice(0,MATH_SOURCE_LIMIT):all}
++function mathSourceNote(r){const count=hasBranchCurrents(project)?(r?.details||[]).length:0;return count>MATH_SOURCE_LIMIT?`<p class="model-note">This fault location has ${count} sources. Step-by-step tables are shown for the ${MATH_SOURCE_LIMIT} largest contributions. The contribution table, the totals above and the Excel report include every source.</p>`:''}
++function mathView(r){if(isExtendedStudy(project))return analysisResultsMarkup(project,calculation.results);return `<section class="panel"><div class="panel-heading"><div><span class="eyebrow">CALCULATION DETAILS</span><h2>${esc(r?.busName||'Select a fault bus')}</h2></div></div>${!r||r.totalA===null?`<p>${esc(r?.faultNote||'Complete the input review first.')}</p>`:`<div class="math-intro">${isSinglePhase(project)?`Full-voltage two-wire nodal solution. Current base = S / V; transformer leakage = V² / full nameplate VA × %Z. Cable impedance includes the complete outgoing and return loop. Fault current = |Eloop / (Zloop + Zfault)|.`:project.settings.faultType==='3phase'?`Balanced nodal admittance solution on ${n(project.settings.baseMVA)} MVA with each bus’s nominal voltage base. Voltage sources are Norton equivalents; transformers use ratio, phase shift and leakage impedance. Contributions use the same passive network.`:`Equivalent sequence calculation at this bus. Z1 comes from the positive-sequence nodal model; Z2 and Z0 use the entered bus equivalents${project.settings.assumeZ2?' or the explicitly selected Z2 = Z1 screen':''}. ${project.settings.faultType==='ll'?'Line current = √3 × |E| / |Z1 + Z2 + Zfault|.':project.settings.faultType==='dlg'?'I1 = E / [Z1 + Z2 × (Z0 + 3Zfault) / (Z2 + Z0 + 3Zfault)]. I2 = −I1 × (Z0 + 3Zfault) / (Z2 + Z0 + 3Zfault); I0 = −I1 × Z2 / (Z2 + Z0 + 3Zfault). Transform sequence currents to ABC phases; reported RMS is max(|Ib|, |Ic|).':'Line current = 3 × |E| / |Z1 + Z2 + Z0 + 3 × Zfault|.'}`}</div><div class="math-grid"><div>Bus voltage<strong>${voltage(r.voltage)}</strong></div><div>Thevenin impedance<strong>${z(r.zth)}</strong></div><div>${project.settings.faultType==='dlg'?'Maximum phase RMS':'Total '+(r.bound?'magnitude bound':'phasor RMS')}<strong>${ka(r.totalA)}</strong></div><div>Effective X/R<strong>${r.xr===Infinity?'∞':n(r.xr)}</strong></div><div>Asymmetrical RMS screening at study time<strong>${ka(r.asymA)}</strong></div><div>Peak screening<strong>${ka(r.peakA)}</strong></div></div>${r.sequence?`<div class="math-grid"><div>Positive sequence Z1<strong>${z(r.sequence.z1)}</strong></div><div>Negative sequence Z2<strong>${z(r.sequence.z2)}</strong></div><div>Zero sequence Z0<strong>${project.settings.faultType==='ll'?'Not used for LL':z(r.sequence.z0)}</strong></div><div>Prefault phase voltage |E|<strong>${n(abs(r.sequence.referenceVoltage))} V</strong></div></div>`:''}${mathSourceNote(r)}${mathSources(r).map(d=>`<details class="math-source" open><summary>${esc(d.name)} <strong>${ka(d.amps)}</strong></summary><div class="math-grid"><div>Source terminal fault level<strong>${ka(d.terminalA)}</strong></div><div>Source impedance at terminal<strong>${z(d.sourceImpedance)}</strong></div><div>Source impedance referred to fault voltage<strong>${z(d.sourceImpedanceAtFault)}</strong></div><div>Calculated fault contribution<strong>${ka(d.amps)}</strong></div><div>Diagnostic series-path impedance at fault voltage<strong>${z(d.pathSeriesZ)}</strong></div></div>${d.current?`<div class="model-note">Manufacturer-limited current injection. ${d.unknownAngle?'Phase unknown: added as a magnitude bound.':'Known current phase used.'} ${d.expired?'Contribution removed after supplied duration.':''} Transformer/cable impedances are in the network; current divides among the fault path and suppressed conventional source admittances. Pure series impedance does not reduce an ideal regulated current.</div>`:''}<table><thead><tr><th>Path element</th><th>Impedance at element's To side</th><th>Voltage base</th><th>Referred to fault voltage</th></tr></thead><tbody>${d.path.map(e=>`<tr><td>${esc(e.name)} · ${esc(e.kind)}</td><td>${z(e.ohms)}</td><td>${voltage(e.atVoltage)}</td><td>${z({r:e.ohms.r*(r.voltage/e.atVoltage)**2,i:e.ohms.i*(r.voltage/e.atVoltage)**2})}</td></tr>`).join('')||'<tr><td colspan="3">Source is at the fault bus.</td></tr>'}</tbody></table>${d.meshed?'<p class="micro">This is one diagnostic path through a meshed network. The solver uses every connected branch; the table is not an independent series-path sum.</p>':''}<details><summary>Branch current from this source during the fault</summary><table><tbody>${d.branchFlows.map(e=>`<tr><td>${esc(e.name)}</td><td>From: ${ka(e.amps)}</td><td>To: ${ka(e.toAmps)}</td></tr>`).join('')}</tbody></table></details></details>`).join('')}`}</section>`}
+ function resultsView(){if(pending)return '<section class="panel"><h2>Updating network results…</h2><p>Calculate the system to see results for the current inputs.</p></section>';const r=result();if(isExtendedStudy(project))return analysisResultsMarkup(project,calculation.results);return `<div class="results-grid">${contributionPanel(r)}${allBusPanel()}</div>${mathView(r)}${branchView(r)}${dutyView()}${databaseScreensView()}`}
+ function contributionPanel(r){return `<section class="panel"><div class="panel-heading"><h2>${project.settings.faultType==='dlg'?'Phase and ground currents':'Contribution at selected bus'}</h2>${badge(r?.status||'No result')}</div>${contributionView(r)}<div class="result-note">${isSinglePhase(project)?singlePhaseScope:project.settings.faultType!=='3phase'?'Unbalanced faults use equivalent sequence data at the fault bus. Source and branch decomposition is available for three-phase studies.':r?.bound?'Unknown inverter phase: conservative magnitude-sum bound; category magnitudes are not an exact phasor total.':'Source phasors are combined at the selected fault location, after solving all impedances and transformer ratios.'}</div></section>`}
+ function allBusPanel(){return `<section class="panel"><h2>All bus fault levels</h2><div class="table-scroll"><table><thead><tr><th>Fault location</th><th>Voltage</th><th>${project.settings.faultType==='dlg'?'Maximum phase RMS':'RMS fault'}</th>${project.settings.faultType==='dlg'?'<th>Ground return RMS</th>':''}<th>Status</th></tr></thead><tbody>${project.buses.map(b=>{const q=result(b.id);return `<tr><td><button class="text-button" data-fault-bus="${b.id}">${esc(b.name)}</button></td><td>${voltage(b.voltage)}</td><td>${pending?'Updating…':ka(q?.totalA)}</td>${project.settings.faultType==='dlg'?`<td>${ka(q?.groundA)}</td>`:''}<td>${badge(q?.status||'Not calculated')}</td></tr>`}).join('')}</tbody></table></div></section>`}
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/network-calculation.mjs /home/claude/repo/Electrical-Studies/SITE/network-calculation.mjs
+--- V32_SITE/network-calculation.mjs	2026-11-13 15:22:11.433799411 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/network-calculation.mjs	2026-11-14 06:02:42.376430614 -0800
+@@ -82,8 +82,11 @@
+ // The study stays on the visitor's device in both execution paths.
+ // A denied/failed worker must never leave a valid study stuck at "Calculating".
+ export function runCalculation({project,revision,onResult,WorkerClass=globalThis.Worker,
+- workerUrl=new URL('./network-worker.mjs?v=20261108-v32',import.meta.url),startupTimeoutMs=4000,resultTimeoutMs=30000,
++ workerUrl=new URL('./network-worker.mjs?v=20261113-v33',import.meta.url),startupTimeoutMs=4000,resultTimeoutMs=30000,
+  setTimer=setTimeout,clearTimer=clearTimeout,compute=calculateProject}){
++ // V33: a plant with thousands of buses and thousands of sources needs longer than 30 s on a slow or throttled computer.
++ // The limit grows with buses x sources (30 s up to 200,000; about 2 minutes at 3 million; at most 3 minutes in total).
++ const work=(project?.buses?.length||0)*(project?.sources?.length||0),resultLimitMs=resultTimeoutMs+(work>2e5?Math.min(150000,Math.round(work*0.03)):0);
+  let closed=false,worker=null,watchdog=null,started=false;
+  const cleanup=()=>{if(watchdog!==null){clearTimer(watchdog);watchdog=null}worker?.terminate();worker=null};
+  const finish=data=>{if(closed)return;closed=true;cleanup();onResult({...data,revision})};
+@@ -93,7 +96,7 @@
+   worker=new WorkerClass(workerUrl,{type:'module'});
+   worker.onmessage=event=>{
+    if(closed||event.data?.revision!==revision)return;
+-   if(event.data.phase==='started'){if(started)return;started=true;if(watchdog!==null)clearTimer(watchdog);watchdog=setTimer(()=>finish({error:'Calculation did not complete. Retry, or download this study for troubleshooting.',execution:'worker'}),resultTimeoutMs);return}
++   if(event.data.phase==='started'){if(started)return;started=true;if(watchdog!==null)clearTimer(watchdog);watchdog=setTimer(()=>finish({error:'Calculation did not complete. Retry, or download this study for troubleshooting.',execution:'worker'}),resultLimitMs);return}
+    if(event.data.error){if(typeof event.data.error!=='string'){inline();return}finish({error:event.data.error,execution:'worker'});return}
+    try{if(!validPacket(event.data,project)){inline();return}}catch{inline();return}
+    finish({results:event.data.results,issues:event.data.issues,execution:'worker'});
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/network-engine.mjs /home/claude/repo/Electrical-Studies/SITE/network-engine.mjs
+--- V32_SITE/network-engine.mjs	2026-11-13 15:22:11.433835084 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/network-engine.mjs	2026-11-14 05:15:29.837063452 -0800
+@@ -1,12 +1,12 @@
+-import {isExtendedStudy,usesConnectedSequences,calculateExtendedProject,validateExtendedProject,prepareSplitPhaseProject} from './analysis-models.mjs?v=20261108-v32';
+-import {isSplitPhaseFault,calculateSplitPhaseBusDetail} from './split-phase-network.mjs?v=20261108-v32';
+-import {calculateConnectedBusDetail} from './connected-sequences.mjs?v=20261108-v32';
++import {isExtendedStudy,usesConnectedSequences,calculateExtendedProject,validateExtendedProject,prepareSplitPhaseProject} from './analysis-models.mjs?v=20261113-v33';
++import {isSplitPhaseFault,calculateSplitPhaseBusDetail} from './split-phase-network.mjs?v=20261113-v33';
++import {calculateConnectedBusDetail} from './connected-sequences.mjs?v=20261113-v33';
+ // Balanced network screening, on a common MVA base and each bus's nominal voltage base.
+ import {combineBranchFlows} from './network-flow.mjs?v=20261022-pv-final';
+ import {isBranchEnabled} from './network-model.mjs?v=20261022-pv-final';
+ import {cableVoltageMessage} from './network-voltage.mjs?v=20261022-pv-final';
+ import {calculateDlg} from './dlg-fault.mjs?v=20261022-pv-final';
+-import {calculateDcBusDetail} from './dc-network.mjs?v=20261108-v32';
++import {calculateDcBusDetail} from './dc-network.mjs?v=20261113-v33';
+ import {isSinglePhase,hasBranchCurrents,cableLoopFactor,singlePhaseIssues,singlePhaseSourceImpedance,singlePhaseScope} from './single-phase.mjs?v=20261022-pv-final';
+ const finiteComplex=z=>Number.isFinite(z?.r)&&Number.isFinite(z?.i);
+ export const C=(r=0,i=0)=>({r,i}),add=(a,b)=>C(a.r+b.r,a.i+b.i),sub=(a,b)=>C(a.r-b.r,a.i-b.i),mul=(a,b)=>C(a.r*b.r-a.i*b.i,a.r*b.i+a.i*b.r),scale=(a,k)=>C(a.r*k,a.i*k),conj=a=>C(a.r,-a.i),abs=a=>Math.hypot(a.r,a.i),div=(a,b)=>{if(!finiteComplex(a)||!finiteComplex(b))throw Error('Calculation exceeds numerical range. Check input values and units.');const m=Math.max(Math.abs(b.r),Math.abs(b.i));if(m===0)throw Error('Zero impedance / singular system');const br=b.r/m,bi=b.i/m,d=br*br+bi*bi,result=C(((a.r/m)*br+(a.i/m)*bi)/d,((a.i/m)*br-(a.r/m)*bi)/d);if(!finiteComplex(result))throw Error('Calculation exceeds numerical range. Check input values and units.');return result},polar=(v,d)=>C(v*Math.cos(d*Math.PI/180),v*Math.sin(d*Math.PI/180));
+@@ -151,7 +151,25 @@
+ // matrix, prefault vectors per source, and one impedance column per faulted bus. The matrix is held
+ // sparse and factorized with minimum-degree ordering, so cost grows with the number of connections rather
+ // than with the cube of the bus count. Networks at or below SPARSE_MIN_BUSES keep the dense path unchanged.
+-export const SPARSE_MIN_BUSES=150,COMPACT_WORK=4e5;
++export const SPARSE_MIN_BUSES=150,COMPACT_WORK=4e5,LEAN_DETAIL_ROWS=2e5,GROUP_MIN_SOURCES=48;
++// V33: unknown-angle current sources whose solved columns are equal except at a few places (for example the inverters of one block)
++// are summed once per group. A member is accepted only when its columns equal the group's first member within 1e-12 of the column size;
++// the places where they differ are summed individually, so the branch-current bound is the same sum as before.
++function groupUnknownSources(us,P,dPU,U,mb,N,ref){
++ const MAXEXC=12,TOL=1e-12,groupOf=new Int32Array(U),reps=[],counts=[],buckets=new Map(),excQ=new Map(),excF=new Map(),norms=new Map();
++ const key=h=>{const [pr,pi]=P.get(us[h].id),j=us[h].injection;return [pr[ref],pi[ref],j.r,j.i].map(v=>v.toPrecision(9)).join('|')};
++ const norm=h=>{let v=norms.get(h);if(v)return v;const [pr,pi]=P.get(us[h].id);let a=0,d=0;for(let k=0;k<N;k++){const m=Math.max(Math.abs(pr[k]),Math.abs(pi[k]));if(m>a)a=m}for(let q=0;q<mb;q++){const o=2*(q*U+h),m=Math.max(Math.abs(dPU[o]),Math.abs(dPU[o+1]));if(m>d)d=m}v={p:a,d};norms.set(h,v);return v};
++ const compare=(h,r)=>{const [pr,pi]=P.get(us[h].id),[qr,qi]=P.get(us[r].id),nr=norm(r),tp=TOL*nr.p,td=TOL*nr.d,ef=[],eq=[];
++  for(let a=0;a<N;a++)if(!(Math.abs(pr[a]-qr[a])<=tp&&Math.abs(pi[a]-qi[a])<=tp)){if(ef.length===MAXEXC)return null;ef.push(a)}
++  for(let q=0;q<mb;q++){const o=2*q*U;if(!(Math.abs(dPU[o+2*h]-dPU[o+2*r])<=td&&Math.abs(dPU[o+2*h+1]-dPU[o+2*r+1])<=td)){if(eq.length===MAXEXC)return null;eq.push(q)}}
++  return {ef,eq}};
++ for(let h=0;h<U;h++){const k=key(h);let list=buckets.get(k);if(!list)buckets.set(k,list=[]);let placed=false;
++  for(let t=0;t<list.length&&t<16;t++){const g=list[t],x=compare(h,reps[g]);if(!x)continue;groupOf[h]=g;counts[g]++;for(const a of x.ef){let l=excF.get(a);if(!l)excF.set(a,l=[]);l.push(h)}for(const q of x.eq){let l=excQ.get(q);if(!l)excQ.set(q,l=[]);l.push(h)}placed=true;break}
++  if(!placed){groupOf[h]=reps.length;list.push(reps.length);reps.push(h);counts.push(1)}}
++ if(reps.length>U/2)return null;
++ const Gn=reps.length,cols=new Float64Array(2*mb*Gn);for(let q=0;q<mb;q++)for(let g=0;g<Gn;g++){const o=2*(q*U+reps[g]),t=2*(q*Gn+g);cols[t]=dPU[o];cols[t+1]=dPU[o+1]}
++ return {groupOf,reps:Int32Array.from(reps),counts:Float64Array.from(counts),excQ,excF,cols,gR:new Float64Array(Gn),gI:new Float64Array(Gn),abs:new Float64Array(Gn),mark:new Uint32Array(U),stamp:0};
++}
+ const rangeError=()=>Error('Calculation exceeds numerical range. Check input values and units.');
+ const flowIndex=new WeakMap();
+ function linkFlows(results,id){let index=flowIndex.get(results);if(!index){index=new Map();for(const r of results){if(!r||r.totalA===null)continue;for(const e of r.branchFlows||[]){let list=index.get(e.id);if(!list)index.set(e.id,list=[]);list.push({r,e})}}flowIndex.set(results,index)}return index.get(id)||[]}
+@@ -194,7 +212,7 @@
+  for(const c of comps){c.sources=[];c.branches=[]}
+  for(const s of net.sources)comps[compId[s.i]].sources.push(s);
+  branches.forEach((e,k)=>comps[compId[e.i]].branches.push(k));
+- const work=n*Math.max(1,branches.length)*Math.max(1,net.sources.length),compact=forceCompact??work>COMPACT_WORK;
++ const work=n*Math.max(1,branches.length)*Math.max(1,net.sources.length),compact=forceCompact??work>COMPACT_WORK,lean=compact&&only===null&&n*net.sources.length>LEAN_DETAIL_ROWS;
+  const pathEntry=branches.map(e=>({id:e.id,name:e.name,kind:e.kind,from:e.from,to:e.to,ohms:e.ohms,atVoltage:net.buses[e.j].voltage}));
+  const trees=new Map();
+  const tree=root=>{let t=trees.get(root);if(t)return t;const parent=new Int32Array(n).fill(-2),via=new Int32Array(n).fill(-1),q=[root];parent[root]=-1;for(let h=0;h<q.length;h++){const u=q[h];for(const k of badj[u]){const e=branches[k],j=e.i===u?e.j:e.i;if(parent[j]===-2){parent[j]=u;via[j]=k;q.push(j)}}}t={parent,via};trees.set(root,t);return t};
+@@ -211,7 +229,10 @@
+    const dP=new Map();for(const s of c.sources){const [pr,pi]=P.get(s.id),d=new Float64Array(2*c.branches.length);c.branches.forEach((k,q)=>{const e=branches[k],a=loc[e.i],b=loc[e.j],v=coef[k].inv;d[2*q]=pr[a]*v.r-pi[a]*v.i-pr[b];d[2*q+1]=pr[a]*v.i+pi[a]*v.r-pi[b]});dP.set(s.id,d)}
+    const m2=2*c.branches.length,dPk=new Float64Array(m2);for(const s of c.sources)if(!(s.current&&s.unknownAngle)){const d=dP.get(s.id);for(let q=0;q<m2;q++)dPk[q]+=d[q]}
+    const us=c.sources.filter(s=>s.current&&s.unknownAngle),U=us.length,mb=c.branches.length,dPU=new Float64Array(2*U*mb);us.forEach((s,h)=>{const d=dP.get(s.id);for(let q=0;q<mb;q++){dPU[2*(q*U+h)]=d[2*q];dPU[2*(q*U+h)+1]=d[2*q+1]}});
+-   c.prep={F,P,dP,dPk,dPU};return c.prep}catch(error){c.prep={error};return c.prep}};
++   let G=null;if(compact&&U>=GROUP_MIN_SOURCES){try{G=groupUnknownSources(us,P,dPU,U,mb,N,loc[c.sources.find(s=>!s.current).i])}catch{G=null}}
++   // V33: with no fault-current drop on a branch, the unknown-angle sum for that branch is the same for every fault location.
++   const S0=new Float64Array(mb);for(let q=0;q<mb;q++){let t=0;const o=2*q*U;for(let h=0;h<U;h++)t+=Math.sqrt(dPU[o+2*h]*dPU[o+2*h]+dPU[o+2*h+1]*dPU[o+2*h+1]);S0[q]=t}
++   c.prep={F,P,dP,dPk,dPU,G,S0};return c.prep}catch(error){c.prep={error};return c.prep}};
+  const results=new Array(n);
+  const targets=only===null?net.buses.map((_,k)=>k):[net.at.get(only)];
+  for(const f of targets){
+@@ -221,16 +242,25 @@
+    const prep=prepare(c);if(prep?.error)throw prep.error;
+    const loc=c.loc,N=c.list.length,lf=loc[f],zf=C(p.settings.faultR||0,p.settings.faultX||0),faultZpu=scale(zf,1/baseZ(bus.voltage,net.base)),busI=networkBaseI(net,bus.voltage);
+    const per=[];let zth=null,Zf=null;
++   let total=C(),conventional=C(),derKnown=C(),derBound=0;const details=[];
++   const full=!compact||f===net.at.get(selected),fast=lean&&!!prep&&!full;let fastU=null;
+    if(prep){const b=[new Float64Array(N),new Float64Array(N)];b[0][lf]=1;Zf=sparseSolve(prep.F,b[0],b[1]);zth=scale(C(Zf[0][lf],Zf[1][lf]),baseZ(bus.voltage,net.base));
+-    for(const s of srcs){const [pr,pi]=prep.P.get(s.id),ipu=div(C(pr[lf],pi[lf]),add(C(Zf[0][lf],Zf[1][lf]),faultZpu)),k=loc[s.i];per.push({s,ipu,vAt:a=>C(pr[a]-(Zf[0][a]*ipu.r-Zf[1][a]*ipu.i),pi[a]-(Zf[0][a]*ipu.i+Zf[1][a]*ipu.r)),term:C(pr[k]-(Zf[0][k]*ipu.r-Zf[1][k]*ipu.i),pi[k]-(Zf[0][k]*ipu.i+Zf[1][k]*ipu.r))})}}
++    if(fast){
++     // V33 plant-scale tier: totals for this bus are summed over every source exactly as below, but the per-source rows are not kept.
++     const zt=add(C(Zf[0][lf],Zf[1][lf]),faultZpu),uR=new Float64Array(srcs.length),uI=new Float64Array(srcs.length);let kR=0,kI=0,h=0;
++     const cols=c.srcCols||(c.srcCols=srcs.map(s=>prep.P.get(s.id)));
++     for(let x=0;x<srcs.length;x++){const s=srcs[x],col=cols[x],ipu=div(C(col[0][lf],col[1][lf]),zt),amps=scale(ipu,busI);total=add(total,amps);
++      if(s.current){if(s.unknownAngle)derBound+=abs(amps);else derKnown=add(derKnown,amps)}else conventional=add(conventional,amps);
++      if(s.current&&s.unknownAngle){uR[h]=ipu.r;uI[h]=ipu.i;h++}else{kR+=ipu.r;kI+=ipu.i}
++      details.push({sourceId:s.id,kind:s.kind,current:s.current,expired:s.expired,amps:abs(amps),phasor:amps})}
++     fastU={U:h,uR,uI,kR,kI}}
++    else for(const s of srcs){const [pr,pi]=prep.P.get(s.id),ipu=div(C(pr[lf],pi[lf]),add(C(Zf[0][lf],Zf[1][lf]),faultZpu)),k=loc[s.i];per.push({s,ipu,vAt:a=>C(pr[a]-(Zf[0][a]*ipu.r-Zf[1][a]*ipu.i),pi[a]-(Zf[0][a]*ipu.i+Zf[1][a]*ipu.r)),term:C(pr[k]-(Zf[0][k]*ipu.r-Zf[1][k]*ipu.i),pi[k]-(Zf[0][k]*ipu.i+Zf[1][k]*ipu.r))})}}
+    else{const bolted=abs(faultZpu)<1e-14,unknown=c.list.filter(i=>!bolted||i!==f),uloc=new Int32Array(n).fill(-1);unknown.forEach((g,k)=>uloc[g]=k);
+     const extra=bolted?null:new Map([[f,div(C(1),faultZpu)]]),F=sparseFactor(localRows(net,unknown,uloc,extra));
+     for(const s of srcs){const b=[new Float64Array(unknown.length),new Float64Array(unknown.length)];if(uloc[s.i]>=0){b[0][uloc[s.i]]=s.injection.r;b[1][uloc[s.i]]=s.injection.i}const x=sparseSolve(F,b[0],b[1]);
+      const V=g=>uloc[g]>=0?C(x[0][uloc[g]],x[1][uloc[g]]):C();let ipu;
+      if(bolted){ipu=s.i===f?s.injection:C();for(const [j,v] of net.Y[f])if(uloc[j]>=0)ipu=sub(ipu,mul(v,V(j)))}else ipu=div(V(f),faultZpu);
+      per.push({s,ipu,vAt:a=>V(c.list[a]),term:V(s.i)})}}
+-   let total=C(),conventional=C(),derKnown=C(),derBound=0;const details=[];
+-   const full=!compact||f===net.at.get(selected);
+    for(const {s,ipu,vAt,term} of per){const amps=scale(ipu,busI);total=add(total,amps);if(s.current){if(s.unknownAngle)derBound+=abs(amps);else derKnown=add(derKnown,amps)}else conventional=add(conventional,amps);
+     const pathIdx=pathOf(s,f),busPhaseScale=s.voltage/bus.voltage;let pathSeriesZ=s.impedance?scale(s.impedance,busPhaseScale**-2):C();for(const k of pathIdx){const e=branches[k];pathSeriesZ=add(pathSeriesZ,scale(e.ohms,(bus.voltage/net.buses[e.j].voltage)**2))}
+     let flows=[];if(hbc&&full){const list=compact?pathIdx:c.branches;flows=list.map(k=>{const e=branches[k],vi=vAt(loc[e.i]),vj=vAt(loc[e.j]),drop=sub(div(vi,e.tap),vj),fromPhasor=scale(mul(coef[k].c,drop),networkBaseI(net,net.buses[e.i].voltage)),toPhasor=scale(mul(e.y,drop),-networkBaseI(net,net.buses[e.j].voltage));return {id:e.id,name:e.name,kind:e.kind,from:e.from,to:e.to,amps:abs(fromPhasor),toAmps:abs(toPhasor),fromPhasor,toPhasor}})}
+@@ -238,14 +268,36 @@
+    let branchFlows=[];
+    if(hbc){
+     if(!compact)branchFlows=combineBranchFlows(details);
+-    else{const keep=new Set(full?c.branches:badj[f]);if(!full){const count=new Map(),dist=new Map();let near=Infinity;for(const d of details){const L=d._path.length;d._path.forEach((k,x)=>{if(!branches[k].deviceId)return;count.set(k,(count.get(k)||0)+1);const g=L-1-x;if(!(dist.get(k)<=g))dist.set(k,g);near=Math.min(near,g)})}for(const [k,g] of dist)if(g<=near+2||count.get(k)===details.length)keep.add(k)}
++    else{const keep=new Set(full?c.branches:badj[f]);if(!full){const count=new Map(),dist=new Map();let near=Infinity;
++      const note=(path)=>{const L=path.length;path.forEach((k,x)=>{if(!branches[k].deviceId)return;count.set(k,(count.get(k)||0)+1);const g=L-1-x;if(!(dist.get(k)<=g))dist.set(k,g);near=Math.min(near,g)})};
++      if(!fast)for(const d of details)note(d._path);
++      else if(c.meshed)for(const s of srcs)note(pathOf(s,f));
++      else{
++       // Radial component: the path from every source to the fault is unique, so one walk from the fault bus gives the same
++       // device counts and distances as the per-source paths.
++       if(!c.srcAt){c.srcAt=new Int32Array(n);for(const s of srcs)c.srcAt[s.i]++}
++       const depth=new Int32Array(n).fill(-1),via=new Int32Array(n).fill(-1),up=new Int32Array(n).fill(-1),sub=new Int32Array(n),order=[f];depth[f]=0;
++       for(let h=0;h<order.length;h++){const u=order[h];for(const k of badj[u]){const e=branches[k],j=e.i===u?e.j:e.i;if(depth[j]<0){depth[j]=depth[u]+1;via[j]=k;up[j]=u;order.push(j)}}}
++       for(let h=order.length-1;h>0;h--){const u=order[h],m=sub[u]+c.srcAt[u];sub[up[u]]+=m;if(m>0){const k=via[u];if(branches[k].deviceId){const g=depth[u]-1;count.set(k,m);dist.set(k,g);if(g<near)near=g}}}
++      }
++      for(const [k,g] of dist)if(g<=near+2||count.get(k)===details.length)keep.add(k)}
+      const dZ=new Float64Array(2*c.branches.length);
+      c.branches.forEach((k,q)=>{const e=branches[k],a=loc[e.i],b=loc[e.j],v=coef[k].inv;if(Zf){dZ[2*q]=Zf[0][a]*v.r-Zf[1][a]*v.i-Zf[0][b];dZ[2*q+1]=Zf[0][a]*v.i+Zf[1][a]*v.r-Zf[1][b]}});
+-     const rows=[],known=per.filter(x=>!(x.s.current&&x.s.unknownAngle)),unknownSrc=per.filter(x=>x.s.current&&x.s.unknownAngle),U=unknownSrc.length,uR=new Float64Array(U),uI=new Float64Array(U);
+-     let kR=0,kI=0;for(const x of known){kR+=x.ipu.r;kI+=x.ipu.i}unknownSrc.forEach((x,h)=>{uR[h]=x.ipu.r;uI[h]=x.ipu.i});
++     const rows=[],known=per.filter(x=>!(x.s.current&&x.s.unknownAngle)),unknownSrc=per.filter(x=>x.s.current&&x.s.unknownAngle),U=fastU?fastU.U:unknownSrc.length,uR=fastU?fastU.uR:new Float64Array(U),uI=fastU?fastU.uI:new Float64Array(U);
++     let kR=0,kI=0;if(fastU){kR=fastU.kR;kI=fastU.kI}else{for(const x of known){kR+=x.ipu.r;kI+=x.ipu.i}unknownSrc.forEach((x,h)=>{uR[h]=x.ipu.r;uI[h]=x.ipu.i})}
++     const G=prep?.G||null,excF=G?G.excF.get(lf):null;if(G)for(let g=0;g<G.reps.length;g++){G.gR[g]=uR[G.reps[g]];G.gI[g]=uI[G.reps[g]]}
+      const K=prep?.K||branchConstants(c);
++     // Branches that carry no part of the fault path: their fault-path current is numerical zero (below 1e-14 of the largest branch current).
++     let izMax=0;for(let q=0;q<K.mb;q++){const m=Math.max(Math.abs(dZ[2*q]),Math.abs(dZ[2*q+1]))*K.ca[q];if(m>izMax)izMax=m}const izTiny=1e-14*izMax;
+      for(let q=0;q<K.mb;q++){const k=c.branches[q],q2=2*q,zr=dZ[q2],zi=dZ[q2+1];let xr=0,xi=0,su=0;
+-      if(prep){xr=prep.dPk[q2]-(zr*kR-zi*kI);xi=prep.dPk[q2+1]-(zr*kI+zi*kR);const D=prep.dPU,o=2*q*U;for(let h=0;h<U;h++){const ir=uR[h],ii=uI[h],ar=D[o+2*h]-(zr*ir-zi*ii),ai=D[o+2*h+1]-(zr*ii+zi*ir);su+=Math.sqrt(ar*ar+ai*ai)}}
++      if(prep){xr=prep.dPk[q2]-(zr*kR-zi*kI);xi=prep.dPk[q2+1]-(zr*kI+zi*kR);if(U&&Math.max(Math.abs(zr),Math.abs(zi))*K.ca[q]<=izTiny)su=prep.S0[q];else{const D=prep.dPU,o=2*q*U;
++       if(G){const ga=G.abs,rp=G.reps,cn=G.counts,go=G.groupOf,mk=G.mark,st=++G.stamp;
++        const Gn=rp.length,gc=G.cols,gR=G.gR,gI=G.gI,t0=2*q*Gn;for(let g=0;g<Gn;g++){const ir=gR[g],ii=gI[g],ar=gc[t0+2*g]-(zr*ir-zi*ii),ai=gc[t0+2*g+1]-(zr*ii+zi*ir),v=Math.sqrt(ar*ar+ai*ai);ga[g]=v;su+=cn[g]*v}
++        const eq=G.excQ.get(q);
++        if(eq)for(const h of eq){mk[h]=st;const ir=uR[h],ii=uI[h],ar=D[o+2*h]-(zr*ir-zi*ii),ai=D[o+2*h+1]-(zr*ii+zi*ir);su+=Math.sqrt(ar*ar+ai*ai)-ga[go[h]]}
++        if(excF)for(const h of excF)if(mk[h]!==st){const ir=uR[h],ii=uI[h],ar=D[o+2*h]-(zr*ir-zi*ii),ai=D[o+2*h+1]-(zr*ii+zi*ir);su+=Math.sqrt(ar*ar+ai*ai)-ga[go[h]]}
++        if(su<0)su=0}
++       else for(let h=0;h<U;h++){const ir=uR[h],ii=uI[h],ar=D[o+2*h]-(zr*ir-zi*ii),ai=D[o+2*h+1]-(zr*ii+zi*ir);su+=Math.sqrt(ar*ar+ai*ai)}}}
+       else{const e=branches[k],dropOf=x=>sub(div(x.vAt(loc[e.i]),e.tap),x.vAt(loc[e.j]));for(const x of known){const d=dropOf(x);xr+=d.r;xi+=d.i}for(const x of unknownSrc)su+=abs(dropOf(x))}
+       const fr=K.cr[q]*xr-K.ci[q]*xi,fi=K.cr[q]*xi+K.ci[q]*xr,tr=K.yr[q]*xr-K.yi[q]*xi,ti=K.yr[q]*xi+K.yi[q]*xr,fb=K.ca[q]*su,tb=K.ya[q]*su;
+       const fromA=Math.sqrt(fr*fr+fi*fi)+fb,toA=Math.sqrt(tr*tr+ti*ti)+tb;
+@@ -255,7 +307,7 @@
+       if(only===null){const E=c.env;const mx=fromA>toA?fromA:toA;if(E.toRow[q]===null||toA>E.toVal[q]){E.toVal[q]=toA;E.toRow[q]=make();E.toF[q]=f}if(E.maxRow[q]===null||mx>E.maxVal[q]){E.maxVal[q]=mx;E.maxRow[q]=make();E.maxF[q]=f}}}
+      branchFlows=rows}}
+    for(const d of details)delete d._path;
+-   results[f]=finishScaled(net,p,f,bus,srcs,details,total,conventional,derKnown,derBound,zth,c.xrKnown,branchFlows,{compact,full});
++   results[f]=finishScaled(net,p,f,bus,srcs,details,total,conventional,derKnown,derBound,zth,c.xrKnown,branchFlows,{compact,full,lean:fast});
+   }catch(e){results[f]={busId:bus.id,busName:bus.name,voltage:bus.voltage,status:'NETWORK ERROR',totalA:null,faultNote:e.message,issues:net.issues}}
+  }
+  if(compact){
+@@ -266,9 +318,9 @@
+  }else for(const r of results)for(const e of r?.branchFlows||[])delete e._k;
+  return {results};
+ }
+-function finishScaled(net,p,f,bus,sources,details,total,conventional,derKnown,derBound,zth,xrKnownAll,branchFlows,{compact,full}){
++function finishScaled(net,p,f,bus,sources,details,total,conventional,derKnown,derBound,zth,xrKnownAll,branchFlows,{compact,full,lean=false}){
+  let totalA=abs(add(conventional,derKnown))+derBound,bound=derBound>0;const xrKnown=xrKnownAll;const zDuty=zth?add(zth,C(p.settings.faultR||0,p.settings.faultX||0)):null;const xr=zDuty&&zDuty.r>=0?(zDuty.r===0?Infinity:zDuty.i/zDuty.r):null;let peak=null,asym=null;
+- const srcOf=new Map(net.sources.map(s=>[s.id,s]));
++ const srcOf=net._srcOf||(net._srcOf=new Map(net.sources.map(s=>[s.id,s])));
+  if(xrKnown&&zth&&xr!==null){const convPeak=Math.sqrt(2)*(1.02+.98*(xr===Infinity?1:Math.exp(-3/Math.max(xr,1e-8))))*abs(conventional);const currentDetails=details.filter(d=>d.current&&!d.expired),allPeak=currentDetails.every(d=>srcOf.get(d.sourceId).peakA>0);if(allPeak)peak=convPeak+currentDetails.reduce((sum,d)=>{const s=srcOf.get(d.sourceId);return sum+s.peakA*s.strengthFactor*(s.amps>0?d.amps/s.amps:0)},0);if(!currentDetails.length){const tau=xr/(2*Math.PI*p.settings.frequency);asym=Math.hypot(totalA,Math.sqrt(2)*abs(conventional)*(xr===0?0:xr===Infinity?1:Math.exp(-p.settings.time/Math.max(tau,1e-12))))}}
+  if(!sources.some(s=>!s.current)){const active=details.filter(d=>d.current&&!d.expired&&d.amps>0);if(active.every(d=>srcOf.get(d.sourceId).peakA>0))peak=active.reduce((sum,d)=>{const s=srcOf.get(d.sourceId);return sum+s.peakA*s.strengthFactor*(s.amps>0?d.amps/s.amps:0)},0)}
+  let faultNote=null,sequence=null,dlgResult=null;if(!hasBranchCurrents(p)){if(details.some(d=>d.current&&!d.expired)){totalA=null;faultNote='Unbalanced inverter fault data is missing. Supply manufacturer positive/negative/zero-sequence control behavior.'}else if(!zth){totalA=null;faultNote='No conventional Thevenin sequence model is available.'}else{const seq=bus.sequence||{},z2=number(seq.r2)&&seq.r2>=0&&number(seq.x2)&&seq.x2>=0&&abs(C(seq.r2,seq.x2))>0?C(seq.r2,seq.x2):((p.settings.faultType==='dlg'?p.settings.assumeZ2===true:p.settings.assumeZ2)?zth:null),zf=C(p.settings.faultR||0,p.settings.faultX||0),vth=mul(conventional,add(zth,zf));sequence={z1:zth,z2,z0:null,faultZ:zf,referenceVoltage:vth};if(!z2){totalA=null;faultNote='Enter equivalent negative-sequence R2 and X2 at this bus, or explicitly select Z2 = Z1 screening.'}else if(p.settings.faultType==='ll')totalA=abs(div(scale(vth,Math.sqrt(3)),add(add(zth,z2),zf)));else if(number(seq.r0)&&seq.r0>=0&&number(seq.x0)&&seq.x0>=0&&abs(C(seq.r0,seq.x0))>0){sequence.z0=C(seq.r0,seq.x0);if(p.settings.faultType==='dlg'){dlgResult=calculateDlg(sequence);totalA=dlgResult.totalA;}else totalA=abs(div(scale(vth,3),add(add(add(zth,z2),sequence.z0),scale(zf,3))));}else{totalA=null;faultNote=(p.settings.faultType==='dlg'?'DLG':'SLG')+' requires equivalent R0 and X0 at this bus, including transformer grounding paths and neutral impedance. No ground-fault value is invented.'}}peak=null;asym=null;bound=false}
+@@ -276,5 +328,5 @@
+  if(branchFlows.some(e=>!Number.isFinite(e.fromA)||!Number.isFinite(e.toA)||!finiteComplex(e.fromPhasor)||!finiteComplex(e.toPhasor)))throw Error('Branch current exceeds numerical range. Check input values and units.');
+  if((totalA!==null&&(!Number.isFinite(totalA)||totalA<0))||[peak,asym].some(v=>v!==null&&(!Number.isFinite(v)||v<0))||!finiteComplex(conventional)||details.some(d=>!Number.isFinite(d.amps)||!finiteComplex(d.phasor))||(zth&&!finiteComplex(zth)))throw rangeError();
+  const hbc=hasBranchCurrents(p);
+- return {...(dlgResult||{}),...(isSinglePhase(p)?{phaseModel:'single-phase-ll'}:{}),busId:bus.id,busName:bus.name,voltage:bus.voltage,status:totalA===null?'DATA REQUIRED':bound?'SCREENING BOUND':'CALCULATED',totalA,conventionalA:hbc?abs(conventional):null,derBound:hbc?derBound:0,details:hbc?details:[],branchFlows:hbc?branchFlows:[],sequence,zth,xr:xrKnown&&hbc?xr:null,peakA:peak,asymA:asym,faultNote,bound,issues:net.issues,groups:hbc?details.reduce((o,d)=>(o[d.kind]=(o[d.kind]||0)+d.amps,o),{}):{},solver:'sparse-lu',...(compact?{outputScope:'compact',detailScope:full?'full':'summary'}:{})}
++ return {...(dlgResult||{}),...(isSinglePhase(p)?{phaseModel:'single-phase-ll'}:{}),busId:bus.id,busName:bus.name,voltage:bus.voltage,status:totalA===null?'DATA REQUIRED':bound?'SCREENING BOUND':'CALCULATED',totalA,conventionalA:hbc?abs(conventional):null,derBound:hbc?derBound:0,details:hbc&&!lean?details:[],branchFlows:hbc?branchFlows:[],sequence,zth,xr:xrKnown&&hbc?xr:null,peakA:peak,asymA:asym,faultNote,bound,issues:net.issues,groups:hbc?details.reduce((o,d)=>(o[d.kind]=(o[d.kind]||0)+d.amps,o),{}):{},solver:'sparse-lu',...(compact?{outputScope:'compact',detailScope:full?'full':lean?'totals':'summary'}:{}),...(lean&&hbc?{sourceCount:details.length}:{})}
+ }
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/network-style.css /home/claude/repo/Electrical-Studies/SITE/network-style.css
+--- V32_SITE/network-style.css	2026-11-13 15:22:11.434753801 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/network-style.css	2026-11-13 22:47:32.329866248 -0800
+@@ -1,4 +1,4 @@
+-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
++@import url('./fonts/local-fonts-v33.css');
+ :root{font-family:'DM Sans',system-ui,sans-serif;color:#24384c;background:#edf2f5;font-synthesis:none;--navy:#12283b;--mint:#26d7aa;--line:#dce5eb}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button,a,input,select{outline-offset:4px}button{border:1px solid #d4dfe5;border-radius:7px;background:white;padding:9px 13px;color:#263e50;cursor:pointer;font-weight:600;font-size:12px;transition:background .15s,transform .15s}button:hover{background:#edf8f5;border-color:#73bbaa}button:active{transform:translateY(1px)}button:disabled{opacity:.4;cursor:default}.primary{background:#11775f;color:white;border-color:#11775f}.primary:hover{background:#0a624d;color:white}.danger{color:#a5393d}.text-button{border:0;padding:0;color:#137c66;background:transparent;text-align:left}a{color:#08765d;text-decoration:none}h1,h2,h3,h4,strong{font-family:'Space Grotesk',system-ui,sans-serif}h1{font-size:24px;letter-spacing:-.7px;margin:5px 0}h2{font-size:18px;letter-spacing:-.4px;margin:0 0 8px}h3{margin:5px 0 0;font-size:18px}h4{margin:22px 0 10px;font-size:13px}p{font-size:13px;line-height:1.65;color:#67798a;margin:7px 0 15px}small,.micro{font-size:11px;line-height:1.6;color:#748695}.eyebrow{font-size:9px;letter-spacing:1.6px;font-weight:700;color:#618291}.sidebar{position:fixed;inset:0 auto 0 0;width:235px;background:var(--navy);color:#c7d5df;padding:30px 18px;display:flex;flex-direction:column;z-index:5}.brand{display:flex;gap:12px;align-items:center;color:white;font-size:14px;font-weight:700;letter-spacing:.7px;padding:0 8px 35px}.brand>span{color:var(--mint);font-size:40px;font-family:serif}.brand small{display:block;font-size:8px;letter-spacing:1.2px;color:#829cac;margin-top:5px}.workspace-label{font-size:9px;letter-spacing:1.5px;color:#6c899d;margin:0 12px 13px}nav{display:grid;gap:5px}nav a{display:flex;align-items:center;gap:11px;padding:13px 12px;color:#9eb4c4;border-radius:7px;font-size:12px}nav a i{font-style:normal;font-size:18px;width:20px;text-align:center;color:#7f9aac}nav a.active{background:#254457;color:white}nav a.active i{color:var(--mint)}nav a:hover{background:#1d384c}nav b{background:#b44645;border-radius:12px;padding:2px 6px;font-size:10px;margin-left:auto}.sidebar-bottom{margin-top:auto;border-top:1px solid #2c4355;padding:20px 9px 0;font-size:10px}.sidebar-bottom small{display:block;color:#708c9d;margin-top:8px;font-size:10px}.local-dot{display:inline-block;width:6px;height:6px;background:var(--mint);border-radius:50%;margin-right:6px}main{margin-left:235px;padding:29px 32px 18px;max-width:1900px}header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:23px}.actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px}.study-bar{display:flex;gap:22px;align-items:center;padding:14px 18px;background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:18px}.study-bar label{font-size:8px;color:#6d8393;letter-spacing:1px;flex:1;max-width:400px;font-weight:700}.study-bar select{display:block;width:100%;margin-top:7px;padding:3px 20px 3px 0;background:transparent;border:0;color:#20394c;font-size:12px;letter-spacing:0}.study-bar>a{font-size:11px;margin-left:auto}.metrics{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:14px;margin-bottom:22px}.metric{background:white;border:1px solid var(--line);border-radius:10px;padding:19px 18px;min-height:124px;position:relative;overflow:hidden}.metric.dark{background:var(--navy);color:white;border-color:var(--navy)}.metric.dark:after{content:'ϟ';position:absolute;right:12px;top:0;color:#294658;font-size:110px;pointer-events:none}.metric span{display:block;font-size:8px;letter-spacing:1.4px;color:#7890a1;font-weight:700}.metric strong{display:block;font-size:29px;letter-spacing:-1px;margin:10px 0 6px;position:relative;z-index:1}.metric.dark strong{color:var(--mint)}.metric small{display:block;font-size:9px}.metric em{font:10px 'DM Sans',sans-serif;color:#7c91a0;margin-left:6px;letter-spacing:0}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 335px;gap:18px;align-items:start}.network-panel,.panel,.editor{border:1px solid var(--line);border-radius:11px;background:white;min-width:0;overflow:hidden}.panel{padding:23px;margin-bottom:18px}.panel-heading{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:20px}.panel .panel-heading{padding:0 0 16px}.panel-heading h2{margin:6px 0 0}.panel-heading p{margin-bottom:0}.canvas{background:#102838;min-height:430px;overflow:auto;border-top:1px solid #244152}.canvas svg{display:block;min-width:800px;width:100%;min-height:430px}.canvas-foot{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;color:#768c9b;font-size:9px}.edge{cursor:pointer}.edge path{stroke:#658d9e;stroke-width:2;fill:none}.edge .edge-hit{stroke:transparent;stroke-width:24}.edge .transformer-line{stroke:#28cfa6;stroke-width:3}.edge rect{fill:#1b3b4d;stroke:#466475;stroke-width:1}.edge text{fill:#dce9ef;text-anchor:middle;font-family:'DM Sans',sans-serif;font-size:10px}.edge .edge-small{fill:#8eaebb;font-size:8px}.edge:hover rect{stroke:#28cfa6}.edge.disabled{opacity:.35;stroke-dasharray:5}.bus-node{cursor:grab}.bus-node>rect{fill:#193b4e;stroke:#496b7d;stroke-width:1.2}.bus-node.selected>rect{stroke:#2bdfb4;stroke-width:2}.bus-node:hover>rect{fill:#23495c}.bus-node>line{stroke:#2bd2ac;stroke-width:4}.bus-node text{fill:#e3eef3;font-size:11px;pointer-events:none}.bus-node .node-name{font-weight:700}.bus-node .node-voltage{fill:#9abacb;font-size:10px}.bus-node .node-fault{fill:#40deb5;font-size:15px;font-weight:600}.source-tag rect{fill:#2c5861;stroke:#3e7b7a}.source-tag text{fill:#a7efe0;font-size:9px}.device-tag rect{fill:#203f54;stroke:#3b5b70}.device-tag text{font-size:9px}.source-tag,.device-tag{cursor:pointer}.editor-head{display:flex;align-items:center;justify-content:space-between;padding:19px;border-bottom:1px solid var(--line)}.icon-button{border:0;background:transparent;font-size:24px;padding:0 6px;color:#79909e}.editor-scroll{padding:18px;max-height:690px;overflow:auto}.editor-empty{text-align:center;padding:100px 24px;color:#667f90}.editor-empty>span{font-size:35px;color:#1f997b}.editor-empty h3{margin:20px 0 9px}.field{display:block;margin-bottom:14px}.field>span{display:block;font-size:11px;font-weight:600;margin-bottom:7px;color:#425e70}.field small{display:block;margin-top:5px;font-size:10px}.input-unit{display:flex;border:1px solid #d6e0e6;border-radius:6px;background:#f9fbfc;overflow:hidden}.input-unit:focus-within{border-color:#259c7d;box-shadow:0 0 0 2px #1fab8217}.input-unit input,.input-unit select{background:transparent;border:0;min-width:0;width:100%;padding:10px 9px;color:#18364a;font-size:12px;outline:none}.input-unit .unit{border-left:1px solid #d6e0e6;width:76px;flex-shrink:0;font-size:10px;color:#758d9c;padding:8px}.input-unit input::placeholder{color:#a1adb6;font-size:11px}.req{color:#ba5652}.check-field{display:flex;flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:9px}.check-field>span{margin:0}.check-field .input-unit{border:0;background:none;flex:0 0 15px;overflow:visible}.check-field input{width:15px;padding:0;accent-color:#138266}.database-pick{width:100%;padding:12px;color:#0a7c63;background:#eaf8f3;border-color:#b7e2d4;margin:4px 0 18px}.voltage-bridge{font-size:10px;letter-spacing:2px;color:#168368;text-align:center;border-radius:5px;background:#ecf8f4;padding:10px;margin:14px 0}.voltage-bridge span{margin:0 25px;font-size:17px}.connection-note{background:#edf5f9;border-radius:6px;padding:12px;margin:15px 0;font-size:11px;color:#54778b}.connection-note strong,.connection-note small{display:block;margin-top:5px}.connection-note strong{color:#1c4760;font-size:17px}.editor-actions{display:flex;gap:10px;border-top:1px solid var(--line);padding-top:17px;margin-top:20px}.editor-actions button{flex:1}.model-note,.provenance{background:#f0f7f4;border-left:3px solid #60af95;padding:12px 14px;border-radius:4px;color:#5b786c;font-size:11px;line-height:1.6;margin:12px 0 18px}.provenance strong,.provenance span,.provenance small{display:block}.provenance span{font-size:9px;margin:5px 0}.provenance p{font-size:10px;margin:4px 0}.inline-issue{border-left:3px solid #cd655e;background:#fff1ef;padding:10px;color:#994740;font-size:11px;line-height:1.5;margin-bottom:10px}.inline-issue.warning{border-color:#d6b357;background:#fff9eb;color:#907038}.badge{display:inline-block;padding:5px 8px;background:#eaf7f0;color:#227554;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.4px;white-space:normal}.badge.bad{color:#a23e3b;background:#fceae7}.badge.amber{color:#987129;background:#fff5df}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:11px}th{font-size:9px;font-weight:600;text-align:left;color:#8398a6;padding:12px 10px;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:13px 10px;border-bottom:1px solid #edf2f5;vertical-align:top;line-height:1.6}td small{display:block}td button{font-size:10px;padding:5px 7px}tr:last-child td{border-bottom:0}.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.contribution{display:grid;grid-template-columns:140px 1fr 85px;gap:12px;align-items:center;margin:19px 0}.contribution strong{font-size:11px}.contribution span{display:block;font-size:9px;color:#91a0ab;margin-top:3px}.contribution b{font-size:13px;text-align:right;font-family:'Space Grotesk',sans-serif}.track{background:#eef5f3;border-radius:5px;height:9px;overflow:hidden}.track i{height:100%;background:linear-gradient(90deg,#2a9f7c,#61d2ab);display:block;border-radius:5px}.result-note{font-size:10px;color:#82939e;line-height:1.5;padding-top:10px}.math-intro{font-size:12px;color:#677f8d;line-height:1.7;margin:7px 0 19px}.math-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;padding:14px;background:#f5f8fa;border-radius:6px;margin-bottom:15px}.math-grid>div{font-size:9px;color:#7c919e}.math-grid strong{display:block;color:#335369;font-size:12px;margin-top:7px;overflow-wrap:anywhere}.math-source{border:1px solid var(--line);border-radius:7px;margin-top:12px;padding:16px}.math-source summary{cursor:pointer;font-size:12px;color:#294859;padding-bottom:12px}.math-source summary strong{float:right}.math-source details{margin:15px 0 0}.review-row{display:flex;gap:15px;align-items:center;border-bottom:1px solid var(--line);padding:12px 0}.review-row>span{background:#fff0ed;color:#b25d51;font-size:9px;padding:5px 8px;white-space:nowrap;border-radius:4px}.review-row.warning>span{background:#fff7e3;color:#9c7a3c}.review-row p{flex:1;margin:0;font-size:11px}.review-row button{font-size:10px;white-space:nowrap}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px 22px;margin-top:20px}.db-controls{display:flex;gap:12px;margin:10px 0}.db-controls input,.db-controls select{border:1px solid var(--line);border-radius:7px;padding:12px;font-size:12px;min-width:0;background:#fafcfd}.db-controls input{flex:1}.db-count{font-size:10px;color:#8da0ab;margin:15px 0}.db-value{font-size:9px;display:block;color:#698492}.saved-row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:16px 0}.saved-row strong{font-size:13px}.saved-row small{display:block}.notice{border:1px solid #b7dece;background:#eaf7ef;border-radius:6px;padding:12px 16px;font-size:12px;color:#386c56;margin-bottom:17px;overflow-wrap:anywhere}.notice pre{max-height:450px;overflow:auto;white-space:pre-wrap;font-size:10px}.modal-backdrop{position:fixed;inset:0;background:#081d32a6;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}.add-dialog{background:#fff;border-radius:14px;width:640px;padding:15px;max-height:90vh;overflow:auto;box-shadow:0 20px 60px #05142444}.add-dialog>p{margin:0 20px 19px}.add-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px 20px}.add-grid button{padding:20px 10px;text-align:left;border-color:#e0e9ee;font-size:11px}.add-grid span{display:block;font-size:24px;color:#1a9377;margin-bottom:10px}.canvas-empty{text-align:center;padding:65px 20px;color:white}.canvas-empty h2{color:white;margin:18px 0 12px;font-size:24px}.canvas-empty p{color:#8ba8b9}.canvas-empty .actions{justify-content:center}.diagram-glyph{font-size:45px;color:#2bcda6}footer{display:flex;justify-content:space-between;color:#8da0ae;font-size:9px;padding:23px 0 4px;gap:15px}.report-title{margin:30px 0}.loading{padding:50px;text-align:center;color:#688499}.result-empty{padding:30px 0;font-size:12px;color:#8497a4}
+ @media(min-width:1600px){main{padding:35px 45px}.workspace{grid-template-columns:minmax(0,1fr) 370px}.canvas svg{min-height:530px}.editor-scroll{max-height:800px}}
+ @media(max-width:1150px){.sidebar{width:195px;padding-left:10px;padding-right:10px}main{margin-left:195px;padding:24px 20px}.workspace{grid-template-columns:minmax(0,1fr) 300px}.metrics{gap:9px}.metric{padding:15px 12px}.metric strong{font-size:25px}header h1{font-size:20px}header .actions button{padding:8px;font-size:10px}.canvas-foot span:last-child{display:none}.math-grid{grid-template-columns:1fr 1fr}.contribution{grid-template-columns:110px 1fr 70px}}
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/network-worker.mjs /home/claude/repo/Electrical-Studies/SITE/network-worker.mjs
+--- V32_SITE/network-worker.mjs	2026-11-13 15:22:11.434790807 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/network-worker.mjs	2026-11-13 22:46:55.572994921 -0800
+@@ -1 +1 @@
+-import {calculateProject} from './network-engine.mjs?v=20261108-v32';self.onmessage=e=>{self.postMessage({revision:e.data.revision,phase:'started'});try{const r=calculateProject(e.data.project);self.postMessage({revision:e.data.revision,issues:r.issues,results:r.results})}catch(error){self.postMessage({revision:e.data.revision,error:error.message})}};
++import {calculateProject} from './network-engine.mjs?v=20261113-v33';self.onmessage=e=>{self.postMessage({revision:e.data.revision,phase:'started'});try{const r=calculateProject(e.data.project);self.postMessage({revision:e.data.revision,issues:r.issues,results:r.results})}catch(error){self.postMessage({revision:e.data.revision,error:error.message})}};
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/operating-table-ui-v33.mjs /home/claude/repo/Electrical-Studies/SITE/operating-table-ui-v33.mjs
+--- V32_SITE/operating-table-ui-v33.mjs	1969-12-31 16:00:00.000000000 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/operating-table-ui-v33.mjs	2026-11-14 06:15:42.750697973 -0800
+@@ -0,0 +1,38 @@
++// V33 (list C4): "Bus table (CSV)" on the Operating studies page. Download every bus with its operating data, fill it in a
++// spreadsheet, upload it. Changes go through the Studio hook: normal validation, undo history, draft save and recalculation.
++import {operatingCsv,applyOperatingCsv} from './operating-table-v33.mjs?v=20261114-v33c4';
++const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
++const studio=()=>{const s=globalThis.__fcsStudio;if(!s)throw Error('The Studio is still loading. Try again in a moment.');return s};
++function download(name,text){const u=URL.createObjectURL(new Blob(['\uFEFF'+text],{type:'text/csv'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)}
++function openDialog(){
++ let p;try{p=studio().snapshot()}catch(e){alert(e.message);return}
++ document.getElementById('v33-operating-table')?.remove();
++ const d=document.createElement('dialog');d.id='v33-operating-table';d.className='v31-dialog';d.setAttribute('aria-labelledby','v33-operating-table-title');
++ d.innerHTML=`<form method="dialog" class="v31-dialog-form"><header><h2 id="v33-operating-table-title">Operating data · bus table</h2><button type="button" class="v31-close" data-v31-close aria-label="Close">×</button></header><div class="v31-dialog-body">
++  <p class="v31-lead">Download the ${p.buses.length} buses of <strong>${esc(p.name)}</strong> with their load-flow data as a CSV table. Fill net MW and Mvar in a spreadsheet, then upload the file to enter them in one step.</p>
++  <ul class="v31-notes"><li>Rows are matched by <strong>bus_id</strong>. If bus_id is blank, the bus name is used when only one bus has that name.</li><li><strong>net_P_MW / net_Q_Mvar</strong>: generation is positive, load is negative.</li><li><strong>control</strong>: PQ or PV. The slack bus is chosen on the page, not in the table.</li><li>A blank cell leaves the stored value unchanged. Write <em>clear</em> to empty a value. Nothing is filled in for you.</li><li>Rows may be left out. Buses that are not in the file keep their values.</li></ul>
++  <div class="v31-actions"><button type="button" class="primary" id="ot-download">Download bus table (CSV)</button><label class="v31-file"><input type="file" id="ot-file" accept=".csv,text/csv"><span>Upload filled table…</span></label></div>
++  <p class="v31-summary" role="status" id="ot-status"></p><ul class="v31-errors" id="ot-errors"></ul><footer><button type="button" data-v31-close>Close</button></footer></div></form>`;
++ document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target.closest('[data-v31-close]'))d.close()});d.addEventListener('close',()=>d.remove());d.showModal();
++ d.querySelector('#ot-download').addEventListener('click',()=>{const q=studio().snapshot(),name=(q.name||'project').replace(/[^a-z0-9_-]+/gi,'-').slice(0,80)+'-operating-buses.csv';download(name,operatingCsv(q))});
++ d.querySelector('#ot-file').addEventListener('change',async e=>{
++  const file=e.target.files[0];if(!file)return;const status=d.querySelector('#ot-status'),list=d.querySelector('#ot-errors');list.innerHTML='';status.textContent='';
++  try{if(file.size>20e6)throw Error('The table exceeds 20 MB.');const text=await file.text();let result;
++   studio().apply(q=>{result=applyOperatingCsv(q,text)},'');
++   status.textContent=`${result.matched} of ${result.rows} rows matched · ${result.changes} values changed · ${result.cleared} cleared${result.notInFile?` · ${result.notInFile} buses not in the file kept their values`:''}${result.errors.length?` · ${result.errors.length} rows or cells skipped`:''}.`;
++   const extra=result.unknownColumns.length?[`Columns not used: ${result.unknownColumns.join(', ')}.`]:[];
++   const all=[...extra,...result.errors];list.innerHTML=all.slice(0,50).map(x=>`<li>${esc(x)}</li>`).join('')+(all.length>50?`<li>…and ${all.length-50} more</li>`:'');
++  }catch(err){list.innerHTML=`<li>${esc(err.message)}</li>`}e.target.value='';
++ });
++}
++// The button sits above the bus table of the Operating studies page.
++function place(){
++ const wrap=[...document.querySelectorAll('.operating-table-wrap')].find(w=>/Net P \(MW\)/.test(w.querySelector('thead')?.textContent||''));if(!wrap)return;
++ if(wrap.previousElementSibling?.classList?.contains('v33-operating-bulk'))return;
++ const bar=document.createElement('div');bar.className='operating-fill v33-operating-bulk';
++ bar.innerHTML='<p>Many buses? Enter load and generation for all of them from a spreadsheet.</p><button type="button" data-operating-table>Bus table (CSV): download / upload…</button>';
++ wrap.parentNode.insertBefore(bar,wrap);
++}
++let queued=false;const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;try{place()}catch{}})};
++new MutationObserver(schedule).observe(document.body,{childList:true,subtree:true});schedule();
++document.addEventListener('click',e=>{const b=e.target.closest?.('[data-operating-table]');if(!b)return;e.preventDefault();e.stopPropagation();openDialog()},true);
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/operating-table-v33.mjs /home/claude/repo/Electrical-Studies/SITE/operating-table-v33.mjs
+--- V32_SITE/operating-table-v33.mjs	1969-12-31 16:00:00.000000000 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/operating-table-v33.mjs	2026-11-14 06:15:42.751715027 -0800
+@@ -0,0 +1,74 @@
++// V33 (list C4): bulk entry of operating-study bus data (net MW / Mvar, PQ or PV control, voltage setpoint, PV Q limits)
++// through a CSV table. Pure functions: no page access. Nothing is filled in for the user: a blank cell leaves the stored
++// value unchanged, the word "clear" empties it, and every rejected cell is reported with its row number and reason.
++export const OPERATING_COLUMNS=['bus_id','bus_name','voltage_V','control','net_P_MW','net_Q_Mvar','voltage_setpoint_pu','pv_Q_min_Mvar','pv_Q_max_Mvar'];
++const NUMBER_FIELDS=[['net_P_MW','pMW'],['net_Q_Mvar','qMvar'],['voltage_setpoint_pu','vSetPu'],['pv_Q_min_Mvar','qMinMvar'],['pv_Q_max_Mvar','qMaxMvar']];
++const cell=v=>{let s=v==null?'':String(v);if(/^[ \t]*[=+@-]/.test(s)&&!/^-?\d+(\.\d+)?(e[+-]?\d+)?$/i.test(s))s="'"+s;return /[",\r\n]/.test(s)?'"'+s.replaceAll('"','""')+'"':s};
++
++export function operatingCsv(project){
++ const cfg=project.operatingStudy||{},buses=cfg.buses||{};
++ const rows=[OPERATING_COLUMNS];
++ for(const b of project.buses){const d=buses[b.id]||{},slack=b.id===cfg.slackBusId;
++  rows.push([b.id,b.name,b.voltage,slack?'SLACK':(d.type||'PQ'),slack?'':d.pMW,slack?'':d.qMvar,d.vSetPu,d.qMinMvar,d.qMaxMvar])}
++ return rows.map(r=>r.map(cell).join(',')).join('\r\n')+'\r\n';
++}
++
++// RFC 4180 reader: quoted cells, doubled quotes, commas and line breaks inside quotes. A semicolon file is accepted when
++// the heading row has no comma (spreadsheets in some regions save it that way).
++export function parseCsv(text){
++ text=String(text??'').replace(/^\uFEFF/,'');const first=text.split(/\r?\n/,1)[0]||'',sep=!first.includes(',')&&first.includes(';')?';':',';
++ const rows=[];let row=[],cur='',quoted=false,i=0;
++ while(i<text.length){const c=text[i];
++  if(quoted){if(c==='"'){if(text[i+1]==='"'){cur+='"';i+=2;continue}quoted=false;i++;continue}cur+=c;i++;continue}
++  if(c==='"'&&cur===''){quoted=true;i++;continue}
++  if(c===sep){row.push(cur);cur='';i++;continue}
++  if(c==='\r'||c==='\n'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cur);cur='';rows.push(row);row=[];i++;continue}
++  cur+=c;i++}
++ if(quoted)throw Error('The file ends inside a quoted cell. Check for a missing closing quote.');
++ if(cur!==''||row.length){row.push(cur);rows.push(row)}
++ return {rows:rows.filter(r=>r.some(x=>x.trim()!=='')),separator:sep};
++}
++
++const plain=s=>String(s??'').trim().replace(/^'(?=[ \t]*[=+@-])/,'');
++function number(raw,sep){
++ let s=raw.trim();if(sep===';'&&/^-?\d+,\d+$/.test(s))s=s.replace(',','.');
++ if(!/^[+-]?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/i.test(s))return NaN;return Number(s);
++}
++
++// Changes project.operatingStudy in place and returns what happened. Rows are matched by bus_id; a row without bus_id is
++// matched by bus_name when exactly one bus has that name.
++export function applyOperatingCsv(project,text){
++ const {rows,separator}=parseCsv(text);if(!rows.length)throw Error('The file is empty.');
++ const head=rows[0].map(h=>h.trim().replace(/^\uFEFF/,'')),col=name=>head.findIndex(h=>h.toLowerCase()===name.toLowerCase());
++ if(col('bus_id')<0&&col('bus_name')<0)throw Error('The heading row needs a bus_id or bus_name column. Download the table first and keep its heading row.');
++ const known=new Set(OPERATING_COLUMNS.map(c=>c.toLowerCase())),unknown=head.filter(h=>h&&!known.has(h.toLowerCase()));
++ const cfg=project.operatingStudy??={buses:{},screening:{}};cfg.buses??={};
++ const byId=new Map(project.buses.map(b=>[b.id,b])),byName=new Map();for(const b of project.buses){const k=b.name.trim().toLowerCase();byName.set(k,byName.has(k)?null:b)}
++ const out={matched:0,changes:0,cleared:0,errors:[],unknownColumns:unknown,rows:rows.length-1,seen:new Set()};
++ const get=(r,name)=>{const i=col(name);return i<0?'':(r[i]??'')};
++ for(let n=1;n<rows.length;n++){const r=rows[n],line='Row '+(n+1),id=plain(get(r,'bus_id')),name=plain(get(r,'bus_name'));
++  let bus=id?byId.get(id):undefined;
++  if(!bus&&!id&&name){const hit=byName.get(name.toLowerCase());if(hit===null){out.errors.push(`${line}: more than one bus is named "${name}". Fill bus_id for this row.`);continue}bus=hit}
++  if(!bus){out.errors.push(`${line}: no bus with ${id?'bus_id "'+id+'"':'bus_name "'+name+'"'} in this project. Row skipped.`);continue}
++  if(out.seen.has(bus.id)){out.errors.push(`${line}: bus "${bus.name}" appears twice. The second row was skipped.`);continue}
++  out.seen.add(bus.id);out.matched++;
++  const slack=bus.id===cfg.slackBusId,control=get(r,'control').trim().toUpperCase();
++  if(slack){if(control&&control!=='SLACK')out.errors.push(`${line}: "${bus.name}" is the slack bus. Its control cannot be changed in the table; choose the slack bus on the page.`);
++   const rawV=get(r,'voltage_setpoint_pu').trim();if(rawV){const d=cfg.buses[bus.id]??={};if(rawV.toLowerCase()==='clear'){if(d.vSetPu!=null){d.vSetPu=null;out.cleared++}}else{const v=number(rawV,separator);if(!Number.isFinite(v)||v<0.5||v>1.5)out.errors.push(`${line}: voltage_setpoint_pu "${rawV}" must be a number from 0.5 to 1.5.`);else if(d.vSetPu!==v){d.vSetPu=v;out.changes++}}}
++   continue}
++  if(control==='SLACK'){out.errors.push(`${line}: "${bus.name}" is not the slack bus. Write PQ or PV; choose the slack bus on the page.`);continue}
++  if(control&&control!=='PQ'&&control!=='PV'){out.errors.push(`${line}: control "${get(r,'control').trim()}" is not PQ or PV. Row skipped.`);continue}
++  const d=cfg.buses[bus.id]??={};
++  if(control&&(d.type||'PQ')!==control){d.type=control;out.changes++}
++  for(const [column,key] of NUMBER_FIELDS){const raw=get(r,column).trim();if(raw==='')continue;
++   if(raw.toLowerCase()==='clear'){if(d[key]!=null){d[key]=null;out.cleared++}continue}
++   const v=number(raw,separator);
++   if(!Number.isFinite(v)){out.errors.push(`${line}: ${column} "${raw}" is not a number. Cell skipped.`);continue}
++   if(Math.abs(v)>1e6){out.errors.push(`${line}: ${column} ${raw} is outside ±1,000,000. Cell skipped.`);continue}
++   if(key==='vSetPu'&&(v<0.5||v>1.5)){out.errors.push(`${line}: voltage_setpoint_pu ${raw} must be from 0.5 to 1.5. Cell skipped.`);continue}
++   if(d[key]!==v){d[key]=v;out.changes++}}
++  if(d.qMinMvar!=null&&d.qMaxMvar!=null&&d.qMinMvar>d.qMaxMvar)out.errors.push(`${line}: pv_Q_min_Mvar (${d.qMinMvar}) is above pv_Q_max_Mvar (${d.qMaxMvar}) for "${bus.name}". Both values were stored; correct one of them.`);
++ }
++ out.notInFile=project.buses.filter(b=>!out.seen.has(b.id)).length;delete out.seen;
++ return out;
++}
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/operations-v27-ui.mjs /home/claude/repo/Electrical-Studies/SITE/operations-v27-ui.mjs
+--- V32_SITE/operations-v27-ui.mjs	2026-11-13 15:22:11.434938994 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/operations-v27-ui.mjs	2026-11-13 22:46:55.573453662 -0800
+@@ -1,8 +1,8 @@
+ /** Fault Current Studio V27 — independent user-visible time-series analysis workbench.
+  * No writes to network draft, history, databases, or Cloud Vault.
+  */
+-import {evaluateBessDispatch,evaluateAcTimeSeries,compareBessSizeCases,operatingCaseFromStudio} from './operations-v27.mjs?v=20261108-v32';
+-import {pdfBlob,workbookBlob} from './public-report-engine.mjs?v=20261108-v32';
++import {evaluateBessDispatch,evaluateAcTimeSeries,compareBessSizeCases,operatingCaseFromStudio} from './operations-v27.mjs?v=20261113-v33';
++import {pdfBlob,workbookBlob} from './public-report-engine.mjs?v=20261113-v33';
+ const __fcsReportStudy=(key,label,get)=>{try{(globalThis.__fcsReportStudies??=new Map()).set(key,{label,projectId:globalThis.__fcsStudio?.projectId?.()??null,at:Date.now(),get});globalThis.dispatchEvent?.(new Event('fcs-report-studies'))}catch{}};
+ const KEY='fault-studio-operations-v27-cases';
+ const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/operations-v27.mjs /home/claude/repo/Electrical-Studies/SITE/operations-v27.mjs
+--- V32_SITE/operations-v27.mjs	2026-11-13 15:22:11.434973298 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/operations-v27.mjs	2026-11-13 22:46:55.575925078 -0800
+@@ -3,7 +3,7 @@
+  * Does NOT implement validated utility dispatch optimisation, full quasi-dynamics,
+  * unbalanced power flow, dynamic inverter response or certified planning standards.
+  */
+-import {solveBalancedPowerFlow,operatingNetworkFromStudio} from './operating-studies.mjs?v=20261108-v32';
++import {solveBalancedPowerFlow,operatingNetworkFromStudio} from './operating-studies.mjs?v=20261113-v33';
+ const bad=message=>{throw Error('Operations study: '+message)};
+ const num=(value,name,low=-Infinity,high=Infinity)=>{if(typeof value!=='number'||!Number.isFinite(value)||value<low||value>high)bad(name+' must be a finite number between '+low+' and '+high);return value};
+ const entries=(array,limit,name)=>{if(!Array.isArray(array)||!array.length||array.length>limit)bad(name+' requires 1–'+limit+' entries');return array};
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/plant-builder-ui-v31.mjs /home/claude/repo/Electrical-Studies/SITE/plant-builder-ui-v31.mjs
+--- V32_SITE/plant-builder-ui-v31.mjs	2026-11-13 15:22:11.434988429 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/plant-builder-ui-v31.mjs	2026-11-14 12:27:21.967861885 -0800
+@@ -1,6 +1,6 @@
+ // V31 Build plant + Equipment table dialogs. All changes go through the Studio hook (validation, undo,
+ // draft save, project-folder autosave and recalculation).
+-import {BUILDER_FIELDS,BUILDER_OPTIONS,validateSpec,estimateCounts,buildPlant,equipmentCsv,applyEquipmentCsv,DC_FIELDS,DC_OPTIONS,validateDcSpec,estimateDcCounts,buildDcArray} from './plant-builder.mjs?v=20261108-v32';
++import {BUILDER_FIELDS,BUILDER_OPTIONS,validateSpec,estimateCounts,buildPlant,equipmentCsv,applyEquipmentCsv,previewEquipmentCsv,DC_FIELDS,DC_OPTIONS,validateDcSpec,estimateDcCounts,buildDcArray} from './plant-builder.mjs?v=20261114-v33d2';
+ import {emptyProject} from './network-model.mjs?v=20261022-pv-final';
+ // The diagram layout comes from the bundled Studio (no second copy of the engine modules is loaded).
+ const arrangeNetwork=p=>{const req=globalThis.__fcsBundleRequire;if(!req)throw Error('The Studio is still loading. Try again in a moment.');return req('network-diagram.mjs').arrangeNetwork(p)};
+@@ -54,16 +54,24 @@
+  let p;try{p=studio().snapshot()}catch(e){alert(e.message);return}
+  const n=p.buses.length+p.branches.length+p.sources.length+p.devices.length;
+  const d=dialog('v31-equipment-table','Equipment table',`<p class="v31-lead">Download every bus, connection, source and protective device of <strong>${esc(p.name)}</strong> (${n} rows) as a CSV table. Edit values in a spreadsheet, then upload the file here to update the project in one step.</p>
+-  <ul class="v31-notes"><li>Rows are matched by <strong>id</strong>. Do not change ids. Blank cells leave the stored value unchanged.</li><li><strong>Add equipment:</strong> write <em>add</em> in the action column, leave id blank, and fill type (bus, cable, transformer, link, source:utility / pv / bess / generator / motor / other, device:breaker / fuse / recloser / switchgear / disconnect / panel), name and its values. Connect it with bus names in from_bus / to_bus (connections) or bus (sources); a new device without to_bus gets its own load-side bus.</li><li><strong>Delete equipment:</strong> write <em>delete</em> in the action column of its row. Items connected to a deleted bus stay in the project as disconnected, as in the editor.</li><li>Units are in the column headings (m, Ω/km, kVA, A, V). The Studio converts them on upload. Nothing is filled in for you: blank ratings stay blank and are reported as input required.</li></ul>
++  <ul class="v31-notes"><li>Rows are matched by <strong>id</strong>. Do not change ids. Blank cells leave the stored value unchanged.</li><li><strong>Add equipment:</strong> write <em>add</em> in the action column, leave id blank, and fill type (bus, cable, transformer, link, source:utility / pv / bess / generator / motor / other, device:breaker / fuse / recloser / switchgear / disconnect / panel), name and its values. Connect it with bus names in from_bus / to_bus (connections) or bus (sources); a new device without to_bus gets its own load-side bus.</li><li><strong>Change a connection:</strong> write another bus name in from_bus / to_bus (cables, transformers, links) or bus (sources). You see every connection change and its checks before anything is applied.</li><li><strong>Delete equipment:</strong> write <em>delete</em> in the action column of its row. Items connected to a deleted bus stay in the project as disconnected, as in the editor.</li><li>Units are in the column headings (m, Ω/km, kVA, A, V). The Studio converts them on upload. Nothing is filled in for you: blank ratings stay blank and are reported as input required.</li></ul>
+   <div class="v31-actions"><button type="button" class="primary" id="et-download">Download table (CSV)</button><label class="v31-file"><input type="file" id="et-file" accept=".csv,text/csv"><span>Upload edited table…</span></label></div>
+   <p class="v31-summary" role="status" id="et-status"></p><ul class="v31-errors" id="et-errors"></ul><footer><button type="button" data-v31-close>Close</button></footer>`);
+  d.querySelector('#et-download').addEventListener('click',()=>{const name=(p.name||'project').replace(/[^a-z0-9_-]+/gi,'-').slice(0,80)+'-equipment.csv';download(name,equipmentCsv(studio().snapshot()))});
+  d.querySelector('#et-file').addEventListener('change',async e=>{
+   const file=e.target.files[0];if(!file)return;const status=d.querySelector('#et-status'),list=d.querySelector('#et-errors');list.innerHTML='';
+-  try{if(file.size>20e6)throw Error('The table exceeds 20 MB');const text=await file.text();let result;
+-   studio().apply(p=>{result=applyEquipmentCsv(p,text)},'');
+-   status.textContent=`${result.matched} rows matched · ${result.changes} values changed · ${result.added||0} added · ${result.deleted||0} deleted${result.errors.length?` · ${result.errors.length} rows or cells skipped`:''}.`;
+-   list.innerHTML=result.errors.slice(0,50).map(x=>`<li>${esc(x)}</li>`).join('')+(result.errors.length>50?`<li>…and ${result.errors.length-50} more</li>`:'');
++  try{if(file.size>20e6)throw Error('The table exceeds 20 MB');const text=await file.text();
++   const show=result=>{status.textContent=`${result.matched} rows matched · ${result.changes} values changed · ${result.added||0} added · ${result.deleted||0} deleted${result.errors.length?` · ${result.errors.length} rows or cells skipped`:''}.`;
++    list.innerHTML=result.errors.slice(0,50).map(x=>`<li>${esc(x)}</li>`).join('')+(result.errors.length>50?`<li>…and ${result.errors.length-50} more</li>`:'')};
++   const apply=()=>{let result;studio().apply(p=>{result=applyEquipmentCsv(p,text)},'');show(result);d.querySelector('#et-preview')?.remove()};
++   // V33 (D2): an upload that changes connections is shown first and applied only after Apply.
++   const preview=previewEquipmentCsv(studio().snapshot(),text);d.querySelector('#et-preview')?.remove();
++   if(!preview.connections.length){apply()}
++   else{status.textContent=`Preview — nothing changed yet: ${preview.connections.length} connection change${preview.connections.length>1?'s':''}, ${preview.changes-preview.connections.length} other values, ${preview.added||0} added, ${preview.deleted||0} deleted${preview.errors.length?`, ${preview.errors.length} rows or cells would be skipped`:''}.`;
++    list.innerHTML=preview.errors.slice(0,50).map(x=>`<li>${esc(x)}</li>`).join('');
++    const box=document.createElement('div');box.id='et-preview';box.className='v33-connection-preview';box.style.cssText='margin-top:14px;max-height:45vh;overflow:auto';
++    box.innerHTML=`<table class="v33-preview-table" style="width:100%;border-collapse:collapse;font-size:13px;text-align:left"><thead><tr><th>Row</th><th>Equipment</th><th>Column</th><th>Now</th><th>After upload</th><th>Check</th></tr></thead><tbody>${preview.connections.slice(0,200).map(c=>`<tr><td>${c.row}</td><td>${esc(c.name)}</td><td>${c.field}</td><td>${esc(c.before)}</td><td><strong>${esc(c.after)}</strong></td><td>${c.warning?esc(c.warning):'OK'}</td></tr>`).join('')}</tbody></table>${preview.connections.length>200?`<p>…and ${preview.connections.length-200} more</p>`:''}<div class="v31-actions"><button type="button" class="primary" id="et-apply">Apply these changes</button><button type="button" id="et-cancel">Cancel</button></div>`;
++    list.after(box);box.querySelector('#et-apply').addEventListener('click',()=>{try{apply()}catch(err){list.innerHTML=`<li>${esc(err.message)}</li>`}});box.querySelector('#et-cancel').addEventListener('click',()=>{box.remove();status.textContent='Upload cancelled. Nothing was changed.';list.innerHTML=''})}
+   }catch(err){status.textContent='';list.innerHTML=`<li>${esc(err.message)}</li>`}e.target.value='';
+  });
+ }
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/plant-builder.mjs /home/claude/repo/Electrical-Studies/SITE/plant-builder.mjs
+--- V32_SITE/plant-builder.mjs	2026-11-13 15:22:11.435003445 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/plant-builder.mjs	2026-11-14 12:26:59.935997420 -0800
+@@ -174,7 +174,23 @@
+ export function applyEquipmentCsv(p,text){
+  const rows=parseCsv(text);if(!rows.length)throw Error('The file is empty');
+  const head=rows[0].map(h=>h.trim().replace(/\s*\[.*\]$/,'')),idCol=head.indexOf('id');if(idCol<0)throw Error('The first row must contain the column names, including id');
+- const items=new Map([...p.buses,...p.branches,...p.sources,...p.devices].map(x=>[x.id,x])),errors=[];let changes=0,matched=0,added=0,deleted=0;
++ const items=new Map([...p.buses,...p.branches,...p.sources,...p.devices].map(x=>[x.id,x])),errors=[],connections=[];let changes=0,matched=0,added=0,deleted=0;
++ // V33 (D2): connections can be edited. A cell of from_bus / to_bus (connections) or bus (sources) holds a bus name.
++ const busName=id=>p.buses.find(b=>b.id===id)?.name??'';
++ const findBus=v=>{const hits=p.buses.filter(b=>b.name===v);if(!hits.length)throw Error('no bus named "'+v+'"');if(hits.length>1)throw Error('more than one bus is named "'+v+'"; rename one first');return hits[0]};
++ const editConnection=(x,r,vals,cellOf)=>{
++  const isBranch=p.branches.includes(x),isSource=p.sources.includes(x),isDevice=p.devices.includes(x);
++  const want=isBranch?{from:cellOf(vals,'from_bus'),to:cellOf(vals,'to_bus')}:isSource||isDevice?{bus:cellOf(vals,'bus')}:{};
++  const keys=Object.keys(want).filter(k=>want[k]!==''&&want[k]!==busName(x[k]));if(!keys.length)return;
++  if(isDevice||isBranch&&x.deviceId)throw Error('the connection of a protective device is changed in the one-line editor, not in the table');
++  const next={};for(const k of keys)next[k]=findBus(want[k]);
++  if(isBranch){const a=next.from||p.buses.find(b=>b.id===x.from),b=next.to||p.buses.find(b=>b.id===x.to);if(!a||!b)throw Error('both ends must be existing buses');if(a===b)throw Error('from_bus and to_bus must differ');
++   if(x.kind!=='transformer'&&Number.isFinite(a.voltage)&&Number.isFinite(b.voltage)&&a.voltage!==b.voltage)throw Error(`${x.kind} "${x.name}" would join ${a.name} (${a.voltage} V) and ${b.name} (${b.voltage} V); a ${x.kind} cannot change voltage, use a transformer`)}
++  const note=[];
++  for(const k of keys){const before=busName(x[k]);x[k]=next[k].id;changes++;connections.push({row:r+1,id:x.id,name:x.name,field:k==='from'?'from_bus':k==='to'?'to_bus':'bus',before,after:next[k].name})}
++  if(isBranch&&x.kind==='transformer'){const a=p.buses.find(b=>b.id===x.from),b=p.buses.find(b=>b.id===x.to);if(Number.isFinite(x.v1)&&Number.isFinite(a?.voltage)&&Math.abs(x.v1-a.voltage)>1e-9*a.voltage||Number.isFinite(x.v2)&&Number.isFinite(b?.voltage)&&Math.abs(x.v2-b.voltage)>1e-9*b.voltage)connections.at(-1).warning=`transformer ratings ${x.v1} V / ${x.v2} V differ from the bus voltages ${a?.voltage} V / ${b?.voltage} V; check them`}
++  if(isSource){const b=p.buses.find(q=>q.id===x.bus);if(Number.isFinite(x.voltage)&&Number.isFinite(b?.voltage)&&x.voltage!==b.voltage)connections.at(-1).warning=`source voltage ${x.voltage} V differs from the new bus voltage ${b.voltage} V; check it`}
++ };
+  const actCol=head.indexOf('action'),cellOf=(vals,col)=>{const c=head.indexOf(col);return c<0?'':(vals[c]??'').trim().replace(/^'(?=[=+@-])/,'')};
+  const adds=[],dels=[];
+  for(let r=1;r<rows.length;r++){const a=actCol<0?'':(rows[r][actCol]||'').trim().toLowerCase();if(a==='add')adds.push(r);else if(a==='delete')dels.push(r);else if(a)errors.push('Row '+(r+1)+': action must be blank, add or delete')}
+@@ -182,6 +198,7 @@
+  const order=r=>{const t=cellOf(rows[r],'type').toLowerCase();return t==='bus'?0:t.startsWith('device:')?2:1};
+  for(const r of adds.sort((a,b)=>order(a)-order(b)||a-b)){try{const x=addTableItem(p,head,rows[r],cellOf);items.set(x.id,x);added++}catch(e){errors.push('Row '+(r+1)+': '+e.message)}}
+  for(let r=1;r<rows.length;r++){const vals=rows[r],id=(vals[idCol]||'').trim();if(!id||adds.includes(r)||dels.includes(r))continue;const x=items.get(id);if(!x){errors.push('Row '+(r+1)+': no equipment with id '+id);continue}matched++;
++  try{editConnection(x,r,vals,cellOf)}catch(e){errors.push('Row '+(r+1)+': '+e.message)}
+   head.forEach((col,c)=>{const raw=(vals[c]??'').trim().replace(/^'(?=[=+@-])/,'');if(raw===''||col==='id'||col==='type'||col==='from_bus'||col==='to_bus'||col==='bus')return;
+    if(col==='name'){if(raw!==x.name){x.name=raw.slice(0,200);changes++}return}
+    if(col==='enabled'){const on=/^(yes|true|1|on)$/i.test(raw),off=/^(no|false|0|off)$/i.test(raw);if(!on&&!off){errors.push('Row '+(r+1)+': enabled must be yes or no');return}if(p.buses.includes(x))return;if(x.enabled!==on){x.enabled=on;changes++}return}
+@@ -191,8 +208,10 @@
+    const v=key==='runs'?Math.round(n):+(n*f).toPrecision(15),cur=x[key];if(fin(cur)&&Math.abs(v-cur)<=1e-11*Math.max(Math.abs(cur),1e-300))return;if(cur!==v){x[key]=v;changes++}});
+  }
+  for(const r of dels){const id=(rows[r][idCol]||'').trim();if(!id){errors.push('Row '+(r+1)+': delete needs the id');continue}if(!items.has(id)){errors.push('Row '+(r+1)+': no equipment with id '+id);continue}deleteItem(p,id);items.delete(id);deleted++}
+- return {changes,matched,added,deleted,errors};
++ return {changes,matched,added,deleted,errors,connections};
+ }
++// V33 (D2): the same upload applied to a copy, so the page can show what would change before anything is changed.
++export function previewEquipmentCsv(p,text){return applyEquipmentCsv(structuredClone(p),text)}
+ const SOURCE_KINDS=['utility','pv','bess','generator','motor','other'],DEVICE_TYPES=['breaker','fuse','recloser','switchgear','disconnect','panel'];
+ function addTableItem(p,head,vals,cellOf){
+  const type=cellOf(vals,'type').toLowerCase(),name=cellOf(vals,'name').slice(0,200);if(!name)throw Error('a name is required to add equipment');
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/power-quality-ui-v29.mjs /home/claude/repo/Electrical-Studies/SITE/power-quality-ui-v29.mjs
+--- V32_SITE/power-quality-ui-v29.mjs	2026-11-13 15:22:11.435023044 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/power-quality-ui-v29.mjs	2026-11-13 22:46:55.577529128 -0800
+@@ -1,6 +1,6 @@
+ /** V29c incremental UI: IEEE 519 PCC harmonic check and power-factor correction with resonance check. Reads the Studio draft read-only. */
+ import {ieee519Check,pfCorrection,POWER_QUALITY_V29} from './power-quality-v29.mjs';
+-import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261108-v32';
++import {advancedStudyReportBlob} from './advanced-study-report.mjs?v=20261113-v33';
+ const __fcsReportStudy=(key,label,get)=>{try{(globalThis.__fcsReportStudies??=new Map()).set(key,{label,projectId:globalThis.__fcsStudio?.projectId?.()??null,at:Date.now(),get});globalThis.dispatchEvent?.(new Event('fcs-report-studies'))}catch{}};
+ const KEY='fault-studio-power-quality-v29',DRAFT='fault-network-draft-v2';
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+@@ -8,7 +8,7 @@
+ const ok=v=>v?'<span class="ok">OK</span>':'<span class="bad">EXCEEDS</span>';
+ function dockLauncher(btn){const tryDock=()=>{const h=document.getElementById('v26-launcher-holder');if(h&&btn.parentElement!==h){h.append(btn);btn.style.position='static';btn.style.margin='4px';return true}return !!h};if(tryDock())return;let tries=0;const t=setInterval(()=>{if(tryDock()||++tries>40)clearInterval(t)},250)}
+ function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
+-async function engine(){const req=globalThis.__fcsBundleRequire;if(typeof req==='function')return req('network-engine.mjs').calculateProject;return (await import('./network-engine.mjs?v=20261108-v31')).calculateProject}
++async function engine(){const req=globalThis.__fcsBundleRequire;if(typeof req==='function')return req('network-engine.mjs').calculateProject;return (await import('./network-engine.mjs?v=20261113-v33')).calculateProject}
+ async function studioBuses(){const raw=localStorage.getItem(DRAFT);if(!raw)return [];let p;try{p=JSON.parse(raw)}catch{return []}if(p?.format!=='fault-current-network'||p.settings?.faultType==='dc')return [];
+  const q=JSON.parse(JSON.stringify(p));q.settings={...q.settings,faultType:'3phase',faultR:0,faultX:0};const out=(await engine())(q);
+  return (out.results||[]).filter(r=>Number.isFinite(r.totalA)&&r.totalA>0).map(r=>{const b=p.buses.find(x=>x.id===r.busId);return {id:r.busId,name:b?.name||r.busId,kV:(b?.voltage||0)/1000,iscA:r.totalA,mva:Math.sqrt(3)*(b?.voltage||0)*r.totalA/1e6}})}
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/public-style-v21.css /home/claude/repo/Electrical-Studies/SITE/public-style-v21.css
+--- V32_SITE/public-style-v21.css	2026-11-13 15:22:11.435653226 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/public-style-v21.css	2026-11-13 22:47:32.329464571 -0800
+@@ -1,5 +1,5 @@
+ /* bundled: network-style.css */
+-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
++@import url('./fonts/local-fonts-v33.css');
+ :root{font-family:'DM Sans',system-ui,sans-serif;color:#24384c;background:#edf2f5;font-synthesis:none;--navy:#12283b;--mint:#26d7aa;--line:#dce5eb}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button,a,input,select{outline-offset:4px}button{border:1px solid #d4dfe5;border-radius:7px;background:white;padding:9px 13px;color:#263e50;cursor:pointer;font-weight:600;font-size:12px;transition:background .15s,transform .15s}button:hover{background:#edf8f5;border-color:#73bbaa}button:active{transform:translateY(1px)}button:disabled{opacity:.4;cursor:default}.primary{background:#11775f;color:white;border-color:#11775f}.primary:hover{background:#0a624d;color:white}.danger{color:#a5393d}.text-button{border:0;padding:0;color:#137c66;background:transparent;text-align:left}a{color:#08765d;text-decoration:none}h1,h2,h3,h4,strong{font-family:'Space Grotesk',system-ui,sans-serif}h1{font-size:24px;letter-spacing:-.7px;margin:5px 0}h2{font-size:18px;letter-spacing:-.4px;margin:0 0 8px}h3{margin:5px 0 0;font-size:18px}h4{margin:22px 0 10px;font-size:13px}p{font-size:13px;line-height:1.65;color:#67798a;margin:7px 0 15px}small,.micro{font-size:11px;line-height:1.6;color:#748695}.eyebrow{font-size:9px;letter-spacing:1.6px;font-weight:700;color:#618291}.sidebar{position:fixed;inset:0 auto 0 0;width:235px;background:var(--navy);color:#c7d5df;padding:30px 18px;display:flex;flex-direction:column;z-index:5}.brand{display:flex;gap:12px;align-items:center;color:white;font-size:14px;font-weight:700;letter-spacing:.7px;padding:0 8px 35px}.brand>span{color:var(--mint);font-size:40px;font-family:serif}.brand small{display:block;font-size:8px;letter-spacing:1.2px;color:#829cac;margin-top:5px}.workspace-label{font-size:9px;letter-spacing:1.5px;color:#6c899d;margin:0 12px 13px}nav{display:grid;gap:5px}nav a{display:flex;align-items:center;gap:11px;padding:13px 12px;color:#9eb4c4;border-radius:7px;font-size:12px}nav a i{font-style:normal;font-size:18px;width:20px;text-align:center;color:#7f9aac}nav a.active{background:#254457;color:white}nav a.active i{color:var(--mint)}nav a:hover{background:#1d384c}nav b{background:#b44645;border-radius:12px;padding:2px 6px;font-size:10px;margin-left:auto}.sidebar-bottom{margin-top:auto;border-top:1px solid #2c4355;padding:20px 9px 0;font-size:10px}.sidebar-bottom small{display:block;color:#708c9d;margin-top:8px;font-size:10px}.local-dot{display:inline-block;width:6px;height:6px;background:var(--mint);border-radius:50%;margin-right:6px}main{margin-left:235px;padding:29px 32px 18px;max-width:1900px}header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:23px}.actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px}.study-bar{display:flex;gap:22px;align-items:center;padding:14px 18px;background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:18px}.study-bar label{font-size:8px;color:#6d8393;letter-spacing:1px;flex:1;max-width:400px;font-weight:700}.study-bar select{display:block;width:100%;margin-top:7px;padding:3px 20px 3px 0;background:transparent;border:0;color:#20394c;font-size:12px;letter-spacing:0}.study-bar>a{font-size:11px;margin-left:auto}.metrics{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:14px;margin-bottom:22px}.metric{background:white;border:1px solid var(--line);border-radius:10px;padding:19px 18px;min-height:124px;position:relative;overflow:hidden}.metric.dark{background:var(--navy);color:white;border-color:var(--navy)}.metric.dark:after{content:'ϟ';position:absolute;right:12px;top:0;color:#294658;font-size:110px;pointer-events:none}.metric span{display:block;font-size:8px;letter-spacing:1.4px;color:#7890a1;font-weight:700}.metric strong{display:block;font-size:29px;letter-spacing:-1px;margin:10px 0 6px;position:relative;z-index:1}.metric.dark strong{color:var(--mint)}.metric small{display:block;font-size:9px}.metric em{font:10px 'DM Sans',sans-serif;color:#7c91a0;margin-left:6px;letter-spacing:0}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 335px;gap:18px;align-items:start}.network-panel,.panel,.editor{border:1px solid var(--line);border-radius:11px;background:white;min-width:0;overflow:hidden}.panel{padding:23px;margin-bottom:18px}.panel-heading{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:20px}.panel .panel-heading{padding:0 0 16px}.panel-heading h2{margin:6px 0 0}.panel-heading p{margin-bottom:0}.canvas{background:#102838;min-height:430px;overflow:auto;border-top:1px solid #244152}.canvas svg{display:block;min-width:800px;width:100%;min-height:430px}.canvas-foot{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;color:#768c9b;font-size:9px}.edge{cursor:pointer}.edge path{stroke:#658d9e;stroke-width:2;fill:none}.edge .edge-hit{stroke:transparent;stroke-width:24}.edge .transformer-line{stroke:#28cfa6;stroke-width:3}.edge rect{fill:#1b3b4d;stroke:#466475;stroke-width:1}.edge text{fill:#dce9ef;text-anchor:middle;font-family:'DM Sans',sans-serif;font-size:10px}.edge .edge-small{fill:#8eaebb;font-size:8px}.edge:hover rect{stroke:#28cfa6}.edge.disabled{opacity:.35;stroke-dasharray:5}.bus-node{cursor:grab}.bus-node>rect{fill:#193b4e;stroke:#496b7d;stroke-width:1.2}.bus-node.selected>rect{stroke:#2bdfb4;stroke-width:2}.bus-node:hover>rect{fill:#23495c}.bus-node>line{stroke:#2bd2ac;stroke-width:4}.bus-node text{fill:#e3eef3;font-size:11px;pointer-events:none}.bus-node .node-name{font-weight:700}.bus-node .node-voltage{fill:#9abacb;font-size:10px}.bus-node .node-fault{fill:#40deb5;font-size:15px;font-weight:600}.source-tag rect{fill:#2c5861;stroke:#3e7b7a}.source-tag text{fill:#a7efe0;font-size:9px}.device-tag rect{fill:#203f54;stroke:#3b5b70}.device-tag text{font-size:9px}.source-tag,.device-tag{cursor:pointer}.editor-head{display:flex;align-items:center;justify-content:space-between;padding:19px;border-bottom:1px solid var(--line)}.icon-button{border:0;background:transparent;font-size:24px;padding:0 6px;color:#79909e}.editor-scroll{padding:18px;max-height:690px;overflow:auto}.editor-empty{text-align:center;padding:100px 24px;color:#667f90}.editor-empty>span{font-size:35px;color:#1f997b}.editor-empty h3{margin:20px 0 9px}.field{display:block;margin-bottom:14px}.field>span{display:block;font-size:11px;font-weight:600;margin-bottom:7px;color:#425e70}.field small{display:block;margin-top:5px;font-size:10px}.input-unit{display:flex;border:1px solid #d6e0e6;border-radius:6px;background:#f9fbfc;overflow:hidden}.input-unit:focus-within{border-color:#259c7d;box-shadow:0 0 0 2px #1fab8217}.input-unit input,.input-unit select{background:transparent;border:0;min-width:0;width:100%;padding:10px 9px;color:#18364a;font-size:12px;outline:none}.input-unit .unit{border-left:1px solid #d6e0e6;width:76px;flex-shrink:0;font-size:10px;color:#758d9c;padding:8px}.input-unit input::placeholder{color:#a1adb6;font-size:11px}.req{color:#ba5652}.check-field{display:flex;flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:9px}.check-field>span{margin:0}.check-field .input-unit{border:0;background:none;flex:0 0 15px;overflow:visible}.check-field input{width:15px;padding:0;accent-color:#138266}.database-pick{width:100%;padding:12px;color:#0a7c63;background:#eaf8f3;border-color:#b7e2d4;margin:4px 0 18px}.voltage-bridge{font-size:10px;letter-spacing:2px;color:#168368;text-align:center;border-radius:5px;background:#ecf8f4;padding:10px;margin:14px 0}.voltage-bridge span{margin:0 25px;font-size:17px}.connection-note{background:#edf5f9;border-radius:6px;padding:12px;margin:15px 0;font-size:11px;color:#54778b}.connection-note strong,.connection-note small{display:block;margin-top:5px}.connection-note strong{color:#1c4760;font-size:17px}.editor-actions{display:flex;gap:10px;border-top:1px solid var(--line);padding-top:17px;margin-top:20px}.editor-actions button{flex:1}.model-note,.provenance{background:#f0f7f4;border-left:3px solid #60af95;padding:12px 14px;border-radius:4px;color:#5b786c;font-size:11px;line-height:1.6;margin:12px 0 18px}.provenance strong,.provenance span,.provenance small{display:block}.provenance span{font-size:9px;margin:5px 0}.provenance p{font-size:10px;margin:4px 0}.inline-issue{border-left:3px solid #cd655e;background:#fff1ef;padding:10px;color:#994740;font-size:11px;line-height:1.5;margin-bottom:10px}.inline-issue.warning{border-color:#d6b357;background:#fff9eb;color:#907038}.badge{display:inline-block;padding:5px 8px;background:#eaf7f0;color:#227554;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.4px;white-space:normal}.badge.bad{color:#a23e3b;background:#fceae7}.badge.amber{color:#987129;background:#fff5df}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:11px}th{font-size:9px;font-weight:600;text-align:left;color:#8398a6;padding:12px 10px;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:13px 10px;border-bottom:1px solid #edf2f5;vertical-align:top;line-height:1.6}td small{display:block}td button{font-size:10px;padding:5px 7px}tr:last-child td{border-bottom:0}.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.contribution{display:grid;grid-template-columns:140px 1fr 85px;gap:12px;align-items:center;margin:19px 0}.contribution strong{font-size:11px}.contribution span{display:block;font-size:9px;color:#91a0ab;margin-top:3px}.contribution b{font-size:13px;text-align:right;font-family:'Space Grotesk',sans-serif}.track{background:#eef5f3;border-radius:5px;height:9px;overflow:hidden}.track i{height:100%;background:linear-gradient(90deg,#2a9f7c,#61d2ab);display:block;border-radius:5px}.result-note{font-size:10px;color:#82939e;line-height:1.5;padding-top:10px}.math-intro{font-size:12px;color:#677f8d;line-height:1.7;margin:7px 0 19px}.math-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;padding:14px;background:#f5f8fa;border-radius:6px;margin-bottom:15px}.math-grid>div{font-size:9px;color:#7c919e}.math-grid strong{display:block;color:#335369;font-size:12px;margin-top:7px;overflow-wrap:anywhere}.math-source{border:1px solid var(--line);border-radius:7px;margin-top:12px;padding:16px}.math-source summary{cursor:pointer;font-size:12px;color:#294859;padding-bottom:12px}.math-source summary strong{float:right}.math-source details{margin:15px 0 0}.review-row{display:flex;gap:15px;align-items:center;border-bottom:1px solid var(--line);padding:12px 0}.review-row>span{background:#fff0ed;color:#b25d51;font-size:9px;padding:5px 8px;white-space:nowrap;border-radius:4px}.review-row.warning>span{background:#fff7e3;color:#9c7a3c}.review-row p{flex:1;margin:0;font-size:11px}.review-row button{font-size:10px;white-space:nowrap}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px 22px;margin-top:20px}.db-controls{display:flex;gap:12px;margin:10px 0}.db-controls input,.db-controls select{border:1px solid var(--line);border-radius:7px;padding:12px;font-size:12px;min-width:0;background:#fafcfd}.db-controls input{flex:1}.db-count{font-size:10px;color:#8da0ab;margin:15px 0}.db-value{font-size:9px;display:block;color:#698492}.saved-row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:16px 0}.saved-row strong{font-size:13px}.saved-row small{display:block}.notice{border:1px solid #b7dece;background:#eaf7ef;border-radius:6px;padding:12px 16px;font-size:12px;color:#386c56;margin-bottom:17px;overflow-wrap:anywhere}.notice pre{max-height:450px;overflow:auto;white-space:pre-wrap;font-size:10px}.modal-backdrop{position:fixed;inset:0;background:#081d32a6;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}.add-dialog{background:#fff;border-radius:14px;width:640px;padding:15px;max-height:90vh;overflow:auto;box-shadow:0 20px 60px #05142444}.add-dialog>p{margin:0 20px 19px}.add-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px 20px}.add-grid button{padding:20px 10px;text-align:left;border-color:#e0e9ee;font-size:11px}.add-grid span{display:block;font-size:24px;color:#1a9377;margin-bottom:10px}.canvas-empty{text-align:center;padding:65px 20px;color:white}.canvas-empty h2{color:white;margin:18px 0 12px;font-size:24px}.canvas-empty p{color:#8ba8b9}.canvas-empty .actions{justify-content:center}.diagram-glyph{font-size:45px;color:#2bcda6}footer{display:flex;justify-content:space-between;color:#8da0ae;font-size:9px;padding:23px 0 4px;gap:15px}.report-title{margin:30px 0}.loading{padding:50px;text-align:center;color:#688499}.result-empty{padding:30px 0;font-size:12px;color:#8497a4}
+ @media(min-width:1600px){main{padding:35px 45px}.workspace{grid-template-columns:minmax(0,1fr) 370px}.canvas svg{min-height:530px}.editor-scroll{max-height:800px}}
+ @media(max-width:1150px){.sidebar{width:195px;padding-left:10px;padding-right:10px}main{margin-left:195px;padding:24px 20px}.workspace{grid-template-columns:minmax(0,1fr) 300px}.metrics{gap:9px}.metric{padding:15px 12px}.metric strong{font-size:25px}header h1{font-size:20px}header .actions button{padding:8px;font-size:10px}.canvas-foot span:last-child{display:none}.math-grid{grid-template-columns:1fr 1fr}.contribution{grid-template-columns:110px 1fr 70px}}
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/report-data.mjs /home/claude/repo/Electrical-Studies/SITE/report-data.mjs
+--- V32_SITE/report-data.mjs	2026-11-13 15:22:11.435791920 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/report-data.mjs	2026-11-13 22:46:06.047674212 -0800
+@@ -69,6 +69,8 @@
+   const qa=[...issues.map(i=>[i.severity.toUpperCase(),i.id==='settings'?'Study controls':i.id==='project'?p.name:[...p.buses,...p.sources,...p.branches,...p.devices,...(p.pvArrays||[])].find(x=>x.id===i.id)?.name||'Calculation',i.message]),...p.notes.map(note=>['NOTE','Project',note]),...(isExtendedStudy(p)?[analysisScope(p),'Retained values from other study modes are preserved for traceability and do not replace the explicit model inputs. Complete IEC/ANSI duty procedures are not claimed.']:scopeNotes).map(note=>['SCOPE','Engineering method',note])];
+   if(p.pvArrays?.length){qa.push(['SCOPE','PV module / array',pvArrayScope]);for(const i of pvReferenceIssues(p))qa.push(['PV REFERENCE '+i.severity.toUpperCase(),p.pvArrays.find(a=>a.id===i.id)?.name||'PV array',i.message]);}
+   if(!hasBranchCurrents(p))qa.unshift(['SCOPE','Source / branch details','Per-source and branch-current results are available for three-phase faults only. Unbalanced results use bus equivalent sequence data.']);
++  // V33: very large plants keep per-source rows for the selected fault bus only; say so instead of silently listing fewer rows.
++  {const lean=results.filter(r=>r.detailScope==='totals');if(lean.length)qa.unshift(['SCOPE','Source contributions','This project has '+p.sources.length+' sources and '+results.length+' fault locations. Per-source contribution rows are listed for the selected fault bus only ('+lean.length+' other locations show totals). The bus totals, source-type totals and branch currents of every location are complete. Select another fault bus to list its sources.']);}
+   return {project:p,results,issues,selected,summary,sheets:[
+     {name:'Summary',headers:['Study item','Value'],rows:summary},
+     {name:'Bus results',headers:['Fault location','Voltage (V)',isExtendedStudy(p)?analysisQuantity(p)+' (kA)':p.settings.faultType==='dlg'?'Maximum phase RMS (kA)':'RMS fault (kA)','Peak screen (kA)','Asym RMS screen (kA)','X/R','Thevenin R (ohm)','Thevenin X (ohm)','Current basis','Status','Result notes'],rows:buses},
+diff -ruN -x public-bundle-v21.js -x '*.woff2' -x favicon.ico -x database V32_SITE/split-phase-network.mjs /home/claude/repo/Electrical-Studies/SITE/split-phase-network.mjs
+--- V32_SITE/split-phase-network.mjs	2026-11-13 15:22:11.435970359 -0800
++++ /home/claude/repo/Electrical-Studies/SITE/split-phase-network.mjs	2026-11-13 22:46:55.576493357 -0800
+@@ -1,4 +1,4 @@
+-import {sparseFactorC} from './sparse-complex-lu.mjs?v=20261108-v32';
++import {sparseFactorC} from './sparse-complex-lu.mjs?v=20261113-v33';
+ // Opt-in documented center-tapped one-leg fault loop. Existing sequence/L-L modes are untouched.
+ export const SPLIT_PHASE_FAULTS=Object.freeze(['split-l1-n','split-l2-n','split-l1-g','split-l2-g']);
+ export const isSplitPhaseFault=p=>SPLIT_PHASE_FAULTS.includes(p?.settings?.faultType);

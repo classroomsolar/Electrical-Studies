@@ -1,0 +1,232 @@
+{
+ "injected_fields": 74,
+ "checks": [
+  {
+   "where": "project with injected names still calculates",
+   "pass": true,
+   "note": "THREE-PHASE FAULT RMS 20.15 kA SCREENING BOUND"
+  },
+  {
+   "where": "one-line page after load",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "view #results",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "view #operating",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "view #advanced",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "view #report",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "view #projects",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "view #database",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "view #atlas",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "view #network",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Arc flash all buses",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Equipment table",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Build plant",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Fault envelope",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Cable sizing",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Power quality",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Conductor duty",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Operations",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Tools search",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: IEEE 1584 study",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Harmonics",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "dialog: Methods",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "property panel after clicking equipment",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  },
+  {
+   "where": "export xlsx",
+   "pass": true,
+   "bytes": 1241654,
+   "file": "Plant-img-src-x-onerror-window.__xss-window.__xss-0-1-script-window.__xss-99-script-.xlsx"
+  },
+  {
+   "where": "export pdf",
+   "pass": true,
+   "bytes": 924485,
+   "file": "Plant-img-src-x-onerror-window.__xss-window.__xss-0-1-script-window.__xss-99-script-.pdf"
+  },
+  {
+   "where": "report page after exports",
+   "pass": true,
+   "flag": 0,
+   "imgs": 0,
+   "scripts": 0,
+   "onerr": 0,
+   "shown": true
+  }
+ ],
+ "result_after_load": "THREE-PHASE FAULT RMS 20.15 kA SCREENING BOUND",
+ "loaded_name": true,
+ "page_errors": []
+}

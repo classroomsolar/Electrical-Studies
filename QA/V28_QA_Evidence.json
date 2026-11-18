@@ -1,0 +1,12 @@
+{
+  "release": "V28",
+  "date": "2026-10-26",
+  "site": {"files": 236, "previousFiles": 234, "byteIdenticalPriorFiles": 233, "modified": ["index.html"], "added": ["conductor-duty-v28.mjs", "conductor-duty-ui-v28.mjs"], "deleted": [], "allJsSyntax": "PASS"},
+  "v20Handoff": {"manifestEntriesSha256Verified": 232, "zipCRC": "PASS", "browserDownloadTimeout": "11th download event after ten successful downloads; multisequence PDF succeeds in fresh context", "isolatedContextsFourModes": "PASS", "desktopAndMobileAdvancedModeExports": 64},
+  "v27AdvancedModeExports": {"desktopAndMobileAdvancedModeExports": 64, "sourceReportsAndPDFXLSXParsed": "PASS"},
+  "advancedReports": {"totalBrowserFilesParsed": 128, "pdfFiles": 64, "xlsxFiles": 64, "verifiedInputAndOutputPathsPerFormat": 9924, "totalPdfPlusExcelPathChecks": 19848, "results": "QA/RESULTS/report_validation.json"},
+  "transformer": {"independentCases": 1200, "independentNumericComparisons": 24000, "mismatches": 0, "invalidCasesRejected": 16},
+  "conductor": {"independentCases": 1500, "independentNumericComparisons": 9000, "mismatches": 0, "invalidCasesRejected": 27, "desktopAndMobileNewPdfXlsxJsonDownloads": 18, "savedCaseAndOriginalProjectStorageIsolation": "PASS"},
+  "liveSite": {"wixPublished": true, "hydrationVerified": false, "host429Resolved": false, "publicDeploymentOfV28": false, "remoteBrowserTool": "Unavailable (wallet insufficient); no repeated host load generated"},
+  "engineering": {"fullIECIEEEConformity": false, "OEMQualifiedKFactors": false, "privateOriginalStudiesExported": false, "completeUserScopeAccepted": false}
+}

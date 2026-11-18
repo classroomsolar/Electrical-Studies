@@ -1,0 +1,583 @@
+{
+  "siteVersion": "V20",
+  "modules": 45,
+  "exports": 64,
+  "files": [
+    {
+      "viewport": "desktop",
+      "mode": "fault",
+      "format": "pdf",
+      "size": 7230,
+      "sha256": "c1fa5dd1b7b1633a4e77ae52d3b30a0b0944945ad3cb9fcca3e54a8cc67635a8",
+      "status": "BOUNDED_SINGLE_RADIAL_SOURCE_SCREEN",
+      "filename": "fault-studio-fault-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "fault",
+      "format": "xlsx",
+      "size": 14130,
+      "sha256": "293eb232e57d857646ff7b2b20f15f5274f46c3d39435fe82faf357a2ff4c885",
+      "status": "BOUNDED_SINGLE_RADIAL_SOURCE_SCREEN",
+      "filename": "fault-studio-fault-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "multisource",
+      "format": "pdf",
+      "size": 13862,
+      "sha256": "71e931e11b6f6e0b3f1700478d23ebef1dc8bf24f8e35588d203a8a1eb05f48f",
+      "status": "BOUNDED_MULTI_SOURCE_3PH_PHASOR",
+      "filename": "fault-studio-multisource-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "multisource",
+      "format": "xlsx",
+      "size": 24113,
+      "sha256": "b59f74ba4a0d6a27c2350503737494aef211f1ece74d9f06b3ef4fb98cdddb00",
+      "status": "BOUNDED_MULTI_SOURCE_3PH_PHASOR",
+      "filename": "fault-studio-multisource-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "multivoltage",
+      "format": "pdf",
+      "size": 16508,
+      "sha256": "f367d3138ee16e4a80c85329b4f6052ba755840597cbcaa0376b0af515143da5",
+      "status": "BOUNDED_MULTIVOLTAGE_3PH_NETWORK",
+      "filename": "fault-studio-multivoltage-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "multivoltage",
+      "format": "xlsx",
+      "size": 27646,
+      "sha256": "aa51a790c9c092813877404c4e88b6fea915d080fe85dc3b8dff37acabac945d",
+      "status": "BOUNDED_MULTIVOLTAGE_3PH_NETWORK",
+      "filename": "fault-studio-multivoltage-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "transformer60909",
+      "format": "pdf",
+      "size": 17697,
+      "sha256": "65112e06457cb7137faae585510baa89050f76ae9a35033980047cb84ed44ba6",
+      "status": "BOUNDED_IEC60909_RADIAL_TRANSFORMER_ENVELOPE",
+      "filename": "fault-studio-transformer60909-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "transformer60909",
+      "format": "xlsx",
+      "size": 26506,
+      "sha256": "5c00f4052d13ff815ac98b48615efbceff9826a3c10b230731489fdccfa43f3d",
+      "status": "BOUNDED_IEC60909_RADIAL_TRANSFORMER_ENVELOPE",
+      "filename": "fault-studio-transformer60909-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "sequence",
+      "format": "pdf",
+      "size": 7089,
+      "sha256": "c2d7cad1105d7a33be89341fd1e4c42fc4b1cec0b99820ce7885b682be7bf811",
+      "status": "BOUNDED_REDUCED_SEQUENCE_NETWORK",
+      "filename": "fault-studio-sequence-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "sequence",
+      "format": "xlsx",
+      "size": 13742,
+      "sha256": "1564f1a410852babc756f7170e014e17dada48e782023227abc0ba8fa24986da",
+      "status": "BOUNDED_REDUCED_SEQUENCE_NETWORK",
+      "filename": "fault-studio-sequence-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "multisequence",
+      "format": "pdf",
+      "size": 39156,
+      "sha256": "7d9e165066cc209d00eda549c1353a060c02545746b3183f3f07269fa1bb79b7",
+      "status": "BOUNDED_MULTI_BUS_SEQUENCE_FAULT",
+      "filename": "fault-studio-multisequence-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "multisequence",
+      "format": "xlsx",
+      "size": 56403,
+      "sha256": "7b5e54c01c0a140e56a845c07f3913f841f56e74e4525e60a99e42f7b31e4fe6",
+      "status": "BOUNDED_MULTI_BUS_SEQUENCE_FAULT",
+      "filename": "fault-studio-multisequence-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "multienvelope",
+      "format": "pdf",
+      "size": 104114,
+      "sha256": "53d2af910c8d100e3bac035431c2bc07017b64b3a03b2ec3dd01290388424183",
+      "status": "DOCUMENTED_SCENARIO_ENVELOPE_SCREEN",
+      "filename": "fault-studio-multienvelope-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "multienvelope",
+      "format": "xlsx",
+      "size": 122070,
+      "sha256": "611f5a2e65be9b7b9882f03d86a7258153b15eeeb470db608d4b1d97bf47bb53",
+      "status": "DOCUMENTED_SCENARIO_ENVELOPE_SCREEN",
+      "filename": "fault-studio-multienvelope-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "contingency",
+      "format": "pdf",
+      "size": 26507,
+      "sha256": "00cf81d565c7a8efde85a0ef51b05dd1641526a4b53068770097bcde4d0ad228",
+      "status": "ALL_ENUMERATED_BRANCH_OUTAGES_WITHIN_SUPPLIED_LIMITS",
+      "filename": "fault-studio-contingency-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "contingency",
+      "format": "xlsx",
+      "size": 43661,
+      "sha256": "2e1e39a39eca466410bc1d46aa3b14b61b9782795994c0a943087feaca9e5c55",
+      "status": "ALL_ENUMERATED_BRANCH_OUTAGES_WITHIN_SUPPLIED_LIMITS",
+      "filename": "fault-studio-contingency-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "peakscreen",
+      "format": "pdf",
+      "size": 9775,
+      "sha256": "cf5e9e7accec5651e650155a78c796f718f3a1ff42a7b00b97171e3a6b0ffda1",
+      "status": "BOUNDED_METHOD_C_PEAK_SCREEN",
+      "filename": "fault-studio-peakscreen-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "peakscreen",
+      "format": "xlsx",
+      "size": 17909,
+      "sha256": "0cf3cb707a90af3225a674dcc5375d3cc50fc2aafe9ef35ea2d814f2c7f1d691",
+      "status": "BOUNDED_METHOD_C_PEAK_SCREEN",
+      "filename": "fault-studio-peakscreen-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "faultsweep",
+      "format": "pdf",
+      "size": 94317,
+      "sha256": "a4ef21ae043c4fb603e0003b9e762185e75aa6d7c841b145d925bd611f921726",
+      "status": "BOUNDED_DOCUMENTED_FAULT_LOCATION_SWEEP",
+      "filename": "fault-studio-faultsweep-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "faultsweep",
+      "format": "xlsx",
+      "size": 120425,
+      "sha256": "52b7ff3b73eee27d5ff2d4c5271d3fbfdee4224c9cee9d8afc1f3394553e81f3",
+      "status": "BOUNDED_DOCUMENTED_FAULT_LOCATION_SWEEP",
+      "filename": "fault-studio-faultsweep-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "thermal",
+      "format": "pdf",
+      "size": 5789,
+      "sha256": "a26be21398c29c73d8a453dda0b87916a6933fa7ec7b414b587f6a7de0353cb5",
+      "status": "BOUNDED_IEC_60287_CORE_EQUATION",
+      "filename": "fault-studio-thermal-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "thermal",
+      "format": "xlsx",
+      "size": 12215,
+      "sha256": "81df8f15d8c36b404edb51060907aa650550659412ef81a5891c82de5f1c6ecc",
+      "status": "BOUNDED_IEC_60287_CORE_EQUATION",
+      "filename": "fault-studio-thermal-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "resistance",
+      "format": "pdf",
+      "size": 4862,
+      "sha256": "d8dc85f8f1620605566315b971a940f28c3022741a5e64c65086dcf83a6e2350",
+      "status": "IEC60287_1_1_2023_CONDUCTOR_AC_RESISTANCE_COMPONENT",
+      "filename": "fault-studio-resistance-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "resistance",
+      "format": "xlsx",
+      "size": 11072,
+      "sha256": "85c279e249925fd2a5272d52cf4162fbc3966170bce9c3d54d175a1bdc4acada",
+      "status": "IEC60287_1_1_2023_CONDUCTOR_AC_RESISTANCE_COMPONENT",
+      "filename": "fault-studio-resistance-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "buried",
+      "format": "pdf",
+      "size": 11253,
+      "sha256": "04fd08828de62b10545024444732bd8e83297a00acf803aeaa2dab81414911ad",
+      "status": "BOUNDED_IEC60287_SINGLE_CORE_HOMOGENEOUS_DIRECT_BURIAL",
+      "filename": "fault-studio-buried-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "buried",
+      "format": "xlsx",
+      "size": 19080,
+      "sha256": "a7f34c6cf6d25be6cd2fc7ffe5054fef3d56c29388ae2a202e8abdc3e13c21df",
+      "status": "BOUNDED_IEC60287_SINGLE_CORE_HOMOGENEOUS_DIRECT_BURIAL",
+      "filename": "fault-studio-buried-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "protectionrange",
+      "format": "pdf",
+      "size": 10942,
+      "sha256": "444508fed3b3b432ae2435eb533a06da76bf090fe0154ccc63a1f0827e61c734",
+      "status": "ENTERED_ENVELOPE_MARGIN_MET_ALL_LOCATIONS",
+      "filename": "fault-studio-protectionrange-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "protectionrange",
+      "format": "xlsx",
+      "size": 19242,
+      "sha256": "9b8abeeb916c3fbe96dcdca2a47c110fc7685f9b39efc7df211629d2858480bd",
+      "status": "ENTERED_ENVELOPE_MARGIN_MET_ALL_LOCATIONS",
+      "filename": "fault-studio-protectionrange-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "phasorduty",
+      "format": "pdf",
+      "size": 8303,
+      "sha256": "1b29d715e2cbd1533bbcb9b5efec6723c2548cb170305435933465c6d2cb9d76",
+      "status": "DOCUMENTED_SYMMETRICAL_PHASOR_THERMAL_DUTY",
+      "filename": "fault-studio-phasorduty-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "phasorduty",
+      "format": "xlsx",
+      "size": 15253,
+      "sha256": "5248830d448ff120c68db36be183af16dbb7b81ae15f2b90ab195ca7e2196258",
+      "status": "DOCUMENTED_SYMMETRICAL_PHASOR_THERMAL_DUTY",
+      "filename": "fault-studio-phasorduty-documented-study.xlsx"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "acdcwave",
+      "format": "pdf",
+      "size": 11141,
+      "sha256": "6fd811e92db3b8f1a016b116e76b42a5576835594dcdd0d2fed7164adb9bc8cd",
+      "status": "EXPLICIT_DOCUMENTED_AC_DC_WAVEFORM_DUTY",
+      "filename": "fault-studio-acdcwave-documented-study.pdf"
+    },
+    {
+      "viewport": "desktop",
+      "mode": "acdcwave",
+      "format": "xlsx",
+      "size": 18984,
+      "sha256": "6d2f32c92fa1485a4e78c5139ec517b12d6453d5cdf76a2c6317b2b7b2537392",
+      "status": "EXPLICIT_DOCUMENTED_AC_DC_WAVEFORM_DUTY",
+      "filename": "fault-studio-acdcwave-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "fault",
+      "format": "pdf",
+      "size": 7230,
+      "sha256": "172e1a2bf9651b83f55c806df248628925bbf6d3308262d2b4a0ff61e3148509",
+      "status": "BOUNDED_SINGLE_RADIAL_SOURCE_SCREEN",
+      "filename": "fault-studio-fault-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "fault",
+      "format": "xlsx",
+      "size": 14130,
+      "sha256": "6bac866a5001ae4b31ab826d29880baf252fb4a48e28c11d10595965bee0e8ac",
+      "status": "BOUNDED_SINGLE_RADIAL_SOURCE_SCREEN",
+      "filename": "fault-studio-fault-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "multisource",
+      "format": "pdf",
+      "size": 13862,
+      "sha256": "a94f18764eccbdcb615a6107cc41516c90432c5abbf7606f44ba88a9bbb8e6fd",
+      "status": "BOUNDED_MULTI_SOURCE_3PH_PHASOR",
+      "filename": "fault-studio-multisource-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "multisource",
+      "format": "xlsx",
+      "size": 24113,
+      "sha256": "0a5aedb7d558dce8176567dc13021c6e1f6bc71d291e7b354ef4390a9f69b1b9",
+      "status": "BOUNDED_MULTI_SOURCE_3PH_PHASOR",
+      "filename": "fault-studio-multisource-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "multivoltage",
+      "format": "pdf",
+      "size": 16508,
+      "sha256": "a5bdf774b24b6cd925d855d01fe3bc4d91e6fd7f0394e0fb526787d8fd312b22",
+      "status": "BOUNDED_MULTIVOLTAGE_3PH_NETWORK",
+      "filename": "fault-studio-multivoltage-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "multivoltage",
+      "format": "xlsx",
+      "size": 27646,
+      "sha256": "05491241ff62a2290870237f7775434ed2268decd64526abe1f98db7b2c80940",
+      "status": "BOUNDED_MULTIVOLTAGE_3PH_NETWORK",
+      "filename": "fault-studio-multivoltage-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "transformer60909",
+      "format": "pdf",
+      "size": 17697,
+      "sha256": "21f0f9a8b6580f7c09413ee78df4ca6c3ff12ade8f7ae26665211de1f0978d88",
+      "status": "BOUNDED_IEC60909_RADIAL_TRANSFORMER_ENVELOPE",
+      "filename": "fault-studio-transformer60909-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "transformer60909",
+      "format": "xlsx",
+      "size": 26506,
+      "sha256": "1177af516b5f26b749fe0133444fbcbac2f3a98908508dc8bbae581edd0c31f9",
+      "status": "BOUNDED_IEC60909_RADIAL_TRANSFORMER_ENVELOPE",
+      "filename": "fault-studio-transformer60909-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "sequence",
+      "format": "pdf",
+      "size": 7089,
+      "sha256": "f1aa58f9e0c24d8edb767f3baafa317134722e440a314fa8eaf0d247d408b2d8",
+      "status": "BOUNDED_REDUCED_SEQUENCE_NETWORK",
+      "filename": "fault-studio-sequence-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "sequence",
+      "format": "xlsx",
+      "size": 13742,
+      "sha256": "8ab54011f90b466b6dfc6d0c2bae837ad2c30d51be45f14828eabd998d28d835",
+      "status": "BOUNDED_REDUCED_SEQUENCE_NETWORK",
+      "filename": "fault-studio-sequence-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "multisequence",
+      "format": "pdf",
+      "size": 39156,
+      "sha256": "1471a47449cf42f535a81d3606a2a39799403148f42e19f10d9fda4f1fe72721",
+      "status": "BOUNDED_MULTI_BUS_SEQUENCE_FAULT",
+      "filename": "fault-studio-multisequence-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "multisequence",
+      "format": "xlsx",
+      "size": 56403,
+      "sha256": "6d7a577d009e14e1c47ba7e92b9c8df4b97a1088c718b2512ada8de58658855c",
+      "status": "BOUNDED_MULTI_BUS_SEQUENCE_FAULT",
+      "filename": "fault-studio-multisequence-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "multienvelope",
+      "format": "pdf",
+      "size": 104114,
+      "sha256": "5223a9b58e9b3976a396544137f0fb6ec70eb4ae8654fc6d77fb345d7f644e45",
+      "status": "DOCUMENTED_SCENARIO_ENVELOPE_SCREEN",
+      "filename": "fault-studio-multienvelope-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "multienvelope",
+      "format": "xlsx",
+      "size": 122070,
+      "sha256": "c04b7b5ea64a85a8469dc5864870a51f77a68aff9d9dafeb8472213359ba974b",
+      "status": "DOCUMENTED_SCENARIO_ENVELOPE_SCREEN",
+      "filename": "fault-studio-multienvelope-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "contingency",
+      "format": "pdf",
+      "size": 26507,
+      "sha256": "b0bc6e52cac017470074393868ba54b3cd8aa6febc9fc7f76dcc6e23c5779009",
+      "status": "ALL_ENUMERATED_BRANCH_OUTAGES_WITHIN_SUPPLIED_LIMITS",
+      "filename": "fault-studio-contingency-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "contingency",
+      "format": "xlsx",
+      "size": 43661,
+      "sha256": "18de27645ba5c1e37734d4d7a624b1868c3fb8abf983591adba80887a932cf18",
+      "status": "ALL_ENUMERATED_BRANCH_OUTAGES_WITHIN_SUPPLIED_LIMITS",
+      "filename": "fault-studio-contingency-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "peakscreen",
+      "format": "pdf",
+      "size": 9775,
+      "sha256": "85eeb87ec4d6e349c838c0952b971d2c75ac8f87147c622f4cd302a2466ce2bc",
+      "status": "BOUNDED_METHOD_C_PEAK_SCREEN",
+      "filename": "fault-studio-peakscreen-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "peakscreen",
+      "format": "xlsx",
+      "size": 17909,
+      "sha256": "465e86179b36457ffc3f449e3d4a9c4adb02578059615774e1dd3bcebec32f35",
+      "status": "BOUNDED_METHOD_C_PEAK_SCREEN",
+      "filename": "fault-studio-peakscreen-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "faultsweep",
+      "format": "pdf",
+      "size": 94317,
+      "sha256": "d726440bdeb4d91c2bc1f2443280f31ed3f611f642b6b4a758610deeec0bcc87",
+      "status": "BOUNDED_DOCUMENTED_FAULT_LOCATION_SWEEP",
+      "filename": "fault-studio-faultsweep-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "faultsweep",
+      "format": "xlsx",
+      "size": 120425,
+      "sha256": "98a4594d12592e468b22274eb096c7ce087195302d594ae08a0779bd93a06bb3",
+      "status": "BOUNDED_DOCUMENTED_FAULT_LOCATION_SWEEP",
+      "filename": "fault-studio-faultsweep-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "thermal",
+      "format": "pdf",
+      "size": 5789,
+      "sha256": "bd4669e776acd3308653bf95b3cfbe0b1b622d445c944e10172d18c3bf2a8f46",
+      "status": "BOUNDED_IEC_60287_CORE_EQUATION",
+      "filename": "fault-studio-thermal-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "thermal",
+      "format": "xlsx",
+      "size": 12215,
+      "sha256": "ca240a57ffae971b256088e9fe5767198816a9dc313b02b09d0389ce4ed6a815",
+      "status": "BOUNDED_IEC_60287_CORE_EQUATION",
+      "filename": "fault-studio-thermal-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "resistance",
+      "format": "pdf",
+      "size": 4862,
+      "sha256": "b0a43fea86da61f5427904882b75812f3a7e9fb0da69668b99109006de6fdf71",
+      "status": "IEC60287_1_1_2023_CONDUCTOR_AC_RESISTANCE_COMPONENT",
+      "filename": "fault-studio-resistance-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "resistance",
+      "format": "xlsx",
+      "size": 11072,
+      "sha256": "c73cccb773f2bd860c0ea20f633f9b4bf93ce950239525ba7649a2e860f8d499",
+      "status": "IEC60287_1_1_2023_CONDUCTOR_AC_RESISTANCE_COMPONENT",
+      "filename": "fault-studio-resistance-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "buried",
+      "format": "pdf",
+      "size": 11253,
+      "sha256": "400e0910f12e3992cbcda3002d6c7eed764a07794a56caadf5e083bcf0224b00",
+      "status": "BOUNDED_IEC60287_SINGLE_CORE_HOMOGENEOUS_DIRECT_BURIAL",
+      "filename": "fault-studio-buried-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "buried",
+      "format": "xlsx",
+      "size": 19080,
+      "sha256": "833eb10c419cf4e7c3381c641a999e137fd372e285544d9c10d4a306c0492580",
+      "status": "BOUNDED_IEC60287_SINGLE_CORE_HOMOGENEOUS_DIRECT_BURIAL",
+      "filename": "fault-studio-buried-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "protectionrange",
+      "format": "pdf",
+      "size": 10942,
+      "sha256": "3df5ad07f09f319d271c7f48b5346506c9178630d6ca9aefaa87f3b2ee2c9a14",
+      "status": "ENTERED_ENVELOPE_MARGIN_MET_ALL_LOCATIONS",
+      "filename": "fault-studio-protectionrange-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "protectionrange",
+      "format": "xlsx",
+      "size": 19242,
+      "sha256": "897eeed820606c66dd6009bbf0350fd731d901b5f6aae01073b03c054af9811a",
+      "status": "ENTERED_ENVELOPE_MARGIN_MET_ALL_LOCATIONS",
+      "filename": "fault-studio-protectionrange-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "phasorduty",
+      "format": "pdf",
+      "size": 8303,
+      "sha256": "b3cb5f7b85244d94b0bf15c91972f0647137855ab3d5a05db07c21d59a634fb7",
+      "status": "DOCUMENTED_SYMMETRICAL_PHASOR_THERMAL_DUTY",
+      "filename": "fault-studio-phasorduty-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "phasorduty",
+      "format": "xlsx",
+      "size": 15253,
+      "sha256": "1b60d5d2ed90dabf8a353ed1c4bca6c0d76bd4bb794bae6c4b2ca5c6c8e886f5",
+      "status": "DOCUMENTED_SYMMETRICAL_PHASOR_THERMAL_DUTY",
+      "filename": "fault-studio-phasorduty-documented-study.xlsx"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "acdcwave",
+      "format": "pdf",
+      "size": 11141,
+      "sha256": "2290f2632ad2a54ba7fc0219a63fd61f799fc4906fa101a0b70b9011395ba9d3",
+      "status": "EXPLICIT_DOCUMENTED_AC_DC_WAVEFORM_DUTY",
+      "filename": "fault-studio-acdcwave-documented-study.pdf"
+    },
+    {
+      "viewport": "mobile",
+      "mode": "acdcwave",
+      "format": "xlsx",
+      "size": 18984,
+      "sha256": "f510e437e3b7b4a977b8f98b2125cef1f7af1d545050b939eea5327392272f09",
+      "status": "EXPLICIT_DOCUMENTED_AC_DC_WAVEFORM_DUTY",
+      "filename": "fault-studio-acdcwave-documented-study.xlsx"
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+[
+ {
+  "source": "ESW2020-45",
+  "case": "VCB",
+  "what": "arcing current",
+  "published": 30.6,
+  "ours": 30.586,
+  "unit": "kA",
+  "result": "match"
+ },
+ {
+  "source": "ESW2020-45",
+  "case": "VCB",
+  "what": "incident energy",
+  "published": 105,
+  "ours": 105.041,
+  "unit": "cal/cm²",
+  "result": "match"
+ },
+ {
+  "source": "ESW2020-45",
+  "case": "VCB",
+  "what": "arc-flash boundary",
+  "published": 394.1,
+  "ours": 394.087,
+  "unit": "in",
+  "result": "match"
+ },
+ {
+  "source": "ESW2020-45",
+  "case": "VCBB",
+  "what": "arcing current",
+  "published": 35,
+  "ours": 34.951,
+  "unit": "kA",
+  "result": "match"
+ },
+ {
+  "source": "ESW2020-45",
+  "case": "VCBB",
+  "what": "incident energy",
+  "published": 145.3,
+  "ours": 145.327,
+  "unit": "cal/cm²",
+  "result": "match"
+ },
+ {
+  "source": "ESW2020-45",
+  "case": "VCBB",
+  "what": "arc-flash boundary",
+  "published": 340.2,
+  "ours": 340.226,
+  "unit": "in",
+  "result": "match"
+ },
+ {
+  "source": "ESW2020-45",
+  "case": "HCB",
+  "what": "arcing current",
+  "published": 30.1,
+  "ours": 30.139,
+  "unit": "kA",
+  "result": "match"
+ },
+ {
+  "source": "ESW2020-45",
+  "case": "HCB",
+  "what": "incident energy",
+  "published": 188.6,
+  "ours": 188.632,
+  "unit": "cal/cm²",
+  "result": "match"
+ },
+ {
+  "source": "ESW2020-45",
+  "case": "HCB",
+  "what": "arc-flash boundary",
+  "published": 289.9,
+  "ours": 289.867,
+  "unit": "in",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "MV_Bus full",
+  "what": "arcing current",
+  "published": 12.979,
+  "ours": 12.9795,
+  "unit": "kA",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "MV_Bus full",
+  "what": "incident energy",
+  "published": 2.904,
+  "ours": 2.9043,
+  "unit": "cal/cm²",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "MV_Bus full",
+  "what": "arc-flash boundary",
+  "published": 5.269,
+  "ours": 5.269,
+  "unit": "ft",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "MV_Bus reduced",
+  "what": "arcing current",
+  "published": 12.675,
+  "ours": 12.6753,
+  "unit": "kA",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "MV_Bus reduced",
+  "what": "incident energy",
+  "published": 3.189,
+  "ours": 3.1891,
+  "unit": "cal/cm²",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "MV_Bus reduced",
+  "what": "arc-flash boundary",
+  "published": 5.591,
+  "ours": 5.5912,
+  "unit": "ft",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "LV_Bus full",
+  "what": "arcing current",
+  "published": 28.793,
+  "ours": 28.7933,
+  "unit": "kA",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "LV_Bus full",
+  "what": "incident energy",
+  "published": 2.769,
+  "ours": 2.7689,
+  "unit": "cal/cm²",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "LV_Bus full",
+  "what": "arc-flash boundary",
+  "published": 3.376,
+  "ours": 3.3749,
+  "unit": "ft",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "LV_Bus reduced",
+  "what": "arcing current",
+  "published": 25.244,
+  "ours": 25.2444,
+  "unit": "kA",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "LV_Bus reduced",
+  "what": "incident energy",
+  "published": 12.705,
+  "ours": 12.7047,
+  "unit": "cal/cm²",
+  "result": "match"
+ },
+ {
+  "source": "IEEE 1584-2018 Annex D (ETAP AF1)",
+  "case": "LV_Bus reduced",
+  "what": "arc-flash boundary",
+  "published": 8.757,
+  "ours": 8.7563,
+  "unit": "ft",
+  "result": "match"
+ }
+]

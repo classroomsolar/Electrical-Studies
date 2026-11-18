@@ -1,0 +1,450 @@
+[
+  {
+    "mode": "fault",
+    "format": "pdf",
+    "bytes": 7253,
+    "status": "BOUNDED_SINGLE_RADIAL_SOURCE_SCREEN",
+    "outputPaths": 31,
+    "inputPaths": 13,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "fault",
+    "format": "xlsx",
+    "bytes": 14130,
+    "status": "BOUNDED_SINGLE_RADIAL_SOURCE_SCREEN",
+    "outputPaths": 31,
+    "inputPaths": 13,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "multisource",
+    "format": "pdf",
+    "bytes": 13882,
+    "status": "BOUNDED_MULTI_SOURCE_3PH_PHASOR",
+    "outputPaths": 76,
+    "inputPaths": 29,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "multisource",
+    "format": "xlsx",
+    "bytes": 24113,
+    "status": "BOUNDED_MULTI_SOURCE_3PH_PHASOR",
+    "outputPaths": 76,
+    "inputPaths": 29,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "multivoltage",
+    "format": "pdf",
+    "bytes": 16551,
+    "status": "BOUNDED_MULTIVOLTAGE_3PH_NETWORK",
+    "outputPaths": 84,
+    "inputPaths": 35,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "multivoltage",
+    "format": "xlsx",
+    "bytes": 27646,
+    "status": "BOUNDED_MULTIVOLTAGE_3PH_NETWORK",
+    "outputPaths": 84,
+    "inputPaths": 35,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "transformer60909",
+    "format": "pdf",
+    "bytes": 17989,
+    "status": "BOUNDED_IEC60909_RADIAL_TRANSFORMER_ENVELOPE",
+    "outputPaths": 68,
+    "inputPaths": 21,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "transformer60909",
+    "format": "xlsx",
+    "bytes": 26506,
+    "status": "BOUNDED_IEC60909_RADIAL_TRANSFORMER_ENVELOPE",
+    "outputPaths": 68,
+    "inputPaths": 21,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "sequence",
+    "format": "pdf",
+    "bytes": 7170,
+    "status": "BOUNDED_REDUCED_SEQUENCE_NETWORK",
+    "outputPaths": 31,
+    "inputPaths": 9,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "sequence",
+    "format": "xlsx",
+    "bytes": 13742,
+    "status": "BOUNDED_REDUCED_SEQUENCE_NETWORK",
+    "outputPaths": 31,
+    "inputPaths": 9,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "multisequence",
+    "format": "pdf",
+    "bytes": 40575,
+    "status": "BOUNDED_MULTI_BUS_SEQUENCE_FAULT",
+    "outputPaths": 239,
+    "inputPaths": 46,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "multisequence",
+    "format": "xlsx",
+    "bytes": 56403,
+    "status": "BOUNDED_MULTI_BUS_SEQUENCE_FAULT",
+    "outputPaths": 239,
+    "inputPaths": 46,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "multienvelope",
+    "format": "pdf",
+    "bytes": 103955,
+    "status": "DOCUMENTED_SCENARIO_ENVELOPE_SCREEN",
+    "outputPaths": 499,
+    "inputPaths": 97,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "multienvelope",
+    "format": "xlsx",
+    "bytes": 122070,
+    "status": "DOCUMENTED_SCENARIO_ENVELOPE_SCREEN",
+    "outputPaths": 499,
+    "inputPaths": 97,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "contingency",
+    "format": "pdf",
+    "bytes": 26533,
+    "status": "ALL_ENUMERATED_BRANCH_OUTAGES_WITHIN_SUPPLIED_LIMITS",
+    "outputPaths": 185,
+    "inputPaths": 40,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "contingency",
+    "format": "xlsx",
+    "bytes": 43661,
+    "status": "ALL_ENUMERATED_BRANCH_OUTAGES_WITHIN_SUPPLIED_LIMITS",
+    "outputPaths": 185,
+    "inputPaths": 40,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "peakscreen",
+    "format": "pdf",
+    "bytes": 9818,
+    "status": "BOUNDED_METHOD_C_PEAK_SCREEN",
+    "outputPaths": 27,
+    "inputPaths": 29,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "peakscreen",
+    "format": "xlsx",
+    "bytes": 17909,
+    "status": "BOUNDED_METHOD_C_PEAK_SCREEN",
+    "outputPaths": 27,
+    "inputPaths": 29,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "faultsweep",
+    "format": "pdf",
+    "bytes": 94261,
+    "status": "BOUNDED_DOCUMENTED_FAULT_LOCATION_SWEEP",
+    "outputPaths": 592,
+    "inputPaths": 53,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "faultsweep",
+    "format": "xlsx",
+    "bytes": 120425,
+    "status": "BOUNDED_DOCUMENTED_FAULT_LOCATION_SWEEP",
+    "outputPaths": 592,
+    "inputPaths": 53,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "thermal",
+    "format": "pdf",
+    "bytes": 6123,
+    "status": "BOUNDED_IEC_60287_CORE_EQUATION",
+    "outputPaths": 18,
+    "inputPaths": 12,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "thermal",
+    "format": "xlsx",
+    "bytes": 12215,
+    "status": "BOUNDED_IEC_60287_CORE_EQUATION",
+    "outputPaths": 18,
+    "inputPaths": 12,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "resistance",
+    "format": "pdf",
+    "bytes": 4887,
+    "status": "IEC60287_1_1_2023_CONDUCTOR_AC_RESISTANCE_COMPONENT",
+    "outputPaths": 14,
+    "inputPaths": 9,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "resistance",
+    "format": "xlsx",
+    "bytes": 11072,
+    "status": "IEC60287_1_1_2023_CONDUCTOR_AC_RESISTANCE_COMPONENT",
+    "outputPaths": 14,
+    "inputPaths": 9,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "buried",
+    "format": "pdf",
+    "bytes": 11266,
+    "status": "BOUNDED_IEC60287_SINGLE_CORE_HOMOGENEOUS_DIRECT_BURIAL",
+    "outputPaths": 40,
+    "inputPaths": 24,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "buried",
+    "format": "xlsx",
+    "bytes": 19080,
+    "status": "BOUNDED_IEC60287_SINGLE_CORE_HOMOGENEOUS_DIRECT_BURIAL",
+    "outputPaths": 40,
+    "inputPaths": 24,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "protectionrange",
+    "format": "pdf",
+    "bytes": 11042,
+    "status": "ENTERED_ENVELOPE_MARGIN_MET_ALL_LOCATIONS",
+    "outputPaths": 41,
+    "inputPaths": 19,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "protectionrange",
+    "format": "xlsx",
+    "bytes": 19242,
+    "status": "ENTERED_ENVELOPE_MARGIN_MET_ALL_LOCATIONS",
+    "outputPaths": 41,
+    "inputPaths": 19,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "phasorduty",
+    "format": "pdf",
+    "bytes": 8318,
+    "status": "DOCUMENTED_SYMMETRICAL_PHASOR_THERMAL_DUTY",
+    "outputPaths": 20,
+    "inputPaths": 20,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "phasorduty",
+    "format": "xlsx",
+    "bytes": 15253,
+    "status": "DOCUMENTED_SYMMETRICAL_PHASOR_THERMAL_DUTY",
+    "outputPaths": 20,
+    "inputPaths": 20,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "acdcwave",
+    "format": "pdf",
+    "bytes": 11208,
+    "status": "EXPLICIT_DOCUMENTED_AC_DC_WAVEFORM_DUTY",
+    "outputPaths": 33,
+    "inputPaths": 27,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  },
+  {
+    "mode": "acdcwave",
+    "format": "xlsx",
+    "bytes": 18984,
+    "status": "EXPLICIT_DOCUMENTED_AC_DC_WAVEFORM_DUTY",
+    "outputPaths": 33,
+    "inputPaths": 27,
+    "sheets": [
+      "Summary",
+      "Study inputs",
+      "Equipment duty",
+      "Assumptions & QA"
+    ]
+  }
+]

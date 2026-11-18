@@ -1,0 +1,74 @@
+{
+ "checks": {
+  "desktop button on the page": {
+   "pass": true,
+   "info": ""
+  },
+  "desktop button inside the screen": {
+   "pass": true,
+   "info": "[1120, 1363, 1440]"
+  },
+  "desktop download has every bus": {
+   "pass": true,
+   "info": "1970 rows, file PV-plant-70-operating-buses.csv"
+  },
+  "desktop upload summary": {
+   "pass": true,
+   "info": "1970 of 1970 rows matched \u00b7 3938 values changed \u00b7 0 cleared."
+  },
+  "desktop load flow solves from the uploaded values": {
+   "pass": true,
+   "info": "Converged in 3 iterations \u00b7 max residual 0 pu \u00b7 network loss 0.19373 MW, 0.95385 Mvar"
+  },
+  "desktop values stored in the project": {
+   "pass": true,
+   "info": "[70, 1899]"
+  },
+  "desktop bad rows are explained": {
+   "pass": true,
+   "info": "['Row 2: no bus with bus_id \"not-a-bus\" in this project. Row skipped.', 'Row 3: net_P_MW \"abc\" is not a number. Cell skipped.']"
+  },
+  "desktop no page errors": {
+   "pass": true,
+   "info": "[]"
+  },
+  "phone button on the page": {
+   "pass": true,
+   "info": ""
+  },
+  "phone button inside the screen": {
+   "pass": true,
+   "info": "[48, 291, 390]"
+  },
+  "phone download has every bus": {
+   "pass": true,
+   "info": "1970 rows, file PV-plant-70-operating-buses.csv"
+  },
+  "phone upload summary": {
+   "pass": true,
+   "info": "1970 of 1970 rows matched \u00b7 3938 values changed \u00b7 0 cleared."
+  },
+  "phone load flow solves from the uploaded values": {
+   "pass": true,
+   "info": "Converged in 3 iterations \u00b7 max residual 0 pu \u00b7 network loss 0.19373 MW, 0.95385 Mvar"
+  },
+  "phone values stored in the project": {
+   "pass": true,
+   "info": "[70, 1899]"
+  },
+  "phone bad rows are explained": {
+   "pass": true,
+   "info": "['Row 2: no bus with bus_id \"not-a-bus\" in this project. Row skipped.', 'Row 3: net_P_MW \"abc\" is not a number. Cell skipped.']"
+  },
+  "phone no page errors": {
+   "pass": true,
+   "info": "[]"
+  }
+ },
+ "times": {
+  "desktop upload s": 2.4,
+  "desktop load flow shown s": 0.5,
+  "phone upload s": 7.5,
+  "phone load flow shown s": 6.0
+ }
+}

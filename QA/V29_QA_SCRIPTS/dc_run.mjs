@@ -1,0 +1,2 @@
+import fs from 'node:fs';import {calculateDcProject} from '../../SITE/dc-network.mjs';
+const c=JSON.parse(fs.readFileSync('dc_cases.json'));console.log(JSON.stringify(c.map(p=>{try{const r=calculateDcProject(p);return {errs:r.issues.filter(i=>i.severity==='error').map(i=>i.message),res:r.results.map(x=>({id:x.busId,a:x.totalA,st:x.status}))}}catch(e){return {crash:e.message}}})))

@@ -1,0 +1,1197 @@
+{
+  "release": "V28",
+  "parent": "V27",
+  "websiteFileCount": 236,
+  "previousFileCount": 234,
+  "preservedPriorFiles": 233,
+  "changedPriorFiles": [
+    "index.html"
+  ],
+  "newFiles": [
+    "conductor-duty-v28.mjs",
+    "conductor-duty-ui-v28.mjs"
+  ],
+  "deletedFiles": [],
+  "files": [
+    {
+      "path": "PUBLIC_PREVIEW_NOTICE.txt",
+      "bytes": 421,
+      "sha256": "61830e108869888b8c87c4a380cda48bb4f723b8b9c35dddef675a33915eaa61"
+    },
+    {
+      "path": "advanced-screening.mjs",
+      "bytes": 10953,
+      "sha256": "aa13f09ab330c4b21363ab21e4bda7d7e1ff5b5dc1c25da7c2657a6f515734c3"
+    },
+    {
+      "path": "advanced-study-report.mjs",
+      "bytes": 3186,
+      "sha256": "cb9f708ce43b1dfd1fa66d921b1748cc5fc444ab11afc0c813a8c4aa759b50a8"
+    },
+    {
+      "path": "advanced-workspace.mjs",
+      "bytes": 12526,
+      "sha256": "cd2f87b80b97c9bb8ec883eab8ca09a11a53ff57cdcd8fc25b4b66da0cc3518f"
+    },
+    {
+      "path": "analysis-data.mjs",
+      "bytes": 706,
+      "sha256": "4624c220deb11d537aabdec86c7c6eed7e2cf7717f99ec80c894e498eba80573"
+    },
+    {
+      "path": "analysis-examples.mjs",
+      "bytes": 2903,
+      "sha256": "1b7ac5a89fe213fa553496e16167fd62a58c0ee2878bde824ae2848d086acb91"
+    },
+    {
+      "path": "analysis-fields.mjs",
+      "bytes": 12211,
+      "sha256": "105e9e6582bc07d34c821eb4d68ec3bb5805d60a68a521ce948c7b78bc516aa8"
+    },
+    {
+      "path": "analysis-models.mjs",
+      "bytes": 7909,
+      "sha256": "4688c0c6c68f0e03dd724d7872b656c80ecdacdcb4678ede15bfa5286f0b6274"
+    },
+    {
+      "path": "analysis-presentation.mjs",
+      "bytes": 4061,
+      "sha256": "b3a7a73cccc2b573e6a2da3954441056ae0959fb94e7d4becf374aef4502b34c"
+    },
+    {
+      "path": "analysis-report.mjs",
+      "bytes": 3020,
+      "sha256": "af7d2d822b38f7f65a474adf80c91350985d3675b9949ed5bd15ae7181657212"
+    },
+    {
+      "path": "app.mjs",
+      "bytes": 40087,
+      "sha256": "a74f83a85357e1dfb7021fe58e803ed30903a122e1e789ecc638a3d2e6f0cdee"
+    },
+    {
+      "path": "arcflash-study-ui.mjs",
+      "bytes": 10509,
+      "sha256": "fdba35c60b37a2da17c7cb2cf9d3507ab22a6480ce0b0260faad08a50acffbeb"
+    },
+    {
+      "path": "asymmetrical-waveform-duty.mjs",
+      "bytes": 7630,
+      "sha256": "1dbdfb1a8e8fee9df6c3fa3f4ebca0ca4aebcf31ff986f355e10deaf4a40d599"
+    },
+    {
+      "path": "cable-insulation.mjs",
+      "bytes": 10586,
+      "sha256": "948719374fe76d3b5ec305bae7208919bbd7b125ea081bac5eb20608d0af4bf0"
+    },
+    {
+      "path": "cable-library.mjs",
+      "bytes": 898,
+      "sha256": "e99ff1f3ca32008fb85e1d668c15c62a8bff02a7f4c7f366134241b694a894dc"
+    },
+    {
+      "path": "catalog-dropdowns.mjs",
+      "bytes": 7638,
+      "sha256": "a55aaf15e1e0a76ff9f9657d358f1df2efbef2464e827601882702bca1af48d9"
+    },
+    {
+      "path": "cloud-backup.mjs",
+      "bytes": 6561,
+      "sha256": "2f019bd0cea25b81d036901c55a916ef189ae68a20ac2ea7cba355f2d9136e61"
+    },
+    {
+      "path": "cloud-staging-restore.mjs",
+      "bytes": 6503,
+      "sha256": "0e75d17577086383514fe3fab8d548cdcbf501590d30fdd3849595d9446110ba"
+    },
+    {
+      "path": "cloud-vault-ui.mjs",
+      "bytes": 17433,
+      "sha256": "d28c8bc7aa79659591f637bc8769f752505a0d0a3cb9faa3632f4faf5429ab22"
+    },
+    {
+      "path": "conductor-duty-ui-v28.mjs",
+      "bytes": 10618,
+      "sha256": "0eff844f832a18803f20dec179aa2cf43d5887f0c0526e101d5aaed140fc1d9e"
+    },
+    {
+      "path": "conductor-duty-v28.mjs",
+      "bytes": 6152,
+      "sha256": "b29e8118aaf5e04b38622d3a286f86c5026a9836f054fca6565fa3ce75204b83"
+    },
+    {
+      "path": "connected-sequences.mjs",
+      "bytes": 27302,
+      "sha256": "fddd31809a9cd5542da62abaa31e03689dbae547634fd22dc2c700bba5f1e29e"
+    },
+    {
+      "path": "contingency-power-flow.mjs",
+      "bytes": 5310,
+      "sha256": "822ef31dff43338af8d3ea99a3a080737589e840d7137e76253a71f9958c6d5e"
+    },
+    {
+      "path": "database/cable-picker.json.txt",
+      "bytes": 248339,
+      "sha256": "728377d53569d7d32776371d07c5a77de5e28473a1b2d57f345b8d661c1f89f5"
+    },
+    {
+      "path": "database/cable_impedance_defaults.json.txt",
+      "bytes": 493,
+      "sha256": "3980e71e8a150d2eefdccf36f86550bbdc82211480e788d9b83945dd222739ca"
+    },
+    {
+      "path": "database/cables.json.txt",
+      "bytes": 636226,
+      "sha256": "a6b02cbf714c9ad2fb851d111d11c34bbcec50f7f9fcc7904e6d8cb67725bcc1"
+    },
+    {
+      "path": "database/disconnects.json.txt",
+      "bytes": 2493,
+      "sha256": "e273435a8e390fa0328f23ebc78bb25a5a0cb7f0785ac08c328727001aa53115"
+    },
+    {
+      "path": "database/fuses.json.txt",
+      "bytes": 798,
+      "sha256": "e45448b750461cd1b6e8a343e79d87e62cd22d781e278fbe0e63d9bed207d01a"
+    },
+    {
+      "path": "database/generators.json.txt",
+      "bytes": 797,
+      "sha256": "b31b7dab1242bf50282bbda7fac4376197b9e2ee4c31b42825021dfa19fd0bca"
+    },
+    {
+      "path": "database/hv_breakers.json.txt",
+      "bytes": 45521,
+      "sha256": "f8c14023e55f72cb45fe852d9b7a5cb74ea37586739819cbf6512958d5c949e7"
+    },
+    {
+      "path": "database/ibr.json.txt",
+      "bytes": 16493,
+      "sha256": "1e382fd95b223fff11bb9bfcfb245c829f84935565698cf14dd1ba67f35b32bd"
+    },
+    {
+      "path": "database/lv_breakers.json.txt",
+      "bytes": 1707,
+      "sha256": "99c36f30b935f92f44891bca37c4a19f892ba2e28a78f11fd820f3fd6b0fd72f"
+    },
+    {
+      "path": "database/manifest.json.txt",
+      "bytes": 10841,
+      "sha256": "ac4b92bcc095395ed2ab7735590e20152d8426a9930ae5be66f4036e253d6594"
+    },
+    {
+      "path": "database/master-ampacity_ambient_factors.json.txt",
+      "bytes": 452,
+      "sha256": "8d551d6caab787bbc064aa078f53c9cba7f37c69ba25d305a09d0dddcf1c783e"
+    },
+    {
+      "path": "database/master-ampacity_ccc_factors.json.txt",
+      "bytes": 244,
+      "sha256": "1efc7a355bdc5c07198cd8dfab8e836b5c7594842ec5f8f5a3ea2ad76aae120d"
+    },
+    {
+      "path": "database/master-ampacity_parameters.json.txt",
+      "bytes": 409,
+      "sha256": "6a9a54903917182808496de5f3bbad098c0ac88d10ee179dd1672d36dec47da0"
+    },
+    {
+      "path": "database/master-ampacity_routes.json.txt",
+      "bytes": 730,
+      "sha256": "17c29e4fa01b0b69bf0fb0048d2e72af21dd5e2409d019d544f6b80d9ed5756c"
+    },
+    {
+      "path": "database/master-audit_readme.json.txt",
+      "bytes": 3272,
+      "sha256": "f37a7538524be95a53ea774653f5dc97d77e6db339feb9797d2db8ba60351dc9"
+    },
+    {
+      "path": "database/master-batteries.json.txt",
+      "bytes": 8607,
+      "sha256": "0fe531c459a3db051ae23f96f9a5aa6214a3e22d44928b4ba8a69b20597ecb8a"
+    },
+    {
+      "path": "database/master-battery_performance.json.txt",
+      "bytes": 119382,
+      "sha256": "335df292e6e11eb7bc1eb7af391bd69646f5cd6fcb03d36ca1b8f72b522d9564"
+    },
+    {
+      "path": "database/master-box_fill.json.txt",
+      "bytes": 365,
+      "sha256": "51d65f7b3b162c34acd4a35378fc9f509be8271ce02191d5d40591562a61d075"
+    },
+    {
+      "path": "database/master-breaker_lugs.json.txt",
+      "bytes": 9988,
+      "sha256": "757d0b5a99bdf895e48aaf1a5aaefa7a1f78a2d5b397d2f76463d25e2ceb740f"
+    },
+    {
+      "path": "database/master-cable_cleat_size_map.json.txt",
+      "bytes": 6703,
+      "sha256": "c0b6e8de7e476c86326c6c8144edd534f2c0b9ab3fb12d22dcc319c7fd398d35"
+    },
+    {
+      "path": "database/master-cable_cleat_sizes.json.txt",
+      "bytes": 2659,
+      "sha256": "80f0a516816cc57c1e8376d4ee6445c55569bad7021a78f39e390bf1a213df1c"
+    },
+    {
+      "path": "database/master-cable_cleats.json.txt",
+      "bytes": 3722,
+      "sha256": "fc10a9bbced1cb42a1873e8f725337bcc5369d0bb4ed443d8bcb074cbf4d3a33"
+    },
+    {
+      "path": "database/master-cable_fault_current_reference.json.txt",
+      "bytes": 1086,
+      "sha256": "6dd3e9dcb3239d78b59700cae82e71923222ea6130b4107cbce4454d239ca515"
+    },
+    {
+      "path": "database/master-cable_impedance_defaults.json.txt",
+      "bytes": 496,
+      "sha256": "afd0797f946dd561b918cff025071543c4dbd8d376656ef20f53c9f3fc8bd3e1"
+    },
+    {
+      "path": "database/master-cable_normalization.json.txt",
+      "bytes": 394879,
+      "sha256": "055d65e407680dc81d7d0471beb9156ba70930cdd86c146b44e7c077bda4408c"
+    },
+    {
+      "path": "database/master-cable_planning_defaults.json.txt",
+      "bytes": 885,
+      "sha256": "8ecba9bb36ad1494226fa95bf2ed4eb2beb3140a4ef918bda683d1b433a32dac"
+    },
+    {
+      "path": "database/master-cable_sc_k_factors.json.txt",
+      "bytes": 387,
+      "sha256": "c62d9ab34eab85bcbae02d1850a6bf6f119d9f1bf0a09910d32170208e2e6724"
+    },
+    {
+      "path": "database/master-cable_tray_equipment.json.txt",
+      "bytes": 6303,
+      "sha256": "58d96834a1ee6c5971daebef34dafd33e4e285a2dc4f125cf81a445111467988"
+    },
+    {
+      "path": "database/master-cable_trays.json.txt",
+      "bytes": 3319,
+      "sha256": "7b69b5a16d23574c94df373a27986c7db278f341b26f5c0302ba402635bff56d"
+    },
+    {
+      "path": "database/master-cable_types.json.txt",
+      "bytes": 7351,
+      "sha256": "463a881f49369a4d94c011204c7a462ec549105adad00b50314ed50023bca19e"
+    },
+    {
+      "path": "database/master-cables.json.txt",
+      "bytes": 469128,
+      "sha256": "332de0ca9fe57f6c6c0624f6c3476e4535eb52853602cbaeeb37cffb73427370"
+    },
+    {
+      "path": "database/master-calculator_key_audit.json.txt",
+      "bytes": 2145,
+      "sha256": "f2ed387cd7a241077f5520d99314c0c2d0158b6f7d683f694aceb774e8d873a4"
+    },
+    {
+      "path": "database/master-change_log.json.txt",
+      "bytes": 171470,
+      "sha256": "c9f9ff8995f2b93cead587517f0e908e64da86959ef8a25d0b7be4268871a0a8"
+    },
+    {
+      "path": "database/master-conductor_materials.json.txt",
+      "bytes": 610,
+      "sha256": "fc3cdd9c05222bf35545640dfc9e1139e0be81042a089c3059182fd2c2805ec5"
+    },
+    {
+      "path": "database/master-conductor_properties.json.txt",
+      "bytes": 1307,
+      "sha256": "7dce49563de8b4e4ac09563bb78f319545194db85d050f7ef53b5957937b3f6e"
+    },
+    {
+      "path": "database/master-conductor_sizes.json.txt",
+      "bytes": 566,
+      "sha256": "131d90f1dbc374a846772704807da758cd66637e4babd444c1a40fd5353e54a3"
+    },
+    {
+      "path": "database/master-conduit_fire_protection.json.txt",
+      "bytes": 521,
+      "sha256": "5b6190829320cf887050ed936c352fb5548d60cc06f90bf81093bf170170052b"
+    },
+    {
+      "path": "database/master-conduits.json.txt",
+      "bytes": 961,
+      "sha256": "41dd0790a97a8bba0098367707d15e534c981d787bc33e23e737e5b19bdb9138"
+    },
+    {
+      "path": "database/master-csd_devices.json.txt",
+      "bytes": 23863,
+      "sha256": "cfa31684ceb531f3b80dda7a7daec7f669fce077632eb9c531e909e32e38f2cd"
+    },
+    {
+      "path": "database/master-data_issues.json.txt",
+      "bytes": 23511,
+      "sha256": "a1bde350a3cedb7f6f377017dc32772f0f14fe052e7cd8542a2750238f3f21f9"
+    },
+    {
+      "path": "database/master-database_table_index.json.txt",
+      "bytes": 1999,
+      "sha256": "0ba0aaf4ee4f072b0167036999e2ef187680cbfa0c51df2b0ccec084ae571209"
+    },
+    {
+      "path": "database/master-disconnects.json.txt",
+      "bytes": 2429,
+      "sha256": "fa575d1e394fc00f296b071813ca12b55dd23fb96d772dc52523b1de49ac8860"
+    },
+    {
+      "path": "database/master-egc_size_by_ocpd.json.txt",
+      "bytes": 619,
+      "sha256": "23d118fc2509db1f2ae3b8a0d70de360db176ddd1bd08d401166aa9e03446630"
+    },
+    {
+      "path": "database/master-egc_size_thresholds.json.txt",
+      "bytes": 634,
+      "sha256": "76f7de371371217037433411a05ede17c228395b4cf95c104b1159983d367af7"
+    },
+    {
+      "path": "database/master-electronic_controllers.json.txt",
+      "bytes": 11050,
+      "sha256": "35e675cb22caa8cbe758358d311cc237639c07ba3a322722f8ff0a213e551baf"
+    },
+    {
+      "path": "database/master-enclosures.json.txt",
+      "bytes": 1849,
+      "sha256": "1027857dab3f0a24d271afb27ab3b73dc1fb83d9eac3021d6eb3f0d646cf5418"
+    },
+    {
+      "path": "database/master-field_audit.json.txt",
+      "bytes": 29378,
+      "sha256": "1c44b9a377612c97ab9a876e2c65e127e9ff02daef09a71aaba15193a3cf645b"
+    },
+    {
+      "path": "database/master-fire_protection.json.txt",
+      "bytes": 1025,
+      "sha256": "b9211b42815f9413b934c3d525c0d0f9766d8d642d955c8bf405b036c44a45f0"
+    },
+    {
+      "path": "database/master-fuses.json.txt",
+      "bytes": 206429,
+      "sha256": "253b5548087cc4cf4a38d5044796b3243d4c0c35d700c7fd396b1f72a939836e"
+    },
+    {
+      "path": "database/master-generators.json.txt",
+      "bytes": 811,
+      "sha256": "7de3ec06627b57f3e0a9a8a15e153b0e31ad1f75db901bf5b37900eabf984ea3"
+    },
+    {
+      "path": "database/master-ground_electrodes.json.txt",
+      "bytes": 2528,
+      "sha256": "4bf953a1e0cbc981cc79217523bd6ae80d27ba8fbc03d7fb92635d79f9945a0e"
+    },
+    {
+      "path": "database/master-harmonics.json.txt",
+      "bytes": 4325,
+      "sha256": "d0da913c01b5664eb2b49f21a1cfad97e1d863edc0fc20ff92abe508b13c1661"
+    },
+    {
+      "path": "database/master-hv_breakers.json.txt",
+      "bytes": 43152,
+      "sha256": "ab8d5abb4598aef7d2da919c820c2e6f00bd3df0e52e8bdae714de0b221e8f4e"
+    },
+    {
+      "path": "database/master-hv_breakers_extended.json.txt",
+      "bytes": 33593,
+      "sha256": "a650de903391ab060a8222e7365b6ecbc1c257746e753b0d2f891dda434c7592"
+    },
+    {
+      "path": "database/master-ibr.json.txt",
+      "bytes": 15195,
+      "sha256": "dfc75ce427ac8118eae382f7631eb05017da00819f361bea8d748df58adab5c2"
+    },
+    {
+      "path": "database/master-instrument_transformers.json.txt",
+      "bytes": 3941,
+      "sha256": "78cb076d421df17c38358fe5848230685d0d2aea2116fe23ca72620562db7654"
+    },
+    {
+      "path": "database/master-insulation_classes.json.txt",
+      "bytes": 540,
+      "sha256": "e99a429c819462f54a4f4593cf949c4d4e4717bdfde1790d561afda2c919c71e"
+    },
+    {
+      "path": "database/master-interruption_cost.json.txt",
+      "bytes": 893,
+      "sha256": "9269c3bcb7b7a16c6445578f64342498a6fbc9cabdda5d8059142e62e3244f6f"
+    },
+    {
+      "path": "database/master-legacy_nec_reference.json.txt",
+      "bytes": 25647,
+      "sha256": "dfce97b8225bed3f043cced9b4d614a628fb2b3c536d79227093fc12bb290248"
+    },
+    {
+      "path": "database/master-lv_breakers.json.txt",
+      "bytes": 453384,
+      "sha256": "cecc344389ec614ec2585385418d498cc4a5f3159df2a9d1d9abd8d918062edc"
+    },
+    {
+      "path": "database/master-model_requirements.json.txt",
+      "bytes": 5125,
+      "sha256": "a3bb6019dc6f69b5c1f623f71739baedd60a919316eeaf8c502d4bf263931414"
+    },
+    {
+      "path": "database/master-motor_characteristics.json.txt",
+      "bytes": 26363,
+      "sha256": "8cb4695b8033ce70ffaa407131e827d018fca7a479804e10407a1bf4c7718207"
+    },
+    {
+      "path": "database/master-motor_locked_rotor_codes.json.txt",
+      "bytes": 727,
+      "sha256": "9c96c131ba0848d72265c1251f30f21d0f057d24ca65d53a54094b64c2363029"
+    },
+    {
+      "path": "database/master-motor_models.json.txt",
+      "bytes": 1897,
+      "sha256": "93fcafe693bef9c18f4d636c1a8eb550c89e52afeb91410bf7aa88b15ccf0cbc"
+    },
+    {
+      "path": "database/master-motors_nameplate.json.txt",
+      "bytes": 21049,
+      "sha256": "bce738e17b084c2e1f87ed951ebeb4aa2da56019a95b7c272bd71349104d4d9c"
+    },
+    {
+      "path": "database/master-nec_ampacity_2020.json.txt",
+      "bytes": 21527,
+      "sha256": "33a04c2d8f6c2ad12a599f10a99292848d9d88487b2bc3e301f264c51c0b4c6b"
+    },
+    {
+      "path": "database/master-nec_ampacity_2023.json.txt",
+      "bytes": 21515,
+      "sha256": "cae0f31e7999b81954de2b51ad52c5479610c2daea7b604943e4ef50d0e0f9aa"
+    },
+    {
+      "path": "database/master-nec_channel_tray_fill.json.txt",
+      "bytes": 389,
+      "sha256": "f5c68767f3117e93488d782d9fa57aa7b55503b9ef5b2150983123069f623389"
+    },
+    {
+      "path": "database/master-nec_tray_fill.json.txt",
+      "bytes": 748,
+      "sha256": "31fd18f98652944139bf9ac87d0d75ce6dc494ff5046bc7b1dceac4687d09911"
+    },
+    {
+      "path": "database/master-neutral_grounding_resistors.json.txt",
+      "bytes": 1344,
+      "sha256": "3502b953e9b38137c3a38a69907f1df6e09f05157de23a423154674963544efb"
+    },
+    {
+      "path": "database/master-numeric_benchmarks.json.txt",
+      "bytes": 426,
+      "sha256": "a2b97bafb4acf65429e3d9e35d5e6236f3d967ba6913052ca2aafe01b87b9f97"
+    },
+    {
+      "path": "database/master-optimizer_review.json.txt",
+      "bytes": 2034,
+      "sha256": "53dc903e431cc476f86a0a8bb8188393386f351e2bea52617ca83c45d664efef"
+    },
+    {
+      "path": "database/master-overload_heaters.json.txt",
+      "bytes": 72730,
+      "sha256": "79d363d26546c300690b8dc4de6dce14d26e92f8d03701598ef0c17106ee75e7"
+    },
+    {
+      "path": "database/master-paper_audit.json.txt",
+      "bytes": 13341,
+      "sha256": "4106a5b4c0a932e2822debafdf04d81c2c251084e1498a7bdb8c130bf409f030"
+    },
+    {
+      "path": "database/master-parts_catalog.json.txt",
+      "bytes": 21158,
+      "sha256": "ab1cc89cd86dd503d59e38ddea0441dd59dd12735d4064ea04205dc2de57b725"
+    },
+    {
+      "path": "database/master-plugin_log.json.txt",
+      "bytes": 3066,
+      "sha256": "700b48e2dc526824eb357dd55adefec0f2f913a33a91231e7388d522c3a830b3"
+    },
+    {
+      "path": "database/master-protection_curves.json.txt",
+      "bytes": 510,
+      "sha256": "6a5eca6708773c82b1fb6e94fb6898d88e14b0fb3c5d6ae693c514435d0245a4"
+    },
+    {
+      "path": "database/master-pv_modules.json.txt",
+      "bytes": 761637,
+      "sha256": "541ee40a00c742036b3df0fc3ff13f3bf246515ed900f74c037ad1c62aecb0ac"
+    },
+    {
+      "path": "database/master-pv_optimizers.json.txt",
+      "bytes": 1326,
+      "sha256": "799b37052ff38bca9063f690aa85791c02cd8c01d9d6fb4d70d0f55186cd31f9"
+    },
+    {
+      "path": "database/master-pv_unit_review.json.txt",
+      "bytes": 313499,
+      "sha256": "c9e74769461a8090b2e31b01ad686abfc73be24d7fcfd93b031c66d31d40edde"
+    },
+    {
+      "path": "database/master-railway_loads.json.txt",
+      "bytes": 370,
+      "sha256": "ee33feb064ca83eae9b887b38b1da9c71f0782915c90f4c200eb05b1b71f861e"
+    },
+    {
+      "path": "database/master-reclosers.json.txt",
+      "bytes": 31001,
+      "sha256": "86c9f9f43d4f3a126189e21aeb139117dd7f9c5ff83b6f45fa0867809e4c60c3"
+    },
+    {
+      "path": "database/master-rectifiers.json.txt",
+      "bytes": 355,
+      "sha256": "667cb2cd21a5b481bb47d8d283cbf74e1229838cea3a7e42f028de15ae2e00f1"
+    },
+    {
+      "path": "database/master-relays.json.txt",
+      "bytes": 101808,
+      "sha256": "55272e10155974e9856ecad49beea6e16e5b0522cd5ba6fc8a1b87ebdebdc957"
+    },
+    {
+      "path": "database/master-reliability.json.txt",
+      "bytes": 2564,
+      "sha256": "1d22410e1721400a0c7b0d4f727c80851c08e5266f9f5e2e18e507918c09b632"
+    },
+    {
+      "path": "database/master-reliability_extended.json.txt",
+      "bytes": 1992,
+      "sha256": "d327bb6a8d408e7ef1db91918ed14b0281ee955cf8a54ccbcb7d70e1c6aa090c"
+    },
+    {
+      "path": "database/master-research_guidance.json.txt",
+      "bytes": 8487,
+      "sha256": "780fbb46308f7a8dc66d3d34661eb4a068a3b956a6ea409920c60c47b56183a4"
+    },
+    {
+      "path": "database/master-sheet_map.json.txt",
+      "bytes": 2798,
+      "sha256": "09ae3a0540135bc33100d87ca7c62797833f968e0e7422ec5ebe11ef9a89c22a"
+    },
+    {
+      "path": "database/master-source_register.json.txt",
+      "bytes": 53547,
+      "sha256": "2afb3a43f78b8b5f35e850a0a8c90ae1eac9b3f6ce3857c44809fe5952d43c05"
+    },
+    {
+      "path": "database/master-surge_arresters.json.txt",
+      "bytes": 5067,
+      "sha256": "88ccf07e40a0c4243323e29d4501370188570f88c3d810a464f77ab783edb261"
+    },
+    {
+      "path": "database/master-switchgear.json.txt",
+      "bytes": 2361,
+      "sha256": "f5de9db4793db48a053b2297a98a406a8175aeee22efde9e79bafa6daa7fe4a9"
+    },
+    {
+      "path": "database/master-terminations.json.txt",
+      "bytes": 2512,
+      "sha256": "833c36a72320f2fc8d49fb5952699e033a3c5c0ff90d0c243a5dee2c4699b326"
+    },
+    {
+      "path": "database/master-transformers.json.txt",
+      "bytes": 6059,
+      "sha256": "5f2ab7319ee57e35d8140b7de2f04ebfaf3228fada9fac2b2ec933b92cb2ed44"
+    },
+    {
+      "path": "database/master-transmission_conductors.json.txt",
+      "bytes": 109631,
+      "sha256": "4dc6f981276b71dcc4d183f859c6f4b7356ba81006981635e088cec1b726de31"
+    },
+    {
+      "path": "database/master-tray_accessory_rules.json.txt",
+      "bytes": 2695,
+      "sha256": "2542c5d16c1351527f7cce2b4df58a20298aac20630ce73ece7f2c30a179bc70"
+    },
+    {
+      "path": "database/master-tray_barrier_cover_codes.json.txt",
+      "bytes": 395,
+      "sha256": "f8cf494b123cb72002677e1a5dab914801cdfd4297324007f1302ede3cf678ff"
+    },
+    {
+      "path": "database/master-tray_egc_area_thresholds.json.txt",
+      "bytes": 476,
+      "sha256": "4ebcf1b15bd8fb914233bdde73d510099c6cc105f89ba7a41853ae1e676cc33c"
+    },
+    {
+      "path": "database/master-tray_egc_metal_area.json.txt",
+      "bytes": 493,
+      "sha256": "f826a4d700c7ea06cd8c2f676a700ea49e86a0f6bf228b0a157258262deaa97f"
+    },
+    {
+      "path": "database/master-tray_engineering_defaults.json.txt",
+      "bytes": 546,
+      "sha256": "1a1fadaa596da760cea3382a27ca987dc51d5a9ee3040ed949e4cd913b3f411f"
+    },
+    {
+      "path": "database/master-tray_expansion_rules.json.txt",
+      "bytes": 692,
+      "sha256": "50fcc15b6e5a613e86028eb32667923e926085b7ef1481a8bc9d72a6647de383"
+    },
+    {
+      "path": "database/master-tray_grounding_accessories.json.txt",
+      "bytes": 987,
+      "sha256": "fccd52e08d05d3f97d10a386ba8247c69c182a427b84aa93881208006516ff00"
+    },
+    {
+      "path": "database/master-tray_width_codes.json.txt",
+      "bytes": 378,
+      "sha256": "fb48ad71469223900bb02f506cb49c341aa1639a33f97c4924a423ccc207c7e7"
+    },
+    {
+      "path": "database/master-trip_devices.json.txt",
+      "bytes": 160280,
+      "sha256": "4764123ccd0b32dfd2cb0537d4e66ada9b6cbd8d7131a0561f66cf966b33e78a"
+    },
+    {
+      "path": "database/motors_nameplate.json.txt",
+      "bytes": 29453,
+      "sha256": "27d0f02cccefc7705d46cafce00e2e5e6ae74c56b2e8da35b590cb3ec5fa1988"
+    },
+    {
+      "path": "database/pv_modules.json.txt",
+      "bytes": 874990,
+      "sha256": "47263c28e9c07951d686a62a9e5fd52beeb6dade55230ad2203b43d409565d44"
+    },
+    {
+      "path": "database/reclosers.json.txt",
+      "bytes": 695,
+      "sha256": "9e4868a07315be0b19af4ba2b9a3a4b612da4d7812068233e0c565a8f0dd02f2"
+    },
+    {
+      "path": "database/switchgear.json.txt",
+      "bytes": 2428,
+      "sha256": "5f5d53e8a5819d7cf93432569590b82fc3365a56c8284d8bb0a75bb49b4bb55f"
+    },
+    {
+      "path": "database/transformers.json.txt",
+      "bytes": 5954,
+      "sha256": "e802586b214330e0e883fc18d15322f5879487f874af8b3e8da21d4565171b9d"
+    },
+    {
+      "path": "database/v10-shadow/cable_impedance_defaults-index.json.txt",
+      "bytes": 99,
+      "sha256": "61a2b9688c64def9a0b7b40426231b0370d71d2ca23c7b4221b41013d6f67dfa"
+    },
+    {
+      "path": "database/v10-shadow/cable_impedance_defaults-samples.json.txt",
+      "bytes": 99,
+      "sha256": "61a2b9688c64def9a0b7b40426231b0370d71d2ca23c7b4221b41013d6f67dfa"
+    },
+    {
+      "path": "database/v10-shadow/cables-index.json.txt",
+      "bytes": 14651,
+      "sha256": "ba7836fe790847a1589eab901c625cc8404b96eac02501d67ddb7447c0fc5b08"
+    },
+    {
+      "path": "database/v10-shadow/cables-samples.json.txt",
+      "bytes": 8248,
+      "sha256": "7ecd3654c687b20e751adb330421e1b79a47cc338be2bf5582e34a1f0d3c5a11"
+    },
+    {
+      "path": "database/v10-shadow/disconnects-index.json.txt",
+      "bytes": 967,
+      "sha256": "d0274c600d3a62850b34075c17ec307378860dad68a50605dacfdf688f410844"
+    },
+    {
+      "path": "database/v10-shadow/disconnects-samples.json.txt",
+      "bytes": 7084,
+      "sha256": "c1c7c2d7be758a9ffe771c8b739fad17e87739139c36b794c684ef58aa7ea699"
+    },
+    {
+      "path": "database/v10-shadow/fuses-index.json.txt",
+      "bytes": 110480,
+      "sha256": "ec33fe73349212c88542665fcc99d0f7073efb91750dde411bfefa9aae95493a"
+    },
+    {
+      "path": "database/v10-shadow/fuses-samples.json.txt",
+      "bytes": 1453,
+      "sha256": "a2098effd991ce2fee85ef6d256a3e9436a51ac22a4ea0556ebff22b21236757"
+    },
+    {
+      "path": "database/v10-shadow/generators-index.json.txt",
+      "bytes": 244,
+      "sha256": "7dac9b9885f23f6707e4c27157711f81be938f65fdb90476ca7243fd56b37df0"
+    },
+    {
+      "path": "database/v10-shadow/generators-samples.json.txt",
+      "bytes": 3109,
+      "sha256": "de4d9788b103626dee1e82be85b76964e0bf205212e47e837c873f9ff8bfa220"
+    },
+    {
+      "path": "database/v10-shadow/hv_breakers-index.json.txt",
+      "bytes": 476,
+      "sha256": "cafea45b49e67431234cfd0f0b0748aec86b6d2c9564a7f0e7217cf2706eafcf"
+    },
+    {
+      "path": "database/v10-shadow/hv_breakers-samples.json.txt",
+      "bytes": 3491,
+      "sha256": "6e4bf4c40dbc2998f85d0d7c1d3953537506d61bb89a63c4dc3c8c25e820c9e1"
+    },
+    {
+      "path": "database/v10-shadow/ibr-index.json.txt",
+      "bytes": 1057,
+      "sha256": "d14bc8dbb0bdc93aa6b41f689ea1a2b085524a7f0f50e03b5657ca5c23d56940"
+    },
+    {
+      "path": "database/v10-shadow/ibr-samples.json.txt",
+      "bytes": 7608,
+      "sha256": "da4f1df22431d25a27562d9562d5444210d7ed4ee91821e95f852dda9f7ec4d6"
+    },
+    {
+      "path": "database/v10-shadow/lv_breakers-index.json.txt",
+      "bytes": 247781,
+      "sha256": "636974664375b0f4d54be99ed850c90f753eb5e3deed1d6b3a8a07cb460164c5"
+    },
+    {
+      "path": "database/v10-shadow/lv_breakers-samples.json.txt",
+      "bytes": 1456,
+      "sha256": "87f9f96daf5f1ca5128a161c212a0c8b62c8d47fea1e55e1f3973158c84c46fb"
+    },
+    {
+      "path": "database/v10-shadow/manifest.json.txt",
+      "bytes": 2103,
+      "sha256": "2835ccff2e101935efd0537534f2c77f2decdbb2fd64e8c9411a6a8c2114a090"
+    },
+    {
+      "path": "database/v10-shadow/motors_nameplate-index.json.txt",
+      "bytes": 3899,
+      "sha256": "50a503a91f22ed6422794f690e66da23b1dba16fb126f71eb0e67450f211e29a"
+    },
+    {
+      "path": "database/v10-shadow/motors_nameplate-samples.json.txt",
+      "bytes": 3110,
+      "sha256": "4681e8df025e594a3bdb6bc03cf69bd46ded3429bcd2ad8c6452e8bee282be0f"
+    },
+    {
+      "path": "database/v10-shadow/pv_modules-index.json.txt",
+      "bytes": 675,
+      "sha256": "0f75431d55afa8e1ae140a8b14706dead161df02665d83162bf6a82183d37f8e"
+    },
+    {
+      "path": "database/v10-shadow/pv_modules-samples.json.txt",
+      "bytes": 6639,
+      "sha256": "4a7085ac900791bd6e6e848191ccaebe359c653d3c6e2221f60c5a88bb900b12"
+    },
+    {
+      "path": "database/v10-shadow/reclosers-index.json.txt",
+      "bytes": 16553,
+      "sha256": "94f58428b99bb95b094b441fd8afa9c0bda3b11718dccccf3d129b2d3c613fbc"
+    },
+    {
+      "path": "database/v10-shadow/reclosers-samples.json.txt",
+      "bytes": 1539,
+      "sha256": "cf53aaf784377451e194504b16c040a21f6d8ac60d4a8f43ddafe56fe6969170"
+    },
+    {
+      "path": "database/v10-shadow/switchgear-index.json.txt",
+      "bytes": 705,
+      "sha256": "53cd2a7f31b02e93a02666748f6db5a6397b868b08ef190e54fe8561eb2931e5"
+    },
+    {
+      "path": "database/v10-shadow/switchgear-samples.json.txt",
+      "bytes": 3814,
+      "sha256": "12f224fb00fba7959efd52bf90aa021e869bd8718a30f25eed3b072dbcdce1cc"
+    },
+    {
+      "path": "database/v10-shadow/transformers-index.json.txt",
+      "bytes": 4134,
+      "sha256": "7c31bc5a3264b7663dc316ac911da2b1e69536922dd94bd910e8fe60cbb2cdd1"
+    },
+    {
+      "path": "database/v10-shadow/transformers-samples.json.txt",
+      "bytes": 4109,
+      "sha256": "800a65be50233742b3ba27ac8dbd18c42b3e9eb2cfd5978e058f541284ae4b72"
+    },
+    {
+      "path": "database-checks.mjs",
+      "bytes": 7393,
+      "sha256": "fe95f2e243f683def3dd5f041315b476c1dfb5758dd16cd6faa6e9c95fa673eb"
+    },
+    {
+      "path": "database-map.mjs",
+      "bytes": 8788,
+      "sha256": "fbda0707824da712e5f8d937e047b77bae212c84639032c18bf6f47a64dbe5af"
+    },
+    {
+      "path": "database-reference-tables.mjs",
+      "bytes": 10672,
+      "sha256": "879e3176ea3022dd0b5139384727f1848c11cc90682a2769dfd3b6944e65f319"
+    },
+    {
+      "path": "database-selection.mjs",
+      "bytes": 2948,
+      "sha256": "5007fccde2ab284652dde62c7e63593a37674392b2a77bd43d7b3dca906745e1"
+    },
+    {
+      "path": "database-workspace.css",
+      "bytes": 3145,
+      "sha256": "e82729a3d54348533bc497b9123df9350e4b00eb5cc1bf9d4bd96621c3a886f5"
+    },
+    {
+      "path": "dc-network.mjs",
+      "bytes": 14745,
+      "sha256": "dc925667c71813c72a483611bc02a60c6c8b7670286b7eef893cc78f8e844fe5"
+    },
+    {
+      "path": "dlg-fault.mjs",
+      "bytes": 1851,
+      "sha256": "b51e62171eb321cf342133d552536c47d3454624374744206d42d2d4e60c18cc"
+    },
+    {
+      "path": "drawing-feedback.mjs",
+      "bytes": 3503,
+      "sha256": "54c1a2832cb50e778a35bb0220e47f10c563e14ee5d135d41f756141c06d3e83"
+    },
+    {
+      "path": "engine.mjs",
+      "bytes": 9346,
+      "sha256": "5f0dcad51955e4869779d5d6e2c0649c2e931168a1df6ba650baa6f6b70c2298"
+    },
+    {
+      "path": "engineering-core-methods.mjs",
+      "bytes": 6306,
+      "sha256": "cd832644eea076942ec72509b1f34c5d982d9241d4dde13acc3b03e1f94762fd"
+    },
+    {
+      "path": "engineering-core-ui.mjs",
+      "bytes": 28269,
+      "sha256": "8e5866d4cf8522f7dca81e72caab76b595005a88db11a8de8b43d9cc8cb3e7b8"
+    },
+    {
+      "path": "equipment-dialog.mjs",
+      "bytes": 1853,
+      "sha256": "a19d9e5179042b224995e3405c4884b798a2801c5c61efb367d1d9d3944276b7"
+    },
+    {
+      "path": "fault-bus-sweep.mjs",
+      "bytes": 3127,
+      "sha256": "8bf9fad51ddbe607a4da202dd6177162b4f2f4cad17877eb999afc3e0f2d74fa"
+    },
+    {
+      "path": "fault-scenario-envelope.mjs",
+      "bytes": 2516,
+      "sha256": "1afae60cd8501ba31730669bbb84a2dff99d89173ab18c2bb00a8953891bf4fb"
+    },
+    {
+      "path": "harmonic-network-ui.mjs",
+      "bytes": 6088,
+      "sha256": "8b77b1f026d350946c4cce0da483a088ad3adb9121b5f327c6d26228127a327d"
+    },
+    {
+      "path": "harmonic-network.mjs",
+      "bytes": 5965,
+      "sha256": "8c3ace935bddb9953687908b88571bd000660423c9cd5b71b701e851935e90f0"
+    },
+    {
+      "path": "iec60287-ac-resistance.mjs",
+      "bytes": 2527,
+      "sha256": "6a5b9c75b36d3a7fae9bedb91c8b416f8b612d1ad8ed60ba02d7aca59068752a"
+    },
+    {
+      "path": "iec60287-buried-cable.mjs",
+      "bytes": 6940,
+      "sha256": "fad6b5dd33b0612141129849a5a949c2c367899eb40eca19deeb4b905cc297f6"
+    },
+    {
+      "path": "iec60909-peak-network.mjs",
+      "bytes": 7023,
+      "sha256": "ca10082aab43d5c9d994f518c6aaa95ce399c48279e72aba5015033858f1fd21"
+    },
+    {
+      "path": "iec60909-transformer-scenarios.mjs",
+      "bytes": 7557,
+      "sha256": "64318ff17100b82747f9db1bef440a4598adffd9b0a7a25b08e1cb399f1a2c53"
+    },
+    {
+      "path": "index.html",
+      "bytes": 3064,
+      "sha256": "6346534a17b30116f5fab0f42fdd55d0e092064077c1adcb616675190bae897d"
+    },
+    {
+      "path": "interface-v25.js",
+      "bytes": 4977,
+      "sha256": "e87c242cd3c48955841cecaa33135a0c9ce5d6e3059286690fd1cf671da02461"
+    },
+    {
+      "path": "interface-v26.js",
+      "bytes": 8512,
+      "sha256": "ab901c3eba452a21b18cd5e0e7eba9fb568d611e00c08540a10352e501a6357f"
+    },
+    {
+      "path": "legacy-app.mjs",
+      "bytes": 40087,
+      "sha256": "a74f83a85357e1dfb7021fe58e803ed30903a122e1e789ecc638a3d2e6f0cdee"
+    },
+    {
+      "path": "manufacturer-catalog.mjs",
+      "bytes": 284,
+      "sha256": "94a5d604e83b78e1664bf06106eee9915a0a4b4d68fae67820cab794d9907da5"
+    },
+    {
+      "path": "manufacturer-data.mjs",
+      "bytes": 24993,
+      "sha256": "1af0045bf9e3b8c1701770a8fac6519d9d6460199c47d73282d40e706666404f"
+    },
+    {
+      "path": "manufacturer-expanded-data.mjs",
+      "bytes": 26211,
+      "sha256": "1c5bc378a0c3b7e7367338a34a63951a2a93b526b432f1af3260fe5f3142f51c"
+    },
+    {
+      "path": "manufacturer-library.mjs",
+      "bytes": 14139,
+      "sha256": "7dcb61ea0b257896db396f7000b066d7ca03431b8cfb2f6e80c5d22980bada2b"
+    },
+    {
+      "path": "manufacturer-tcc.mjs",
+      "bytes": 6145,
+      "sha256": "fcdce42db54f143968e17064742078357996371cde261b048e2afece2800d031"
+    },
+    {
+      "path": "master-database.mjs",
+      "bytes": 10205,
+      "sha256": "04ff5f9ac17858b1888063de5b7cff832a12ce77a71b3e7f138afa8a8cfeec63"
+    },
+    {
+      "path": "multi-source-fault-network.mjs",
+      "bytes": 10028,
+      "sha256": "3aacf4ac606257bda76e8f4c8a56f48ee8a2b9b39e2d296bb783f56d7fe9f3ba"
+    },
+    {
+      "path": "multi-voltage-fault-network.mjs",
+      "bytes": 7979,
+      "sha256": "43d3e1b9bba0c728c4ee9797aa33d1249f58468b925f4190a6a7bef0af390338"
+    },
+    {
+      "path": "multibus-sequence-fault-network.mjs",
+      "bytes": 9887,
+      "sha256": "2537f1ce40eb9bf107f761601775ba551439696fd1cb161095befa97af95984f"
+    },
+    {
+      "path": "network-app.mjs",
+      "bytes": 198481,
+      "sha256": "c2a1c032d40c9f9d28269c8de7aea11287821461a24e9b736a462e271e6b0c7e"
+    },
+    {
+      "path": "network-calculation.mjs",
+      "bytes": 11492,
+      "sha256": "029eece5931739e807c196a7ef5eddba6238b96dbdde146584a7821fa506d516"
+    },
+    {
+      "path": "network-cloud.mjs",
+      "bytes": 7738,
+      "sha256": "5c45900939483afa37abbe97f3fa69a1021ddaac8569883ad2bf773e1da3190b"
+    },
+    {
+      "path": "network-diagram.mjs",
+      "bytes": 59,
+      "sha256": "de71f380b7ad7860132de8d073bcb3bc5526a97b331dd7b7e5729b34f9d4243a"
+    },
+    {
+      "path": "network-engine.mjs",
+      "bytes": 30070,
+      "sha256": "d71dee5e1d0a6227b1fd108ec0e0eb724ae3a3a1b1df7f5fc3ba3dc639ed6cc0"
+    },
+    {
+      "path": "network-flow.mjs",
+      "bytes": 1299,
+      "sha256": "70da92448c02408ce782c86f4877a361077e7ecbcbf5249ca33a10f0d3c9cb23"
+    },
+    {
+      "path": "network-model.mjs",
+      "bytes": 20917,
+      "sha256": "b632cab39ae92e613dcb9b66054eb4505e8c6ec2412b1f428d99357658db3e82"
+    },
+    {
+      "path": "network-storage.mjs",
+      "bytes": 2266,
+      "sha256": "8e928e21653ae4fb68cb1afe477387ba06744b54dc7105fee87d652c29266a84"
+    },
+    {
+      "path": "network-style.css",
+      "bytes": 26866,
+      "sha256": "52a95612b26793039f98b2899569ec719282d18aff752dc66bdc90a33311331d"
+    },
+    {
+      "path": "network-voltage.mjs",
+      "bytes": 1712,
+      "sha256": "a2bd17ec1e5684f766738fec3c4754a23444ec69961d5378977ac5f4f1708679"
+    },
+    {
+      "path": "network-worker.mjs",
+      "bytes": 359,
+      "sha256": "89f078a05f22d9d5f27666479d449b5452d9dafdc547243f7dff0d552c7e0fe5"
+    },
+    {
+      "path": "one-line-editor.mjs",
+      "bytes": 25664,
+      "sha256": "c90841215e2516906de0144b3b60f1cc0087f753bd40a4965092b880e6ea0cbb"
+    },
+    {
+      "path": "operating-studies.mjs",
+      "bytes": 17311,
+      "sha256": "c5a7efbc438ad831c8cba684acfdc9e343a987d4701eff67dccf60626441c31b"
+    },
+    {
+      "path": "operating-workspace.css",
+      "bytes": 2309,
+      "sha256": "86771e174e070c5c2807670a834879d941f1f9e534d19f74e957228133e90fc1"
+    },
+    {
+      "path": "operating-workspace.mjs",
+      "bytes": 9270,
+      "sha256": "0eb7226074da941ac5312215d51c1424b8e0e6dbec6c48aceb97875b97231b57"
+    },
+    {
+      "path": "operations-v27-ui.mjs",
+      "bytes": 23487,
+      "sha256": "374653b91f4e4497d771ff816e0809040eebb029c279997c5b5dde07ab6ceb49"
+    },
+    {
+      "path": "operations-v27.css",
+      "bytes": 7089,
+      "sha256": "d80b77d7ab246799976f8bef8eccd03d4b53881e1104c011a16c08939173421e"
+    },
+    {
+      "path": "operations-v27.mjs",
+      "bytes": 18547,
+      "sha256": "2888a3cb7e0cde17bcc81eaa9fcd130bbda0078e8483027f24c4c4318bd6d4a4"
+    },
+    {
+      "path": "project-history.mjs",
+      "bytes": 1443,
+      "sha256": "efd1e1b598034a6ab06cd3ae8510e86597ecda3cfb4f254217d9f4d0f8314344"
+    },
+    {
+      "path": "property-values.mjs",
+      "bytes": 2411,
+      "sha256": "ab3a8e09dcfea9f6ef23b2ce58cb5994bb212907c090418a06a8c1ab4a63ad63"
+    },
+    {
+      "path": "protection-full-range.mjs",
+      "bytes": 4953,
+      "sha256": "dd7c22290d268badb7d29b4db3c4bf2d0a40525aff8724d17d13e58699b87fd5"
+    },
+    {
+      "path": "protection-study.mjs",
+      "bytes": 7164,
+      "sha256": "9b741c4b5ef9931a2e685d0171b184f47a3e58f86f742841752c65d8f77f0007"
+    },
+    {
+      "path": "protection-workspace.mjs",
+      "bytes": 10244,
+      "sha256": "46d4d942a347210203e2e786222686d2d2c8e32e107fa70aa2e0043a6fcbe1ef"
+    },
+    {
+      "path": "public-bundle-v21.js",
+      "bytes": 1023667,
+      "sha256": "39643292a4ca7166c26ef5be1dc83bc7221cb0ab9ceb6a582b46eb18f278c173"
+    },
+    {
+      "path": "public-catalog-loader.mjs",
+      "bytes": 1187,
+      "sha256": "edbbe8b7268be019ca5e1eb4de5c57cef3e07f62035269ba814ae25007cd3bc7"
+    },
+    {
+      "path": "public-entry.mjs",
+      "bytes": 228,
+      "sha256": "c2016a9c3970b9b8b1151f15bc769248b5c4b40e539694b766633a65b5c4f9c3"
+    },
+    {
+      "path": "public-report-engine.mjs",
+      "bytes": 8641,
+      "sha256": "65239e82ffea65ff7dfb620128d785ca51585ad62e5a10157c53da3d61ba8ff5"
+    },
+    {
+      "path": "public-style-v21.css",
+      "bytes": 83312,
+      "sha256": "3415fbad8005a87ee93fd6951e7e2f4a9630ac97374e0c215bb0e4d4109caadb"
+    },
+    {
+      "path": "pv-arrays.mjs",
+      "bytes": 6366,
+      "sha256": "742012421c62487be072ac76ce77d0c13125bea0699918e9bad70da2d2ad4f0d"
+    },
+    {
+      "path": "report-data.mjs",
+      "bytes": 20513,
+      "sha256": "63fdc19a5d4799c9a4a1bff087e90c01cbc577ab48c5c00d830709f3668cfbf0"
+    },
+    {
+      "path": "report-download.mjs",
+      "bytes": 5653,
+      "sha256": "d0defa4cfccaf417a20390cebba9ac6ca78b3f91d6262052f3a52cafdeef5b7c"
+    },
+    {
+      "path": "sequence-fault-screen.mjs",
+      "bytes": 3124,
+      "sha256": "55e009d9898b16b93549fd627e91fa364f81f43d4e17c97468d3f8a53f02abde"
+    },
+    {
+      "path": "single-phase-form.mjs",
+      "bytes": 4106,
+      "sha256": "34befe88101cb1cf6f670b49645531e572bc2db0dc001f345550b81e0a00d15a"
+    },
+    {
+      "path": "single-phase.mjs",
+      "bytes": 5084,
+      "sha256": "4a7b88f4c85cfd03a756342c3f536c5b0e2ab1a04203bb00397424a5f56221a4"
+    },
+    {
+      "path": "split-phase-network.mjs",
+      "bytes": 17108,
+      "sha256": "ee8a2a55752b12bbc0152d972f02b57135401eaa343b3d0acf75dc689ba3b09b"
+    },
+    {
+      "path": "studio-v26.css",
+      "bytes": 22133,
+      "sha256": "17f755e695d07e23ed4b42b88100dc121dce5b67a4c98254b329b476c8ac5bce"
+    },
+    {
+      "path": "studio-workspace.css",
+      "bytes": 23768,
+      "sha256": "10d287dab06c43c7005999673f264f0dd1bf39c6a46d747512285de068d30a5a"
+    },
+    {
+      "path": "studio-workspace.mjs",
+      "bytes": 14927,
+      "sha256": "ae4868c6b25a4ac0076d18bd6005503512ef598c1edbf151b4c0f88aaf94d125"
+    },
+    {
+      "path": "style.css",
+      "bytes": 10547,
+      "sha256": "edb7f635199e29935d22cb371be08e7afe417283305f008cc7440f1f98853010"
+    },
+    {
+      "path": "thermal-bridge.mjs",
+      "bytes": 3263,
+      "sha256": "b02093da406992319351ff8326091acb4997ed3716cad0e8aea49d91d832ac7e"
+    },
+    {
+      "path": "time-varying-current-duty.mjs",
+      "bytes": 3890,
+      "sha256": "4f9cccacd11c1741bf50dac2ae5bbaf50bac64376c94b581fb114fceaf25180e"
+    },
+    {
+      "path": "v10-review.html",
+      "bytes": 4258,
+      "sha256": "24bb9fbe00f900773e36e5be726fc0895e52eb80c013dd426ac3d8221f84db7a"
+    },
+    {
+      "path": "v10-review.mjs",
+      "bytes": 6327,
+      "sha256": "cdd47ca347baa1523615abd7e7eeffeeabe663610e974dfe02ed4936541ca441"
+    },
+    {
+      "path": "workbook.json.txt",
+      "bytes": 236906,
+      "sha256": "7d35481b7f4b611b9354929cb7366a4d63da3407a9b2f722dffc4b7c501c850b"
+    },
+    {
+      "path": "workspace.css",
+      "bytes": 17583,
+      "sha256": "1253c40d27133c2ef2f835944f94f32656ec4971031d285f754cf586354a7d65"
+    }
+  ]
+}

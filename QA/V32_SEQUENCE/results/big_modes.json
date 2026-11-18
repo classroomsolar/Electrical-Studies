@@ -1,0 +1,28 @@
+{
+ "seq2000": {
+  "first_result_s": 6.6,
+  "metric": "1.104 kA",
+  "calc_status": "CALCULATED\n1.104 kA at Bus 10\nView results \u2192",
+  "change_bus_s": 1.0,
+  "metric_after": "1.192 kA",
+  "results_has_table": false,
+  "report_chooser": 1,
+  "xlsx_MB": 1.05,
+  "errors": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ]
+ },
+ "split2000": {
+  "first_result_s": 8.9,
+  "metric": "76.19 A",
+  "calc_status": "CALCULATED\n76.19 A at Panel 10\nView results \u2192",
+  "change_bus_s": 1.7,
+  "metric_after": "48.485 A",
+  "results_has_table": true,
+  "report_chooser": 1,
+  "xlsx_MB": 1.43,
+  "errors": [],
+  "console": []
+ }
+}

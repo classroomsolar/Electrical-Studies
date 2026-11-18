@@ -1,0 +1,150 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5263 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: protectionrange) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: ENTERED_ENVELOPE_MARGIN_MET_ALL_LOCATIONS) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: requiredMarginS | Entered value: 0.15) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: downstream.model | Entered value: EXAMPLE_DOWNSTREAM_125A) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: downstream.source | Entered value: ILLUSTRATIVE POINTS NOT OEM DATA: replace with) Tj ET
+BT /F1 8 Tf 32 558 Td (publication and actual settings) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: downstream.revision | Entered value: illustrative-1) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: downstream.curveCsv | Entered value:) Tj ET
+BT /F1 8 Tf 32 519 Td (100,0.65,0.8?200,0.25,0.3?400,0.08,0.10?800,0.03,0.04) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: upstream.model | Entered value: EXAMPLE_UPSTREAM_400A) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: upstream.source | Entered value: ILLUSTRATIVE POINTS NOT OEM DATA: replace with) Tj ET
+BT /F1 8 Tf 32 480 Td (publication and actual settings) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: upstream.revision | Entered value: illustrative-1) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: upstream.curveCsv | Entered value: 100,1.4,1.7?200,1.0,1.2?400,0.7,0.9?800,0.38,0.50) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: faultRanges[0].location | Entered value: Illustrative downstream feeder faults) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: faultRanges[0].source | Entered value: ILLUSTRATIVE electrical fault study, replace) Tj ET
+BT /F1 8 Tf 32 415 Td (with signed fault cases) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: faultRanges[0].downstreamMinA | Entered value: 130) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: faultRanges[0].downstreamMaxA | Entered value: 700) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: faultRanges[0].upstreamPerDownstream | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: faultRanges[1].location | Entered value: Illustrative two-source scenario) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: faultRanges[1].source | Entered value: ILLUSTRATIVE current distribution, replace with) Tj ET
+BT /F1 8 Tf 32 337 Td (signed case) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: faultRanges[1].downstreamMinA | Entered value: 230) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: faultRanges[1].downstreamMaxA | Entered value: 600) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: faultRanges[1].upstreamPerDownstream | Entered value: 0.8) Tj ET
+BT /F1 8 Tf 32 285 Td () Tj ET
+BT /F1 8 Tf 32 272 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: status | Value: ENTERED_ENVELOPE_MARGIN_MET_ALL_LOCATIONS) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: worstCaseMarginS | Value: 0.37973736355067933) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: requiredMarginS | Value: 0.15) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: worstLocation | Value: Illustrative downstream feeder faults) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: worstFaultPrimaryA.downstream | Value: 700) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: worstFaultPrimaryA.upstream | Value: 700) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: scenarios[0].location | Value: Illustrative downstream feeder faults) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: scenarios[0].source | Value: ILLUSTRATIVE electrical fault study, replace) Tj ET
+BT /F1 8 Tf 32 155 Td (with signed fault cases) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: scenarios[0].downstreamRangeA.minimum | Value: 130) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: scenarios[0].downstreamRangeA.maximum | Value: 700) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: scenarios[0].upstreamPerDownstream | Value: 1) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scenarios[0].worstCase.downstreamPrimaryA | Value: 700) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: scenarios[0].worstCase.upstreamPrimaryA | Value: 700) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: scenarios[0].worstCase.downstreamMaximumClearingS | Value:) Tj ET
+BT /F1 8 Tf 32 64 Td (0.04772227898715389) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: scenarios[0].worstCase.upstreamMinimumClearingS | Value: 0.4274596425378332) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: scenarios[0].worstCase.marginS | Value: 0.37973736355067933) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 5009 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: scenarios[0].candidateCount | Value: 5) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: scenarios[1].location | Value: Illustrative two-source scenario) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: scenarios[1].source | Value: ILLUSTRATIVE current distribution, replace) Tj ET
+BT /F1 8 Tf 32 753 Td (with signed case) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: scenarios[1].downstreamRangeA.minimum | Value: 230) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: scenarios[1].downstreamRangeA.maximum | Value: 600) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: scenarios[1].upstreamPerDownstream | Value: 0.8) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: scenarios[1].worstCase.downstreamPrimaryA | Value: 600) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: scenarios[1].worstCase.upstreamPrimaryA | Value: 480) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: scenarios[1].worstCase.downstreamMaximumClearingS | Value:) Tj ET
+BT /F1 8 Tf 32 662 Td (0.058508641898213344) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: scenarios[1].worstCase.upstreamMinimumClearingS | Value: 0.5960891447185928) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scenarios[1].worstCase.marginS | Value: 0.5375805028203794) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: scenarios[1].candidateCount | Value: 5) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: candidateCount | Value: 10) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: downstream.model | Value: EXAMPLE_DOWNSTREAM_125A) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: downstream.source | Value: ILLUSTRATIVE POINTS NOT OEM DATA: replace with) Tj ET
+BT /F1 8 Tf 32 571 Td (publication and actual settings) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: downstream.revision | Value: illustrative-1) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: upstream.model | Value: EXAMPLE_UPSTREAM_400A) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: upstream.source | Value: ILLUSTRATIVE POINTS NOT OEM DATA: replace with) Tj ET
+BT /F1 8 Tf 32 519 Td (publication and actual settings) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: upstream.revision | Value: illustrative-1) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: approved | Value: false) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: method | Value: Exact minimum of manufacturer ENTERED monotone log-log time) Tj ET
+BT /F1 8 Tf 32 467 Td (envelope on continuous source-current interval via knots and analytic stationary points) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: limitations[0] | Value: User-digitised OEM source points are not) Tj ET
+BT /F1 8 Tf 32 441 Td (independently authenticated here) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: limitations[1] | Value: Instantaneous and energy-limiting selectivity must) Tj ET
+BT /F1 8 Tf 32 415 Td (use official manufacturer tables/testing where applicable) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: limitations[2] | Value: Upstream-to-downstream current ratio is a) Tj ET
+BT /F1 8 Tf 32 389 Td (documented constant per entered location range; verify all independent sources and CTs) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: limitations[3] | Value: No CT transient saturation, reset, zone) Tj ET
+BT /F1 8 Tf 32 363 Td (selectivity, protective settings verification, or OEM approval) Tj ET
+BT /F1 8 Tf 32 350 Td () Tj ET
+BT /F1 8 Tf 32 337 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 324 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 311 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 298 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 285 Td (use.) Tj ET
+BT /F1 8 Tf 32 272 Td (Evidence / limitation: Study method | Value: protectionrange) Tj ET
+BT /F1 8 Tf 32 259 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T00:00:00.000Z) Tj ET
+BT /F1 8 Tf 32 246 Td (Evidence / limitation: outputs.limitations[0] | Value: User-digitised OEM source points are not) Tj ET
+BT /F1 8 Tf 32 233 Td (independently authenticated here) Tj ET
+BT /F1 8 Tf 32 220 Td (Evidence / limitation: outputs.limitations[1] | Value: Instantaneous and energy-limiting) Tj ET
+BT /F1 8 Tf 32 207 Td (selectivity must use official manufacturer tables/testing where applicable) Tj ET
+BT /F1 8 Tf 32 194 Td (Evidence / limitation: outputs.limitations[2] | Value: Upstream-to-downstream current ratio is a) Tj ET
+BT /F1 8 Tf 32 181 Td (documented constant per entered location range; verify all independent sources and CTs) Tj ET
+BT /F1 8 Tf 32 168 Td (Evidence / limitation: outputs.limitations[3] | Value: No CT transient saturation, reset, zone) Tj ET
+BT /F1 8 Tf 32 155 Td (selectivity, protective settings verification, or OEM approval) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000005504 00000 n 
+0000005630 00000 n 
+0000010691 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+10817
+%%EOF

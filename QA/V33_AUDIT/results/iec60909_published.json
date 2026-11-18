@@ -1,0 +1,202 @@
+{
+ "pass": 28,
+ "fail": 0,
+ "checks": [
+  {
+   "name": "EIG G71 |Z| after Cable C1 (mΩ)",
+   "got": 11.7733,
+   "want": 11.8,
+   "tol": 0.06,
+   "ok": true
+  },
+  {
+   "name": "EIG G71 Ikmax after Cable C1 (kA)",
+   "got": 20.5963,
+   "want": 21,
+   "tol": 0.5,
+   "ok": true
+  },
+  {
+   "name": "EIG G71 |Z| after Cable C3 (mΩ)",
+   "got": 13.0157,
+   "want": 13,
+   "tol": 0.06,
+   "ok": true
+  },
+  {
+   "name": "EIG G71 Ikmax after Cable C3 (kA)",
+   "got": 18.6303,
+   "want": 19,
+   "tol": 0.5,
+   "ok": true
+  },
+  {
+   "name": "EIG G71 |Z| after Cable C7 (mΩ)",
+   "got": 13.7579,
+   "want": 13.8,
+   "tol": 0.06,
+   "ok": true
+  },
+  {
+   "name": "EIG G71 Ikmax after Cable C7 (kA)",
+   "got": 17.6253,
+   "want": 18,
+   "tol": 0.5,
+   "ok": true
+  },
+  {
+   "name": "EasyPower 400 kVA Ik at LV terminals (kA)",
+   "got": 14.1473,
+   "want": 14.1,
+   "tol": 0.06,
+   "ok": true
+  },
+  {
+   "name": "EasyPower 1600 kVA total Z (mΩ)",
+   "got": 6.2133,
+   "want": 6.2133,
+   "tol": 0.0005,
+   "ok": true
+  },
+  {
+   "name": "EasyPower 1600 kVA Isc (kA)",
+   "got": 37.1685,
+   "want": 37.168,
+   "tol": 0.005,
+   "ok": true
+  },
+  {
+   "name": "kappa radial R/X=0",
+   "got": 2,
+   "want": 2,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "peak = kappa·√2·Ik, R/X=0",
+   "got": 65319.7265,
+   "want": 65319.726474218085,
+   "tol": 0.000001,
+   "ok": true
+  },
+  {
+   "name": "kappa radial R/X=0.05",
+   "got": 1.8635,
+   "want": 1.8634938168965567,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "peak = kappa·√2·Ik, R/X=0.05",
+   "got": 60785.5187,
+   "want": 60785.518734040554,
+   "tol": 0.000001,
+   "ok": true
+  },
+  {
+   "name": "kappa radial R/X=0.1",
+   "got": 1.746,
+   "want": 1.7460018562680835,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "peak = kappa·√2·Ik, R/X=0.1",
+   "got": 56741.1817,
+   "want": 56741.18166956387,
+   "tol": 0.000001,
+   "ok": true
+  },
+  {
+   "name": "kappa radial R/X=0.2",
+   "got": 1.5578,
+   "want": 1.5578354033721458,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "peak = kappa·√2·Ik, R/X=0.2",
+   "got": 49890.6614,
+   "want": 49890.66141483699,
+   "tol": 0.000001,
+   "ok": true
+  },
+  {
+   "name": "kappa radial R/X=0.3",
+   "got": 1.4184,
+   "want": 1.4184382665457873,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "peak = kappa·√2·Ik, R/X=0.3",
+   "got": 44372.2603,
+   "want": 44372.260293439955,
+   "tol": 0.000001,
+   "ok": true
+  },
+  {
+   "name": "kappa radial R/X=0.5",
+   "got": 1.2387,
+   "want": 1.2386675569454613,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "peak = kappa·√2·Ik, R/X=0.5",
+   "got": 36183.7953,
+   "want": 36183.79531673835,
+   "tol": 0.000001,
+   "ok": true
+  },
+  {
+   "name": "kappa radial R/X=1",
+   "got": 1.0688,
+   "want": 1.0687913270005067,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "peak = kappa·√2·Ik, R/X=1",
+   "got": 24682.6784,
+   "want": 24682.678414051195,
+   "tol": 0.000001,
+   "ok": true
+  },
+  {
+   "name": "kappa radial R/X=1.2",
+   "got": 1.0468,
+   "want": 1.0467772479983468,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "peak = kappa·√2·Ik, R/X=1.2",
+   "got": 21886.3693,
+   "want": 21886.36930827356,
+   "tol": 0.000001,
+   "ok": true
+  },
+  {
+   "name": "kappa R/X=0 equals 2.0",
+   "got": 2,
+   "want": 2,
+   "tol": 1e-12,
+   "ok": true
+  },
+  {
+   "name": "method C single path kappa = radial kappa",
+   "got": 1.4491,
+   "want": 1.4490760390310198,
+   "tol": 1e-9,
+   "ok": true
+  },
+  {
+   "name": "method C single path Ik = radial Ik (kA)",
+   "got": 20.5963,
+   "want": 20.59634165077916,
+   "tol": 1e-9,
+   "ok": true
+  }
+ ]
+}

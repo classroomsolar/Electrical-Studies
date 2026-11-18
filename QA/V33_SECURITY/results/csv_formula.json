@@ -1,0 +1,11 @@
+{
+ "csv_cells_that_start_a_formula": [],
+ "csv_how_names_are_written": [
+  "\"'=HYPERLINK(\"\"http://example.invalid\"\",\"\"x\"\")\"",
+  "\"'@SUM(1,2)\"",
+  "\"'=HYPERLINK(\"\"http://example.invalid\"\",\"\"x\"\")\"",
+  "\"'=HYPERLINK(\"\"http://example.invalid\"\",\"\"x\"\")\""
+ ],
+ "xlsx_formula_cells": 0,
+ "xlsx_has_name_as_text": true
+}

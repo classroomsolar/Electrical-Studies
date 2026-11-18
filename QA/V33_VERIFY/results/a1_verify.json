@@ -1,0 +1,907 @@
+{
+ "site": "/home/claude/work/zipcheck/SITE",
+ "generated": "2026-11-14 12:49:11",
+ "summary": {
+  "pass": 124,
+  "fail": 2,
+  "not_tested": 2
+ },
+ "results": [
+  {
+   "item": "a.report[example] chooser shown",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.09,
+   "evidence": ".report-contents"
+  },
+  {
+   "item": "a.report[example] section checkboxes present",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[[\"basis\", true], [\"diagram\", true], [\"buses\", true], [\"sources\", true], [\"branches\", true], [\"duty\", true], [\"screens\", true], [\"pv\", false], [\"inputs\", true], [\"qa\", true], [\"methodology\", true]]"
+  },
+  {
+   "item": "a.report[example] section checkbox toggles content",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.04,
+   "evidence": ".report-inputs count ticked=1 unticked=0 re-ticked=1"
+  },
+  {
+   "item": "a.report[example] scope radios all/selected present",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[[\"all\", true, false], [\"selected\", false, false]]"
+  },
+  {
+   "item": "a.report[example] scope radio switches all<->selected",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "table rows selected=17 all=17"
+  },
+  {
+   "item": "a.report[example] extra studies chooser",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "native studies offered=[[\"advanced:arc\", false, false]]; registered tool study box=1, printed in report=1"
+  },
+  {
+   "item": "a.report[example] PDF download",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.12,
+   "evidence": "12-kV-208-V-Worked-example.pdf 24162 bytes, head=b'%PDF-1.4'"
+  },
+  {
+   "item": "a.report[example] Excel download",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.14,
+   "evidence": "12-kV-208-V-Worked-example.xlsx 53813 bytes, sheets=['Summary', 'Bus results', 'Source contributions', 'Branch currents', 'Equipment duty', 'Study inputs', 'Assumptions &amp; QA', 'Database screens', 'Workbook references', 'V33 test tool study']"
+  },
+  {
+   "item": "a.report[example] print (window.print stubbed)",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 2.58,
+   "evidence": "click; window.print calls 0->1; pageerrors=[]"
+  },
+  {
+   "item": "a.report[example] no horizontal page overflow",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "scrollWidth=1440 innerWidth=1440"
+  },
+  {
+   "item": "a.report[example] no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "a.report[plant2000] project loads",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 3.59,
+   "evidence": "metric ready"
+  },
+  {
+   "item": "a.report[plant2000] chooser shown",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 4.08,
+   "evidence": ".report-contents"
+  },
+  {
+   "item": "a.report[plant2000] section checkboxes present",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[[\"basis\", true], [\"diagram\", true], [\"buses\", true], [\"sources\", true], [\"branches\", true], [\"duty\", true], [\"screens\", true], [\"pv\", false], [\"inputs\", true], [\"qa\", true], [\"methodology\", true]]"
+  },
+  {
+   "item": "a.report[plant2000] section checkbox toggles content",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.41,
+   "evidence": ".report-inputs count ticked=1 unticked=0 re-ticked=1"
+  },
+  {
+   "item": "a.report[plant2000] scope radios all/selected present",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[[\"all\", false, false], [\"selected\", true, false]]"
+  },
+  {
+   "item": "a.report[plant2000] scope \"selected\" active",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "table rows selected=9314"
+  },
+  {
+   "item": "a.report[plant2000] extra studies chooser",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "native studies offered=[[\"advanced:arc\", false, false]]; registered tool study box=1, printed in report=1"
+  },
+  {
+   "item": "a.report[plant2000] PDF download",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 11.44,
+   "evidence": "PV-plant-70.pdf 9297379 bytes, head=b'%PDF-1.4'"
+  },
+  {
+   "item": "a.report[plant2000] Excel download",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 11.54,
+   "evidence": "PV-plant-70.xlsx 1165542 bytes, sheets=['Summary', 'Bus results', 'Source contributions', 'Branch currents', 'Equipment duty', 'Study inputs', 'Assumptions &amp; QA', 'Database screens', 'Workbook references', 'V33 test tool study']"
+  },
+  {
+   "item": "a.report[plant2000] print (window.print stubbed)",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 12.35,
+   "evidence": "click; window.print calls 0->1; pageerrors=[]"
+  },
+  {
+   "item": "a.report[plant2000] no horizontal page overflow",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "scrollWidth=1440 innerWidth=1440"
+  },
+  {
+   "item": "a.report[plant2000] no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "a.report[plant2000] Excel, scope=all",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 13.78,
+   "evidence": "5803363 bytes, 11 sheets"
+  },
+  {
+   "item": "a.report[plant2000] PDF, scope=all",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 60.27,
+   "evidence": "no file; app shows size-limit message: PDF report would exceed 2000 pages. Largest sections: Source contributions (\u22651866 pages), Bus results (\u2265134 pages), Summary (\u22651 pages). Untick sections or choose \u201cSelected fault bus only\u201d in Report contents, or download Excel."
+  },
+  {
+   "item": "b.seq2000 SLG (as stored) calculates",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 5.33,
+   "evidence": "SINGLE-LINE-TO-GROUND MAXIMUM PHASE RMS | 1.104 kA | CALCULATED"
+  },
+  {
+   "item": "b.seq2000 fault type -> LL via Study setup",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 4.99,
+   "evidence": "click; select_option; metric: LINE-TO-LINE MAXIMUM PHASE RMS | 1.454 kA | CALCULATED"
+  },
+  {
+   "item": "b.seq2000 fault type -> DLG via Study setup",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 6.56,
+   "evidence": "click; select_option; metric: DOUBLE-LINE-TO-GROUND \u00b7 B\u2013C\u2013GROUND MAXIMUM PHASE RMS | 1.599 kA | CALCULATED"
+  },
+  {
+   "item": "b.seq2000 fault type -> SLG via Study setup",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 6.49,
+   "evidence": "click; select_option; metric: SINGLE-LINE-TO-GROUND MAXIMUM PHASE RMS | 1.104 kA | CALCULATED"
+  },
+  {
+   "item": "b.seq2000 no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "b.split2000 split-phase calculates",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 7.73,
+   "evidence": "SPLIT-PHASE \u00b7 L1\u2013NEUTRAL SINGLE-LEG RMS | 76.19 A | CALCULATED"
+  },
+  {
+   "item": "b.split2000 no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "c.operating[plant2000] page opens",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 1.43,
+   "evidence": "#op-base"
+  },
+  {
+   "item": "c.operating[plant2000] load flow result after base/slack + fill-zero",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 2.06,
+   "evidence": "button \"Enter 0 MW / 0 Mvar at the 1969 blank buses\" (click); before: \"Calculation blocked: Operating study: choose the actual reference/slack bus.\"; result: \"Converged in 0 iterations \u00b7 max residual 0 pu \u00b7 network loss 0 MW, 0 Mvar\"; first result table rows=1970"
+  },
+  {
+   "item": "c.operating[plant2000] re-solve after 0.8 MW on one inverter bus",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 3.33,
+   "evidence": "Converged in 3 iterations \u00b7 max residual 0 pu \u00b7 network loss 0.00161 MW, 0.01268 Mvar"
+  },
+  {
+   "item": "c.operating[plant2000] no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "c.operating[plant80, closed breakers] model has closed switch links between buses",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "14 closed link branches (breakers) in QA/V31_SCALE/results/plant80.json"
+  },
+  {
+   "item": "c.operating[plant80-switches] page opens",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.08,
+   "evidence": "#op-base"
+  },
+  {
+   "item": "c.operating[plant80-switches] load flow result after base/slack + fill-zero",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.09,
+   "evidence": "button \"Enter 0 MW / 0 Mvar at the 27 blank buses\" (click); before: \"Calculation blocked: Operating study: choose the actual reference/slack bus.\"; result: \"Converged in 0 iterations \u00b7 max residual 0 pu \u00b7 network loss 0 MW, 0 Mvar\"; first result table rows=28"
+  },
+  {
+   "item": "c.operating[plant80-switches] no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] dialog opens",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 8.07,
+   "evidence": "dom-click (real click failed: Page.click: Timeout 8000ms exceeded.)"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] Run/update completes (bracket off)",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 6.08,
+   "evidence": "status=\"0 of 1970 buses calculated (base scenario). Inputs saved in this browser.\"; rows=1970; row statuses={\"OUTSIDE IEEE 1584-2018 VOLTAGE RANGE\": 150, \"REVIEW: FAULT RESULT IS SCREENING BOUND\": 1820}"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] Run/update with \"Bracket bounded currents\"",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 6.35,
+   "evidence": "status=\"0 of 1970 buses calculated (base scenario). Inputs saved in this browser.\"; row statuses={\"OUTSIDE IEEE 1584-2018 VOLTAGE RANGE\": 150, \"CLEARING TIMES REQUIRED\": 1820} (before: {\"OUTSIDE IEEE 1584-2018 VOLTAGE RANGE\": 150, \"REVIEW: FAULT RESULT IS SCREENING BOUND\": 1820})"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] typed clearing times give incident energy",
+   "viewport": "desktop",
+   "status": "not_tested",
+   "time_s": null,
+   "evidence": "no row with typed clearing-time inputs inside the model range"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "e.engineering arc-flash card gives IEEE 1584 incident energy",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 3.37,
+   "evidence": "selected bus {'bus': 'Main panel', 'voltage': 208, 'faultType': '3phase'}; before: \"DATA_INCOMPLETE. Bolted fault current (kA); Working distance (mm); Actual electrode gap (mm); Enclosure height (mm); Enclosure width (mm); Enclosure depth (mm); Valid clearing time at actual arcing cu\"; after: \"Incident energy 1.83782169 cal/cm\u00b2 at the working distance \u00b7 arc-flash boundary 596.969795 mm \u00b7 governing case: full \u00b7 arcing current 7.74640584 kA (full), 6.67388204 kA (reduced).\"; stored inputs={\"boltedFaultKA\": 16.7, \"workingDistanceMm\": 457.2, \"electrodeGapMm\": 25, \"enclosureHeightMm\": 508, \"enclosu"
+  },
+  {
+   "item": "e.engineering no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "f.equipment-table dialog opens",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.06,
+   "evidence": "click"
+  },
+  {
+   "item": "f.equipment-table CSV download",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.04,
+   "evidence": "12-kV-208-V-Worked-example-equipment.csv: 8 lines, 25 columns, first columns=['action', 'id', 'type', 'name', 'from_bus', 'to_bus', 'bus', 'enabled'], types=['bus', 'cable', 'device:panel', 'source:utility', 'transformer']"
+  },
+  {
+   "item": "f.equipment-table upload: add row",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 2.93,
+   "evidence": "status=\"0 rows matched \u00b7 0 values changed \u00b7 1 added \u00b7 1 deleted.\" errors=[] buses 3->4"
+  },
+  {
+   "item": "f.equipment-table upload: delete row",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "deleted id=example-panel (type device:panel); devices 1->0, branches 2->2"
+  },
+  {
+   "item": "f.equipment-table result still shown after upload",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "THREE-PHASE FAULT RMS | 16.706 kA | CALCULATED"
+  },
+  {
+   "item": "f.equipment-table no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "g.build-plant AC plant (mode=new)",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 2.66,
+   "evidence": "click; summary=\"12 blocks \u00b7 48 inverters \u00b7 90 buses \u00b7 64 protective devices \u00b7 49 sources\"; builder errors=\"\"; draft {'buses': 3, 'branches': 2, 'devices': 1, 'sources': 1, 'pvArrays': 0, 'faultType': '3phase', 'name': '12 kV \u2192 208 V \u00b7 Worked example'} -> {'buses': 90, 'branches': 89, 'devices': 64, 'sources': 49, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant \u00b7 48 inverters'}; metric THREE-PHASE FAULT RMS | 20.437 kA | CALCULATED"
+  },
+  {
+   "item": "g.build-plant attach to bus (mode=attach)",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 1.16,
+   "evidence": "click; summary=\"6 blocks \u00b7 12 inverters \u00b7 32 buses \u00b7 20 protective devices \u00b7 12 sources\"; builder errors=\"\"; draft {'buses': 90, 'branches': 89, 'devices': 64, 'sources': 49, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant \u00b7 48 inverters'} -> {'buses': 122, 'branches': 121, 'devices': 84, 'sources': 61, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant \u00b7 48 inverters'}; metric THREE-PHASE FAULT RMS | 20.621 kA | CALCULATED"
+  },
+  {
+   "item": "g.build-plant DC array (kind=dc)",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 1.86,
+   "evidence": "click; summary=\"288 strings \u00b7 12 combiner boxes \u00b7 602 buses \u00b7 300 protective devices\"; builder errors=\"\"; draft {'buses': 122, 'branches': 121, 'devices': 84, 'sources': 61, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant \u00b7 48 inverters'} -> {'buses': 602, 'branches': 600, 'devices': 300, 'sources': 288, 'pvArrays': 0, 'faultType': 'dc', 'name': 'DC array \u00b7 288 strings'}; metric DC POLE-TO-POLE \u00b7 DOCUMENTED RESISTIVE LOOP PROSPECTIVE DC CURRENT | 5.067 kA | CALCULATED"
+  },
+  {
+   "item": "g.build-plant no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "h.arrange[plant2000, 1,970 buses] completes",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 4.07,
+   "evidence": "click; settled after 3.76 s (positions changed: False), result shown again after 4.07 s"
+  },
+  {
+   "item": "h.arrange[plant2000] no two bus symbols overlap",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "after: {\"buses\": 1970, \"nonFinite\": 0, \"samePosition\": 0, \"overlappingPairs\": 0, \"examples\": [], \"extent\": [100, 200, 72380, 7740], \"symbol\": [180, 80]}; before arrange: overlappingPairs=0, samePosition=0"
+  },
+  {
+   "item": "h.arrange[plant2000] no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "perf[plant2000] small edit (rename project) saved",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.8,
+   "evidence": "#field-project-name"
+  },
+  {
+   "item": "perf[plant2000] Undo after rename",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 1.74,
+   "evidence": "click; draft reverted after 1.43 s; result shown again after 1.74 s"
+  },
+  {
+   "item": "perf[plant2000] Redo after rename",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 1.91,
+   "evidence": "click; draft re-applied after 1.6 s; result shown again after 1.91 s"
+  },
+  {
+   "item": "perf[plant2000] \"+ Add equipment\" menu opens",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 0.86,
+   "evidence": "click"
+  },
+  {
+   "item": "perf[plant2000] add one breaker",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 6.36,
+   "evidence": "click; breaker in draft after 1.73 s; result shown again after 6.36 s; draft {'buses': 1970, 'branches': 1969, 'devices': 148, 'sources': 71, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant 70 V33'} -> {'buses': 1971, 'branches': 1970, 'devices': 149, 'sources': 71, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant 70 V33'}"
+  },
+  {
+   "item": "perf[plant2000] Undo after adding breaker",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 2.56,
+   "evidence": "click; draft reverted after 2.24 s; result shown again after 2.56 s"
+  },
+  {
+   "item": "perf[plant2000] Redo after adding breaker",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": 2.18,
+   "evidence": "click; draft re-applied after 1.88 s; result shown again after 2.18 s"
+  },
+  {
+   "item": "perf[plant2000] no new page/console errors",
+   "viewport": "desktop",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "a.report[example] chooser shown",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 0.09,
+   "evidence": ".report-contents"
+  },
+  {
+   "item": "a.report[example] section checkboxes present",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[[\"basis\", true], [\"diagram\", true], [\"buses\", true], [\"sources\", true], [\"branches\", true], [\"duty\", true], [\"screens\", true], [\"pv\", false], [\"inputs\", true], [\"qa\", true], [\"methodology\", true]]"
+  },
+  {
+   "item": "a.report[example] section checkbox toggles content",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 0.06,
+   "evidence": ".report-inputs count ticked=1 unticked=0 re-ticked=1"
+  },
+  {
+   "item": "a.report[example] scope radios all/selected present",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[[\"all\", true, false], [\"selected\", false, false]]"
+  },
+  {
+   "item": "a.report[example] scope radio switches all<->selected",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "table rows selected=17 all=17"
+  },
+  {
+   "item": "a.report[example] extra studies chooser",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "native studies offered=[[\"advanced:arc\", false, false]]; registered tool study box=1, printed in report=1"
+  },
+  {
+   "item": "a.report[example] PDF download",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 0.16,
+   "evidence": "12-kV-208-V-Worked-example.pdf 24162 bytes, head=b'%PDF-1.4'"
+  },
+  {
+   "item": "a.report[example] Excel download",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 0.17,
+   "evidence": "12-kV-208-V-Worked-example.xlsx 53813 bytes, sheets=['Summary', 'Bus results', 'Source contributions', 'Branch currents', 'Equipment duty', 'Study inputs', 'Assumptions &amp; QA', 'Database screens', 'Workbook references', 'V33 test tool study']"
+  },
+  {
+   "item": "a.report[example] print (window.print stubbed)",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 2.62,
+   "evidence": "click; window.print calls 0->1; pageerrors=[]"
+  },
+  {
+   "item": "a.report[example] no horizontal page overflow",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "scrollWidth=390 innerWidth=390"
+  },
+  {
+   "item": "a.report[example] no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "a.report[plant2000] project loads",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 3.37,
+   "evidence": "metric ready"
+  },
+  {
+   "item": "a.report[plant2000] chooser shown",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 14.44,
+   "evidence": ".report-contents"
+  },
+  {
+   "item": "a.report[plant2000] section checkboxes present",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[[\"basis\", true], [\"diagram\", true], [\"buses\", true], [\"sources\", true], [\"branches\", true], [\"duty\", true], [\"screens\", true], [\"pv\", false], [\"inputs\", true], [\"qa\", true], [\"methodology\", true]]"
+  },
+  {
+   "item": "a.report[plant2000] section checkbox toggles content",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 2.88,
+   "evidence": ".report-inputs count ticked=1 unticked=0 re-ticked=1"
+  },
+  {
+   "item": "a.report[plant2000] scope radios all/selected present",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[[\"all\", false, false], [\"selected\", true, false]]"
+  },
+  {
+   "item": "a.report[plant2000] scope \"selected\" active",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "table rows selected=9314"
+  },
+  {
+   "item": "a.report[plant2000] extra studies chooser",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "native studies offered=[[\"advanced:arc\", false, false]]; registered tool study box=1, printed in report=1"
+  },
+  {
+   "item": "a.report[plant2000] PDF download",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 27.42,
+   "evidence": "PV-plant-70.pdf 9297379 bytes, head=b'%PDF-1.4'"
+  },
+  {
+   "item": "a.report[plant2000] Excel download",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 29.12,
+   "evidence": "PV-plant-70.xlsx 1165542 bytes, sheets=['Summary', 'Bus results', 'Source contributions', 'Branch currents', 'Equipment duty', 'Study inputs', 'Assumptions &amp; QA', 'Database screens', 'Workbook references', 'V33 test tool study']"
+  },
+  {
+   "item": "a.report[plant2000] print (window.print stubbed)",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 33.89,
+   "evidence": "dom-click (real click failed: Page.click: Timeout 8000ms exceeded.); window.print calls 0->2; pageerrors=[]"
+  },
+  {
+   "item": "a.report[plant2000] no horizontal page overflow",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "scrollWidth=390 innerWidth=390"
+  },
+  {
+   "item": "a.report[plant2000] no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "a.report[plant2000] Excel, scope=all",
+   "viewport": "mobile",
+   "status": "fail",
+   "time_s": 31.07,
+   "evidence": "Page crashed"
+  },
+  {
+   "item": "a.report[plant2000]",
+   "viewport": "mobile",
+   "status": "fail",
+   "time_s": 202.75,
+   "evidence": "EXCEPTION Locator.inner_text: Target crashed "
+  },
+  {
+   "item": "b.seq2000 SLG (as stored) calculates",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 5.75,
+   "evidence": "SINGLE-LINE-TO-GROUND MAXIMUM PHASE RMS | 1.104 kA | CALCULATED"
+  },
+  {
+   "item": "b.seq2000 fault type -> LL via Study setup",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 6.47,
+   "evidence": "click; select_option; metric: LINE-TO-LINE MAXIMUM PHASE RMS | 1.454 kA | CALCULATED"
+  },
+  {
+   "item": "b.seq2000 fault type -> DLG via Study setup",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 7.16,
+   "evidence": "click; select_option; metric: DOUBLE-LINE-TO-GROUND \u00b7 B\u2013C\u2013GROUND MAXIMUM PHASE RMS | 1.599 kA | CALCULATED"
+  },
+  {
+   "item": "b.seq2000 fault type -> SLG via Study setup",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 6.57,
+   "evidence": "click; select_option; metric: SINGLE-LINE-TO-GROUND MAXIMUM PHASE RMS | 1.104 kA | CALCULATED"
+  },
+  {
+   "item": "b.seq2000 no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "b.split2000 split-phase calculates",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 8.91,
+   "evidence": "SPLIT-PHASE \u00b7 L1\u2013NEUTRAL SINGLE-LEG RMS | 76.19 A | CALCULATED"
+  },
+  {
+   "item": "b.split2000 no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] dialog opens",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 8.07,
+   "evidence": "dom-click (real click failed: Page.click: Timeout 8000ms exceeded.)"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] Run/update completes (bracket off)",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 9.92,
+   "evidence": "status=\"0 of 1970 buses calculated (base scenario). Inputs saved in this browser.\"; rows=1970; row statuses={\"OUTSIDE IEEE 1584-2018 VOLTAGE RANGE\": 150, \"REVIEW: FAULT RESULT IS SCREENING BOUND\": 1820}"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] Run/update with \"Bracket bounded currents\"",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 16.33,
+   "evidence": "status=\"0 of 1970 buses calculated (base scenario). Inputs saved in this browser.\"; row statuses={\"OUTSIDE IEEE 1584-2018 VOLTAGE RANGE\": 150, \"CLEARING TIMES REQUIRED\": 1820} (before: {\"OUTSIDE IEEE 1584-2018 VOLTAGE RANGE\": 150, \"REVIEW: FAULT RESULT IS SCREENING BOUND\": 1820})"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] typed clearing times give incident energy",
+   "viewport": "mobile",
+   "status": "not_tested",
+   "time_s": null,
+   "evidence": "no row with typed clearing-time inputs inside the model range"
+  },
+  {
+   "item": "d.arcflash-all[plant2000] no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "e.engineering arc-flash card gives IEEE 1584 incident energy",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 3.56,
+   "evidence": "selected bus {'bus': 'Main panel', 'voltage': 208, 'faultType': '3phase'}; before: \"DATA_INCOMPLETE. Bolted fault current (kA); Working distance (mm); Actual electrode gap (mm); Enclosure height (mm); Enclosure width (mm); Enclosure depth (mm); Valid clearing time at actual arcing cu\"; after: \"Incident energy 1.83782169 cal/cm\u00b2 at the working distance \u00b7 arc-flash boundary 596.969795 mm \u00b7 governing case: full \u00b7 arcing current 7.74640584 kA (full), 6.67388204 kA (reduced).\"; stored inputs={\"boltedFaultKA\": 16.7, \"workingDistanceMm\": 457.2, \"electrodeGapMm\": 25, \"enclosureHeightMm\": 508, \"enclosu"
+  },
+  {
+   "item": "e.engineering no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "f.equipment-table dialog opens",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 0.16,
+   "evidence": "click"
+  },
+  {
+   "item": "f.equipment-table CSV download",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 0.25,
+   "evidence": "12-kV-208-V-Worked-example-equipment.csv: 8 lines, 25 columns, first columns=['action', 'id', 'type', 'name', 'from_bus', 'to_bus', 'bus', 'enabled'], types=['bus', 'cable', 'device:panel', 'source:utility', 'transformer']"
+  },
+  {
+   "item": "f.equipment-table upload: add row",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 3.17,
+   "evidence": "status=\"0 rows matched \u00b7 0 values changed \u00b7 1 added \u00b7 1 deleted.\" errors=[] buses 3->4"
+  },
+  {
+   "item": "f.equipment-table upload: delete row",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "deleted id=example-panel (type device:panel); devices 1->0, branches 2->2"
+  },
+  {
+   "item": "f.equipment-table result still shown after upload",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "THREE-PHASE FAULT RMS | 16.706 kA | CALCULATED"
+  },
+  {
+   "item": "f.equipment-table no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "g.build-plant AC plant (mode=new)",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 2.68,
+   "evidence": "click; summary=\"12 blocks \u00b7 48 inverters \u00b7 90 buses \u00b7 64 protective devices \u00b7 49 sources\"; builder errors=\"\"; draft {'buses': 3, 'branches': 2, 'devices': 1, 'sources': 1, 'pvArrays': 0, 'faultType': '3phase', 'name': '12 kV \u2192 208 V \u00b7 Worked example'} -> {'buses': 90, 'branches': 89, 'devices': 64, 'sources': 49, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant \u00b7 48 inverters'}; metric THREE-PHASE FAULT RMS | 20.437 kA | CALCULATED"
+  },
+  {
+   "item": "g.build-plant attach to bus (mode=attach)",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 1.35,
+   "evidence": "click; summary=\"6 blocks \u00b7 12 inverters \u00b7 32 buses \u00b7 20 protective devices \u00b7 12 sources\"; builder errors=\"\"; draft {'buses': 90, 'branches': 89, 'devices': 64, 'sources': 49, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant \u00b7 48 inverters'} -> {'buses': 122, 'branches': 121, 'devices': 84, 'sources': 61, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant \u00b7 48 inverters'}; metric THREE-PHASE FAULT RMS | 20.621 kA | CALCULATED"
+  },
+  {
+   "item": "g.build-plant DC array (kind=dc)",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 2.26,
+   "evidence": "click; summary=\"288 strings \u00b7 12 combiner boxes \u00b7 602 buses \u00b7 300 protective devices\"; builder errors=\"\"; draft {'buses': 122, 'branches': 121, 'devices': 84, 'sources': 61, 'pvArrays': 0, 'faultType': '3phase', 'name': 'PV plant \u00b7 48 inverters'} -> {'buses': 602, 'branches': 600, 'devices': 300, 'sources': 288, 'pvArrays': 0, 'faultType': 'dc', 'name': 'DC array \u00b7 288 strings'}; metric DC POLE-TO-POLE \u00b7 DOCUMENTED RESISTIVE LOOP PROSPECTIVE DC CURRENT | 5.067 kA | CALCULATED"
+  },
+  {
+   "item": "g.build-plant no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "h.arrange[plant2000, 1,970 buses] completes",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 4.15,
+   "evidence": "click; settled after 3.84 s (positions changed: False), result shown again after 4.15 s"
+  },
+  {
+   "item": "h.arrange[plant2000] no two bus symbols overlap",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "after: {\"buses\": 1970, \"nonFinite\": 0, \"samePosition\": 0, \"overlappingPairs\": 0, \"examples\": [], \"extent\": [100, 200, 72380, 7740], \"symbol\": [180, 80]}; before arrange: overlappingPairs=0, samePosition=0"
+  },
+  {
+   "item": "h.arrange[plant2000] no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "c.operating[plant2000] page opens",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 2.64,
+   "evidence": "#op-base"
+  },
+  {
+   "item": "c.operating[plant2000] load flow result after base/slack + fill-zero",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 5.92,
+   "evidence": "button \"Enter 0 MW / 0 Mvar at the 1969 blank buses\" (click); before: \"Calculation blocked: Operating study: choose the actual reference/slack bus.\"; result: \"Converged in 0 iterations \u00b7 max residual 0 pu \u00b7 network loss 0 MW, 0 Mvar\"; first result table rows=1970"
+  },
+  {
+   "item": "c.operating[plant2000] re-solve after 0.8 MW on one inverter bus",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 7.58,
+   "evidence": "Converged in 3 iterations \u00b7 max residual 0 pu \u00b7 network loss 0.00161 MW, 0.01268 Mvar"
+  },
+  {
+   "item": "c.operating[plant2000] no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  },
+  {
+   "item": "c.operating[plant80, closed breakers] model has closed switch links between buses",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "14 closed link branches (breakers) in QA/V31_SCALE/results/plant80.json"
+  },
+  {
+   "item": "c.operating[plant80-switches] page opens",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 0.09,
+   "evidence": "#op-base"
+  },
+  {
+   "item": "c.operating[plant80-switches] load flow result after base/slack + fill-zero",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": 0.12,
+   "evidence": "button \"Enter 0 MW / 0 Mvar at the 27 blank buses\" (click); before: \"Calculation blocked: Operating study: choose the actual reference/slack bus.\"; result: \"Converged in 0 iterations \u00b7 max residual 0 pu \u00b7 network loss 0 MW, 0 Mvar\"; first result table rows=28"
+  },
+  {
+   "item": "c.operating[plant80-switches] no new page/console errors",
+   "viewport": "mobile",
+   "status": "pass",
+   "time_s": null,
+   "evidence": "[]"
+  }
+ ]
+}

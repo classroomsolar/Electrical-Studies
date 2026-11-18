@@ -1,0 +1,72 @@
+[
+ {
+  "check": "body text uses the Sitka Text stack",
+  "pass": true,
+  "info": "\"Sitka Text\", \"Sitka Small\", Georgia, \"Times New Roman\", serif"
+ },
+ {
+  "check": "headings use the Sitka Heading stack",
+  "pass": true,
+  "info": "\"Sitka Heading\", \"Sitka Subheading\", \"Sitka Text\", Georgia, \"Times New Roman\", serif"
+ },
+ {
+  "check": "code stays monospace",
+  "pass": true,
+  "info": "ui-monospace, \"Cascadia Mono\", Consolas, SFMono-Regular, \"Courier New\", monospace"
+ },
+ {
+  "check": "no font file is requested",
+  "pass": true,
+  "info": "[]"
+ },
+ {
+  "check": "launcher no longer says BESS",
+  "pass": true,
+  "info": "Operations study lab \u00b7 time-series load flow"
+ },
+ {
+  "check": "lab opens",
+  "pass": true,
+  "info": "{'visible': True, 'heading': 'Operations Study Lab \u00b7 time-series load flow', 'bessHidden': True, 'sweepHidden': True, 'acPressed': 'true', 'note': 'BESS sizing and charge / discharge / dispatch studies are not in the scope of this calculator. BESS and generators stay available as equipment in the on"
+ },
+ {
+  "check": "BESS dispatch and sizing tabs hidden",
+  "pass": true,
+  "info": "{'visible': True, 'heading': 'Operations Study Lab \u00b7 time-series load flow', 'bessHidden': True, 'sweepHidden': True, 'acPressed': 'true', 'note': 'BESS sizing and charge / discharge / dispatch studies are not in the scope of this calculator. BESS and generators stay available as equipment in the on"
+ },
+ {
+  "check": "time-series load flow is the active mode",
+  "pass": true,
+  "info": "{'visible': True, 'heading': 'Operations Study Lab \u00b7 time-series load flow', 'bessHidden': True, 'sweepHidden': True, 'acPressed': 'true', 'note': 'BESS sizing and charge / discharge / dispatch studies are not in the scope of this calculator. BESS and generators stay available as equipment in the on"
+ },
+ {
+  "check": "scope note shown",
+  "pass": true,
+  "info": "BESS sizing and charge / discharge / dispatch studies are not in the scope of this calculator. BESS and generators stay available as equipment in the one-line and in the fault, load-flow, protection and arc-flash studies."
+ },
+ {
+  "check": "heading no longer says BESS",
+  "pass": true,
+  "info": "Operations Study Lab \u00b7 time-series load flow"
+ },
+ {
+  "check": "time-series load flow example calculates",
+  "pass": true,
+  "info": "CALCULATED \u00b7 BOUNDED_TIME_SERIES_SCREENOperating profile resultsExisting balanced steady-state AC Newton-Raphson solver run independently for each scaled-injection interval; no load switching, fault c"
+ },
+ {
+  "check": "imported BESS scenario is refused with the scope message",
+  "pass": true,
+  "info": ""
+ },
+ {
+  "check": "Cloud Vault backup input has a label",
+  "pass": true,
+  "info": "Owner cloud-backup JSON file"
+ },
+ {
+  "check": "no page errors",
+  "pass": true,
+  "info": "[]"
+ }
+]

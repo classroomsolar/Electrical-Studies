@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "randomizedCases": 1500,
+  "numericComparisons": 9000,
+  "methods": [
+    "constant-rms",
+    "linear-rms-trace",
+    "documented-i2t"
+  ],
+  "note": "Independent mathematical reference; no OEM k factors, trip curves, or standard conformance validated"
+}

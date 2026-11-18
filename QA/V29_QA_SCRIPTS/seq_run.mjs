@@ -1,0 +1,2 @@
+import fs from 'node:fs';import {reducedSequenceFault} from '../../SITE/sequence-fault-screen.mjs';
+const c=JSON.parse(fs.readFileSync('seq_cases.json'));console.log(JSON.stringify(c.map(x=>{try{return reducedSequenceFault(x)}catch(e){return {error:e.message}}})))

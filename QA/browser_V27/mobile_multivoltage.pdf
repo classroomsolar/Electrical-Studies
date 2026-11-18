@@ -1,0 +1,215 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 4735 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: multivoltage) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_MULTIVOLTAGE_3PH_NETWORK) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:04:36.729Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: baseMVA | Entered value: 10) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: frequencyHz | Entered value: 60) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: faultBus | Entered value: PANEL) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: buses[0].id | Entered value: UTILITY) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: buses[0].nominalLLV | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: buses[1].id | Entered value: SECONDARY) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: buses[1].nominalLLV | Entered value: 480) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: buses[2].id | Entered value: PANEL) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: buses[2].nominalLLV | Entered value: 480) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: branches[0].id | Entered value: TX_1) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: branches[0].kind | Entered value: transformer) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: branches[0].from | Entered value: UTILITY) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: branches[0].to | Entered value: SECONDARY) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: branches[0].rPu | Entered value: 0.012) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: branches[0].xPu | Entered value: 0.055) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: branches[0].tapMagnitude | Entered value: 1.025) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: branches[0].phaseShiftDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: branches[1].id | Entered value: FEEDER) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: branches[1].kind | Entered value: line) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: branches[1].from | Entered value: SECONDARY) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: branches[1].to | Entered value: PANEL) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: branches[1].rOhm | Entered value: 0.0012) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: branches[1].xOhm | Entered value: 0.003) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: sources[0].id | Entered value: GRID) Tj ET
+BT /F1 8 Tf 32 285 Td (Input path: sources[0].bus | Entered value: UTILITY) Tj ET
+BT /F1 8 Tf 32 272 Td (Input path: sources[0].rPu | Entered value: 0.008) Tj ET
+BT /F1 8 Tf 32 259 Td (Input path: sources[0].xPu | Entered value: 0.042) Tj ET
+BT /F1 8 Tf 32 246 Td (Input path: sources[0].emScale | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 233 Td (Input path: sources[0].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 220 Td (Input path: sources[1].id | Entered value: GENERATOR) Tj ET
+BT /F1 8 Tf 32 207 Td (Input path: sources[1].bus | Entered value: SECONDARY) Tj ET
+BT /F1 8 Tf 32 194 Td (Input path: sources[1].rPu | Entered value: 0.05) Tj ET
+BT /F1 8 Tf 32 181 Td (Input path: sources[1].xPu | Entered value: 0.19) Tj ET
+BT /F1 8 Tf 32 168 Td (Input path: sources[1].emScale | Entered value: 1.04) Tj ET
+BT /F1 8 Tf 32 155 Td (Input path: sources[1].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 142 Td () Tj ET
+BT /F1 8 Tf 32 129 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: status | Value: BOUNDED_MULTIVOLTAGE_3PH_NETWORK) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: scope | Value: Fundamental-frequency balanced 3PH linear Thevenin sources +) Tj ET
+BT /F1 8 Tf 32 90 Td (documented nominal transformer LL voltage bases, leakage on one 3PH power base and off-nominal tap) Tj ET
+BT /F1 8 Tf 32 77 Td (phase/magnitude. No vector-group zero-sequence, non-linear fault arc, generator/motor/IBR decrement) Tj ET
+BT /F1 8 Tf 32 64 Td (or correction factors, certified maximum/minimum IEC-60909 duty, or breaker approval.) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: baseMVA | Value: 10) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: frequencyHz | Value: 60) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 6252 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: faultBus | Value: PANEL) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: faultNominalLLV | Value: 480) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: faultMode | Value: BOLTED_FAULT) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: faultCurrentA.real | Value: 20221.924060021163) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: faultCurrentA.imag | Value: -59072.01134125021) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: faultCurrentA.magnitude | Value: 62437.39854117928) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: faultCurrentA.angleDegrees | Value: -71.10255760601106) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: initialSymmetricalKA | Value: 62.437398541179284) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: initialShortCircuitMVA | Value: 51.90947835155971) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: sourceCurrents[0].id | Value: GRID) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: sourceCurrents[0].bus | Value: UTILITY) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: sourceCurrents[0].currentA.real | Value: 446.6515454548517) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: sourceCurrents[0].currentA.imag | Value: -1395.2876474841898) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: sourceCurrents[0].currentA.magnitude | Value: 1465.0342051567168) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: sourceCurrents[0].currentA.angleDegrees | Value: -72.24938735218943) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: sourceCurrents[1].id | Value: GENERATOR) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: sourceCurrents[1].bus | Value: SECONDARY) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: sourceCurrents[1].currentA.real | Value: 7059.661329898489) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: sourceCurrents[1].currentA.imag | Value: -17954.6284794504) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: sourceCurrents[1].currentA.magnitude | Value: 19292.680008955613) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: sourceCurrents[1].currentA.angleDegrees | Value: -68.53552034492692) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: branchCurrents[0].id | Value: TX_1) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: branchCurrents[0].kind | Value: transformer) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: branchCurrents[0].from | Value: UTILITY) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: branchCurrents[0].to | Value: SECONDARY) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: branchCurrents[0].fromA.real | Value: 446.651545454852) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: branchCurrents[0].fromA.imag | Value: -1395.2876474841923) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: branchCurrents[0].fromA.magnitude | Value: 1465.034205156719) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: branchCurrents[0].fromA.angleDegrees | Value: -72.24938735218944) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: branchCurrents[0].toA.real | Value: -13162.262730122671) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: branchCurrents[0].toA.imag | Value: 41117.38286179981) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: branchCurrents[0].toA.magnitude | Value: 43172.72673321208) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: branchCurrents[0].toA.angleDegrees | Value: 107.75061264781056) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: branchCurrents[1].id | Value: FEEDER) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: branchCurrents[1].kind | Value: line) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: branchCurrents[1].from | Value: SECONDARY) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: branchCurrents[1].to | Value: PANEL) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: branchCurrents[1].fromA.real | Value: 20221.924060021163) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: branchCurrents[1].fromA.imag | Value: -59072.01134125021) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: branchCurrents[1].fromA.magnitude | Value: 62437.39854117928) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: branchCurrents[1].fromA.angleDegrees | Value: -71.10255760601106) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: branchCurrents[1].toA.real | Value: -20221.924060021163) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: branchCurrents[1].toA.imag | Value: 59072.01134125021) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: branchCurrents[1].toA.magnitude | Value: 62437.39854117928) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: branchCurrents[1].toA.angleDegrees | Value: 108.89744239398895) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: busVoltages[0].bus | Value: UTILITY) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: busVoltages[0].llV | Value: 13800) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: busVoltages[0].phaseVoltageV.real | Value: 7580.110795780448) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: busVoltages[0].phaseVoltageV.imag | Value: -144.6784816594609) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: busVoltages[0].phaseVoltageV.magnitude | Value: 7581.4913796272685) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: busVoltages[0].phaseVoltageV.angleDegrees | Value: -1.0934483963007628) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: busVoltages[0].voltagePu.real | Value: 0.9513867409632674) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: busVoltages[0].voltagePu.imag | Value: -0.018158730506964368) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: busVoltages[0].voltagePu.magnitude | Value: 0.9515600193231806) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: busVoltages[0].voltagePu.angleDegrees | Value: -1.0934483963007628) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: busVoltages[1].bus | Value: SECONDARY) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: busVoltages[1].llV | Value: 480) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: busVoltages[1].phaseVoltageV.real | Value: 201.48234289577607) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: busVoltages[1].phaseVoltageV.imag | Value: -10.220641429436764) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 4568 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: busVoltages[1].phaseVoltageV.magnitude | Value: 201.74140876379397) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: busVoltages[1].phaseVoltageV.angleDegrees | Value: -2.9039670923628615) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: busVoltages[1].voltagePu.real | Value: 0.7270367806739549) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: busVoltages[1].voltagePu.imag | Value: -0.03688056300359973) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: busVoltages[1].voltagePu.magnitude | Value: 0.7279716041029424) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: busVoltages[1].voltagePu.angleDegrees | Value: -2.9039670923628615) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: busVoltages[2].bus | Value: PANEL) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: busVoltages[2].llV | Value: 480) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: busVoltages[2].phaseVoltageV.real | Value: 0) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: busVoltages[2].phaseVoltageV.imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: busVoltages[2].phaseVoltageV.magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: busVoltages[2].phaseVoltageV.angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: busVoltages[2].voltagePu.real | Value: 0) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: busVoltages[2].voltagePu.imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: busVoltages[2].voltagePu.magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: busVoltages[2].voltagePu.angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: nodalRelativeResidual | Value: 2.761757959478921e-16) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: assumptions[0] | Value: All complex impedances linear and at fundamental) Tj ET
+BT /F1 8 Tf 32 558 Td (frequency) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: assumptions[1] | Value: Transformer leakage and tap explicitly documented;) Tj ET
+BT /F1 8 Tf 32 532 Td (leakage given on global three-phase S base) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: assumptions[2] | Value: Transformer winding group and ground return do not) Tj ET
+BT /F1 8 Tf 32 506 Td (enter balanced 3PH calculations) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: assumptions[3] | Value: No fault-duty correction/decrement, CT/reclosing,) Tj ET
+BT /F1 8 Tf 32 480 Td (or manufacturer equipment qualification) Tj ET
+BT /F1 8 Tf 32 467 Td () Tj ET
+BT /F1 8 Tf 32 454 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 441 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 428 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 415 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 402 Td (use.) Tj ET
+BT /F1 8 Tf 32 389 Td (Evidence / limitation: Study method | Value: multivoltage) Tj ET
+BT /F1 8 Tf 32 376 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:04:36.729Z) Tj ET
+BT /F1 8 Tf 32 363 Td (Evidence / limitation: outputs.scope | Value: Fundamental-frequency balanced 3PH linear Thevenin) Tj ET
+BT /F1 8 Tf 32 350 Td (sources + documented nominal transformer LL voltage bases, leakage on one 3PH power base and) Tj ET
+BT /F1 8 Tf 32 337 Td (off-nominal tap phase/magnitude. No vector-group zero-sequence, non-linear fault arc,) Tj ET
+BT /F1 8 Tf 32 324 Td (generator/motor/IBR decrement or correction factors, certified maximum/minimum IEC-60909 duty, or) Tj ET
+BT /F1 8 Tf 32 311 Td (breaker approval.) Tj ET
+BT /F1 8 Tf 32 298 Td (Evidence / limitation: outputs.assumptions[0] | Value: All complex impedances linear and at) Tj ET
+BT /F1 8 Tf 32 285 Td (fundamental frequency) Tj ET
+BT /F1 8 Tf 32 272 Td (Evidence / limitation: outputs.assumptions[1] | Value: Transformer leakage and tap explicitly) Tj ET
+BT /F1 8 Tf 32 259 Td (documented; leakage given on global three-phase S base) Tj ET
+BT /F1 8 Tf 32 246 Td (Evidence / limitation: outputs.assumptions[2] | Value: Transformer winding group and ground return) Tj ET
+BT /F1 8 Tf 32 233 Td (do not enter balanced 3PH calculations) Tj ET
+BT /F1 8 Tf 32 220 Td (Evidence / limitation: outputs.assumptions[3] | Value: No fault-duty correction/decrement,) Tj ET
+BT /F1 8 Tf 32 207 Td (CT/reclosing, or manufacturer equipment qualification) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000127 00000 n 
+0000000195 00000 n 
+0000004982 00000 n 
+0000005108 00000 n 
+0000011412 00000 n 
+0000011538 00000 n 
+0000016158 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+16284
+%%EOF

@@ -1,0 +1,1158 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R] /Count 17 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 4879 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: faultsweep) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: BOUNDED_DOCUMENTED_FAULT_LOCATION_SWEEP) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:04:42.565Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY ? independently verify actual manufacturer, utility, installation, e) Tj ET
+BT /F1 8 Tf 32 662 Td (quipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM certif) Tj ET
+BT /F1 8 Tf 32 636 Td (ication or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: nominalLLV | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: voltageFactor | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: frequencyHz | Entered value: 60) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: faultType | Entered value: AG) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: faultBus | Entered value: F) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: buses[0] | Entered value: F) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: buses[1] | Entered value: A) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: buses[2] | Entered value: B) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: branches[0].id | Entered value: line-A) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: branches[0].from | Entered value: A) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: branches[0].to | Entered value: F) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: branches[0].positiveSequence.rOhm | Entered value: 0.06) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: branches[0].positiveSequence.xOhm | Entered value: 0.12) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: branches[0].negativeSequence.rOhm | Entered value: 0.07) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: branches[0].negativeSequence.xOhm | Entered value: 0.14) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: branches[0].zeroSequence.rOhm | Entered value: 0.23) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: branches[0].zeroSequence.xOhm | Entered value: 0.44) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: branches[1].id | Entered value: line-B) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: branches[1].from | Entered value: B) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: branches[1].to | Entered value: F) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: branches[1].positiveSequence.rOhm | Entered value: 0.04) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: branches[1].positiveSequence.xOhm | Entered value: 0.13) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: branches[1].negativeSequence.rOhm | Entered value: 0.05) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: branches[1].negativeSequence.xOhm | Entered value: 0.16) Tj ET
+BT /F1 8 Tf 32 285 Td (Input path: branches[1].zeroSequence.rOhm | Entered value: 0.22) Tj ET
+BT /F1 8 Tf 32 272 Td (Input path: branches[1].zeroSequence.xOhm | Entered value: 0.48) Tj ET
+BT /F1 8 Tf 32 259 Td (Input path: sources[0].id | Entered value: grid-A) Tj ET
+BT /F1 8 Tf 32 246 Td (Input path: sources[0].bus | Entered value: A) Tj ET
+BT /F1 8 Tf 32 233 Td (Input path: sources[0].positiveSequence.rOhm | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 220 Td (Input path: sources[0].positiveSequence.xOhm | Entered value: 0.42) Tj ET
+BT /F1 8 Tf 32 207 Td (Input path: sources[0].negativeSequence.rOhm | Entered value: 0.09) Tj ET
+BT /F1 8 Tf 32 194 Td (Input path: sources[0].negativeSequence.xOhm | Entered value: 0.46) Tj ET
+BT /F1 8 Tf 32 181 Td (Input path: sources[0].zeroSequence.rOhm | Entered value: 0.31) Tj ET
+BT /F1 8 Tf 32 168 Td (Input path: sources[0].zeroSequence.xOhm | Entered value: 1.2) Tj ET
+BT /F1 8 Tf 32 155 Td (Input path: sources[0].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 142 Td (Input path: sources[0].emScale | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 129 Td (Input path: sources[1].id | Entered value: source-B) Tj ET
+BT /F1 8 Tf 32 116 Td (Input path: sources[1].bus | Entered value: B) Tj ET
+BT /F1 8 Tf 32 103 Td (Input path: sources[1].positiveSequence.rOhm | Entered value: 0.11) Tj ET
+BT /F1 8 Tf 32 90 Td (Input path: sources[1].positiveSequence.xOhm | Entered value: 0.6) Tj ET
+BT /F1 8 Tf 32 77 Td (Input path: sources[1].negativeSequence.rOhm | Entered value: 0.13) Tj ET
+BT /F1 8 Tf 32 64 Td (Input path: sources[1].negativeSequence.xOhm | Entered value: 0.67) Tj ET
+BT /F1 8 Tf 32 51 Td (Input path: sources[1].zeroSequence.rOhm | Entered value: 0.33) Tj ET
+BT /F1 8 Tf 32 38 Td (Input path: sources[1].zeroSequence.xOhm | Entered value: 1.34) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 5614 >>
+stream
+BT /F1 8 Tf 32 792 Td (Input path: sources[1].angleDeg | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 779 Td (Input path: sources[1].emScale | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 766 Td (Input path: faultBuses[0] | Entered value: F) Tj ET
+BT /F1 8 Tf 32 753 Td (Input path: faultBuses[1] | Entered value: A) Tj ET
+BT /F1 8 Tf 32 740 Td (Input path: faultBuses[2] | Entered value: B) Tj ET
+BT /F1 8 Tf 32 727 Td (Input path: faultTypes[0] | Entered value: 3PH) Tj ET
+BT /F1 8 Tf 32 714 Td (Input path: faultTypes[1] | Entered value: AG) Tj ET
+BT /F1 8 Tf 32 701 Td (Input path: faultTypes[2] | Entered value: BC) Tj ET
+BT /F1 8 Tf 32 688 Td (Input path: faultTypes[3] | Entered value: BCG) Tj ET
+BT /F1 8 Tf 32 675 Td () Tj ET
+BT /F1 8 Tf 32 662 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: status | Value: BOUNDED_DOCUMENTED_FAULT_LOCATION_SWEEP) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: scope | Value: Fault-location and fault-type grid over one explicitly entered fi) Tj ET
+BT /F1 8 Tf 32 623 Td (xed source operating condition. NOT automatic IEC 60909 maximum/minimum source conditions, nor breaker d) Tj ET
+BT /F1 8 Tf 32 610 Td (uty or protection certification.) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: nominalLLV | Value: 13800) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: frequencyHz | Value: 60) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: voltageFactor | Value: 1.1) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: locations[0] | Value: F) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: locations[1] | Value: A) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: locations[2] | Value: B) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: types[0] | Value: 3PH) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: types[1] | Value: AG) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: types[2] | Value: BC) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: types[3] | Value: BCG) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: caseCount | Value: 12) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: globalMaximum.faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: globalMaximum.faultType | Value: 3PH) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: globalMaximum.maximumPhaseRmsA | Value: 30498.57599266589) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: maximaByFaultType[0].faultType | Value: 3PH) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: maximaByFaultType[0].maximum.faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: maximaByFaultType[0].maximum.currentA | Value: 30498.57599266589) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: maximaByFaultType[0].minimum.faultBus | Value: B) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: maximaByFaultType[0].minimum.currentA | Value: 26978.282592342242) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: maximaByFaultType[1].faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: maximaByFaultType[1].maximum.faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: maximaByFaultType[1].maximum.currentA | Value: 18480.083814940346) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: maximaByFaultType[1].minimum.faultBus | Value: F) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: maximaByFaultType[1].minimum.currentA | Value: 16620.557944533848) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: maximaByFaultType[2].faultType | Value: BC) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: maximaByFaultType[2].maximum.faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: maximaByFaultType[2].maximum.currentA | Value: 25016.887310037237) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: maximaByFaultType[2].minimum.faultBus | Value: B) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: maximaByFaultType[2].minimum.currentA | Value: 21969.261655778915) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: maximaByFaultType[3].faultType | Value: BCG) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: maximaByFaultType[3].maximum.faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: maximaByFaultType[3].maximum.currentA | Value: 26616.87717648401) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: maximaByFaultType[3].minimum.faultBus | Value: B) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: maximaByFaultType[3].minimum.currentA | Value: 23492.242200550376) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[0].faultBus | Value: F) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[0].faultType | Value: 3PH) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[0].maximumPhaseRmsA | Value: 27461.82109261666) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[0].groundResidualA | Value: 0) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[0].phaseFaultCurrentA[0].real | Value: 6309.743758583883) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[0].phaseFaultCurrentA[0].imag | Value: -26727.11640682356) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[0].phaseFaultCurrentA[0].magnitude | Value: 27461.82109261666) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[0].phaseFaultCurrentA[0].angleDegrees | Value: -76.7168095145296) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[0].phaseFaultCurrentA[1].real | Value: -26301.23365750501) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cases[0].phaseFaultCurrentA[1].imag | Value: 7899.159817107831) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 5354 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[0].phaseFaultCurrentA[1].magnitude | Value: 27461.821092616658) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cases[0].phaseFaultCurrentA[1].angleDegrees | Value: 163.2831904854704) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[0].phaseFaultCurrentA[2].real | Value: 19991.489898921125) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cases[0].phaseFaultCurrentA[2].imag | Value: 18827.95658971573) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[0].phaseFaultCurrentA[2].magnitude | Value: 27461.82109261666) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[0].phaseFaultCurrentA[2].angleDegrees | Value: 43.2831904854704) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[0].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[0].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[0].real | Value: 3942.75318792349) Tj ET
+BT /F1 8 Tf 32 675 Td (94) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[0].imag | Value: -15207.762296276) Tj ET
+BT /F1 8 Tf 32 649 Td (356) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 15710.54858) Tj ET
+BT /F1 8 Tf 32 623 Td (2431029) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -75.4655) Tj ET
+BT /F1 8 Tf 32 597 Td (4491945989) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[1].real | Value: -15141.685077252) Tj ET
+BT /F1 8 Tf 32 571 Td (243) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[1].imag | Value: 4189.35672654434) Tj ET
+BT /F1 8 Tf 32 545 Td (7) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 15710.54858) Tj ET
+BT /F1 8 Tf 32 519 Td (243103) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: 164.5344) Tj ET
+BT /F1 8 Tf 32 493 Td (5508054014) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[2].real | Value: 11198.9318893287) Tj ET
+BT /F1 8 Tf 32 467 Td (44) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[2].imag | Value: 11018.4055697320) Tj ET
+BT /F1 8 Tf 32 441 Td (1) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 15710.54858) Tj ET
+BT /F1 8 Tf 32 415 Td (243103) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: cases[0].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 44.53445) Tj ET
+BT /F1 8 Tf 32 389 Td (508054013) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: cases[0].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[0].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[0].real | Value: 2366.99057066038) Tj ET
+BT /F1 8 Tf 32 337 Td (5) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[0].imag | Value: -11519.354110547) Tj ET
+BT /F1 8 Tf 32 311 Td (207) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 11760.02395) Tj ET
+BT /F1 8 Tf 32 285 Td (7704168) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -78.3885) Tj ET
+BT /F1 8 Tf 32 259 Td (135761115) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[1].real | Value: -11159.548580252) Tj ET
+BT /F1 8 Tf 32 233 Td (771) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[1].imag | Value: 3709.80309056348) Tj ET
+BT /F1 8 Tf 32 207 Td (46) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 11760.02395) Tj ET
+BT /F1 8 Tf 32 181 Td (7704168) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: 161.6114) Tj ET
+BT /F1 8 Tf 32 155 Td (864238885) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[2].real | Value: 8792.55800959238) Tj ET
+BT /F1 8 Tf 32 129 Td (5) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[2].imag | Value: 7809.55101998372) Tj ET
+BT /F1 8 Tf 32 103 Td (3) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 11760.02395) Tj ET
+BT /F1 8 Tf 32 77 Td (7704168) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[0].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 41.61148) Tj ET
+BT /F1 8 Tf 32 51 Td (642388849) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cases[0].kclRelativeResidual | Value: 1.365511307026037e-16) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 5506 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[0].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cases[1].faultBus | Value: F) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[1].faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cases[1].maximumPhaseRmsA | Value: 16620.557944533848) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[1].groundResidualA | Value: 16620.557944533844) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[1].phaseFaultCurrentA[0].real | Value: 4536.739777344576) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[1].phaseFaultCurrentA[0].imag | Value: -15989.400819926514) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[1].phaseFaultCurrentA[0].magnitude | Value: 16620.557944533848) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[1].phaseFaultCurrentA[0].angleDegrees | Value: -74.15954736119843) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: cases[1].phaseFaultCurrentA[1].real | Value: 4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[1].phaseFaultCurrentA[1].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cases[1].phaseFaultCurrentA[1].magnitude | Value: 4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[1].phaseFaultCurrentA[1].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[1].phaseFaultCurrentA[2].real | Value: 0) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[1].phaseFaultCurrentA[2].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[1].phaseFaultCurrentA[2].magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[1].phaseFaultCurrentA[2].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[1].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[1].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[0].real | Value: 2691.56239766968) Tj ET
+BT /F1 8 Tf 32 532 Td (5) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[0].imag | Value: -8875.0475507298) Tj ET
+BT /F1 8 Tf 32 506 Td (82) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 9274.210325) Tj ET
+BT /F1 8 Tf 32 480 Td (858794) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -73.1288) Tj ET
+BT /F1 8 Tf 32 454 Td (6548949481) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[1].real | Value: -80.071525985093) Tj ET
+BT /F1 8 Tf 32 428 Td (56) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[1].imag | Value: 264.448165889127) Tj ET
+BT /F1 8 Tf 32 402 Td (27) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 276.3046899) Tj ET
+BT /F1 8 Tf 32 376 Td (99473) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: 106.8456) Tj ET
+BT /F1 8 Tf 32 350 Td (418478821) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[2].real | Value: -135.71431077040) Tj ET
+BT /F1 8 Tf 32 324 Td (46) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[2].imag | Value: 258.772818826497) Tj ET
+BT /F1 8 Tf 32 298 Td (4) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 292.2015501) Tj ET
+BT /F1 8 Tf 32 272 Td (5211196) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[1].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 117.6749) Tj ET
+BT /F1 8 Tf 32 246 Td (2081629787) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[1].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[1].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[0].real | Value: 1845.17737967489) Tj ET
+BT /F1 8 Tf 32 194 Td (4) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[0].imag | Value: -7114.3532691966) Tj ET
+BT /F1 8 Tf 32 168 Td (25) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 7349.741628) Tj ET
+BT /F1 8 Tf 32 142 Td (206573) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -75.4601) Tj ET
+BT /F1 8 Tf 32 116 Td (462566015) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[1].real | Value: 80.0715259851076) Tj ET
+BT /F1 8 Tf 32 90 Td (6) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[1].imag | Value: -264.44816588913) Tj ET
+BT /F1 8 Tf 32 64 Td (363) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 276.3046899) Tj ET
+BT /F1 8 Tf 32 38 Td (994832) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 5609 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: -73.1543) Tj ET
+BT /F1 8 Tf 32 779 Td (5815211549) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[2].real | Value: 135.714310770390) Tj ET
+BT /F1 8 Tf 32 753 Td (5) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[2].imag | Value: -258.77281882651) Tj ET
+BT /F1 8 Tf 32 727 Td (005) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 292.2015501) Tj ET
+BT /F1 8 Tf 32 701 Td (521166) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[1].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: -62.3250) Tj ET
+BT /F1 8 Tf 32 675 Td (7918370572) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[1].kclRelativeResidual | Value: 2.634614910300192e-15) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cases[1].nodalRelativeResidual | Value: 1.1443916996305582e-15) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[2].faultBus | Value: F) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[2].faultType | Value: BC) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[2].maximumPhaseRmsA | Value: 22391.653493161994) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[2].groundResidualA | Value: 0) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[2].phaseFaultCurrentA[0].real | Value: 0) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[2].phaseFaultCurrentA[0].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[2].phaseFaultCurrentA[0].magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[2].phaseFaultCurrentA[0].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: cases[2].phaseFaultCurrentA[1].real | Value: -21768.120835010635) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[2].phaseFaultCurrentA[1].imag | Value: -5247.386156002774) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: cases[2].phaseFaultCurrentA[1].magnitude | Value: 22391.653493161994) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[2].phaseFaultCurrentA[1].angleDegrees | Value: -166.44694691812296) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: cases[2].phaseFaultCurrentA[2].real | Value: 21768.120835010635) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[2].phaseFaultCurrentA[2].imag | Value: 5247.386156002774) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: cases[2].phaseFaultCurrentA[2].magnitude | Value: 22391.653493161994) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[2].phaseFaultCurrentA[2].angleDegrees | Value: 13.553053081877025) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: cases[2].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[2].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[0].real | Value: -4.6479407790136) Tj ET
+BT /F1 8 Tf 32 389 Td (52) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[0].imag | Value: 75.2088609544553) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 75.35234647) Tj ET
+BT /F1 8 Tf 32 350 Td (674756) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: 93.53640) Tj ET
+BT /F1 8 Tf 32 324 Td (682826376) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[1].real | Value: -12447.542753653) Tj ET
+BT /F1 8 Tf 32 298 Td (599) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[1].imag | Value: -3314.8159732921) Tj ET
+BT /F1 8 Tf 32 272 Td (945) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 12881.35573) Tj ET
+BT /F1 8 Tf 32 246 Td (380486) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: -165.088) Tj ET
+BT /F1 8 Tf 32 220 Td (0464235306) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[2].real | Value: 12452.1906944326) Tj ET
+BT /F1 8 Tf 32 194 Td (13) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[2].imag | Value: 3239.60711233773) Tj ET
+BT /F1 8 Tf 32 168 Td (87) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 12866.70537) Tj ET
+BT /F1 8 Tf 32 142 Td (9887404) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[2].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 14.58299) Tj ET
+BT /F1 8 Tf 32 116 Td (7428743615) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[2].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[2].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[0].real | Value: 4.64794077900751) Tj ET
+BT /F1 8 Tf 32 64 Td (3) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[0].imag | Value: -75.208860954441) Tj ET
+BT /F1 8 Tf 32 38 Td (66) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 5627 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 75.35234647) Tj ET
+BT /F1 8 Tf 32 779 Td (673356) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -86.4635) Tj ET
+BT /F1 8 Tf 32 753 Td (9317174026) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[1].real | Value: -9320.5780813570) Tj ET
+BT /F1 8 Tf 32 727 Td (3) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[1].imag | Value: -1932.5701827105) Tj ET
+BT /F1 8 Tf 32 701 Td (909) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 9518.823629) Tj ET
+BT /F1 8 Tf 32 675 Td (092787) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: -168.286) Tj ET
+BT /F1 8 Tf 32 649 Td (0234845558) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[2].real | Value: 9315.93014057802) Tj ET
+BT /F1 8 Tf 32 623 Td (2) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[2].imag | Value: 2007.77904366503) Tj ET
+BT /F1 8 Tf 32 597 Td (23) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 9529.833737) Tj ET
+BT /F1 8 Tf 32 571 Td (915395) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[2].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 12.16241) Tj ET
+BT /F1 8 Tf 32 545 Td (2040065265) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: cases[2].kclRelativeResidual | Value: 7.043959115381051e-16) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[2].nodalRelativeResidual | Value: 1.1443916996305582e-15) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: cases[3].faultBus | Value: F) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[3].faultType | Value: BCG) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: cases[3].maximumPhaseRmsA | Value: 23860.42856802407) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[3].groundResidualA | Value: 12962.707171420232) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: cases[3].phaseFaultCurrentA[0].real | Value: 4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[3].phaseFaultCurrentA[0].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: cases[3].phaseFaultCurrentA[0].magnitude | Value: 4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[3].phaseFaultCurrentA[0].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: cases[3].phaseFaultCurrentA[1].real | Value: -23842.904327254666) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[3].phaseFaultCurrentA[1].imag | Value: 914.3110472699864) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: cases[3].phaseFaultCurrentA[1].magnitude | Value: 23860.42856802407) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[3].phaseFaultCurrentA[1].angleDegrees | Value: 177.80393747920164) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: cases[3].phaseFaultCurrentA[2].real | Value: 20122.239724281775) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[3].phaseFaultCurrentA[2].imag | Value: 11502.952424371988) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: cases[3].phaseFaultCurrentA[2].magnitude | Value: 23178.05958226074) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[3].phaseFaultCurrentA[2].angleDegrees | Value: 29.75460336679494) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[3].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[3].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[0].real | Value: 82.4509288590065) Tj ET
+BT /F1 8 Tf 32 259 Td (8) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[0].imag | Value: -126.83321050097) Tj ET
+BT /F1 8 Tf 32 233 Td (766) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 151.2772916) Tj ET
+BT /F1 8 Tf 32 207 Td (0617028) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -56.9731) Tj ET
+BT /F1 8 Tf 32 181 Td (65808843355) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[1].real | Value: -13616.047377488) Tj ET
+BT /F1 8 Tf 32 155 Td (154) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[1].imag | Value: 0.30180685930099) Tj ET
+BT /F1 8 Tf 32 129 Td (57) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 13616.04738) Tj ET
+BT /F1 8 Tf 32 103 Td (0833008) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: 179.9987) Tj ET
+BT /F1 8 Tf 32 77 Td (300088797) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[2].real | Value: 11507.4391307699) Tj ET
+BT /F1 8 Tf 32 51 Td (42) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[2].imag | Value: 6611.29255206854) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Length 5569 >>
+stream
+BT /F1 8 Tf 32 792 Td (4) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 13271.41079) Tj ET
+BT /F1 8 Tf 32 766 Td (7553222) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cases[3].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 29.87837) Tj ET
+BT /F1 8 Tf 32 740 Td (3668669852) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[3].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[3].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[0].real | Value: -82.450928859011) Tj ET
+BT /F1 8 Tf 32 688 Td (7) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[0].imag | Value: 126.833210500992) Tj ET
+BT /F1 8 Tf 32 662 Td (21) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 151.2772916) Tj ET
+BT /F1 8 Tf 32 636 Td (0618523) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: 123.0268) Tj ET
+BT /F1 8 Tf 32 610 Td (3419115526) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[1].real | Value: -10226.856949766) Tj ET
+BT /F1 8 Tf 32 584 Td (505) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[1].imag | Value: 914.009240410677) Tj ET
+BT /F1 8 Tf 32 558 Td (6) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 10267.61978) Tj ET
+BT /F1 8 Tf 32 532 Td (07741) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: 174.8928) Tj ET
+BT /F1 8 Tf 32 506 Td (4903491014) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[2].real | Value: 8614.80059351183) Tj ET
+BT /F1 8 Tf 32 480 Td (4) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[2].imag | Value: 4891.65987230344) Tj ET
+BT /F1 8 Tf 32 454 Td (4) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 9906.721232) Tj ET
+BT /F1 8 Tf 32 428 Td (18755) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[3].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 29.58879) Tj ET
+BT /F1 8 Tf 32 402 Td (598235543) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[3].kclRelativeResidual | Value: 6.518073792588415e-16) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: cases[3].nodalRelativeResidual | Value: 1.1443916996305582e-15) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[4].faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: cases[4].faultType | Value: 3PH) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[4].maximumPhaseRmsA | Value: 30498.57599266589) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: cases[4].groundResidualA | Value: 0) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[4].phaseFaultCurrentA[0].real | Value: 6236.357264374502) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[4].phaseFaultCurrentA[0].imag | Value: -29854.16194857092) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[4].phaseFaultCurrentA[0].magnitude | Value: 30498.57599266589) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: cases[4].phaseFaultCurrentA[0].angleDegrees | Value: -78.20092334818762) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[4].phaseFaultCurrentA[1].real | Value: -28972.641288344403) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[4].phaseFaultCurrentA[1].imag | Value: 9526.237156261515) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[4].phaseFaultCurrentA[1].magnitude | Value: 30498.57599266589) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[4].phaseFaultCurrentA[1].angleDegrees | Value: 161.79907665181238) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[4].phaseFaultCurrentA[2].real | Value: 22736.284023969904) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[4].phaseFaultCurrentA[2].imag | Value: 20327.924792309404) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[4].phaseFaultCurrentA[2].magnitude | Value: 30498.57599266589) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[4].phaseFaultCurrentA[2].angleDegrees | Value: 41.799076651812385) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[4].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[4].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[0].real | Value: 3835.52607715471) Tj ET
+BT /F1 8 Tf 32 116 Td (64) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[0].imag | Value: -20136.511905062) Tj ET
+BT /F1 8 Tf 32 90 Td (256) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 20498.54560) Tj ET
+BT /F1 8 Tf 32 64 Td (673142) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -79.2157) Tj ET
+BT /F1 8 Tf 32 38 Td (0213243741) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 16 0 R >>
+endobj
+18 0 obj
+<< /Length 5486 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[1].real | Value: -19356.493891969) Tj ET
+BT /F1 8 Tf 32 779 Td (054) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[1].imag | Value: 6746.59293283747) Tj ET
+BT /F1 8 Tf 32 753 Td (1) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 20498.54560) Tj ET
+BT /F1 8 Tf 32 727 Td (673142) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: 160.7842) Tj ET
+BT /F1 8 Tf 32 701 Td (9786756263) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[2].real | Value: 15520.9678148143) Tj ET
+BT /F1 8 Tf 32 675 Td (36) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[2].imag | Value: 13389.9189722247) Tj ET
+BT /F1 8 Tf 32 649 Td (85) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 20498.54560) Tj ET
+BT /F1 8 Tf 32 623 Td (673141) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[4].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 40.78429) Tj ET
+BT /F1 8 Tf 32 597 Td (786756261) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[4].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[4].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[0].real | Value: 2400.83118721978) Tj ET
+BT /F1 8 Tf 32 545 Td (8) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[0].imag | Value: -9717.6500435086) Tj ET
+BT /F1 8 Tf 32 519 Td (67) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 10009.83080) Tj ET
+BT /F1 8 Tf 32 493 Td (5644577) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -76.1224) Tj ET
+BT /F1 8 Tf 32 467 Td (7019679201) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[1].real | Value: -9616.1473963753) Tj ET
+BT /F1 8 Tf 32 441 Td (54) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[1].imag | Value: 2779.64422342404) Tj ET
+BT /F1 8 Tf 32 415 Td (4) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 10009.83080) Tj ET
+BT /F1 8 Tf 32 389 Td (5644579) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: 163.8775) Tj ET
+BT /F1 8 Tf 32 363 Td (2980320798) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[2].real | Value: 7215.31620915556) Tj ET
+BT /F1 8 Tf 32 337 Td (6) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[2].imag | Value: 6938.00582008462) Tj ET
+BT /F1 8 Tf 32 311 Td (3) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 10009.83080) Tj ET
+BT /F1 8 Tf 32 285 Td (5644577) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: cases[4].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 43.87752) Tj ET
+BT /F1 8 Tf 32 259 Td (9803208006) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[4].kclRelativeResidual | Value: 1.4910445359672495e-16) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[4].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[5].faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[5].faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[5].maximumPhaseRmsA | Value: 18480.083814940346) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[5].groundResidualA | Value: 18480.08381494035) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[5].phaseFaultCurrentA[0].real | Value: 4567.958329592716) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[5].phaseFaultCurrentA[0].imag | Value: -17906.62599448385) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[5].phaseFaultCurrentA[0].magnitude | Value: 18480.083814940346) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[5].phaseFaultCurrentA[0].angleDegrees | Value: -75.68913450005512) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[5].phaseFaultCurrentA[1].real | Value: 0) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[5].phaseFaultCurrentA[1].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[5].phaseFaultCurrentA[1].magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[5].phaseFaultCurrentA[1].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[5].phaseFaultCurrentA[2].real | Value: 0) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[5].phaseFaultCurrentA[2].imag | Value: -2.2737367544323206e-13) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cases[5].phaseFaultCurrentA[2].magnitude | Value: 2.2737367544323206e-13) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 18 0 R >>
+endobj
+20 0 obj
+<< /Length 5289 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[5].phaseFaultCurrentA[2].angleDegrees | Value: -90) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cases[5].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[5].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[0].real | Value: 2809.52444897593) Tj ET
+BT /F1 8 Tf 32 740 Td (3) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[0].imag | Value: -12075.418391622) Tj ET
+BT /F1 8 Tf 32 714 Td (417) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 12397.94970) Tj ET
+BT /F1 8 Tf 32 688 Td (8001177) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -76.9023) Tj ET
+BT /F1 8 Tf 32 662 Td (1103553285) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[1].real | Value: -10.603101383412) Tj ET
+BT /F1 8 Tf 32 636 Td (195) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[1].imag | Value: 105.881301062110) Tj ET
+BT /F1 8 Tf 32 610 Td (65) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 106.4108813) Tj ET
+BT /F1 8 Tf 32 584 Td (6817697) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: 95.71861) Tj ET
+BT /F1 8 Tf 32 558 Td (42527822) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[2].real | Value: -109.79732753116) Tj ET
+BT /F1 8 Tf 32 532 Td (195) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[2].imag | Value: 90.6824481473156) Tj ET
+BT /F1 8 Tf 32 506 Td (5) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 142.4035095) Tj ET
+BT /F1 8 Tf 32 480 Td (598976) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[5].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 140.4464) Tj ET
+BT /F1 8 Tf 32 454 Td (4038667025) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[5].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: cases[5].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[0].real | Value: 1758.43388061678) Tj ET
+BT /F1 8 Tf 32 402 Td (62) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[0].imag | Value: -5831.2076028614) Tj ET
+BT /F1 8 Tf 32 376 Td (24) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 6090.572372) Tj ET
+BT /F1 8 Tf 32 350 Td (131364) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -73.2190) Tj ET
+BT /F1 8 Tf 32 324 Td (1563989888) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[1].real | Value: 10.6031013834260) Tj ET
+BT /F1 8 Tf 32 298 Td (65) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[1].imag | Value: -105.88130106211) Tj ET
+BT /F1 8 Tf 32 272 Td (474) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 106.4108813) Tj ET
+BT /F1 8 Tf 32 246 Td (6818243) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: -84.2813) Tj ET
+BT /F1 8 Tf 32 220 Td (8574721058) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[2].real | Value: 109.797327531149) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[2].imag | Value: -90.682448147325) Tj ET
+BT /F1 8 Tf 32 181 Td (09) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 142.4035095) Tj ET
+BT /F1 8 Tf 32 155 Td (5989362) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[5].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: -39.5535) Tj ET
+BT /F1 8 Tf 32 129 Td (59613336) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[5].kclRelativeResidual | Value: 2.06998798725602e-15) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[5].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[6].faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[6].faultType | Value: BC) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[6].maximumPhaseRmsA | Value: 25016.887310037237) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[6].groundResidualA | Value: 0) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cases[6].phaseFaultCurrentA[0].real | Value: 0) Tj ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 20 0 R >>
+endobj
+22 0 obj
+<< /Length 5454 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[6].phaseFaultCurrentA[0].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cases[6].phaseFaultCurrentA[0].magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[6].phaseFaultCurrentA[0].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cases[6].phaseFaultCurrentA[1].real | Value: -24471.76335445784) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[6].phaseFaultCurrentA[1].imag | Value: -5193.981999055892) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[6].phaseFaultCurrentA[1].magnitude | Value: 25016.887310037237) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[6].phaseFaultCurrentA[1].angleDegrees | Value: -168.0171420111533) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[6].phaseFaultCurrentA[2].real | Value: 24471.76335445784) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[6].phaseFaultCurrentA[2].imag | Value: 5193.981999055892) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: cases[6].phaseFaultCurrentA[2].magnitude | Value: 25016.887310037237) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[6].phaseFaultCurrentA[2].angleDegrees | Value: 11.982857988846684) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cases[6].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[6].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[0].real | Value: -15.103494997513) Tj ET
+BT /F1 8 Tf 32 610 Td (735) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[0].imag | Value: 135.006293005444) Tj ET
+BT /F1 8 Tf 32 584 Td (6) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 135.8484991) Tj ET
+BT /F1 8 Tf 32 558 Td (1652276) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: 96.38328) Tj ET
+BT /F1 8 Tf 32 532 Td (196237617) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[1].real | Value: -16616.448667450) Tj ET
+BT /F1 8 Tf 32 506 Td (753) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[1].imag | Value: -3279.6918498224) Tj ET
+BT /F1 8 Tf 32 480 Td (954) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 16937.02290) Tj ET
+BT /F1 8 Tf 32 454 Td (6869377) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: -168.834) Tj ET
+BT /F1 8 Tf 32 428 Td (68965721022) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[2].real | Value: 16631.5521624482) Tj ET
+BT /F1 8 Tf 32 402 Td (64) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[2].imag | Value: 3144.68555681705) Tj ET
+BT /F1 8 Tf 32 376 Td (13) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 16926.23923) Tj ET
+BT /F1 8 Tf 32 350 Td (3317345) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[6].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 10.70705) Tj ET
+BT /F1 8 Tf 32 324 Td (5312687396) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[6].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[6].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[0].real | Value: 15.1034949975091) Tj ET
+BT /F1 8 Tf 32 272 Td (88) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[0].imag | Value: -135.00629300543) Tj ET
+BT /F1 8 Tf 32 246 Td (37) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 135.8484991) Tj ET
+BT /F1 8 Tf 32 220 Td (165114) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -83.6167) Tj ET
+BT /F1 8 Tf 32 194 Td (1803762523) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[1].real | Value: -7855.3146870070) Tj ET
+BT /F1 8 Tf 32 168 Td (81) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[1].imag | Value: -1914.2901492334) Tj ET
+BT /F1 8 Tf 32 142 Td (067) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 8085.201024) Tj ET
+BT /F1 8 Tf 32 116 Td (548567) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: -166.304) Tj ET
+BT /F1 8 Tf 32 90 Td (33167522247) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[2].real | Value: 7840.21119200957) Tj ET
+BT /F1 8 Tf 32 64 Td (2) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[2].imag | Value: 2049.29644223884) Tj ET
+BT /F1 8 Tf 32 38 Td (04) Tj ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 22 0 R >>
+endobj
+24 0 obj
+<< /Length 5808 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 8103.611999) Tj ET
+BT /F1 8 Tf 32 779 Td (811252) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[6].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 14.64840) Tj ET
+BT /F1 8 Tf 32 753 Td (3657847984) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[6].kclRelativeResidual | Value: 5.047357825608596e-16) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[6].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[7].faultBus | Value: A) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[7].faultType | Value: BCG) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[7].maximumPhaseRmsA | Value: 26616.87717648401) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: cases[7].groundResidualA | Value: 14301.780065746188) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[7].phaseFaultCurrentA[0].real | Value: -9.094947017729282e-13) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cases[7].phaseFaultCurrentA[0].imag | Value: -1.8189894035458565e-12) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[7].phaseFaultCurrentA[0].magnitude | Value: 2.033691978340166e-12) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[7].phaseFaultCurrentA[0].angleDegrees | Value: -116.56505117707799) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[7].phaseFaultCurrentA[1].real | Value: -26565.04678180434) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[7].phaseFaultCurrentA[1].imag | Value: 1660.2530254699905) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[7].phaseFaultCurrentA[1].magnitude | Value: 26616.87717648401) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[7].phaseFaultCurrentA[1].angleDegrees | Value: 176.42379968288552) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[7].phaseFaultCurrentA[2].real | Value: 22806.084097112813) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[7].phaseFaultCurrentA[2].imag | Value: 12138.70028933153) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: cases[7].phaseFaultCurrentA[2].magnitude | Value: 25835.354004905745) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[7].phaseFaultCurrentA[2].angleDegrees | Value: 28.024457675473407) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: cases[7].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[7].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[0].real | Value: 32.5792077872818) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[0].imag | Value: 60.8890959448872) Tj ET
+BT /F1 8 Tf 32 454 Td (3) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 69.05712696) Tj ET
+BT /F1 8 Tf 32 428 Td (769658) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: 61.85062) Tj ET
+BT /F1 8 Tf 32 402 Td (796375049) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[1].real | Value: -17881.197354643) Tj ET
+BT /F1 8 Tf 32 376 Td (777) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[1].imag | Value: 1311.74079128214) Tj ET
+BT /F1 8 Tf 32 350 Td (54) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 17929.24657) Tj ET
+BT /F1 8 Tf 32 324 Td (4779238) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: 175.8043) Tj ET
+BT /F1 8 Tf 32 298 Td (735013706) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[2].real | Value: 15618.9942896686) Tj ET
+BT /F1 8 Tf 32 272 Td (88) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[2].imag | Value: 7785.55952929786) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 17451.87439) Tj ET
+BT /F1 8 Tf 32 233 Td (230938) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[7].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 26.49475) Tj ET
+BT /F1 8 Tf 32 207 Td (907293966) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[7].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[7].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[0].real | Value: -32.579207787286) Tj ET
+BT /F1 8 Tf 32 155 Td (805) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[0].imag | Value: -60.889095944875) Tj ET
+BT /F1 8 Tf 32 129 Td (41) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 69.05712696) Tj ET
+BT /F1 8 Tf 32 103 Td (768852) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -118.149) Tj ET
+BT /F1 8 Tf 32 77 Td (3720362578) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[1].real | Value: -8683.8494271605) Tj ET
+BT /F1 8 Tf 32 51 Td (61) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[1].imag | Value: 348.512234187836) Tj ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 24 0 R >>
+endobj
+26 0 obj
+<< /Length 5675 >>
+stream
+BT /F1 8 Tf 32 792 Td (4) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 8690.840100) Tj ET
+BT /F1 8 Tf 32 766 Td (414654) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: 177.7017) Tj ET
+BT /F1 8 Tf 32 740 Td (6006014083) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[2].real | Value: 7187.08980744412) Tj ET
+BT /F1 8 Tf 32 714 Td (3) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[2].imag | Value: 4353.14076003367) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 8402.624255) Tj ET
+BT /F1 8 Tf 32 675 Td (370087) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[7].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 31.20282) Tj ET
+BT /F1 8 Tf 32 649 Td (561718744) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[7].kclRelativeResidual | Value: 5.595445598483621e-16) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[7].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[8].faultBus | Value: B) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[8].faultType | Value: 3PH) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[8].maximumPhaseRmsA | Value: 26978.282592342242) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[8].groundResidualA | Value: 0) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[8].phaseFaultCurrentA[0].real | Value: 5868.550604575686) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[8].phaseFaultCurrentA[0].imag | Value: -26332.258646645005) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: cases[8].phaseFaultCurrentA[0].magnitude | Value: 26978.282592342242) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[8].phaseFaultCurrentA[0].angleDegrees | Value: -77.43607729990634) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: cases[8].phaseFaultCurrentA[1].real | Value: -25738.680229304857) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[8].phaseFaultCurrentA[1].imag | Value: 8083.815416365433) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: cases[8].phaseFaultCurrentA[1].magnitude | Value: 26978.28259234223) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[8].phaseFaultCurrentA[1].angleDegrees | Value: 162.56392270009366) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: cases[8].phaseFaultCurrentA[2].real | Value: 19870.129624729172) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[8].phaseFaultCurrentA[2].imag | Value: 18248.443230279572) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: cases[8].phaseFaultCurrentA[2].magnitude | Value: 26978.28259234224) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[8].phaseFaultCurrentA[2].angleDegrees | Value: 42.563922700093656) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: cases[8].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[8].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[0].real | Value: 3277.68933208754) Tj ET
+BT /F1 8 Tf 32 363 Td (4) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[0].imag | Value: -12200.288069436) Tj ET
+BT /F1 8 Tf 32 337 Td (963) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 12632.90450) Tj ET
+BT /F1 8 Tf 32 311 Td (905596) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -74.9621) Tj ET
+BT /F1 8 Tf 32 285 Td (8409641774) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[1].real | Value: -12204.604067664) Tj ET
+BT /F1 8 Tf 32 259 Td (386) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[1].imag | Value: 3261.58180741742) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 12632.90450) Tj ET
+BT /F1 8 Tf 32 220 Td (9055958) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: 165.0378) Tj ET
+BT /F1 8 Tf 32 194 Td (1590358227) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[2].real | Value: 8926.91473557684) Tj ET
+BT /F1 8 Tf 32 168 Td (4) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[2].imag | Value: 8938.70626201954) Tj ET
+BT /F1 8 Tf 32 142 Td (3) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 12632.90450) Tj ET
+BT /F1 8 Tf 32 116 Td (905596) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[8].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 45.03781) Tj ET
+BT /F1 8 Tf 32 90 Td (5903582256) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[8].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[8].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[0].real | Value: 2590.86127248814) Tj ET
+BT /F1 8 Tf 32 38 Td (14) Tj ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 26 0 R >>
+endobj
+28 0 obj
+<< /Length 5562 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[0].imag | Value: -14131.970577208) Tj ET
+BT /F1 8 Tf 32 779 Td (04) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 14367.50342) Tj ET
+BT /F1 8 Tf 32 753 Td (0161505) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -79.6111) Tj ET
+BT /F1 8 Tf 32 727 Td (4218453038) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[1].real | Value: -13534.076161640) Tj ET
+BT /F1 8 Tf 32 701 Td (469) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[1].imag | Value: 4822.23360894801) Tj ET
+BT /F1 8 Tf 32 675 Td (2) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 14367.50342) Tj ET
+BT /F1 8 Tf 32 649 Td (0161507) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: 160.3888) Tj ET
+BT /F1 8 Tf 32 623 Td (578154696) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[2].real | Value: 10943.2148891523) Tj ET
+BT /F1 8 Tf 32 597 Td (27) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[2].imag | Value: 9309.73696826002) Tj ET
+BT /F1 8 Tf 32 571 Td (7) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 14367.50342) Tj ET
+BT /F1 8 Tf 32 545 Td (0161507) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: cases[8].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 40.38885) Tj ET
+BT /F1 8 Tf 32 519 Td (781546963) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: cases[8].kclRelativeResidual | Value: 1.3899857073977845e-16) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[8].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: cases[9].faultBus | Value: B) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[9].faultType | Value: AG) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: cases[9].maximumPhaseRmsA | Value: 16994.64683705812) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[9].groundResidualA | Value: 16994.64683705812) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: cases[9].phaseFaultCurrentA[0].real | Value: 4289.866175680656) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[9].phaseFaultCurrentA[0].imag | Value: -16444.302031739768) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: cases[9].phaseFaultCurrentA[0].magnitude | Value: 16994.64683705812) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[9].phaseFaultCurrentA[0].angleDegrees | Value: -75.37896859472934) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: cases[9].phaseFaultCurrentA[1].real | Value: -4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[9].phaseFaultCurrentA[1].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: cases[9].phaseFaultCurrentA[1].magnitude | Value: 4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[9].phaseFaultCurrentA[1].angleDegrees | Value: 180) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: cases[9].phaseFaultCurrentA[2].real | Value: 0) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[9].phaseFaultCurrentA[2].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[9].phaseFaultCurrentA[2].magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[9].phaseFaultCurrentA[2].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: cases[9].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[9].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[0].real | Value: 2225.12680790027) Tj ET
+BT /F1 8 Tf 32 233 Td (93) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[0].imag | Value: -7097.0628469756) Tj ET
+BT /F1 8 Tf 32 207 Td (475) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 7437.707332) Tj ET
+BT /F1 8 Tf 32 181 Td (582976) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -72.5923) Tj ET
+BT /F1 8 Tf 32 155 Td (394137464) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[1].real | Value: -116.57535786387) Tj ET
+BT /F1 8 Tf 32 129 Td (461) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[1].imag | Value: 470.219915156474) Tj ET
+BT /F1 8 Tf 32 103 Td (8) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 484.4549335) Tj ET
+BT /F1 8 Tf 32 77 Td (8087793) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: 103.9238) Tj ET
+BT /F1 8 Tf 32 51 Td (4429594352) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[2].real | Value: -81.526222406839) Tj ET
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 28 0 R >>
+endobj
+30 0 obj
+<< /Length 5522 >>
+stream
+BT /F1 8 Tf 32 792 Td (68) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[2].imag | Value: 487.662855984001) Tj ET
+BT /F1 8 Tf 32 766 Td (1) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 494.4305674) Tj ET
+BT /F1 8 Tf 32 740 Td (6766985) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[9].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 99.49079) Tj ET
+BT /F1 8 Tf 32 714 Td (343179898) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[9].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[9].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[0].real | Value: 2064.73936778037) Tj ET
+BT /F1 8 Tf 32 662 Td (84) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[0].imag | Value: -9347.2391847641) Tj ET
+BT /F1 8 Tf 32 636 Td (08) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 9572.566481) Tj ET
+BT /F1 8 Tf 32 610 Td (04633) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: -77.5437) Tj ET
+BT /F1 8 Tf 32 584 Td (8953733182) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[1].real | Value: 116.575357863890) Tj ET
+BT /F1 8 Tf 32 558 Td (53) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[1].imag | Value: -470.21991515647) Tj ET
+BT /F1 8 Tf 32 532 Td (96) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 484.4549335) Tj ET
+BT /F1 8 Tf 32 506 Td (808864) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: -76.0761) Tj ET
+BT /F1 8 Tf 32 480 Td (5570405478) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[2].real | Value: 81.5262224068246) Tj ET
+BT /F1 8 Tf 32 454 Td (7) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[2].imag | Value: -487.66285598401) Tj ET
+BT /F1 8 Tf 32 428 Td (225) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 494.4305674) Tj ET
+BT /F1 8 Tf 32 402 Td (6767843) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[9].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: -80.5092) Tj ET
+BT /F1 8 Tf 32 376 Td (0656820296) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[9].kclRelativeResidual | Value: 2.5841133532992237e-15) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: cases[9].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[10].faultBus | Value: B) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: cases[10].faultType | Value: BC) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[10].maximumPhaseRmsA | Value: 21969.261655778915) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[10].groundResidualA | Value: 0) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[10].phaseFaultCurrentA[0].real | Value: 0) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: cases[10].phaseFaultCurrentA[0].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[10].phaseFaultCurrentA[0].magnitude | Value: 0) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[10].phaseFaultCurrentA[0].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[10].phaseFaultCurrentA[1].real | Value: -21421.371994083645) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[10].phaseFaultCurrentA[1].imag | Value: -4875.785023067225) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[10].phaseFaultCurrentA[1].magnitude | Value: 21969.261655778915) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[10].phaseFaultCurrentA[1].angleDegrees | Value: -167.17719088424568) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[10].phaseFaultCurrentA[2].real | Value: 21421.371994083645) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[10].phaseFaultCurrentA[2].imag | Value: 4875.785023067225) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[10].phaseFaultCurrentA[2].magnitude | Value: 21969.261655778915) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[10].phaseFaultCurrentA[2].angleDegrees | Value: 12.822809115754323) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[10].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[10].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[0].real | Value: 21.115901856824) Tj ET
+BT /F1 8 Tf 32 90 Td (62) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[0].imag | Value: -45.99386041049) Tj ET
+BT /F1 8 Tf 32 64 Td (638) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 50.6094507) Tj ET
+BT /F1 8 Tf 32 38 Td (6452891) Tj ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 30 0 R >>
+endobj
+32 0 obj
+<< /Length 5514 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -65.340) Tj ET
+BT /F1 8 Tf 32 779 Td (02070720733) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[1].real | Value: -9893.641715076) Tj ET
+BT /F1 8 Tf 32 753 Td (477) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[1].imag | Value: -2672.704841921) Tj ET
+BT /F1 8 Tf 32 727 Td (048) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 10248.2924) Tj ET
+BT /F1 8 Tf 32 701 Td (21585638) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: -164.88) Tj ET
+BT /F1 8 Tf 32 675 Td (275192611255) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[2].real | Value: 9872.5258132196) Tj ET
+BT /F1 8 Tf 32 649 Td (52) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[2].imag | Value: 2718.6987023315) Tj ET
+BT /F1 8 Tf 32 623 Td (44) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 10240.0238) Tj ET
+BT /F1 8 Tf 32 597 Td (55770432) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: cases[10].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 15.3965) Tj ET
+BT /F1 8 Tf 32 571 Td (04628016435) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: cases[10].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[10].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[0].real | Value: -21.11590185683) Tj ET
+BT /F1 8 Tf 32 519 Td (0305) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[0].imag | Value: 45.993860410511) Tj ET
+BT /F1 8 Tf 32 493 Td (84) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 50.6094507) Tj ET
+BT /F1 8 Tf 32 467 Td (64545336) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: 114.659) Tj ET
+BT /F1 8 Tf 32 441 Td (9792927912) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[1].real | Value: -11527.73027900) Tj ET
+BT /F1 8 Tf 32 415 Td (7166) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[1].imag | Value: -2203.080181146) Tj ET
+BT /F1 8 Tf 32 389 Td (188) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 11736.3592) Tj ET
+BT /F1 8 Tf 32 363 Td (1698453) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: -169.18) Tj ET
+BT /F1 8 Tf 32 337 Td (05879849768) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[2].real | Value: 11548.846180863) Tj ET
+BT /F1 8 Tf 32 311 Td (995) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[2].imag | Value: 2157.0863207356) Tj ET
+BT /F1 8 Tf 32 285 Td (76) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 11748.5688) Tj ET
+BT /F1 8 Tf 32 259 Td (27919504) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: cases[10].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 10.5797) Tj ET
+BT /F1 8 Tf 32 233 Td (6380003714) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: cases[10].kclRelativeResidual | Value: 8.183408020502075e-16) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[10].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: cases[11].faultBus | Value: B) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[11].faultType | Value: BCG) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: cases[11].maximumPhaseRmsA | Value: 23492.242200550376) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[11].groundResidualA | Value: 13543.20300812607) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: cases[11].phaseFaultCurrentA[0].real | Value: -4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[11].phaseFaultCurrentA[0].imag | Value: 0) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: cases[11].phaseFaultCurrentA[0].magnitude | Value: 4.547473508864641e-13) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[11].phaseFaultCurrentA[0].angleDegrees | Value: 180) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: cases[11].phaseFaultCurrentA[1].real | Value: -23436.97494498932) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[11].phaseFaultCurrentA[1].imag | Value: 1610.4809956229947) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[11].phaseFaultCurrentA[1].magnitude | Value: 23492.242200550376) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: cases[11].phaseFaultCurrentA[1].angleDegrees | Value: 176.06907711415565) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: cases[11].phaseFaultCurrentA[2].real | Value: 19864.811207753264) Tj ET
+endstream
+endobj
+33 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 32 0 R >>
+endobj
+34 0 obj
+<< /Length 5408 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: cases[11].phaseFaultCurrentA[2].imag | Value: 11453.13236185551) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: cases[11].phaseFaultCurrentA[2].magnitude | Value: 22930.00142210771) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: cases[11].phaseFaultCurrentA[2].angleDegrees | Value: 29.965762397037654) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: cases[11].sourceContributions[0].id | Value: grid-A) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: cases[11].sourceContributions[0].bus | Value: A) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[0].real | Value: 104.73449676442) Tj ET
+BT /F1 8 Tf 32 714 Td (351) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[0].imag | Value: -427.2105373868) Tj ET
+BT /F1 8 Tf 32 688 Td (5805) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[0].magnitude | Value: 439.861521) Tj ET
+BT /F1 8 Tf 32 662 Td (46654644) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[0].angleDegrees | Value: -76.225) Tj ET
+BT /F1 8 Tf 32 636 Td (1069047261) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[1].real | Value: -10884.74315118) Tj ET
+BT /F1 8 Tf 32 610 Td (1925) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[1].imag | Value: -74.87305833482) Tj ET
+BT /F1 8 Tf 32 584 Td (606) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[1].magnitude | Value: 10885.0006) Tj ET
+BT /F1 8 Tf 32 558 Td (63393008) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[1].angleDegrees | Value: -179.60) Tj ET
+BT /F1 8 Tf 32 532 Td (58848130228) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[2].real | Value: 9107.3590358115) Tj ET
+BT /F1 8 Tf 32 506 Td (14) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[2].imag | Value: 5375.1667887935) Tj ET
+BT /F1 8 Tf 32 480 Td (28) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[2].magnitude | Value: 10575.2733) Tj ET
+BT /F1 8 Tf 32 454 Td (58855862) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: cases[11].sourceContributions[0].phaseCurrentsA[2].angleDegrees | Value: 30.5491) Tj ET
+BT /F1 8 Tf 32 428 Td (20597101183) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: cases[11].sourceContributions[1].id | Value: source-B) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: cases[11].sourceContributions[1].bus | Value: B) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[0].real | Value: -104.7344967644) Tj ET
+BT /F1 8 Tf 32 376 Td (301) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[0].imag | Value: 427.21053738687) Tj ET
+BT /F1 8 Tf 32 350 Td (35) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[0].magnitude | Value: 439.861521) Tj ET
+BT /F1 8 Tf 32 324 Td (46656303) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[0].angleDegrees | Value: 103.774) Tj ET
+BT /F1 8 Tf 32 298 Td (89309527427) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[1].real | Value: -12552.23179380) Tj ET
+BT /F1 8 Tf 32 272 Td (739) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[1].imag | Value: 1685.3540539578) Tj ET
+BT /F1 8 Tf 32 246 Td (13) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[1].magnitude | Value: 12664.8703) Tj ET
+BT /F1 8 Tf 32 220 Td (62252475) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[1].angleDegrees | Value: 172.352) Tj ET
+BT /F1 8 Tf 32 194 Td (7864210715) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[2].real | Value: 10757.452171941) Tj ET
+BT /F1 8 Tf 32 168 Td (75) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[2].imag | Value: 6077.9655730619) Tj ET
+BT /F1 8 Tf 32 142 Td (8) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[2].magnitude | Value: 12355.7453) Tj ET
+BT /F1 8 Tf 32 116 Td (33201916) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: cases[11].sourceContributions[1].phaseCurrentsA[2].angleDegrees | Value: 29.4664) Tj ET
+BT /F1 8 Tf 32 90 Td (68849010106) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: cases[11].kclRelativeResidual | Value: 6.12732485453742e-16) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: cases[11].nodalRelativeResidual | Value: 1.0546329814172563e-15) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: limitations[0] | Value: Only the listed fault locations and types are evaluated) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: limitations[1] | Value: All cases use identical documented network and source op) Tj ET
+endstream
+endobj
+35 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 34 0 R >>
+endobj
+36 0 obj
+<< /Length 2252 >>
+stream
+BT /F1 8 Tf 32 792 Td (erating conditions) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: limitations[2] | Value: No IEC automatic maximum/minimum, voltage correction, tr) Tj ET
+BT /F1 8 Tf 32 766 Td (ansformer vector group, machine transient or breaker duty) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: limitations[3] | Value: Any undefined zero-sequence ground-return path causes en) Tj ET
+BT /F1 8 Tf 32 740 Td (tire sweep to fail closed) Tj ET
+BT /F1 8 Tf 32 727 Td () Tj ET
+BT /F1 8 Tf 32 714 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 701 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 688 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY ? independently verify actual manufac) Tj ET
+BT /F1 8 Tf 32 675 Td (turer, utility, installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 662 Td (Evidence / limitation: Study method | Value: faultsweep) Tj ET
+BT /F1 8 Tf 32 649 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:04:42.565Z) Tj ET
+BT /F1 8 Tf 32 636 Td (Evidence / limitation: outputs.scope | Value: Fault-location and fault-type grid over one explicitly ent) Tj ET
+BT /F1 8 Tf 32 623 Td (ered fixed source operating condition. NOT automatic IEC 60909 maximum/minimum source conditions, nor br) Tj ET
+BT /F1 8 Tf 32 610 Td (eaker duty or protection certification.) Tj ET
+BT /F1 8 Tf 32 597 Td (Evidence / limitation: outputs.limitations[0] | Value: Only the listed fault locations and types are eva) Tj ET
+BT /F1 8 Tf 32 584 Td (luated) Tj ET
+BT /F1 8 Tf 32 571 Td (Evidence / limitation: outputs.limitations[1] | Value: All cases use identical documented network and so) Tj ET
+BT /F1 8 Tf 32 558 Td (urce operating conditions) Tj ET
+BT /F1 8 Tf 32 545 Td (Evidence / limitation: outputs.limitations[2] | Value: No IEC automatic maximum/minimum, voltage correct) Tj ET
+BT /F1 8 Tf 32 532 Td (ion, transformer vector group, machine transient or breaker duty) Tj ET
+BT /F1 8 Tf 32 519 Td (Evidence / limitation: outputs.limitations[3] | Value: Any undefined zero-sequence ground-return path ca) Tj ET
+BT /F1 8 Tf 32 506 Td (uses entire sweep to fail closed) Tj ET
+endstream
+endobj
+37 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 36 0 R >>
+endobj
+xref
+0 38
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000226 00000 n 
+0000000294 00000 n 
+0000005225 00000 n 
+0000005351 00000 n 
+0000011017 00000 n 
+0000011143 00000 n 
+0000016549 00000 n 
+0000016675 00000 n 
+0000022234 00000 n 
+0000022362 00000 n 
+0000028024 00000 n 
+0000028152 00000 n 
+0000033832 00000 n 
+0000033960 00000 n 
+0000039582 00000 n 
+0000039710 00000 n 
+0000045249 00000 n 
+0000045377 00000 n 
+0000050719 00000 n 
+0000050847 00000 n 
+0000056354 00000 n 
+0000056482 00000 n 
+0000062343 00000 n 
+0000062471 00000 n 
+0000068199 00000 n 
+0000068327 00000 n 
+0000073942 00000 n 
+0000074070 00000 n 
+0000079645 00000 n 
+0000079773 00000 n 
+0000085340 00000 n 
+0000085468 00000 n 
+0000090929 00000 n 
+0000091057 00000 n 
+0000093362 00000 n 
+trailer
+<< /Size 38 /Root 1 0 R >>
+startxref
+93490
+%%EOF

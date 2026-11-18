@@ -1,0 +1,322 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 4777 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: contingency) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: ALL_ENUMERATED_BRANCH_OUTAGES_WITHIN_SUPPLIED_LIMITS) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:04:34.448Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: network.baseMVA | Entered value: 10) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: network.buses[0].id | Entered value: S) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: network.buses[0].type | Entered value: SLACK) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: network.buses[0].vSetPu | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: network.buses[1].id | Entered value: A) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: network.buses[1].type | Entered value: PQ) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: network.buses[1].pMW | Entered value: -2) Tj ET
+BT /F1 8 Tf 32 506 Td (Input path: network.buses[1].qMvar | Entered value: -0.7) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: network.buses[2].id | Entered value: B) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: network.buses[2].type | Entered value: PQ) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: network.buses[2].pMW | Entered value: -1.5) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: network.buses[2].qMvar | Entered value: -0.5) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: network.branches[0].id | Entered value: SA) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: network.branches[0].from | Entered value: S) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: network.branches[0].to | Entered value: A) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: network.branches[0].rPu | Entered value: 0.01) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: network.branches[0].xPu | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: network.branches[1].id | Entered value: AB) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: network.branches[1].from | Entered value: A) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: network.branches[1].to | Entered value: B) Tj ET
+BT /F1 8 Tf 32 337 Td (Input path: network.branches[1].rPu | Entered value: 0.015) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: network.branches[1].xPu | Entered value: 0.09) Tj ET
+BT /F1 8 Tf 32 311 Td (Input path: network.branches[2].id | Entered value: SB) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: network.branches[2].from | Entered value: S) Tj ET
+BT /F1 8 Tf 32 285 Td (Input path: network.branches[2].to | Entered value: B) Tj ET
+BT /F1 8 Tf 32 272 Td (Input path: network.branches[2].rPu | Entered value: 0.012) Tj ET
+BT /F1 8 Tf 32 259 Td (Input path: network.branches[2].xPu | Entered value: 0.1) Tj ET
+BT /F1 8 Tf 32 246 Td (Input path: nominalBusVoltageV.S | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 233 Td (Input path: nominalBusVoltageV.A | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 220 Td (Input path: nominalBusVoltageV.B | Entered value: 13800) Tj ET
+BT /F1 8 Tf 32 207 Td (Input path: busVoltageLimitsPu.S.min | Entered value: 0.9) Tj ET
+BT /F1 8 Tf 32 194 Td (Input path: busVoltageLimitsPu.S.max | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 181 Td (Input path: busVoltageLimitsPu.A.min | Entered value: 0.9) Tj ET
+BT /F1 8 Tf 32 168 Td (Input path: busVoltageLimitsPu.A.max | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 155 Td (Input path: busVoltageLimitsPu.B.min | Entered value: 0.9) Tj ET
+BT /F1 8 Tf 32 142 Td (Input path: busVoltageLimitsPu.B.max | Entered value: 1.1) Tj ET
+BT /F1 8 Tf 32 129 Td (Input path: branchCurrentLimitsA.SA | Entered value: 300) Tj ET
+BT /F1 8 Tf 32 116 Td (Input path: branchCurrentLimitsA.AB | Entered value: 300) Tj ET
+BT /F1 8 Tf 32 103 Td (Input path: branchCurrentLimitsA.SB | Entered value: 300) Tj ET
+BT /F1 8 Tf 32 90 Td (Input path: maxCases | Entered value: 200) Tj ET
+BT /F1 8 Tf 32 77 Td () Tj ET
+BT /F1 8 Tf 32 64 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: status | Value: ALL_ENUMERATED_BRANCH_OUTAGES_WITHIN_SUPPLIED_LIMITS) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: base.outagedBranchId | Value: null) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 5844 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: base.status | Value: SCREEN_WITHIN_SUPPLIED_LIMITS) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: base.violations | Value: []) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: base.buses[0].id | Value: S) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: base.buses[0].type | Value: SLACK) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: base.buses[0].voltagePu | Value: 1) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: base.buses[0].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: base.buses[0].pMW | Value: 3.5075898004676587) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: base.buses[0].qMvar | Value: 1.2617827725636488) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: base.buses[1].id | Value: A) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: base.buses[1].type | Value: PQ) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: base.buses[1].voltagePu | Value: 0.9924647354031925) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: base.buses[1].angleDegrees | Value: -0.8677465652836259) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: base.buses[1].pMW | Value: -1.999999999999881) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: base.buses[1].qMvar | Value: -0.6999999999998541) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: base.buses[2].id | Value: B) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: base.buses[2].type | Value: PQ) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: base.buses[2].voltagePu | Value: 0.9927454503800234) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: base.buses[2].angleDegrees | Value: -0.8506459792576777) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: base.buses[2].pMW | Value: -1.4999999999999298) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: base.buses[2].qMvar | Value: -0.4999999999999176) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: base.branches[0].id | Value: SA) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: base.branches[0].from | Value: S) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: base.branches[0].to | Value: A) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: base.branches[0].currentPu | Value: 0.20918139210024778) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: base.branches[0].fromMW | Value: 1.9675659965516556) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: base.branches[0].fromMvar | Value: 0.7101897840109007) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: base.branches[0].toMW | Value: -1.9631903110715556) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: base.branches[0].toMvar | Value: -0.6751843001701028) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: base.branches[0].lossMW | Value: 0.004375685480099978) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: base.branches[0].lossMvar | Value: 0.03500548384079802) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: base.branches[1].id | Value: AB) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: base.branches[1].from | Value: A) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: base.branches[1].to | Value: B) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: base.branches[1].currentPu | Value: 0.004473043531894921) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: base.branches[1].fromMW | Value: -0.03680968892832544) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: base.branches[1].fromMvar | Value: -0.024815699829767175) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: base.branches[1].toMW | Value: 0.03681269014609117) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: base.branches[1].toMvar | Value: 0.02483370713636158) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: base.branches[1].lossMW | Value: 0.000003001217765731534) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: base.branches[1].lossMvar | Value: 0.000018007306594402216) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: base.branches[2].id | Value: SB) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: base.branches[2].from | Value: S) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: base.branches[2].to | Value: B) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: base.branches[2].currentPu | Value: 0.16358264399527417) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: base.branches[2].fromMW | Value: 1.5400238039160024) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: base.branches[2].fromMvar | Value: 0.5515929885527435) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: base.branches[2].toMW | Value: -1.5368126901460244) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: base.branches[2].toMvar | Value: -0.524833707136259) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: base.branches[2].lossMW | Value: 0.003211113769978069) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: base.branches[2].lossMvar | Value: 0.02675928141648458) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: base.iterations | Value: 3) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: base.mismatchPu | Value: 1.4585554986012994e-14) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: contingencies[0].outagedBranchId | Value: SA) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: contingencies[0].status | Value: SCREEN_WITHIN_SUPPLIED_LIMITS) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: contingencies[0].violations | Value: []) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: contingencies[0].buses[0].id | Value: S) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: contingencies[0].buses[0].type | Value: SLACK) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: contingencies[0].buses[0].voltagePu | Value: 1) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: contingencies[0].buses[0].angleDegrees | Value: 0) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 6444 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: contingencies[0].buses[0].pMW | Value: 3.524328032662176) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: contingencies[0].buses[0].qMvar | Value: 1.386126454413894) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: contingencies[0].buses[1].id | Value: A) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: contingencies[0].buses[1].type | Value: PQ) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: contingencies[0].buses[1].voltagePu | Value: 0.9727687016520419) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: contingencies[0].buses[1].angleDegrees | Value: -2.974874327767519) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: contingencies[0].buses[1].pMW | Value: -1.9999999980560488) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: contingencies[0].buses[1].qMvar | Value: -0.699999999542174) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: contingencies[0].buses[2].id | Value: B) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: contingencies[0].buses[2].type | Value: PQ) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: contingencies[0].buses[2].voltagePu | Value: 0.9824835672489097) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: contingencies[0].buses[2].angleDegrees | Value: -1.9586719194506783) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: contingencies[0].buses[2].pMW | Value: -1.5000000014396973) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: contingencies[0].buses[2].qMvar | Value: -0.49999999891069036) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: contingencies[0].branches[0].id | Value: AB) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: contingencies[0].branches[0].from | Value: A) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: contingencies[0].branches[0].to | Value: B) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: contingencies[0].branches[0].currentPu | Value: 0.21782793838422676) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: contingencies[0].branches[0].fromMW | Value: -1.99999999805605) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: contingencies[0].branches[0].fromMvar | Value: -0.6999999995421735) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: contingencies[0].branches[0].toMW | Value: 2.0071173496671584) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: contingencies[0].branches[0].toMvar | Value: 0.7427041092088237) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: contingencies[0].branches[0].lossMW | Value: 0.0071173516111081025) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: contingencies[0].branches[0].lossMvar | Value: 0.04270410966665014) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: contingencies[0].branches[1].id | Value: SB) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: contingencies[0].branches[1].from | Value: S) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: contingencies[0].branches[1].to | Value: B) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: contingencies[0].branches[1].currentPu | Value: 0.3787114287875988) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: contingencies[0].branches[1].fromMW | Value: 3.524328032662176) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: contingencies[0].branches[1].fromMvar | Value: 1.3861264544138825) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: contingencies[0].branches[1].toMW | Value: -3.5071173511068547) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: contingencies[0].branches[1].toMvar | Value: -1.242704108119538) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: contingencies[0].branches[1].lossMW | Value: 0.01721068155532135) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: contingencies[0].branches[1].lossMvar | Value: 0.14342234629434444) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: contingencies[0].iterations | Value: 3) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: contingencies[0].mismatchPu | Value: 1.9439513887498094e-10) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: contingencies[1].outagedBranchId | Value: AB) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: contingencies[1].status | Value: SCREEN_WITHIN_SUPPLIED_LIMITS) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: contingencies[1].violations | Value: []) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: contingencies[1].buses[0].id | Value: S) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: contingencies[1].buses[0].type | Value: SLACK) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: contingencies[1].buses[0].voltagePu | Value: 1) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: contingencies[1].buses[0].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: contingencies[1].buses[0].pMW | Value: 3.5076028298802298) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: contingencies[1].buses[0].qMvar | Value: 1.2618366909259215) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: contingencies[1].buses[1].id | Value: A) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: contingencies[1].buses[1].type | Value: PQ) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: contingencies[1].buses[1].voltagePu | Value: 0.9922215257566835) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: contingencies[1].buses[1].angleDegrees | Value: -0.88353270655452) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: contingencies[1].buses[1].pMW | Value: -1.999999999999863) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: contingencies[1].buses[1].qMvar | Value: -0.6999999999997975) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: contingencies[1].buses[2].id | Value: B) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: contingencies[1].buses[2].type | Value: PQ) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: contingencies[1].buses[2].voltagePu | Value: 0.9930472478399631) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: contingencies[1].buses[2].angleDegrees | Value: -0.8308649404570259) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: contingencies[1].buses[2].pMW | Value: -1.49999999999994) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: contingencies[1].buses[2].qMvar | Value: -0.4999999999999116) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: contingencies[1].branches[0].id | Value: SA) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: contingencies[1].branches[0].from | Value: S) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 6535 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: contingencies[1].branches[0].to | Value: A) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: contingencies[1].branches[0].currentPu | Value: 0.21355735136118487) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: contingencies[1].branches[0].fromMW | Value: 2.0045606742319033) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: contingencies[1].branches[0].fromMvar | Value: 0.7364853938561136) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: contingencies[1].branches[0].toMW | Value: -1.9999999999998628) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: contingencies[1].branches[0].toMvar | Value: -0.6999999999997899) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: contingencies[1].branches[0].lossMW | Value: 0.004560674232040596) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: contingencies[1].branches[0].lossMvar | Value: 0.036485393856323656) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: contingencies[1].branches[1].id | Value: SB) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: contingencies[1].branches[1].from | Value: S) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: contingencies[1].branches[1].to | Value: B) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: contingencies[1].branches[1].currentPu | Value: 0.15922090651007112) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: contingencies[1].branches[1].fromMW | Value: 1.5030421556483275) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: contingencies[1].branches[1].fromMvar | Value: 0.5253512970697883) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: contingencies[1].branches[1].toMW | Value: -1.499999999999941) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: contingencies[1].branches[1].toMvar | Value: -0.4999999999998995) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: contingencies[1].branches[1].lossMW | Value: 0.003042155648386724) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: contingencies[1].branches[1].lossMvar | Value: 0.025351297069888812) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: contingencies[1].iterations | Value: 3) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: contingencies[1].mismatchPu | Value: 2.0247692411601292e-14) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: contingencies[2].outagedBranchId | Value: SB) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: contingencies[2].status | Value: SCREEN_WITHIN_SUPPLIED_LIMITS) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: contingencies[2].violations | Value: []) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: contingencies[2].buses[0].id | Value: S) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: contingencies[2].buses[0].type | Value: SLACK) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: contingencies[2].buses[0].voltagePu | Value: 1) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: contingencies[2].buses[0].angleDegrees | Value: 0) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: contingencies[2].buses[0].pMW | Value: 3.5180750520200554) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: contingencies[2].buses[0].qMvar | Value: 1.3367779671252755) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: contingencies[2].buses[1].id | Value: A) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: contingencies[2].buses[1].type | Value: PQ) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: contingencies[2].buses[1].voltagePu | Value: 0.9861521440443572) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: contingencies[2].buses[1].angleDegrees | Value: -1.5577356226424277) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: contingencies[2].buses[1].pMW | Value: -2.0000000001330154) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: contingencies[2].buses[1].qMvar | Value: -0.699999999872444) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: contingencies[2].buses[2].id | Value: B) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: contingencies[2].buses[2].type | Value: PQ) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: contingencies[2].buses[2].voltagePu | Value: 0.9791725987971484) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: contingencies[2].buses[2].angleDegrees | Value: -2.314293683063583) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: contingencies[2].buses[2].pMW | Value: -1.4999999998054299) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: contingencies[2].buses[2].qMvar | Value: -0.49999999995306804) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: contingencies[2].branches[0].id | Value: SA) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: contingencies[2].branches[0].from | Value: S) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: contingencies[2].branches[0].to | Value: A) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: contingencies[2].branches[0].currentPu | Value: 0.3763486070790953) Tj ET
+BT /F1 8 Tf 32 207 Td (Calculated output path: contingencies[2].branches[0].fromMW | Value: 3.518075052020057) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: contingencies[2].branches[0].fromMvar | Value: 1.336777967125281) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: contingencies[2].branches[0].toMW | Value: -3.5039112246150195) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: contingencies[2].branches[0].toMvar | Value: -1.2234673478849807) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: contingencies[2].branches[0].lossMW | Value: 0.014163827405037632) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: contingencies[2].branches[0].lossMvar | Value: 0.11331061924030036) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: contingencies[2].branches[1].id | Value: AB) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: contingencies[2].branches[1].from | Value: A) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: contingencies[2].branches[1].to | Value: B) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: contingencies[2].branches[1].currentPu | Value: 0.1614770298747223) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: contingencies[2].branches[1].fromMW | Value: 1.503911224482005) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: contingencies[2].branches[1].fromMvar | Value: 0.5234673480125216) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: contingencies[2].branches[1].toMW | Value: -1.4999999998054305) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: contingencies[2].branches[1].toMvar | Value: -0.4999999999530758) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 1481 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: contingencies[2].branches[1].lossMW | Value: 0.003911224676574343) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: contingencies[2].branches[1].lossMvar | Value: 0.02346734805944571) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: contingencies[2].iterations | Value: 3) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: contingencies[2].mismatchPu | Value: 1.945701932903887e-11) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: incompleteEnumeration | Value: false) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: method | Value: Balanced AC Newton-Raphson, every enumerated single branch) Tj ET
+BT /F1 8 Tf 32 714 Td (outage; explicit voltage/current limits; not IEEE/IEC equipment compliance or dynamic stability) Tj ET
+BT /F1 8 Tf 32 701 Td () Tj ET
+BT /F1 8 Tf 32 688 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 675 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 662 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 649 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 636 Td (use.) Tj ET
+BT /F1 8 Tf 32 623 Td (Evidence / limitation: Study method | Value: contingency) Tj ET
+BT /F1 8 Tf 32 610 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:04:34.448Z) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000141 00000 n 
+0000000209 00000 n 
+0000005038 00000 n 
+0000005164 00000 n 
+0000011060 00000 n 
+0000011186 00000 n 
+0000017682 00000 n 
+0000017808 00000 n 
+0000024396 00000 n 
+0000024524 00000 n 
+0000026058 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+26186
+%%EOF

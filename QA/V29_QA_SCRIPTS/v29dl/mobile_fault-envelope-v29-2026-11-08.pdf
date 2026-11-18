@@ -1,0 +1,205 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5386 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: transformer-z-tolerance-envelope-v29) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: CALCULATED) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-11-08T09:48:10.888Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY - independently verify actual manufacturer, utility,) Tj ET
+BT /F1 8 Tf 32 662 Td (installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM) Tj ET
+BT /F1 8 Tf 32 636 Td (certification or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: projectName | Entered value: 12 kV ? 208 V ? Worked example) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: tolerancePercent | Entered value: 7.5) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: buses | Entered value: 3) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: transformers | Entered value: 1) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: faultType | Entered value: 3phase) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: scenario | Entered value: base) Tj ET
+BT /F1 8 Tf 32 519 Td () Tj ET
+BT /F1 8 Tf 32 506 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 480 Td (Calculated output path: method | Value: transformer-z-tolerance-envelope-v29) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: version | Value: 29.0.0) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: tolerancePercent | Value: 7.5) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: transformerCount | Value: 1) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: searchedCases | Value: all 2 +/- tolerance combinations) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: scope | Value: Selected-fault results from the existing Studio network) Tj ET
+BT /F1 8 Tf 32 402 Td (engine, repeated with each enabled transformer nameplate %Z scaled by \(1 - tolerance\) or \(1 +) Tj ET
+BT /F1 8 Tf 32 389 Td (tolerance\); X/R is kept. Per bus, the largest and smallest results over the nameplate case and the) Tj ET
+BT /F1 8 Tf 32 376 Td (searched combinations are reported with the governing combination. Lower %Z does not always raise) Tj ET
+BT /F1 8 Tf 32 363 Td (every bus current: with generator or motor contributions, a stiffer transformer can divert their) Tj ET
+BT /F1 8 Tf 32 350 Td (current, so the extremes are searched rather than assumed.) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: limitations[0] | Value: Applies one common tolerance magnitude; tested) Tj ET
+BT /F1 8 Tf 32 324 Td (impedance from a certified test report supersedes this envelope.) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: limitations[1] | Value: Extremes are searched at tolerance corners only;) Tj ET
+BT /F1 8 Tf 32 298 Td (with mixed sources a true extreme can occasionally lie between corners \(difference is typically) Tj ET
+BT /F1 8 Tf 32 285 Td (well below the tolerance effect\).) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: limitations[2] | Value: Does not change utility maximum/minimum strength) Tj ET
+BT /F1 8 Tf 32 259 Td (settings; use Study setup scenarios for source variation.) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: limitations[3] | Value: Not an ANSI C37 or IEC 60909 equipment-duty) Tj ET
+BT /F1 8 Tf 32 233 Td (certification and not a PPE or arc-flash determination.) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: reference[0] | Value: IEEE C57.12.00: two-winding transformer impedance) Tj ET
+BT /F1 8 Tf 32 207 Td (tolerance of +/-7.5 % of nameplate \(user-selectable here\).) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: reference[1] | Value: Eaton Bussmann point-to-point method: multiply) Tj ET
+BT /F1 8 Tf 32 181 Td (transformer %Z by 0.9 for a worst-case available fault current.) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: reference[2] | Value: NFPA 70 \(NEC\) 110.24\(A\): field-marked maximum) Tj ET
+BT /F1 8 Tf 32 155 Td (available fault current with the date the calculation was performed.) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: issues | Value: []) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: buses[0].busId | Value: bus-913449cd-424b-43b4-a933-7259db50f018) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: buses[0].busName | Value: Utility / POI) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: buses[0].voltageV | Value: 12000) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: buses[0].nominal.status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: buses[0].nominal.totalA | Value: 3400.0000000000005) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: buses[0].nominal.xr | Value: 8.000000000000002) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: buses[0].nominal.peakA | Value: 8143.109400350162) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: buses[0].maximumWithTolerance.status | Value: CALCULATED) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 6211 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: buses[0].maximumWithTolerance.totalA | Value: 3400.0000000000014) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: buses[0].maximumWithTolerance.xr | Value: 8) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: buses[0].maximumWithTolerance.peakA | Value: 8143.109400350164) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: buses[0].maximumWithTolerance.governingCase | Value: 12 kV / 208 V) Tj ET
+BT /F1 8 Tf 32 740 Td (transformer: -7.5 %) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: buses[0].minimumWithTolerance.status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: buses[0].minimumWithTolerance.totalA | Value: 3400.0000000000005) Tj ET
+BT /F1 8 Tf 32 701 Td (Calculated output path: buses[0].minimumWithTolerance.xr | Value: 8.000000000000002) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: buses[0].minimumWithTolerance.peakA | Value: 8143.109400350162) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: buses[0].minimumWithTolerance.governingCase | Value: nameplate) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: buses[0].maximumIncreasePercent | Value: 2.220446049250313e-14) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: buses[0].minimumDecreasePercent | Value: 0) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: buses[1].busId | Value: bus-7cc60faa-886c-4a82-9215-b0c339f97b14) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: buses[1].busName | Value: 208 V transformer secondary) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: buses[1].voltageV | Value: 208) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: buses[1].nominal.status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: buses[1].nominal.totalA | Value: 32725.85775961685) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: buses[1].nominal.xr | Value: 8.000000000000014) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: buses[1].nominal.peakA | Value: 78379.48234025245) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: buses[1].maximumWithTolerance.status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: buses[1].maximumWithTolerance.totalA | Value: 34907.10397060491) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: buses[1].maximumWithTolerance.xr | Value: 7.999999999999999) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: buses[1].maximumWithTolerance.peakA | Value: 83603.63720059802) Tj ET
+BT /F1 8 Tf 32 493 Td (Calculated output path: buses[1].maximumWithTolerance.governingCase | Value: 12 kV / 208 V) Tj ET
+BT /F1 8 Tf 32 480 Td (transformer: -7.5 %) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: buses[1].minimumWithTolerance.status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 454 Td (Calculated output path: buses[1].minimumWithTolerance.totalA | Value: 30801.17917752866) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: buses[1].minimumWithTolerance.xr | Value: 8.000000000000018) Tj ET
+BT /F1 8 Tf 32 428 Td (Calculated output path: buses[1].minimumWithTolerance.peakA | Value: 73769.81520658922) Tj ET
+BT /F1 8 Tf 32 415 Td (Calculated output path: buses[1].minimumWithTolerance.governingCase | Value: 12 kV / 208 V) Tj ET
+BT /F1 8 Tf 32 402 Td (transformer: +7.5 %) Tj ET
+BT /F1 8 Tf 32 389 Td (Calculated output path: buses[1].maximumIncreasePercent | Value: 6.665207149068775) Tj ET
+BT /F1 8 Tf 32 376 Td (Calculated output path: buses[1].minimumDecreasePercent | Value: 5.881216609280793) Tj ET
+BT /F1 8 Tf 32 363 Td (Calculated output path: buses[2].busId | Value: bus-a48abff7-50bb-470e-bd4a-7d01dd5eb5e0) Tj ET
+BT /F1 8 Tf 32 350 Td (Calculated output path: buses[2].busName | Value: Main panel) Tj ET
+BT /F1 8 Tf 32 337 Td (Calculated output path: buses[2].voltageV | Value: 208) Tj ET
+BT /F1 8 Tf 32 324 Td (Calculated output path: buses[2].nominal.status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 311 Td (Calculated output path: buses[2].nominal.totalA | Value: 16706.17335282207) Tj ET
+BT /F1 8 Tf 32 298 Td (Calculated output path: buses[2].nominal.xr | Value: 1.266220695569668) Tj ET
+BT /F1 8 Tf 32 285 Td (Calculated output path: buses[2].nominal.peakA | Value: 26264.644475141395) Tj ET
+BT /F1 8 Tf 32 272 Td (Calculated output path: buses[2].maximumWithTolerance.status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 259 Td (Calculated output path: buses[2].maximumWithTolerance.totalA | Value: 17172.445067428267) Tj ET
+BT /F1 8 Tf 32 246 Td (Calculated output path: buses[2].maximumWithTolerance.xr | Value: 1.2229569887423921) Tj ET
+BT /F1 8 Tf 32 233 Td (Calculated output path: buses[2].maximumWithTolerance.peakA | Value: 26818.687532828295) Tj ET
+BT /F1 8 Tf 32 220 Td (Calculated output path: buses[2].maximumWithTolerance.governingCase | Value: 12 kV / 208 V) Tj ET
+BT /F1 8 Tf 32 207 Td (transformer: -7.5 %) Tj ET
+BT /F1 8 Tf 32 194 Td (Calculated output path: buses[2].minimumWithTolerance.status | Value: CALCULATED) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: buses[2].minimumWithTolerance.totalA | Value: 16260.23367548939) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: buses[2].minimumWithTolerance.xr | Value: 1.3089355272786227) Tj ET
+BT /F1 8 Tf 32 155 Td (Calculated output path: buses[2].minimumWithTolerance.peakA | Value: 25733.025633135745) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: buses[2].minimumWithTolerance.governingCase | Value: 12 kV / 208 V) Tj ET
+BT /F1 8 Tf 32 129 Td (transformer: +7.5 %) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: buses[2].maximumIncreasePercent | Value: 2.7910144636888568) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: buses[2].minimumDecreasePercent | Value: 2.669310726728147) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: nec11024Label.title | Value: MAXIMUM AVAILABLE FAULT CURRENT) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: nec11024Label.equipment | Value: MDP-1) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: nec11024Label.voltage | Value: 208) Tj ET
+BT /F1 8 Tf 32 51 Td (Calculated output path: nec11024Label.availableFaultA | Value: 17172.445067428267) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: nec11024Label.availableFaultText | Value: 17.17 kA) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 3827 >>
+stream
+BT /F1 8 Tf 32 792 Td (Calculated output path: nec11024Label.xr | Value: 1.2229569887423921) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: nec11024Label.basis | Value: Transformer impedance reduced by 7.5 % \(worst) Tj ET
+BT /F1 8 Tf 32 766 Td (case\)) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: nec11024Label.dateOfCalculation | Value: 2026-11-08) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: nec11024Label.calculatedBy | Value: ) Tj ET
+BT /F1 8 Tf 32 727 Td (Calculated output path: nec11024Label.reference | Value: NEC 110.24\(A\) field marking. Re-calculate) Tj ET
+BT /F1 8 Tf 32 714 Td (and re-mark when modifications change the available fault current \(NEC 110.24\(B\)\).) Tj ET
+BT /F1 8 Tf 32 701 Td () Tj ET
+BT /F1 8 Tf 32 688 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 675 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 662 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY - independently verify actual) Tj ET
+BT /F1 8 Tf 32 649 Td (manufacturer, utility, installation, equipment settings and standards edition before professional) Tj ET
+BT /F1 8 Tf 32 636 Td (use.) Tj ET
+BT /F1 8 Tf 32 623 Td (Evidence / limitation: Study method | Value: transformer-z-tolerance-envelope-v29) Tj ET
+BT /F1 8 Tf 32 610 Td (Evidence / limitation: Timestamp | Value: 2026-11-08T09:48:10.888Z) Tj ET
+BT /F1 8 Tf 32 597 Td (Evidence / limitation: outputs.scope | Value: Selected-fault results from the existing Studio) Tj ET
+BT /F1 8 Tf 32 584 Td (network engine, repeated with each enabled transformer nameplate %Z scaled by \(1 - tolerance\) or \(1) Tj ET
+BT /F1 8 Tf 32 571 Td (+ tolerance\); X/R is kept. Per bus, the largest and smallest results over the nameplate case and) Tj ET
+BT /F1 8 Tf 32 558 Td (the searched combinations are reported with the governing combination. Lower %Z does not always) Tj ET
+BT /F1 8 Tf 32 545 Td (raise every bus current: with generator or motor contributions, a stiffer transformer can divert) Tj ET
+BT /F1 8 Tf 32 532 Td (their current, so the extremes are searched rather than assumed.) Tj ET
+BT /F1 8 Tf 32 519 Td (Evidence / limitation: outputs.limitations[0] | Value: Applies one common tolerance magnitude;) Tj ET
+BT /F1 8 Tf 32 506 Td (tested impedance from a certified test report supersedes this envelope.) Tj ET
+BT /F1 8 Tf 32 493 Td (Evidence / limitation: outputs.limitations[1] | Value: Extremes are searched at tolerance corners) Tj ET
+BT /F1 8 Tf 32 480 Td (only; with mixed sources a true extreme can occasionally lie between corners \(difference is) Tj ET
+BT /F1 8 Tf 32 467 Td (typically well below the tolerance effect\).) Tj ET
+BT /F1 8 Tf 32 454 Td (Evidence / limitation: outputs.limitations[2] | Value: Does not change utility maximum/minimum) Tj ET
+BT /F1 8 Tf 32 441 Td (strength settings; use Study setup scenarios for source variation.) Tj ET
+BT /F1 8 Tf 32 428 Td (Evidence / limitation: outputs.limitations[3] | Value: Not an ANSI C37 or IEC 60909 equipment-duty) Tj ET
+BT /F1 8 Tf 32 415 Td (certification and not a PPE or arc-flash determination.) Tj ET
+BT /F1 8 Tf 32 402 Td (Evidence / limitation: outputs.reference[0] | Value: IEEE C57.12.00: two-winding transformer) Tj ET
+BT /F1 8 Tf 32 389 Td (impedance tolerance of +/-7.5 % of nameplate \(user-selectable here\).) Tj ET
+BT /F1 8 Tf 32 376 Td (Evidence / limitation: outputs.reference[1] | Value: Eaton Bussmann point-to-point method: multiply) Tj ET
+BT /F1 8 Tf 32 363 Td (transformer %Z by 0.9 for a worst-case available fault current.) Tj ET
+BT /F1 8 Tf 32 350 Td (Evidence / limitation: outputs.reference[2] | Value: NFPA 70 \(NEC\) 110.24\(A\): field-marked maximum) Tj ET
+BT /F1 8 Tf 32 337 Td (available fault current with the date the calculation was performed.) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000127 00000 n 
+0000000195 00000 n 
+0000005633 00000 n 
+0000005759 00000 n 
+0000012022 00000 n 
+0000012148 00000 n 
+0000016027 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+16153
+%%EOF

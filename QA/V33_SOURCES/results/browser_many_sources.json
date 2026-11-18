@@ -1,0 +1,65 @@
+{
+ "checks": {
+  "fonts served locally": {
+   "pass": true,
+   "info": "DM Sans,Space Grotesk,Inter,JetBrains Mono"
+  },
+  "plant calculates": {
+   "pass": true,
+   "info": "8.8 s; SCREENING BOUND\n24.368 kA at POI \u00b7 upper bound: inverter fault-current angle unknown\nView results \u2192"
+  },
+  "inside 30 s watchdog": {
+   "pass": true,
+   "info": "8.8"
+  },
+  "plant size": {
+   "pass": true,
+   "info": "{'buses': 1900, 'sources': 1681}"
+  },
+  "results page for another fault bus renders": {
+   "pass": true,
+   "info": "1900 rows in the largest table; 4.9 s"
+  },
+  "report opens": {
+   "pass": true,
+   "info": "8.1 s scope on:false,on:true"
+  },
+  "xlsx downloads": {
+   "pass": true,
+   "info": "1799811 bytes 24.4 s"
+  },
+  "report states why source rows are limited": {
+   "pass": true,
+   "info": ""
+  },
+  "arc flash all buses runs": {
+   "pass": true,
+   "info": "1900 rows 9.5 s"
+  },
+  "no page errors": {
+   "pass": true,
+   "info": "[]"
+  },
+  "no requests to other hosts": {
+   "pass": true,
+   "info": "[]"
+  },
+  "pdf downloads or explains why not": {
+   "pass": true,
+   "info": "PDF report would exceed 2000 pages. Largest sections: Study inputs (\u22651540 pages), Equipment duty (\u2265149 pages), Bus results (\u2265129 pages). Untick sections or choose \u201cSelected fault bus only\u201d in Report contents, or download Excel."
+  }
+ },
+ "times": {
+  "build+calculate s": 8.8,
+  "select another bus s": 4.9,
+  "open report s": 8.1,
+  "xlsx s": 24.4,
+  "arc flash open s": 1.1,
+  "arc flash run s": 9.5,
+  "pdf s": 21.1
+ },
+ "plant": {
+  "buses": 1900,
+  "sources": 1681
+ }
+}

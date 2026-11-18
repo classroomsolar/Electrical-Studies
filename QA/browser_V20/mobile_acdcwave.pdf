@@ -1,0 +1,149 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Length 5091 >>
+stream
+BT /F1 8 Tf 32 792 Td (FAULT CURRENT STUDIO - ENGINEERING REPORT) Tj ET
+BT /F1 8 Tf 32 779 Td (BROWSER EXPORT - ENGINEERING REVIEW REQUIRED) Tj ET
+BT /F1 8 Tf 32 766 Td () Tj ET
+BT /F1 8 Tf 32 753 Td () Tj ET
+BT /F1 8 Tf 32 740 Td (===== SUMMARY =====) Tj ET
+BT /F1 8 Tf 32 727 Td (Project: Fault Current Studio advanced study) Tj ET
+BT /F1 8 Tf 32 714 Td (Method: acdcwave) Tj ET
+BT /F1 8 Tf 32 701 Td (Model status: EXPLICIT_DOCUMENTED_AC_DC_WAVEFORM_DUTY) Tj ET
+BT /F1 8 Tf 32 688 Td (Captured UTC: 2026-10-26T06:04:46.479Z) Tj ET
+BT /F1 8 Tf 32 675 Td (Warning: ENGINEERING SCREENING ONLY ? independently verify actual manufacturer, utility, installation, e) Tj ET
+BT /F1 8 Tf 32 662 Td (quipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 649 Td (Report data provenance: Entered study inputs, isolated calculated method outputs. No external OEM certif) Tj ET
+BT /F1 8 Tf 32 636 Td (ication or auto-selected breaker/PPE.) Tj ET
+BT /F1 8 Tf 32 623 Td () Tj ET
+BT /F1 8 Tf 32 610 Td (===== STUDY INPUTS =====) Tj ET
+BT /F1 8 Tf 32 597 Td (Input path: frequencyHz | Entered value: 60) Tj ET
+BT /F1 8 Tf 32 584 Td (Input path: durationS | Entered value: 0.1) Tj ET
+BT /F1 8 Tf 32 571 Td (Input path: inceptionAngleDeg | Entered value: 40) Tj ET
+BT /F1 8 Tf 32 558 Td (Input path: initialCurrentCondition | Entered value: ZERO_PRIOR_CURRENT) Tj ET
+BT /F1 8 Tf 32 545 Td (Input path: sources[0].id | Entered value: UTILITY) Tj ET
+BT /F1 8 Tf 32 532 Td (Input path: sources[0].sourceReference | Entered value: ILLUSTRATIVE ONLY: not utility/OEM trace) Tj ET
+BT /F1 8 Tf 32 519 Td (Input path: sources[0].dcTimeConstantReference | Entered value: ILLUSTRATIVE ONLY: not measured equivale) Tj ET
+BT /F1 8 Tf 32 506 Td (nt X/R) Tj ET
+BT /F1 8 Tf 32 493 Td (Input path: sources[0].dcTimeConstantS | Entered value: 0.025) Tj ET
+BT /F1 8 Tf 32 480 Td (Input path: sources[0].samples[0].timeS | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 467 Td (Input path: sources[0].samples[0].symmetricalRmsA | Entered value: 14000) Tj ET
+BT /F1 8 Tf 32 454 Td (Input path: sources[0].samples[0].phaseDeg | Entered value: -30) Tj ET
+BT /F1 8 Tf 32 441 Td (Input path: sources[0].samples[1].timeS | Entered value: 0.05) Tj ET
+BT /F1 8 Tf 32 428 Td (Input path: sources[0].samples[1].symmetricalRmsA | Entered value: 10000) Tj ET
+BT /F1 8 Tf 32 415 Td (Input path: sources[0].samples[1].phaseDeg | Entered value: -30) Tj ET
+BT /F1 8 Tf 32 402 Td (Input path: sources[0].samples[2].timeS | Entered value: 0.1) Tj ET
+BT /F1 8 Tf 32 389 Td (Input path: sources[0].samples[2].symmetricalRmsA | Entered value: 7000) Tj ET
+BT /F1 8 Tf 32 376 Td (Input path: sources[0].samples[2].phaseDeg | Entered value: -30) Tj ET
+BT /F1 8 Tf 32 363 Td (Input path: sources[1].id | Entered value: GENERATOR) Tj ET
+BT /F1 8 Tf 32 350 Td (Input path: sources[1].sourceReference | Entered value: ILLUSTRATIVE ONLY: not generator decrement or fa) Tj ET
+BT /F1 8 Tf 32 337 Td (ult model) Tj ET
+BT /F1 8 Tf 32 324 Td (Input path: sources[1].dcTimeConstantReference | Entered value: ILLUSTRATIVE ONLY: not OEM rotor/DC time) Tj ET
+BT /F1 8 Tf 32 311 Td ( constant) Tj ET
+BT /F1 8 Tf 32 298 Td (Input path: sources[1].dcTimeConstantS | Entered value: 0.08) Tj ET
+BT /F1 8 Tf 32 285 Td (Input path: sources[1].samples[0].timeS | Entered value: 0) Tj ET
+BT /F1 8 Tf 32 272 Td (Input path: sources[1].samples[0].symmetricalRmsA | Entered value: 4000) Tj ET
+BT /F1 8 Tf 32 259 Td (Input path: sources[1].samples[0].phaseDeg | Entered value: 20) Tj ET
+BT /F1 8 Tf 32 246 Td (Input path: sources[1].samples[1].timeS | Entered value: 0.1) Tj ET
+BT /F1 8 Tf 32 233 Td (Input path: sources[1].samples[1].symmetricalRmsA | Entered value: 1500) Tj ET
+BT /F1 8 Tf 32 220 Td (Input path: sources[1].samples[1].phaseDeg | Entered value: 20) Tj ET
+BT /F1 8 Tf 32 207 Td () Tj ET
+BT /F1 8 Tf 32 194 Td (===== EQUIPMENT DUTY =====) Tj ET
+BT /F1 8 Tf 32 181 Td (Calculated output path: status | Value: EXPLICIT_DOCUMENTED_AC_DC_WAVEFORM_DUTY) Tj ET
+BT /F1 8 Tf 32 168 Td (Calculated output path: model | Value: Piecewise-linear complex RMS phasor traces and source-specific ex) Tj ET
+BT /F1 8 Tf 32 155 Td (ponential decaying DC offset, with documented common fault inception phase and zero pre-fault current) Tj ET
+BT /F1 8 Tf 32 142 Td (Calculated output path: frequencyHz | Value: 60) Tj ET
+BT /F1 8 Tf 32 129 Td (Calculated output path: durationS | Value: 0.1) Tj ET
+BT /F1 8 Tf 32 116 Td (Calculated output path: inceptionAngleDeg | Value: 40) Tj ET
+BT /F1 8 Tf 32 103 Td (Calculated output path: initialCurrentCondition | Value: ZERO_PRIOR_CURRENT) Tj ET
+BT /F1 8 Tf 32 90 Td (Calculated output path: sourceCount | Value: 2) Tj ET
+BT /F1 8 Tf 32 77 Td (Calculated output path: sourceProvenance[0].id | Value: UTILITY) Tj ET
+BT /F1 8 Tf 32 64 Td (Calculated output path: sourceProvenance[0].sourceReference | Value: ILLUSTRATIVE ONLY: not utility/OEM ) Tj ET
+BT /F1 8 Tf 32 51 Td (trace) Tj ET
+BT /F1 8 Tf 32 38 Td (Calculated output path: sourceProvenance[0].dcTimeConstantReference | Value: ILLUSTRATIVE ONLY: not meas) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 5280 >>
+stream
+BT /F1 8 Tf 32 792 Td (ured equivalent X/R) Tj ET
+BT /F1 8 Tf 32 779 Td (Calculated output path: sourceProvenance[0].dcTimeConstantS | Value: 0.025) Tj ET
+BT /F1 8 Tf 32 766 Td (Calculated output path: sourceProvenance[0].initialDCOffsetA | Value: -19498.19872896053) Tj ET
+BT /F1 8 Tf 32 753 Td (Calculated output path: sourceProvenance[1].id | Value: GENERATOR) Tj ET
+BT /F1 8 Tf 32 740 Td (Calculated output path: sourceProvenance[1].sourceReference | Value: ILLUSTRATIVE ONLY: not generator de) Tj ET
+BT /F1 8 Tf 32 727 Td (crement or fault model) Tj ET
+BT /F1 8 Tf 32 714 Td (Calculated output path: sourceProvenance[1].dcTimeConstantReference | Value: ILLUSTRATIVE ONLY: not OEM ) Tj ET
+BT /F1 8 Tf 32 701 Td (rotor/DC time constant) Tj ET
+BT /F1 8 Tf 32 688 Td (Calculated output path: sourceProvenance[1].dcTimeConstantS | Value: 0.08) Tj ET
+BT /F1 8 Tf 32 675 Td (Calculated output path: sourceProvenance[1].initialDCOffsetA | Value: -2828.42712474619) Tj ET
+BT /F1 8 Tf 32 662 Td (Calculated output path: totalInitialDCOffsetA | Value: -22326.625853706722) Tj ET
+BT /F1 8 Tf 32 649 Td (Calculated output path: waveformI2tA2S | Value: 23143646.66048021) Tj ET
+BT /F1 8 Tf 32 636 Td (Calculated output path: equivalentAsymmetricalRmsA | Value: 15213.0360745251) Tj ET
+BT /F1 8 Tf 32 623 Td (Calculated output path: symmetricalRmsPhasorI2tA2S | Value: 15536194.869099773) Tj ET
+BT /F1 8 Tf 32 610 Td (Calculated output path: absolutePeakInstantaneousA | Value: 39985.80203786386) Tj ET
+BT /F1 8 Tf 32 597 Td (Calculated output path: timeAtAbsolutePeakS | Value: 0.007153674229325416) Tj ET
+BT /F1 8 Tf 32 584 Td (Calculated output path: quadratureSubintervals | Value: 48) Tj ET
+BT /F1 8 Tf 32 571 Td (Calculated output path: quadratureRelativeDisagreement | Value: 1.9754802668518058e-10) Tj ET
+BT /F1 8 Tf 32 558 Td (Calculated output path: peakRefinements | Value: 592) Tj ET
+BT /F1 8 Tf 32 545 Td (Calculated output path: atStartInstantaneousA | Value: 0) Tj ET
+BT /F1 8 Tf 32 532 Td (Calculated output path: atClearingInstantaneousA | Value: 9642.27963055042) Tj ET
+BT /F1 8 Tf 32 519 Td (Calculated output path: approved | Value: false) Tj ET
+BT /F1 8 Tf 32 506 Td (Calculated output path: limitations[0] | Value: Not an IEC 60909-0 equivalent thermal factor or certifie) Tj ET
+BT /F1 8 Tf 32 493 Td (d making/breaking current: no standard voltage/impedance source correction, breaker contact timing, arc ) Tj ET
+BT /F1 8 Tf 32 480 Td (restrike, CT saturation, harmonics, waveform discontinuities or inverter controls) Tj ET
+BT /F1 8 Tf 32 467 Td (Calculated output path: limitations[1] | Value: Every symmetrical source phasor history and DC time cons) Tj ET
+BT /F1 8 Tf 32 454 Td (tant must be independently documented; no generator/motor/IBR physics is inferred) Tj ET
+BT /F1 8 Tf 32 441 Td (Calculated output path: limitations[2] | Value: Assumes zero pre-fault current and independent source DC) Tj ET
+BT /F1 8 Tf 32 428 Td ( decay from one common fault inception angle; cannot be applied to loaded circuits or arbitrary current-) Tj ET
+BT /F1 8 Tf 32 415 Td (source inverter dynamics without validating those assumptions) Tj ET
+BT /F1 8 Tf 32 402 Td (Calculated output path: limitations[3] | Value: Output is a prospective model screening waveform; verify) Tj ET
+BT /F1 8 Tf 32 389 Td ( model and protection device suitability before engineering use) Tj ET
+BT /F1 8 Tf 32 376 Td () Tj ET
+BT /F1 8 Tf 32 363 Td (===== ASSUMPTIONS & QA =====) Tj ET
+BT /F1 8 Tf 32 350 Td (Evidence / limitation: Release status | Value: BOUNDED METHOD, NOT A STANDARDS/DEVICE APPROVAL) Tj ET
+BT /F1 8 Tf 32 337 Td (Evidence / limitation: Warning | Value: ENGINEERING SCREENING ONLY ? independently verify actual manufac) Tj ET
+BT /F1 8 Tf 32 324 Td (turer, utility, installation, equipment settings and standards edition before professional use.) Tj ET
+BT /F1 8 Tf 32 311 Td (Evidence / limitation: Study method | Value: acdcwave) Tj ET
+BT /F1 8 Tf 32 298 Td (Evidence / limitation: Timestamp | Value: 2026-10-26T06:04:46.479Z) Tj ET
+BT /F1 8 Tf 32 285 Td (Evidence / limitation: outputs.limitations[0] | Value: Not an IEC 60909-0 equivalent thermal factor or c) Tj ET
+BT /F1 8 Tf 32 272 Td (ertified making/breaking current: no standard voltage/impedance source correction, breaker contact timin) Tj ET
+BT /F1 8 Tf 32 259 Td (g, arc restrike, CT saturation, harmonics, waveform discontinuities or inverter controls) Tj ET
+BT /F1 8 Tf 32 246 Td (Evidence / limitation: outputs.limitations[1] | Value: Every symmetrical source phasor history and DC ti) Tj ET
+BT /F1 8 Tf 32 233 Td (me constant must be independently documented; no generator/motor/IBR physics is inferred) Tj ET
+BT /F1 8 Tf 32 220 Td (Evidence / limitation: outputs.limitations[2] | Value: Assumes zero pre-fault current and independent so) Tj ET
+BT /F1 8 Tf 32 207 Td (urce DC decay from one common fault inception angle; cannot be applied to loaded circuits or arbitrary c) Tj ET
+BT /F1 8 Tf 32 194 Td (urrent-source inverter dynamics without validating those assumptions) Tj ET
+BT /F1 8 Tf 32 181 Td (Evidence / limitation: outputs.limitations[3] | Value: Output is a prospective model screening waveform;) Tj ET
+BT /F1 8 Tf 32 168 Td ( verify model and protection device suitability before engineering use) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000189 00000 n 
+0000005332 00000 n 
+0000005458 00000 n 
+0000010790 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+10916
+%%EOF
